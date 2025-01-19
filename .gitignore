@@ -24,6 +24,9 @@ wheels/
 venv/
 env/
 ENV/
+*rapids-dask/
+rapids-dask/
+.rapids-dask/
 
 # IDEs and editors
 .idea/
