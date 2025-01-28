@@ -98,10 +98,6 @@ def load_config(config_path: str, env: Optional[str] = None) -> Dict[str, Any]:
                     env_config = yaml.safe_load(f)
                     config = deep_update(config, env_config)
         
-        # Validate configuration
-        validate_paths(config)
-        validate_parameters(config)
-        
         # Log configuration
         log_config(config)
         

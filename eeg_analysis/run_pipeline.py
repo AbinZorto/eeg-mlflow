@@ -2,6 +2,8 @@ import click
 import yaml
 import pandas as pd
 import mlflow
+import os
+import time
 from pathlib import Path
 from src.utils.logger import setup_logger
 from src.utils.config import load_config
@@ -13,7 +15,7 @@ from src.processing.filter import filter_eeg_data
 from src.processing.upsampler import upsample_eeg_data
 from src.processing.downsampler import downsample_eeg_data
 from src.processing.window_slicer import slice_eeg_windows
-from src.processing.feature_extractor import extract_eeg_features
+from src.processing.feature_extractor import run_feature_extraction
 
 from src.models.patient_trainer import PatientLevelTrainer
 from src.models.window_trainer import WindowLevelTrainer
@@ -77,7 +79,7 @@ def process(ctx, version_data):
             filtered = filter_eeg_data(config, upsampled)
             downsampled = downsample_eeg_data(config, filtered)
             windowed = slice_eeg_windows(config, downsampled)
-            features = extract_eeg_features(config, windowed)
+            features = run_feature_extraction(config, windowed)
             
             # Save final features
             final_version = data_versioner.save_version(features, {
@@ -101,28 +103,63 @@ def train(ctx, level):
     config = ctx.obj['config']
     model_serializer = create_model_serializer(config['paths']['models'])
     
-    with mlflow.start_run(run_name=f"{level}_training"):
-        try:
-            # Create appropriate trainer
-            trainer_cls = PatientLevelTrainer if level == 'patient' else WindowLevelTrainer
-            trainer = trainer_cls(config)
+    # Set up MLflow tracking with SQLite backend
+    db_path = os.path.join(config['mlflow']['tracking_uri'], 'mlflow.db')
+    tracking_uri = f"sqlite:///{db_path}"
+    os.makedirs(os.path.dirname(db_path), exist_ok=True)
+    
+    mlflow.set_tracking_uri(tracking_uri)
+    experiment_name = config['mlflow']['experiment_name']
+    
+    # Create or get experiment
+    try:
+        experiment = mlflow.get_experiment_by_name(experiment_name)
+        if experiment is None:
+            experiment_id = mlflow.create_experiment(
+                experiment_name,
+                artifact_location=config['mlflow']['artifact_location']
+            )
+        else:
+            experiment_id = experiment.experiment_id
             
+        mlflow.set_experiment(experiment_name)
+        
+    except Exception as e:
+        logger.error(f"Failed to create/get MLflow experiment: {str(e)}")
+        raise
+    
+    # Create appropriate trainer
+    trainer_cls = PatientLevelTrainer if level == 'patient' else WindowLevelTrainer
+    trainer = trainer_cls(config)
+    
+    try:
+        with mlflow.start_run() as run:
             # Train model
-            model = trainer.train(config['feature_path'])
+            model = trainer.train()
+            
+            # Get sample data for model signature
+            data_path = config['data']['feature_path']
+            df = pd.read_parquet(data_path)
+            X, y, _ = trainer._prepare_data(df)
+            X_sample = X.iloc[:100]  # Take first 100 samples
+            y_proba_sample = model.predict_proba(X_sample)[:, 1]
             
             # Save model
             model_id = model_serializer.save_model(
                 model,
-                model_info={'level': level, 'config': config}
+                model_info={
+                    'level': level, 
+                    'config': config,
+                    'X_sample': X_sample,
+                    'y_proba_sample': y_proba_sample
+                }
             )
             
-            mlflow.log_metric("training_success", 1)
             logger.info(f"{level.capitalize()} training completed successfully")
             
-        except Exception as e:
-            mlflow.log_metric("training_success", 0)
-            logger.error(f"Training failed: {str(e)}")
-            raise
+    except Exception as e:
+        logger.error(f"Training failed: {str(e)}")
+        raise
 
 @cli.command()
 @click.option('--model-id', type=str, required=True)

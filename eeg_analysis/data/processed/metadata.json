@@ -770,6 +770,222 @@
       "info": {
         "stage": "raw"
       }
+    },
+    "v_2025-01-19T21-02-46.446017": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-01-19T21:02:46.446017",
+      "path": "data/processed/versions/v_2025-01-19T21-02-46.446017.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-01-19T21-06-51.584908": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-01-19T21:06:51.584908",
+      "path": "data/processed/versions/v_2025-01-19T21-06-51.584908.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-01-19T21-09-03.143304": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-01-19T21:09:03.143304",
+      "path": "data/processed/versions/v_2025-01-19T21-09-03.143304.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-01-19T21-10-24.476379": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-01-19T21:10:24.476379",
+      "path": "data/processed/versions/v_2025-01-19T21-10-24.476379.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-01-19T21-14-01.263938": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-01-19T21:14:01.263938",
+      "path": "data/processed/versions/v_2025-01-19T21-14-01.263938.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-01-19T21-14-26.277418": {
+      "hash": "68df9d60a5a7aa95af6bac26ea099654",
+      "timestamp": "2025-01-19T21:14:26.277418",
+      "path": "data/processed/versions/v_2025-01-19T21-14-26.277418.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-01-19T21-14-01.263938"
+      }
+    },
+    "v_2025-01-19T21-19-32.067484": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-01-19T21:19:32.067484",
+      "path": "data/processed/versions/v_2025-01-19T21-19-32.067484.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-01-19T21-19-56.311654": {
+      "hash": "68df9d60a5a7aa95af6bac26ea099654",
+      "timestamp": "2025-01-19T21:19:56.311654",
+      "path": "data/processed/versions/v_2025-01-19T21-19-56.311654.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-01-19T21-19-32.067484"
+      }
+    },
+    "v_2025-01-19T21-25-05.810803": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-01-19T21:25:05.810803",
+      "path": "data/processed/versions/v_2025-01-19T21-25-05.810803.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-01-19T21-25-29.720706": {
+      "hash": "68df9d60a5a7aa95af6bac26ea099654",
+      "timestamp": "2025-01-19T21:25:29.720706",
+      "path": "data/processed/versions/v_2025-01-19T21-25-29.720706.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-01-19T21-25-05.810803"
+      }
+    },
+    "v_2025-01-19T21-32-15.135562": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-01-19T21:32:15.135562",
+      "path": "data/processed/versions/v_2025-01-19T21-32-15.135562.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-01-19T21-32-42.253530": {
+      "hash": "45dcccbb5b28c09ac08f195f0ce9420e",
+      "timestamp": "2025-01-19T21:32:42.253530",
+      "path": "data/processed/versions/v_2025-01-19T21-32-42.253530.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-01-19T21-32-15.135562"
+      }
+    },
+    "v_2025-01-19T21-37-29.264340": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-01-19T21:37:29.264340",
+      "path": "data/processed/versions/v_2025-01-19T21-37-29.264340.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-01-19T21-40-06.580357": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-01-19T21:40:06.580357",
+      "path": "data/processed/versions/v_2025-01-19T21-40-06.580357.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-01-19T21-42-49.458730": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-01-19T21:42:49.458730",
+      "path": "data/processed/versions/v_2025-01-19T21-42-49.458730.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-01-19T21-45-03.731608": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-01-19T21:45:03.731608",
+      "path": "data/processed/versions/v_2025-01-19T21-45-03.731608.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-01-19T21-51-56.730365": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-01-19T21:51:56.730365",
+      "path": "data/processed/versions/v_2025-01-19T21-51-56.730365.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-01-19T21-52-55.464633": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-01-19T21:52:55.464633",
+      "path": "data/processed/versions/v_2025-01-19T21-52-55.464633.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-01-19T21-55-23.424883": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-01-19T21:55:23.424883",
+      "path": "data/processed/versions/v_2025-01-19T21-55-23.424883.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-01-19T23-09-12.526715": {
+      "hash": "d0dc217621c56c65bb0f59caafa88423",
+      "timestamp": "2025-01-19T23:09:12.526715",
+      "path": "data/processed/versions/v_2025-01-19T23-09-12.526715.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-01-19T21-55-23.424883"
+      }
+    },
+    "v_2025-01-20T01-39-26.936617": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-01-20T01:39:26.936617",
+      "path": "data/processed/versions/v_2025-01-20T01-39-26.936617.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-01-20T02-53-09.267848": {
+      "hash": "c8c4284024888d08e7797effb7f2296a",
+      "timestamp": "2025-01-20T02:53:09.267848",
+      "path": "data/processed/versions/v_2025-01-20T02-53-09.267848.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-01-20T01-39-26.936617"
+      }
+    },
+    "v_2025-01-20T04-09-43.897504": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-01-20T04:09:43.897504",
+      "path": "data/processed/versions/v_2025-01-20T04-09-43.897504.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-01-20T05-23-15.754400": {
+      "hash": "1d9a12fec9779d716f8048f649f58902",
+      "timestamp": "2025-01-20T05:23:15.754400",
+      "path": "data/processed/versions/v_2025-01-20T05-23-15.754400.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-01-20T04-09-43.897504"
+      }
+    },
+    "v_2025-01-20T05-41-34.331402": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-01-20T05:41:34.331402",
+      "path": "data/processed/versions/v_2025-01-20T05-41-34.331402.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-01-20T06-55-32.524734": {
+      "hash": "154e98f16b162710515fdec7affd36d0",
+      "timestamp": "2025-01-20T06:55:32.524734",
+      "path": "data/processed/versions/v_2025-01-20T06-55-32.524734.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-01-20T05-41-34.331402"
+      }
     }
   }
 }
