@@ -90,31 +90,36 @@ class EEGWindowSlicer:
             processed_windows = []
             window_length = self.window_seconds * self.sampling_rate
             
-            # Process each channel
+            # Get all channel data first
+            channel_data = {}
             for channel in self.channels:
                 if channel not in window_data:
                     continue
-                    
-                signal = window_data[channel]
-                num_samples = len(signal)
+                channel_data[channel] = window_data[channel]
+            
+            # Calculate number of windows based on first channel
+            first_channel = next(iter(channel_data.values()))
+            num_samples = len(first_channel)
+            num_windows = (num_samples - window_length) // self.step_size + 1
+            
+            # Create windows preserving all channels
+            for i in range(num_windows):
+                start_idx = i * self.step_size
+                end_idx = start_idx + window_length
                 
-                # Calculate number of windows
-                num_windows = (num_samples - window_length) // self.step_size + 1
+                window = {
+                    'participant_id': metadata['participant_id'],
+                    'group': metadata['group'],
+                    'window_start': start_idx,
+                    'window_end': end_idx,
+                }
                 
-                # Create windows
-                for i in range(num_windows):
-                    start_idx = i * self.step_size
-                    end_idx = start_idx + window_length
-                    
-                    window = {
-                        'participant_id': metadata['participant_id'],
-                        'group': metadata['group'],
-                        'channel': channel,
-                        'window_start': start_idx,
-                        'window_end': end_idx,
-                        'data': signal[start_idx:end_idx]
-                    }
-                    processed_windows.append(window)
+                # Add all channels to the same window
+                for channel in self.channels:
+                    if channel in channel_data:
+                        window[channel] = channel_data[channel][start_idx:end_idx]
+                
+                processed_windows.append(window)
             
             return processed_windows
             

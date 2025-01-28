@@ -3,64 +3,180 @@ import json
 import mlflow
 from pathlib import Path
 from typing import Dict, Any, Optional
-import datetime
+from datetime import datetime
 from sklearn.base import BaseEstimator
 import cloudpickle
+import os
+import logging
+import uuid
+from mlflow.models import infer_signature
+import pandas as pd
+import numpy as np
+
+logger = logging.getLogger(__name__)
 
 class ModelSerializer:
     def __init__(self, base_path: str):
+        """Initialize the model serializer.
+        
+        Args:
+            base_path: Base directory for model storage
+        """
         self.base_path = Path(base_path)
-        self.models_path = self.base_path / 'models'
-        self.metadata_path = self.base_path / 'model_metadata.json'
-        self.models_path.mkdir(parents=True, exist_ok=True)
-        self._load_metadata()
-
-    def _load_metadata(self):
-        if self.metadata_path.exists():
-            with open(self.metadata_path, 'r') as f:
-                self.metadata = json.load(f)
-        else:
+        os.makedirs(self.base_path, exist_ok=True)
+        self.metadata_file = self.base_path / 'metadata.json'
+        
+        # Initialize or load metadata
+        if not self.metadata_file.exists():
             self.metadata = {'models': {}}
+            self._save_metadata()
+        else:
+            try:
+                with open(self.metadata_file, 'r') as f:
+                    self.metadata = json.load(f)
+            except json.JSONDecodeError:
+                logger.warning(f"Corrupted metadata file found at {self.metadata_file}. Creating new metadata.")
+                self.metadata = {'models': {}}
+                self._save_metadata()
 
     def _save_metadata(self):
-        with open(self.metadata_path, 'w') as f:
-            json.dump(self.metadata, f, indent=2)
+        """Save metadata to disk."""
+        with open(self.metadata_file, 'w') as f:
+            json.dump(self.metadata, f, indent=4)
 
-    def save_model(self, 
-                  model: BaseEstimator, 
-                  model_info: Dict[str, Any],
-                  metrics: Optional[Dict[str, float]] = None) -> str:
-        timestamp = datetime.datetime.now().isoformat()
-        model_id = f"model_{timestamp.replace(':', '-')}"
-        model_path = self.models_path / f"{model_id}.joblib"
-        
-        # Save model using joblib
-        joblib.dump(model, model_path)
-        
-        # Save pipeline structure if available
-        if hasattr(model, 'get_params'):
-            pipeline_info = model.get_params()
+    def _load_metadata(self):
+        """Load metadata from disk."""
+        try:
+            with open(self.metadata_file, 'r') as f:
+                self.metadata = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            self.metadata = {'models': {}}
+            self._save_metadata()
+
+    def _make_json_serializable(self, obj):
+        """Convert a dictionary to a JSON-serializable format."""
+        if isinstance(obj, dict):
+            return {k: self._make_json_serializable(v) for k, v in obj.items()}
+        elif isinstance(obj, list):
+            return [self._make_json_serializable(item) for item in obj]
+        elif isinstance(obj, (str, int, float, bool, type(None))):
+            return obj
+        elif isinstance(obj, (np.ndarray, pd.Series)):
+            return obj.tolist()
+        elif isinstance(obj, pd.DataFrame):
+            return {
+                'type': 'DataFrame',
+                'data': obj.to_dict(orient='records')
+            }
+        elif hasattr(obj, '__dict__'):
+            # For objects with __dict__, extract their attributes
+            return {
+                'type': obj.__class__.__name__,
+                'attributes': self._make_json_serializable(
+                    {k: v for k, v in obj.__dict__.items() 
+                     if not k.startswith('_')}
+                )
+            }
+        elif pd.api.types.is_numeric_dtype(type(obj)):
+            # Handle numpy/pandas numeric types
+            return float(np.asarray(obj).item())
         else:
-            pipeline_info = {}
+            # For other objects, convert to string representation
+            return str(obj)
 
+    def save_model(self, model, model_info: dict = None) -> str:
+        """Save a model to disk with optional metadata.
+        
+        Args:
+            model: The model object to save
+            model_info: Optional dictionary of model metadata
+            
+        Returns:
+            str: The model ID
+        """
+        model_id = str(uuid.uuid4())
+        model_dir = self.base_path / model_id
+        model_path = model_dir / 'model'
+        
+        # Create model directory
+        os.makedirs(model_dir, exist_ok=True)
+        
+        try:
+            # Process X_sample and y_proba_sample before MLflow operations
+            if model_info and 'X_sample' in model_info:
+                X = model_info['X_sample']
+                if isinstance(X, pd.DataFrame):
+                    X = X.copy()  # Make a copy to avoid modifying original
+                
+            if model_info and 'y_proba_sample' in model_info:
+                y_proba = model_info['y_proba_sample']
+                if isinstance(y_proba, (np.ndarray, pd.Series)):
+                    y_proba = np.asarray(y_proba)
+            
+            # Save model using MLflow format if possible
+            if X is not None and y_proba is not None:
+                signature = infer_signature(X, y_proba)
+                mlflow.sklearn.save_model(
+                    sk_model=model,
+                    path=str(model_path),
+                    signature=signature
+                )
+            else:
+                logger.warning("No sample data provided for model signature inference")
+                mlflow.sklearn.save_model(
+                    sk_model=model,
+                    path=str(model_path)
+                )
+            
+            # Extract and process model parameters
+            if hasattr(model, 'get_params'):
+                params = self._make_json_serializable(model.get_params())
+            elif hasattr(model, 'named_steps') and 'clf' in model.named_steps:
+                params = self._make_json_serializable(
+                    model.named_steps['clf'].get_params()
+                )
+            else:
+                params = {}
+                
+        except Exception as e:
+            logger.warning(f"Could not save model in MLflow format: {str(e)}. Falling back to joblib.")
+            joblib.dump(model, model_path / 'model.joblib')
+            params = {}
+        
+        # Process model_info to ensure JSON serializable
+        safe_info = self._make_json_serializable(model_info or {})
+        
         # Update metadata
         self.metadata['models'][model_id] = {
-            'timestamp': timestamp,
             'path': str(model_path),
-            'info': model_info,
-            'metrics': metrics or {},
-            'pipeline': pipeline_info
+            'created_at': datetime.now().isoformat(),
+            'info': safe_info,
+            'parameters': params
         }
         self._save_metadata()
         
         return model_id
-
+    
     def load_model(self, model_id: str) -> BaseEstimator:
+        """Load a model from disk.
+        
+        Args:
+            model_id: ID of the model to load
+            
+        Returns:
+            The loaded model
+        """
         if model_id not in self.metadata['models']:
             raise ValueError(f"Model {model_id} not found")
         
         model_path = Path(self.metadata['models'][model_id]['path'])
-        return joblib.load(model_path)
+        
+        # Try loading with MLflow first
+        try:
+            return mlflow.sklearn.load_model(str(model_path))
+        except Exception:
+            # Fall back to joblib if MLflow fails
+            return joblib.load(model_path / 'model.joblib')
 
     def get_model_info(self, model_id: str) -> Dict[str, Any]:
         return self.metadata['models'].get(model_id, {})
@@ -121,9 +237,9 @@ class PipelineSerializer(ModelSerializer):
         else:
             serializer = joblib
             
-        timestamp = datetime.datetime.now().isoformat()
+        timestamp = datetime.now().isoformat()
         pipeline_id = f"pipeline_{timestamp.replace(':', '-')}"
-        pipeline_path = self.models_path / f"{pipeline_id}.pkl"
+        pipeline_path = self.base_path / f"{pipeline_id}.pkl"
         
         # Save pipeline
         with open(pipeline_path, 'wb') as f:
