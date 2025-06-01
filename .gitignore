@@ -27,6 +27,9 @@ ENV/
 *rapids-dask/
 rapids-dask/
 .rapids-dask/
+*env.local
+.env
+.env.local
 
 
 # IDEs and editors
