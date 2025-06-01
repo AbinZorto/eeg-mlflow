@@ -185,15 +185,15 @@ class EEGWindowSlicer:
             mlflow.log_metrics({
                 'window_sampling_rate': self.sampling_rate,
                 'input_windows': len(input_df),
-                'output_windows': len(output_df),
-                'window_length_seconds': self.window_seconds,
-                'window_overlap_seconds': self.overlap_seconds
+                'output_windows': len(output_df)
             })
             
             # Log fixed parameters that won't change
             mlflow.log_params({
                 'window_slicer_method': 'fixed_length',
-                'min_windows': self.min_windows
+                'min_windows': self.min_windows,
+                'window_length_seconds': self.window_seconds,
+                'window_overlap_seconds': self.overlap_seconds
             })
             
             # Log participant-specific metrics

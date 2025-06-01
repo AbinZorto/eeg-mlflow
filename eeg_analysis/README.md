@@ -37,12 +37,12 @@ pip install -e .
 
 1. Data Processing:
 ```bash
-python run_pipeline.py process --config configs/processing_config.yaml
+python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/processing_config.yaml process
 ```
 
 2. Model Training:
 ```bash
-python run_pipeline.py train --config configs/model_config.yaml
+python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type svm --enable-feature-selection --n-features-select 10 --fs-method select_k_best_f_classif
 ```
 
 3. View Results:

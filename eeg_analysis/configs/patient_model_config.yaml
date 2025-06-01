@@ -2,7 +2,7 @@
 
 # Data Configuration
 data:
-  feature_path: "data/processed/features/window_features.parquet"
+  feature_path: "data/processed/features/{window_size}s_window_features.parquet"
   split:
     test_size: 0.2
     random_state: 42
@@ -23,41 +23,41 @@ aggregation:
 # Model Configuration
 model:
   name: "patient_model"
-  type: "random_forest"  # Options: random_forest, gradient_boosting, logistic_regression, svm
-  
+  type: "random_forest" # Options: random_forest, gradient_boosting, logistic_regression, svm
+
   params:
     random_forest:
       n_estimators: 200
-      min_samples_leaf: 2  # Smaller than window-level due to fewer samples
-      max_features: 'sqrt'
-      class_weight: 'balanced'
+      min_samples_leaf: 2 # Smaller than window-level due to fewer samples
+      max_features: "sqrt"
+      class_weight: "balanced"
       random_state: 42
-    
+
     gradient_boosting:
       n_estimators: 200
       learning_rate: 0.1
       max_depth: 3
       min_samples_leaf: 1
       random_state: 42
-    
+
     logistic_regression:
       max_iter: 1000
-      class_weight: 'balanced'
-      penalty: 'l1'
-      solver: 'liblinear'
+      class_weight: "balanced"
+      penalty: "l1"
+      solver: "liblinear"
       random_state: 42
-    
+
     svm:
-      kernel: 'rbf'
+      kernel: "rbf"
       C: 1.0
-      class_weight: 'balanced'
+      class_weight: "balanced"
       probability: true
       random_state: 42
 
 # Cross Validation
 cv:
-  method: "logo"  # Leave-One-Group-Out
-  n_splits: null  # Determined by number of patients
+  method: "logo" # Leave-One-Group-Out
+  n_splits: null # Determined by number of patients
   shuffle: true
   random_state: 42
 
@@ -86,14 +86,14 @@ metrics:
 
 # Model Selection
 model_selection:
-  metric: "f1"  # Primary metric for model selection
-  refit: true   # Refit on full dataset after selection
+  metric: "f1" # Primary metric for model selection
+  refit: true # Refit on full dataset after selection
 
 # Feature Selection
 feature_selection:
   enabled: true
-  method: "importance"  # Options: importance, correlation, variance
-  threshold: 0.01      # Minimum importance threshold
+  method: "importance" # Options: importance, correlation, variance
+  threshold: 0.01 # Minimum importance threshold
 
 # Logging Configuration
 logging:

@@ -1,0 +1,241 @@
+#!/bin/bash
+
+# EEG Analysis - Complete Model Training Script
+# This script runs all available models with different feature selection configurations
+
+set -e  # Exit on any error
+
+# Configuration
+CONFIG_FILE="eeg_analysis/configs/window_model_config.yaml"
+LEVEL="window"
+PYTHON_CMD="python3"
+
+# Available models
+MODELS=("random_forest" "gradient_boosting" "logistic_regression" "svm")
+
+# Feature selection configurations
+FEATURE_SELECTION_METHODS=("select_k_best_f_classif" "select_k_best_mutual_info")
+FEATURE_COUNTS=(10 15 20)
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Logging
+LOG_FILE="experiment_log_$(date +%Y%m%d_%H%M%S).txt"
+
+log_message() {
+    local message="$1"
+    echo -e "${BLUE}[$(date '+%Y-%m-%d %H:%M:%S')]${NC} $message" | tee -a "$LOG_FILE"
+}
+
+log_success() {
+    local message="$1"
+    echo -e "${GREEN}[SUCCESS]${NC} $message" | tee -a "$LOG_FILE"
+}
+
+log_error() {
+    local message="$1"
+    echo -e "${RED}[ERROR]${NC} $message" | tee -a "$LOG_FILE"
+}
+
+log_warning() {
+    local message="$1"
+    echo -e "${YELLOW}[WARNING]${NC} $message" | tee -a "$LOG_FILE"
+}
+
+# Function to run a single experiment
+run_experiment() {
+    local model_type="$1"
+    local use_fs="$2"
+    local fs_method="$3"
+    local n_features="$4"
+    
+    local cmd="$PYTHON_CMD eeg_analysis/run_pipeline.py --config $CONFIG_FILE train --level $LEVEL --model-type $model_type"
+    
+    if [ "$use_fs" = "true" ]; then
+        cmd="$cmd --enable-feature-selection --n-features-select $n_features --fs-method $fs_method"
+        local exp_name="${model_type}_fs_${fs_method}_${n_features}"
+    else
+        local exp_name="${model_type}_no_fs"
+    fi
+    
+    log_message "Starting experiment: $exp_name"
+    log_message "Command: $cmd"
+    
+    if $cmd; then
+        log_success "Completed: $exp_name"
+        return 0
+    else
+        log_error "Failed: $exp_name"
+        return 1
+    fi
+}
+
+# Function to display progress
+show_progress() {
+    local current="$1"
+    local total="$2"
+    local percentage=$((current * 100 / total))
+    printf "\r${BLUE}Progress: [%-50s] %d%% (%d/%d)${NC}" \
+           "$(printf '#%.0s' $(seq 1 $((percentage / 2))))" \
+           "$percentage" "$current" "$total"
+}
+
+# Main execution
+main() {
+    log_message "Starting EEG Analysis Complete Model Training"
+    log_message "Configuration file: $CONFIG_FILE"
+    log_message "Log file: $LOG_FILE"
+    
+    # Check if config file exists
+    if [ ! -f "$CONFIG_FILE" ]; then
+        log_error "Configuration file not found: $CONFIG_FILE"
+        exit 1
+    fi
+    
+    # Calculate total experiments
+    local total_experiments=$(( ${#MODELS[@]} + ${#MODELS[@]} * ${#FEATURE_SELECTION_METHODS[@]} * ${#FEATURE_COUNTS[@]} ))
+    log_message "Total experiments to run: $total_experiments"
+    
+    local current_experiment=0
+    local successful_experiments=0
+    local failed_experiments=0
+    
+    echo ""
+    log_message "=== PHASE 1: Models without feature selection ==="
+    
+    # Run models without feature selection
+    for model in "${MODELS[@]}"; do
+        current_experiment=$((current_experiment + 1))
+        show_progress $current_experiment $total_experiments
+        echo ""
+        
+        if run_experiment "$model" "false" "" ""; then
+            successful_experiments=$((successful_experiments + 1))
+        else
+            failed_experiments=$((failed_experiments + 1))
+        fi
+        
+        sleep 2  # Brief pause between experiments
+    done
+    
+    echo ""
+    log_message "=== PHASE 2: Models with feature selection ==="
+    
+    # Run models with feature selection
+    for model in "${MODELS[@]}"; do
+        for fs_method in "${FEATURE_SELECTION_METHODS[@]}"; do
+            for n_features in "${FEATURE_COUNTS[@]}"; do
+                current_experiment=$((current_experiment + 1))
+                show_progress $current_experiment $total_experiments
+                echo ""
+                
+                if run_experiment "$model" "true" "$fs_method" "$n_features"; then
+                    successful_experiments=$((successful_experiments + 1))
+                else
+                    failed_experiments=$((failed_experiments + 1))
+                fi
+                
+                sleep 2  # Brief pause between experiments
+            done
+        done
+    done
+    
+    echo ""
+    echo ""
+    log_message "=== EXPERIMENT SUMMARY ==="
+    log_message "Total experiments: $total_experiments"
+    log_success "Successful: $successful_experiments"
+    if [ $failed_experiments -gt 0 ]; then
+        log_error "Failed: $failed_experiments"
+    else
+        log_success "Failed: $failed_experiments"
+    fi
+    
+    # Generate summary report
+    echo ""
+    log_message "=== DETAILED EXPERIMENT LIST ==="
+    
+    # Models without feature selection
+    log_message "Without feature selection:"
+    for model in "${MODELS[@]}"; do
+        echo "  - $model" | tee -a "$LOG_FILE"
+    done
+    
+    # Models with feature selection
+    log_message "With feature selection:"
+    for model in "${MODELS[@]}"; do
+        for fs_method in "${FEATURE_SELECTION_METHODS[@]}"; do
+            for n_features in "${FEATURE_COUNTS[@]}"; do
+                echo "  - $model + $fs_method ($n_features features)" | tee -a "$LOG_FILE"
+            done
+        done
+    done
+    
+    echo ""
+    log_message "All experiments completed!"
+    log_message "View results with: mlflow ui"
+    log_message "Full log saved to: $LOG_FILE"
+    
+    if [ $failed_experiments -gt 0 ]; then
+        log_warning "Some experiments failed. Check the log file for details."
+        exit 1
+    else
+        log_success "All experiments completed successfully!"
+    fi
+}
+
+# Trap to handle interruption
+trap 'echo -e "\n${RED}Experiment interrupted by user${NC}"; exit 130' INT
+
+# Check for help
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    echo "EEG Analysis Complete Model Training Script"
+    echo ""
+    echo "This script runs all available models with different configurations:"
+    echo "1. All models without feature selection"
+    echo "2. All models with select_k_best_f_classif (10, 15, 20 features)"
+    echo "3. All models with select_k_best_mutual_info (10, 15, 20 features)"
+    echo ""
+    echo "Models: random_forest, gradient_boosting, logistic_regression, svm"
+    echo "Total experiments: 28"
+    echo ""
+    echo "Usage: $0 [--dry-run]"
+    echo ""
+    echo "Options:"
+    echo "  --dry-run    Show what would be executed without running"
+    echo "  -h, --help   Show this help message"
+    exit 0
+fi
+
+# Dry run option
+if [[ "$1" == "--dry-run" ]]; then
+    echo "DRY RUN MODE - Commands that would be executed:"
+    echo ""
+    
+    echo "=== Without feature selection ==="
+    for model in "${MODELS[@]}"; do
+        echo "$PYTHON_CMD eeg_analysis/run_pipeline.py --config $CONFIG_FILE train --level $LEVEL --model-type $model"
+    done
+    
+    echo ""
+    echo "=== With feature selection ==="
+    for model in "${MODELS[@]}"; do
+        for fs_method in "${FEATURE_SELECTION_METHODS[@]}"; do
+            for n_features in "${FEATURE_COUNTS[@]}"; do
+                echo "$PYTHON_CMD eeg_analysis/run_pipeline.py --config $CONFIG_FILE train --level $LEVEL --model-type $model --enable-feature-selection --n-features-select $n_features --fs-method $fs_method"
+            done
+        done
+    done
+    
+    echo ""
+    echo "Total: $(( ${#MODELS[@]} + ${#MODELS[@]} * ${#FEATURE_SELECTION_METHODS[@]} * ${#FEATURE_COUNTS[@]} )) experiments"
+    exit 0
+fi
+
+# Run main function
+main 
