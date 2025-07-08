@@ -87,3 +87,38 @@ class ModelEvaluator:
         })
         
         return results
+
+    def calculate_detailed_metrics(self, y_true: np.ndarray, y_pred: np.ndarray) -> Dict[str, Any]:
+        """
+        Calculate detailed metrics with counts and proper handling of edge cases.
+        
+        Args:
+            y_true: True labels
+            y_pred: Predicted labels
+            
+        Returns:
+            Dictionary with detailed metrics including counts
+        """
+        # Basic counts
+        TP = sum((y_true == 1) & (y_pred == 1))
+        TN = sum((y_true == 0) & (y_pred == 0))
+        FP = sum((y_true == 0) & (y_pred == 1))
+        FN = sum((y_true == 1) & (y_pred == 0))
+        
+        # Calculate metrics with proper handling of division by zero
+        accuracy = (TP + TN) / len(y_true) if len(y_true) > 0 else 0
+        precision = TP / (TP + FP) if (TP + FP) > 0 else 0
+        recall = TP / (TP + FN) if (TP + FN) > 0 else 0
+        f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
+        
+        return {
+            'TP': int(TP),
+            'TN': int(TN),
+            'FP': int(FP),
+            'FN': int(FN),
+            'accuracy': float(accuracy),
+            'precision': float(precision),
+            'recall': float(recall),
+            'f1': float(f1),
+            'n_samples': int(len(y_true))
+        }
