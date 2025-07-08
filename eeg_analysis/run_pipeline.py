@@ -162,7 +162,9 @@ def train(ctx, level, window_size, model_type, enable_feature_selection, n_featu
     # Load processing config to get window size if not provided
     if window_size is None:
         try:
-            with open('eeg_analysis/configs/processing_config.yaml', 'r') as f:
+            script_dir = Path(__file__).parent
+            config_path = script_dir / 'configs' / 'processing_config.yaml'
+            with open(config_path, 'r') as f:
                 processing_config = yaml.safe_load(f)
                 window_size = processing_config['window_slicer']['window_seconds']
         except Exception as e:
@@ -212,10 +214,16 @@ def train(ctx, level, window_size, model_type, enable_feature_selection, n_featu
             # Train model
             model = trainer.train()
             
-            # Get sample data for model signature
+            # Get sample data for model signature - use the aggregated data like in training
             data_path = config['data']['feature_path']
             df = pd.read_parquet(data_path)
-            X, y, _ = trainer._prepare_data(df)
+            
+            if level == 'patient':
+                # For patient-level training, aggregate the data first like in training
+                patient_df = trainer.aggregate_windows(df)
+                X, y, _ = trainer._prepare_data(patient_df)
+            else:
+                X, y, _ = trainer._prepare_data(df)
             
             # Use the same feature selection that was applied during training
             if hasattr(trainer, 'selected_feature_names'):
@@ -267,7 +275,7 @@ def evaluate(ctx, model_id, data_path, window_size):
             if window_size is None:
                 # Try to get from processing config
                 try:
-                    with open('eeg_analysis/configs/processing_config.yaml', 'r') as f:
+                    with open('configs/processing_config.yaml', 'r') as f:
                         processing_config = yaml.safe_load(f)
                         window_size = processing_config['window_slicer']['window_seconds']
                 except Exception as e:

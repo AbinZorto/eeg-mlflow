@@ -21,9 +21,15 @@ aggregation:
   remove_outliers: false
 
 # Model Configuration
+model_type: "auto" # Options: auto (tries all), random_forest, gradient_boosting, logistic_regression, svm_rbf, svm_linear, etc.
+# Use 'auto' for automatic model selection based on F1 score
+# Or specify a specific model type for single model training
+
+# Class weights configuration
+use_class_weights: true # Whether to use class weights to handle imbalance
+
 model:
   name: "patient_model"
-  type: "random_forest" # Options: random_forest, gradient_boosting, logistic_regression, svm
 
   params:
     random_forest:
@@ -43,16 +49,63 @@ model:
     logistic_regression:
       max_iter: 1000
       class_weight: "balanced"
+      penalty: "l2"
+      solver: "lbfgs"
+      random_state: 42
+
+    logistic_regression_l1:
+      max_iter: 1000
+      class_weight: "balanced"
       penalty: "l1"
       solver: "liblinear"
       random_state: 42
 
-    svm:
+    svm_rbf:
       kernel: "rbf"
       C: 1.0
       class_weight: "balanced"
       probability: true
       random_state: 42
+
+    svm_linear:
+      kernel: "linear"
+      C: 1.0
+      class_weight: "balanced"
+      probability: true
+      random_state: 42
+
+    extra_trees:
+      n_estimators: 200
+      min_samples_leaf: 2
+      class_weight: "balanced"
+      random_state: 42
+
+    ada_boost:
+      n_estimators: 100
+      learning_rate: 0.1
+      random_state: 42
+
+    knn:
+      n_neighbors: 3
+      weights: "distance"
+
+    decision_tree:
+      min_samples_leaf: 2
+      class_weight: "balanced"
+      random_state: 42
+
+    sgd:
+      loss: "modified_huber"
+      penalty: "elasticnet"
+      class_weight: "balanced"
+      max_iter: 1000
+      random_state: 42
+
+# Paths Configuration
+paths:
+  models: "models/patient_level"
+  features: "data/processed/features"
+  logs: "logs"
 
 # Cross Validation
 cv:
@@ -63,7 +116,6 @@ cv:
 
 # Output Configuration
 output:
-  path: "models/patient_level"
   save_predictions: true
   save_probabilities: true
   feature_importance: true
@@ -71,10 +123,11 @@ output:
 
 # MLflow Tracking
 mlflow:
-  experiment_name: "patient_level_training"
-  tracking_uri: "mlruns"
+  experiment_name: "patient_training"
+  tracking_uri: "file:./mlruns"
   register_model: true
   model_stage: "Development"
+  artifact_location: "./mlruns"
 
 # Evaluation Metrics
 metrics:
@@ -84,16 +137,16 @@ metrics:
   - f1
   - roc_auc
 
-# Model Selection
+# Feature Selection
+feature_selection:
+  enabled: false
+  method: "model_based" # Options: model_based, select_k_best_f_classif, select_k_best_mutual_info, select_from_model_l1, rfe
+  n_features: 10 # Number of features to select
+
+# Model Selection (for auto mode)
 model_selection:
   metric: "f1" # Primary metric for model selection
   refit: true # Refit on full dataset after selection
-
-# Feature Selection
-feature_selection:
-  enabled: true
-  method: "importance" # Options: importance, correlation, variance
-  threshold: 0.01 # Minimum importance threshold
 
 # Logging Configuration
 logging:

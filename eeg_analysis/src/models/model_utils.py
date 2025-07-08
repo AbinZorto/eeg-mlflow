@@ -2,9 +2,11 @@ import numpy as np
 import pandas as pd
 from typing import Dict, Any, List
 from sklearn.preprocessing import StandardScaler
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
-from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, ExtraTreesClassifier, AdaBoostClassifier
+from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.pipeline import Pipeline
 import mlflow
 import logging
@@ -18,6 +20,7 @@ logger = logging.getLogger(__name__)
 class ModelBuilder:
     @staticmethod
     def create_classifier(name: str, params: Dict[Any, Any] = None) -> Pipeline:
+        """Create a classifier pipeline with StandardScaler and the specified model."""
         if params is None:
             user_params = {}
         else:
@@ -34,6 +37,7 @@ class ModelBuilder:
             }
             final_params = {**default_params, **user_params}
             model_instance = RandomForestClassifier(**final_params)
+            
         elif name == 'gradient_boosting':
             default_params = {
                 'n_estimators': 200,
@@ -43,6 +47,7 @@ class ModelBuilder:
             }
             final_params = {**default_params, **user_params}
             model_instance = GradientBoostingClassifier(**final_params)
+            
         elif name == 'logistic_regression':
             default_params = {
                 'max_iter': 1000,
@@ -51,7 +56,19 @@ class ModelBuilder:
             }
             final_params = {**default_params, **user_params}
             model_instance = LogisticRegression(**final_params)
-        elif name == 'svm':
+            
+        elif name == 'logistic_regression_l1':
+            default_params = {
+                'penalty': 'l1',
+                'solver': 'liblinear',
+                'max_iter': 1000,
+                'class_weight': 'balanced',
+                'random_state': 42
+            }
+            final_params = {**default_params, **user_params}
+            model_instance = LogisticRegression(**final_params)
+            
+        elif name == 'svm' or name == 'svm_rbf':
             default_params = {
                 'kernel': 'rbf',
                 'class_weight': 'balanced',
@@ -60,14 +77,182 @@ class ModelBuilder:
             }
             final_params = {**default_params, **user_params}
             model_instance = SVC(**final_params)
+            
+        elif name == 'svm_linear':
+            default_params = {
+                'kernel': 'linear',
+                'class_weight': 'balanced',
+                'probability': True,
+                'random_state': 42
+            }
+            final_params = {**default_params, **user_params}
+            model_instance = SVC(**final_params)
+            
+        elif name == 'extra_trees':
+            default_params = {
+                'n_estimators': 200,
+                'min_samples_leaf': 2,
+                'class_weight': 'balanced',
+                'random_state': 42
+            }
+            final_params = {**default_params, **user_params}
+            model_instance = ExtraTreesClassifier(**final_params)
+            
+        elif name == 'ada_boost':
+            default_params = {
+                'n_estimators': 100,
+                'learning_rate': 0.1,
+                'random_state': 42
+            }
+            final_params = {**default_params, **user_params}
+            model_instance = AdaBoostClassifier(**final_params)
+            
+        elif name == 'knn':
+            default_params = {
+                'n_neighbors': 3,
+                'weights': 'distance'
+            }
+            final_params = {**default_params, **user_params}
+            model_instance = KNeighborsClassifier(**final_params)
+            
+        elif name == 'decision_tree':
+            default_params = {
+                'min_samples_leaf': 2,
+                'class_weight': 'balanced',
+                'random_state': 42
+            }
+            final_params = {**default_params, **user_params}
+            model_instance = DecisionTreeClassifier(**final_params)
+            
+        elif name == 'sgd':
+            default_params = {
+                'loss': 'modified_huber',  # Enables probability estimates
+                'penalty': 'elasticnet',
+                'class_weight': 'balanced',
+                'max_iter': 1000,
+                'random_state': 42
+            }
+            final_params = {**default_params, **user_params}
+            model_instance = SGDClassifier(**final_params)
+            
         else:
-            supported_models = ['random_forest', 'gradient_boosting', 'logistic_regression', 'svm']
+            supported_models = [
+                'random_forest', 'gradient_boosting', 'logistic_regression', 'logistic_regression_l1',
+                'svm', 'svm_rbf', 'svm_linear', 'extra_trees', 'ada_boost', 'knn', 'decision_tree', 'sgd'
+            ]
             raise ValueError(f"Classifier {name} not supported. Choose from: {supported_models}")
         
         return Pipeline([
             ('scaler', StandardScaler()),
             ('classifier', model_instance)
         ])
+
+    @staticmethod
+    def get_all_classifiers(use_class_weights: bool = True, config_params: Dict[str, Dict] = None) -> Dict[str, Pipeline]:
+        """
+        Get all available classifiers with their default configurations.
+        
+        Args:
+            use_class_weights: Whether to use class weights for imbalanced datasets
+            config_params: Optional dictionary of model-specific parameters from config
+            
+        Returns:
+            Dictionary of classifier name -> Pipeline
+        """
+        # Set class weights
+        class_weights = {0: 1, 1: 2} if use_class_weights else 'balanced'
+        
+        # Default parameters for all models
+        default_configs = {
+            'random_forest': {
+                'n_estimators': 200,
+                'min_samples_leaf': 2,
+                'class_weight': class_weights,
+                'random_state': 42
+            },
+            'gradient_boosting': {
+                'n_estimators': 200,
+                'min_samples_leaf': 1,
+                'max_depth': 5,
+                'random_state': 42
+            },
+            'logistic_regression': {
+                'max_iter': 1000,
+                'class_weight': class_weights,
+                'random_state': 42
+            },
+            'extra_trees': {
+                'n_estimators': 200,
+                'min_samples_leaf': 2,
+                'class_weight': class_weights,
+                'random_state': 42
+            },
+            'ada_boost': {
+                'n_estimators': 100,
+                'learning_rate': 0.1,
+                'random_state': 42
+            },
+            'svm_rbf': {
+                'kernel': 'rbf',
+                'class_weight': class_weights,
+                'probability': True,
+                'random_state': 42
+            },
+            'svm_linear': {
+                'kernel': 'linear',
+                'class_weight': class_weights,
+                'probability': True,
+                'random_state': 42
+            },
+            'knn': {
+                'n_neighbors': 3,
+                'weights': 'distance'
+            },
+            'decision_tree': {
+                'min_samples_leaf': 2,
+                'class_weight': class_weights,
+                'random_state': 42
+            },
+            'logistic_regression_l1': {
+                'penalty': 'l1',
+                'solver': 'liblinear',
+                'class_weight': class_weights,
+                'max_iter': 1000,
+                'random_state': 42
+            },
+            'sgd': {
+                'loss': 'modified_huber',
+                'penalty': 'elasticnet',
+                'class_weight': class_weights,
+                'max_iter': 1000,
+                'random_state': 42
+            }
+        }
+        
+        # Merge with config parameters if provided
+        if config_params:
+            for model_name, params in config_params.items():
+                if model_name in default_configs:
+                    default_configs[model_name].update(params)
+        
+        # Create all classifiers
+        classifiers = {}
+        for name, params in default_configs.items():
+            try:
+                classifiers[name] = ModelBuilder.create_classifier(name, params)
+            except Exception as e:
+                logger.warning(f"Failed to create classifier {name}: {e}")
+                continue
+                
+        return classifiers
+
+    @staticmethod
+    def get_classifier_names() -> List[str]:
+        """Get list of all supported classifier names."""
+        return [
+            'random_forest', 'gradient_boosting', 'logistic_regression', 'logistic_regression_l1',
+            'svm_rbf', 'svm_linear', 'extra_trees', 'ada_boost', 'knn', 'decision_tree', 'sgd'
+        ]
 
 class MLflowLogger:
     @staticmethod

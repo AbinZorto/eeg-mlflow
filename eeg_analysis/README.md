@@ -41,10 +41,14 @@ python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/processing_co
 ```
 
 2. Model Training:
+For window Level
 ```bash
 python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type svm --enable-feature-selection --n-features-select 10 --fs-method select_k_best_f_classif
 ```
-
+For patient Level
+```bash
+python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/patient_model_config.yaml train --level patient --model-type svm --enable-feature-selection --n-features-select 10 --fs-method select_k_best_f_classif
+```
 3. View Results:
 ```bash
 mlflow ui
