@@ -19,6 +19,7 @@ from src.processing.feature_extractor import extract_eeg_features as run_feature
 
 from src.models.patient_trainer import PatientLevelTrainer
 from src.models.window_trainer import WindowLevelTrainer
+from src.models.deep_learning_trainer import DeepLearningTrainer
 from src.models.evaluation import ModelEvaluator
 
 logger = setup_logger(__name__)
@@ -32,7 +33,15 @@ def setup_mlflow_tracking(config):
     Returns:
         experiment_id: ID of the MLflow experiment
     """
-    experiment_name = config.get('mlflow', {}).get('experiment_name', "eeg_processing")
+    # Check for environment variable first (set by run_all_experiments.sh)
+    experiment_name = os.environ.get('MLFLOW_EXPERIMENT_NAME')
+    
+    # Fall back to config if environment variable not set
+    if experiment_name is None:
+        experiment_name = config.get('mlflow', {}).get('experiment_name', "eeg_processing")
+        logger.info(f"Using experiment name from config: {experiment_name}")
+    else:
+        logger.info(f"Using experiment name from environment: {experiment_name}")
     
     try:
         experiment = mlflow.get_experiment_by_name(experiment_name)
@@ -52,7 +61,7 @@ def setup_mlflow_tracking(config):
     except Exception as e: 
         logger.warning(f"Failed to get, create, or set experiment '{experiment_name}': {e}. Attempting to use/create a fallback.")
         # Create a fallback experiment name with timestamp
-        fallback_name = f"{experiment_name}_fallback_{int(time.time())}"
+        fallback_name = f"{experiment_name}_fallback_1"
         try:
             logger.info(f"Attempting to create or use fallback experiment: {fallback_name}")
             fb_experiment = mlflow.get_experiment_by_name(fallback_name)
@@ -144,7 +153,7 @@ def process(ctx):
 @cli.command()
 @click.option('--level', type=click.Choice(['patient', 'window']), required=True)
 @click.option('--window-size', type=int, help='Window size in seconds (overrides config)')
-@click.option('--model-type', type=click.Choice(['random_forest', 'gradient_boosting', 'logistic_regression', 'svm']), required=True)
+@click.option('--model-type', type=click.Choice(['random_forest', 'gradient_boosting', 'logistic_regression', 'svm', 'pytorch_mlp', 'keras_mlp']), required=True)
 @click.option('--enable-feature-selection', is_flag=True, help='Enable feature selection.')
 @click.option('--n-features-select', type=int, default=10, help='Number of features to select if feature selection is enabled.')
 @click.option('--fs-method', 
@@ -202,8 +211,11 @@ def train(ctx, level, window_size, model_type, enable_feature_selection, n_featu
         raise
     
     # Create appropriate trainer
-    trainer_cls = PatientLevelTrainer if level == 'patient' else WindowLevelTrainer
-    trainer = trainer_cls(config)
+    if model_type in ['pytorch_mlp', 'keras_mlp']:
+        trainer = DeepLearningTrainer(config)
+    else:
+        trainer_cls = PatientLevelTrainer if level == 'patient' else WindowLevelTrainer
+        trainer = trainer_cls(config)
     
     try:
         run_name_suffix = ""

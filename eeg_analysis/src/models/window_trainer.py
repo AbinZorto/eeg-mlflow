@@ -20,10 +20,19 @@ class WindowLevelTrainer(BaseTrainer):
     def __init__(self, config: Dict[str, Any]):
         super().__init__(config)
         self.model_type = config['model_type']
-        self.model_params = config['model']['params'][self.model_type]
+        # Use fallback approach for model params like patient_trainer does
+        all_model_params = config.get('model', {}).get('params', {})
+        self.model_params = all_model_params.get(self.model_type, {})
+        
+        # If the model type doesn't exist in config params, use empty dict (create_classifier will use defaults)
+        if not self.model_params and self.model_type not in all_model_params:
+            logger.info(f"Model type '{self.model_type}' not found in config params. Using default parameters.")
+            self.model_params = {}
+            
         self.output_dir = config['paths']['models']
         self.metrics = config['metrics']['window_level']
         self.feature_selection_config = config.get('feature_selection', {})
+        logger.info(f"WindowLevelTrainer initialized with model_type: {self.model_type}")
         logger.info(f"WindowLevelTrainer initialized with feature_selection_config: {self.feature_selection_config}")
     
     def _create_model_instance(self) -> BaseEstimator:

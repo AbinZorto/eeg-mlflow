@@ -1,0 +1,129 @@
+[0;34m[2025-07-08 22:57:12][0m Starting EEG Analysis Complete Model Training
+[0;34m[2025-07-08 22:57:12][0m Configuration file: eeg_analysis/configs/window_model_config.yaml
+[0;34m[2025-07-08 22:57:12][0m Log file: experiment_log_20250708_225712.txt
+[0;34m[2025-07-08 22:57:12][0m Total experiments to run: 28
+[0;34m[2025-07-08 22:57:12][0m === PHASE 1: Models without feature selection ===
+[0;34m[2025-07-08 22:57:12][0m Starting experiment: random_forest_no_fs
+[0;34m[2025-07-08 22:57:12][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type random_forest
+[0;32m[SUCCESS][0m Completed: random_forest_no_fs
+[0;34m[2025-07-08 22:58:56][0m Starting experiment: gradient_boosting_no_fs
+[0;34m[2025-07-08 22:58:56][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type gradient_boosting
+[0;32m[SUCCESS][0m Completed: gradient_boosting_no_fs
+[0;34m[2025-07-08 23:00:41][0m Starting experiment: logistic_regression_no_fs
+[0;34m[2025-07-08 23:00:41][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type logistic_regression
+[0;32m[SUCCESS][0m Completed: logistic_regression_no_fs
+[0;34m[2025-07-08 23:02:29][0m Starting experiment: svm_no_fs
+[0;34m[2025-07-08 23:02:29][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type svm
+[0;32m[SUCCESS][0m Completed: svm_no_fs
+[0;34m[2025-07-08 23:04:19][0m === PHASE 2: Models with feature selection ===
+[0;34m[2025-07-08 23:04:19][0m Starting experiment: random_forest_fs_select_k_best_f_classif_10
+[0;34m[2025-07-08 23:04:19][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type random_forest --enable-feature-selection --n-features-select 10 --fs-method select_k_best_f_classif
+[0;32m[SUCCESS][0m Completed: random_forest_fs_select_k_best_f_classif_10
+[0;34m[2025-07-08 23:05:10][0m Starting experiment: random_forest_fs_select_k_best_f_classif_15
+[0;34m[2025-07-08 23:05:10][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type random_forest --enable-feature-selection --n-features-select 15 --fs-method select_k_best_f_classif
+[0;32m[SUCCESS][0m Completed: random_forest_fs_select_k_best_f_classif_15
+[0;34m[2025-07-08 23:06:00][0m Starting experiment: random_forest_fs_select_k_best_f_classif_20
+[0;34m[2025-07-08 23:06:00][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type random_forest --enable-feature-selection --n-features-select 20 --fs-method select_k_best_f_classif
+[0;32m[SUCCESS][0m Completed: random_forest_fs_select_k_best_f_classif_20
+[0;34m[2025-07-08 23:07:02][0m Starting experiment: random_forest_fs_select_k_best_mutual_info_10
+[0;34m[2025-07-08 23:07:02][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type random_forest --enable-feature-selection --n-features-select 10 --fs-method select_k_best_mutual_info
+[0;32m[SUCCESS][0m Completed: random_forest_fs_select_k_best_mutual_info_10
+[0;34m[2025-07-08 23:07:49][0m Starting experiment: random_forest_fs_select_k_best_mutual_info_15
+[0;34m[2025-07-08 23:07:49][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type random_forest --enable-feature-selection --n-features-select 15 --fs-method select_k_best_mutual_info
+[0;32m[SUCCESS][0m Completed: random_forest_fs_select_k_best_mutual_info_15
+[0;34m[2025-07-08 23:08:38][0m Starting experiment: random_forest_fs_select_k_best_mutual_info_20
+[0;34m[2025-07-08 23:08:38][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type random_forest --enable-feature-selection --n-features-select 20 --fs-method select_k_best_mutual_info
+[0;32m[SUCCESS][0m Completed: random_forest_fs_select_k_best_mutual_info_20
+[0;34m[2025-07-08 23:09:35][0m Starting experiment: gradient_boosting_fs_select_k_best_f_classif_10
+[0;34m[2025-07-08 23:09:35][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type gradient_boosting --enable-feature-selection --n-features-select 10 --fs-method select_k_best_f_classif
+[0;32m[SUCCESS][0m Completed: gradient_boosting_fs_select_k_best_f_classif_10
+[0;34m[2025-07-08 23:10:24][0m Starting experiment: gradient_boosting_fs_select_k_best_f_classif_15
+[0;34m[2025-07-08 23:10:24][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type gradient_boosting --enable-feature-selection --n-features-select 15 --fs-method select_k_best_f_classif
+[0;32m[SUCCESS][0m Completed: gradient_boosting_fs_select_k_best_f_classif_15
+[0;34m[2025-07-08 23:11:12][0m Starting experiment: gradient_boosting_fs_select_k_best_f_classif_20
+[0;34m[2025-07-08 23:11:12][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type gradient_boosting --enable-feature-selection --n-features-select 20 --fs-method select_k_best_f_classif
+[0;32m[SUCCESS][0m Completed: gradient_boosting_fs_select_k_best_f_classif_20
+[0;34m[2025-07-08 23:12:14][0m Starting experiment: gradient_boosting_fs_select_k_best_mutual_info_10
+[0;34m[2025-07-08 23:12:14][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type gradient_boosting --enable-feature-selection --n-features-select 10 --fs-method select_k_best_mutual_info
+[0;32m[SUCCESS][0m Completed: gradient_boosting_fs_select_k_best_mutual_info_10
+[0;34m[2025-07-08 23:13:01][0m Starting experiment: gradient_boosting_fs_select_k_best_mutual_info_15
+[0;34m[2025-07-08 23:13:01][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type gradient_boosting --enable-feature-selection --n-features-select 15 --fs-method select_k_best_mutual_info
+[0;32m[SUCCESS][0m Completed: gradient_boosting_fs_select_k_best_mutual_info_15
+[0;34m[2025-07-08 23:13:48][0m Starting experiment: gradient_boosting_fs_select_k_best_mutual_info_20
+[0;34m[2025-07-08 23:13:48][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type gradient_boosting --enable-feature-selection --n-features-select 20 --fs-method select_k_best_mutual_info
+[0;32m[SUCCESS][0m Completed: gradient_boosting_fs_select_k_best_mutual_info_20
+[0;34m[2025-07-08 23:14:47][0m Starting experiment: logistic_regression_fs_select_k_best_f_classif_10
+[0;34m[2025-07-08 23:14:47][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type logistic_regression --enable-feature-selection --n-features-select 10 --fs-method select_k_best_f_classif
+[0;32m[SUCCESS][0m Completed: logistic_regression_fs_select_k_best_f_classif_10
+[0;34m[2025-07-08 23:15:36][0m Starting experiment: logistic_regression_fs_select_k_best_f_classif_15
+[0;34m[2025-07-08 23:15:36][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type logistic_regression --enable-feature-selection --n-features-select 15 --fs-method select_k_best_f_classif
+[0;32m[SUCCESS][0m Completed: logistic_regression_fs_select_k_best_f_classif_15
+[0;34m[2025-07-08 23:16:25][0m Starting experiment: logistic_regression_fs_select_k_best_f_classif_20
+[0;34m[2025-07-08 23:16:25][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type logistic_regression --enable-feature-selection --n-features-select 20 --fs-method select_k_best_f_classif
+[0;32m[SUCCESS][0m Completed: logistic_regression_fs_select_k_best_f_classif_20
+[0;34m[2025-07-08 23:17:26][0m Starting experiment: logistic_regression_fs_select_k_best_mutual_info_10
+[0;34m[2025-07-08 23:17:26][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type logistic_regression --enable-feature-selection --n-features-select 10 --fs-method select_k_best_mutual_info
+[0;32m[SUCCESS][0m Completed: logistic_regression_fs_select_k_best_mutual_info_10
+[0;34m[2025-07-08 23:18:09][0m Starting experiment: logistic_regression_fs_select_k_best_mutual_info_15
+[0;34m[2025-07-08 23:18:09][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type logistic_regression --enable-feature-selection --n-features-select 15 --fs-method select_k_best_mutual_info
+[0;32m[SUCCESS][0m Completed: logistic_regression_fs_select_k_best_mutual_info_15
+[0;34m[2025-07-08 23:18:51][0m Starting experiment: logistic_regression_fs_select_k_best_mutual_info_20
+[0;34m[2025-07-08 23:18:51][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type logistic_regression --enable-feature-selection --n-features-select 20 --fs-method select_k_best_mutual_info
+[0;32m[SUCCESS][0m Completed: logistic_regression_fs_select_k_best_mutual_info_20
+[0;34m[2025-07-08 23:19:47][0m Starting experiment: svm_fs_select_k_best_f_classif_10
+[0;34m[2025-07-08 23:19:47][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type svm --enable-feature-selection --n-features-select 10 --fs-method select_k_best_f_classif
+[0;32m[SUCCESS][0m Completed: svm_fs_select_k_best_f_classif_10
+[0;34m[2025-07-08 23:20:36][0m Starting experiment: svm_fs_select_k_best_f_classif_15
+[0;34m[2025-07-08 23:20:36][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type svm --enable-feature-selection --n-features-select 15 --fs-method select_k_best_f_classif
+[0;32m[SUCCESS][0m Completed: svm_fs_select_k_best_f_classif_15
+[0;34m[2025-07-08 23:21:28][0m Starting experiment: svm_fs_select_k_best_f_classif_20
+[0;34m[2025-07-08 23:21:28][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type svm --enable-feature-selection --n-features-select 20 --fs-method select_k_best_f_classif
+[0;32m[SUCCESS][0m Completed: svm_fs_select_k_best_f_classif_20
+[0;34m[2025-07-08 23:22:30][0m Starting experiment: svm_fs_select_k_best_mutual_info_10
+[0;34m[2025-07-08 23:22:30][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type svm --enable-feature-selection --n-features-select 10 --fs-method select_k_best_mutual_info
+[0;32m[SUCCESS][0m Completed: svm_fs_select_k_best_mutual_info_10
+[0;34m[2025-07-08 23:23:20][0m Starting experiment: svm_fs_select_k_best_mutual_info_15
+[0;34m[2025-07-08 23:23:20][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type svm --enable-feature-selection --n-features-select 15 --fs-method select_k_best_mutual_info
+[0;32m[SUCCESS][0m Completed: svm_fs_select_k_best_mutual_info_15
+[0;34m[2025-07-08 23:24:21][0m Starting experiment: svm_fs_select_k_best_mutual_info_20
+[0;34m[2025-07-08 23:24:21][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type svm --enable-feature-selection --n-features-select 20 --fs-method select_k_best_mutual_info
+[0;32m[SUCCESS][0m Completed: svm_fs_select_k_best_mutual_info_20
+[0;34m[2025-07-08 23:25:34][0m === EXPERIMENT SUMMARY ===
+[0;34m[2025-07-08 23:25:34][0m Total experiments: 28
+[0;32m[SUCCESS][0m Successful: 28
+[0;32m[SUCCESS][0m Failed: 0
+[0;34m[2025-07-08 23:25:34][0m === DETAILED EXPERIMENT LIST ===
+[0;34m[2025-07-08 23:25:34][0m Without feature selection:
+  - random_forest
+  - gradient_boosting
+  - logistic_regression
+  - svm
+[0;34m[2025-07-08 23:25:34][0m With feature selection:
+  - random_forest + select_k_best_f_classif (10 features)
+  - random_forest + select_k_best_f_classif (15 features)
+  - random_forest + select_k_best_f_classif (20 features)
+  - random_forest + select_k_best_mutual_info (10 features)
+  - random_forest + select_k_best_mutual_info (15 features)
+  - random_forest + select_k_best_mutual_info (20 features)
+  - gradient_boosting + select_k_best_f_classif (10 features)
+  - gradient_boosting + select_k_best_f_classif (15 features)
+  - gradient_boosting + select_k_best_f_classif (20 features)
+  - gradient_boosting + select_k_best_mutual_info (10 features)
+  - gradient_boosting + select_k_best_mutual_info (15 features)
+  - gradient_boosting + select_k_best_mutual_info (20 features)
+  - logistic_regression + select_k_best_f_classif (10 features)
+  - logistic_regression + select_k_best_f_classif (15 features)
+  - logistic_regression + select_k_best_f_classif (20 features)
+  - logistic_regression + select_k_best_mutual_info (10 features)
+  - logistic_regression + select_k_best_mutual_info (15 features)
+  - logistic_regression + select_k_best_mutual_info (20 features)
+  - svm + select_k_best_f_classif (10 features)
+  - svm + select_k_best_f_classif (15 features)
+  - svm + select_k_best_f_classif (20 features)
+  - svm + select_k_best_mutual_info (10 features)
+  - svm + select_k_best_mutual_info (15 features)
+  - svm + select_k_best_mutual_info (20 features)
+[0;34m[2025-07-08 23:25:34][0m All experiments completed!
+[0;34m[2025-07-08 23:25:34][0m View results with: mlflow ui
+[0;34m[2025-07-08 23:25:34][0m Full log saved to: experiment_log_20250708_225712.txt
+[0;32m[SUCCESS][0m All experiments completed successfully!

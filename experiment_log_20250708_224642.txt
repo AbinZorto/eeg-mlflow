@@ -1,0 +1,17 @@
+[0;34m[2025-07-08 22:46:42][0m Starting EEG Analysis Complete Model Training
+[0;34m[2025-07-08 22:46:42][0m Configuration file: eeg_analysis/configs/window_model_config.yaml
+[0;34m[2025-07-08 22:46:42][0m Log file: experiment_log_20250708_224642.txt
+[0;34m[2025-07-08 22:46:42][0m Total experiments to run: 28
+[0;34m[2025-07-08 22:46:42][0m === PHASE 1: Models without feature selection ===
+[0;34m[2025-07-08 22:46:42][0m Starting experiment: random_forest_no_fs
+[0;34m[2025-07-08 22:46:42][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type random_forest
+[0;31m[ERROR][0m Failed: random_forest_no_fs
+[0;34m[2025-07-08 22:46:44][0m Starting experiment: gradient_boosting_no_fs
+[0;34m[2025-07-08 22:46:44][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type gradient_boosting
+[0;31m[ERROR][0m Failed: gradient_boosting_no_fs
+[0;34m[2025-07-08 22:46:46][0m Starting experiment: logistic_regression_no_fs
+[0;34m[2025-07-08 22:46:46][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type logistic_regression
+[0;31m[ERROR][0m Failed: logistic_regression_no_fs
+[0;34m[2025-07-08 22:46:48][0m Starting experiment: svm_no_fs
+[0;34m[2025-07-08 22:46:48][0m Command: python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml train --level window --model-type svm
+[0;31m[ERROR][0m Failed: svm_no_fs
