@@ -2,14 +2,14 @@
 
 # Data Configuration
 data:
-  feature_path: "data/processed/features/{window_size}s_window_features.parquet"
+  feature_path: "data/processed/features/2s_window_features.parquet"
   split:
     test_size: 0.2
     random_state: 42
     stratify: true
 
 # Model Configuration
-model_type: "random_forest" # Options: random_forest, gradient_boosting, logistic_regression, etc.
+model_type: "random_forest" # Options: random_forest, gradient_boosting, logistic_regression, pytorch_mlp, keras_mlp, etc.
 # Note: Window-level trainer currently uses single model training only
 
 model:
@@ -84,6 +84,37 @@ model:
       class_weight: "balanced"
       max_iter: 1000
       random_state: 42
+
+# Deep Learning Configuration
+deep_learning:
+  pytorch_mlp:
+    hidden_layers: [64, 32] # Conservative network size
+    dropout_rate: 0.3 # Moderate dropout for regularization
+    weight_decay: 0.01 # L2 regularization
+    learning_rate: 0.001 # Conservative learning rate
+    batch_size: 32
+    epochs: 200 # Conservative epochs with early stopping
+    early_stopping_patience: 20 # Patient early stopping
+    batch_norm: true
+    activation: "relu"
+    optimizer: "adam"
+    class_weight: "balanced"
+    random_state: 42
+
+  keras_mlp:
+    hidden_layers: [64, 32] # Conservative network size
+    dropout_rate: 0.3 # Moderate dropout for regularization
+    l1_reg: 0.001 # Smaller L1 regularization
+    l2_reg: 0.01 # L2 regularization for weight decay
+    learning_rate: 0.001 # Conservative learning rate
+    batch_size: 32
+    epochs: 200 # Conservative epochs with early stopping
+    early_stopping_patience: 20 # Patient early stopping
+    batch_norm: true
+    activation: "relu"
+    optimizer: "adam"
+    class_weight: "balanced"
+    random_state: 42
 
 # Paths Configuration
 paths:

@@ -135,10 +135,53 @@ class ModelBuilder:
             final_params = {**default_params, **user_params}
             model_instance = SGDClassifier(**final_params)
             
+        elif name in ['pytorch_mlp', 'keras_mlp']:
+            # Deep learning models are handled by DeepLearningTrainer
+            # Return a placeholder that will be replaced by actual DL model
+            from .deep_learning_trainer import PyTorchMLPClassifier, KerasMLPClassifier
+            
+            if name == 'pytorch_mlp':
+                default_params = {
+                    'hidden_layers': [64, 32],
+                    'dropout_rate': 0.3,
+                    'weight_decay': 0.01,
+                    'learning_rate': 0.001,
+                    'batch_size': 32,
+                    'epochs': 200,
+                    'early_stopping_patience': 20,
+                    'batch_norm': True,
+                    'activation': 'relu',
+                    'optimizer': 'adam',
+                    'class_weight': 'balanced',
+                    'random_state': 42
+                }
+                final_params = {**default_params, **user_params}
+                return PyTorchMLPClassifier(**final_params)  # Return directly, not as pipeline
+                
+            elif name == 'keras_mlp':
+                default_params = {
+                    'hidden_layers': [64, 32],
+                    'dropout_rate': 0.3,
+                    'l1_reg': 0.01,
+                    'l2_reg': 0.01,
+                    'learning_rate': 0.001,
+                    'batch_size': 32,
+                    'epochs': 200,
+                    'early_stopping_patience': 20,
+                    'batch_norm': True,
+                    'activation': 'relu',
+                    'optimizer': 'adam',
+                    'class_weight': 'balanced',
+                    'random_state': 42
+                }
+                final_params = {**default_params, **user_params}
+                return KerasMLPClassifier(**final_params)  # Return directly, not as pipeline
+            
         else:
             supported_models = [
                 'random_forest', 'gradient_boosting', 'logistic_regression', 'logistic_regression_l1',
-                'svm', 'svm_rbf', 'svm_linear', 'extra_trees', 'ada_boost', 'knn', 'decision_tree', 'sgd'
+                'svm', 'svm_rbf', 'svm_linear', 'extra_trees', 'ada_boost', 'knn', 'decision_tree', 'sgd',
+                'pytorch_mlp', 'keras_mlp'
             ]
             raise ValueError(f"Classifier {name} not supported. Choose from: {supported_models}")
         

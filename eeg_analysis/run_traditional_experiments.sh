@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# EEG Analysis - Complete Model Training Script
-# This script runs all available models with different feature selection configurations
+# EEG Analysis - Traditional ML Models Training Script
+# This script runs traditional ML models (excluding deep learning) with different feature selection configurations
 
 set -e  # Exit on any error
 
@@ -15,8 +15,8 @@ CONFIG_FILE="eeg_analysis/configs/window_model_config.yaml"
 LEVEL="window"
 PYTHON_CMD="python"
 
-# Available models
-MODELS=("random_forest" "gradient_boosting" "logistic_regression" "svm" "pytorch_mlp" "keras_mlp")
+# Available traditional ML models (excluding deep learning)
+MODELS=("random_forest" "gradient_boosting" "logistic_regression" "svm")
 
 # Feature selection configurations
 FEATURE_SELECTION_METHODS=("select_k_best_f_classif" "select_k_best_mutual_info")
@@ -30,7 +30,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Logging
-LOG_FILE="experiment_log_$(date +%Y%m%d_%H%M%S).txt"
+LOG_FILE="traditional_experiment_log_$(date +%Y%m%d_%H%M%S).txt"
 
 log_message() {
     local message="$1"
@@ -73,9 +73,7 @@ run_experiment() {
     
     # Set experiment name based on model type category
     local mlflow_experiment=""
-    if [[ "$model_type" == "pytorch_mlp" || "$model_type" == "keras_mlp" ]]; then
-        mlflow_experiment="eeg_deep_learning${experiment_suffix}"
-    elif [[ "$model_type" == "random_forest" || "$model_type" == "gradient_boosting" || "$model_type" == "extra_trees" ]]; then
+    if [[ "$model_type" == "random_forest" || "$model_type" == "gradient_boosting" || "$model_type" == "extra_trees" ]]; then
         mlflow_experiment="eeg_tree_models${experiment_suffix}"
     elif [[ "$model_type" == "logistic_regression" || "$model_type" == "svm" || "$model_type" == "sgd" ]]; then
         mlflow_experiment="eeg_linear_models${experiment_suffix}"
@@ -119,9 +117,10 @@ show_progress() {
 
 # Main execution
 main() {
-    log_message "Starting EEG Analysis Complete Model Training"
+    log_message "Starting EEG Analysis Traditional ML Model Training"
     log_message "Configuration file: $CONFIG_FILE"
     log_message "Log file: $LOG_FILE"
+    log_message "Models: ${MODELS[*]}"
     
     # Check if config file exists
     if [ ! -f "$CONFIG_FILE" ]; then
@@ -188,7 +187,6 @@ main() {
         log_success "Failed: $failed_experiments"
     fi
     
-    # Generate summary report
     echo ""
     log_message "=== DETAILED EXPERIMENT LIST ==="
     
@@ -226,19 +224,17 @@ trap 'echo -e "\n${RED}Experiment interrupted by user${NC}"; exit 130' INT
 
 # Check for help
 if [[ "$1" == "-h" || "$1" == "--help" ]]; then
-    echo "EEG Analysis Complete Model Training Script"
+    echo "EEG Analysis Traditional ML Model Training Script"
     echo ""
-    echo "This script runs all available models with different configurations:"
+    echo "This script runs traditional ML models (excluding deep learning) with different configurations:"
     echo "1. All models without feature selection"
     echo "2. All models with select_k_best_f_classif (10, 15, 20 features)"
     echo "3. All models with select_k_best_mutual_info (10, 15, 20 features)"
     echo ""
-    echo "Models: random_forest, gradient_boosting, logistic_regression, svm, pytorch_mlp, keras_mlp"
-    echo "Total experiments: 42"
+    echo "Models: random_forest, gradient_boosting, logistic_regression, svm"
+    echo "Total experiments: 28"
     echo ""
     echo "MLflow Experiment Organization:"
-    echo "- eeg_deep_learning_baseline: Deep learning models without feature selection"
-    echo "- eeg_deep_learning_feature_selection: Deep learning models with feature selection"
     echo "- eeg_tree_models_baseline: Tree-based models without feature selection"
     echo "- eeg_tree_models_feature_selection: Tree-based models with feature selection"
     echo "- eeg_linear_models_baseline: Linear models without feature selection"
@@ -260,9 +256,7 @@ if [[ "$1" == "--dry-run" ]]; then
     echo "=== Without feature selection ==="
     for model in "${MODELS[@]}"; do
         # Determine experiment name for this model
-        if [[ "$model" == "pytorch_mlp" || "$model" == "keras_mlp" ]]; then
-            exp_name="eeg_deep_learning_baseline"
-        elif [[ "$model" == "random_forest" || "$model" == "gradient_boosting" || "$model" == "extra_trees" ]]; then
+        if [[ "$model" == "random_forest" || "$model" == "gradient_boosting" || "$model" == "extra_trees" ]]; then
             exp_name="eeg_tree_models_baseline"
         elif [[ "$model" == "logistic_regression" || "$model" == "svm" || "$model" == "sgd" ]]; then
             exp_name="eeg_linear_models_baseline"
@@ -278,9 +272,7 @@ if [[ "$1" == "--dry-run" ]]; then
         for fs_method in "${FEATURE_SELECTION_METHODS[@]}"; do
             for n_features in "${FEATURE_COUNTS[@]}"; do
                 # Determine experiment name for this model
-                if [[ "$model" == "pytorch_mlp" || "$model" == "keras_mlp" ]]; then
-                    exp_name="eeg_deep_learning_feature_selection"
-                elif [[ "$model" == "random_forest" || "$model" == "gradient_boosting" || "$model" == "extra_trees" ]]; then
+                if [[ "$model" == "random_forest" || "$model" == "gradient_boosting" || "$model" == "extra_trees" ]]; then
                     exp_name="eeg_tree_models_feature_selection"
                 elif [[ "$model" == "logistic_regression" || "$model" == "svm" || "$model" == "sgd" ]]; then
                     exp_name="eeg_linear_models_feature_selection"
@@ -295,9 +287,7 @@ if [[ "$1" == "--dry-run" ]]; then
     echo ""
     echo "Total: $(( ${#MODELS[@]} + ${#MODELS[@]} * ${#FEATURE_SELECTION_METHODS[@]} * ${#FEATURE_COUNTS[@]} )) experiments"
     echo ""
-    echo "Experiments will be organized into 6 MLflow experiments:"
-    echo "- eeg_deep_learning_baseline (2 runs: pytorch_mlp, keras_mlp)"
-    echo "- eeg_deep_learning_feature_selection (12 runs: 2 models × 2 methods × 3 features)"
+    echo "Experiments will be organized into 4 MLflow experiments:"
     echo "- eeg_tree_models_baseline (2 runs: random_forest, gradient_boosting)"
     echo "- eeg_tree_models_feature_selection (12 runs: 2 models × 2 methods × 3 features)"
     echo "- eeg_linear_models_baseline (2 runs: logistic_regression, svm)"
