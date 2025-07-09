@@ -5,18 +5,21 @@
 
 set -e  # Exit on any error
 
-# Activate conda environment
-echo "Activating conda base environment..."
-source /opt/anaconda3/etc/profile.d/conda.sh
-conda activate base
+# Activate conda environment with GPU support
+echo "Activating conda eeg-env environment (with GPU support)..."
+source /home/abin/anaconda3/etc/profile.d/conda.sh
+conda activate eeg-env
 
 # Configuration
 CONFIG_FILE="eeg_analysis/configs/window_model_config.yaml"
+CONFIG_FILE_GPU="eeg_analysis/configs/window_model_config_max_gpu.yaml"  # GPU-optimized config
 LEVEL="window"
 PYTHON_CMD="python"
 
 # Available models
-MODELS=("random_forest" "gradient_boosting" "logistic_regression" "svm" "pytorch_mlp" "keras_mlp")
+TRADITIONAL_MODELS=("random_forest" "gradient_boosting" "logistic_regression" "svm")
+GPU_MODELS=("pytorch_mlp" "keras_mlp")
+MODELS=("${TRADITIONAL_MODELS[@]}" "${GPU_MODELS[@]}")
 
 # Feature selection configurations
 FEATURE_SELECTION_METHODS=("select_k_best_f_classif" "select_k_best_mutual_info")
@@ -86,7 +89,14 @@ run_experiment() {
     # Export experiment name as environment variable for run_pipeline.py to use
     export MLFLOW_EXPERIMENT_NAME="$mlflow_experiment"
     
-    local cmd="$PYTHON_CMD eeg_analysis/run_pipeline.py --config $CONFIG_FILE train --level $LEVEL --model-type $model_type"
+    # Choose configuration file based on model type
+    local config_file="$CONFIG_FILE"
+    if [[ "$model_type" == "pytorch_mlp" || "$model_type" == "keras_mlp" ]]; then
+        config_file="$CONFIG_FILE_GPU"
+        log_message "Using GPU-optimized configuration for $model_type"
+    fi
+    
+    local cmd="$PYTHON_CMD eeg_analysis/run_pipeline.py --config $config_file train --level $LEVEL --model-type $model_type"
     
     if [ "$use_fs" = "true" ]; then
         cmd="$cmd --enable-feature-selection --n-features-select $n_features --fs-method $fs_method"
@@ -234,6 +244,7 @@ if [[ "$1" == "-h" || "$1" == "--help" ]]; then
     echo "3. All models with select_k_best_mutual_info (10, 15, 20 features)"
     echo ""
     echo "Models: random_forest, gradient_boosting, logistic_regression, svm, pytorch_mlp, keras_mlp"
+    echo "GPU Optimization: pytorch_mlp and keras_mlp use dual RTX 3090 optimized configuration"
     echo "Total experiments: 42"
     echo ""
     echo "MLflow Experiment Organization:"
@@ -259,9 +270,11 @@ if [[ "$1" == "--dry-run" ]]; then
     
     echo "=== Without feature selection ==="
     for model in "${MODELS[@]}"; do
-        # Determine experiment name for this model
+        # Determine experiment name and config file for this model
+        config_file="$CONFIG_FILE"
         if [[ "$model" == "pytorch_mlp" || "$model" == "keras_mlp" ]]; then
             exp_name="eeg_deep_learning_baseline"
+            config_file="$CONFIG_FILE_GPU"
         elif [[ "$model" == "random_forest" || "$model" == "gradient_boosting" || "$model" == "extra_trees" ]]; then
             exp_name="eeg_tree_models_baseline"
         elif [[ "$model" == "logistic_regression" || "$model" == "svm" || "$model" == "sgd" ]]; then
@@ -269,7 +282,7 @@ if [[ "$1" == "--dry-run" ]]; then
         else
             exp_name="eeg_other_models_baseline"
         fi
-        echo "MLFLOW_EXPERIMENT_NAME=$exp_name $PYTHON_CMD eeg_analysis/run_pipeline.py --config $CONFIG_FILE train --level $LEVEL --model-type $model"
+        echo "MLFLOW_EXPERIMENT_NAME=$exp_name $PYTHON_CMD eeg_analysis/run_pipeline.py --config $config_file train --level $LEVEL --model-type $model"
     done
     
     echo ""
@@ -277,9 +290,11 @@ if [[ "$1" == "--dry-run" ]]; then
     for model in "${MODELS[@]}"; do
         for fs_method in "${FEATURE_SELECTION_METHODS[@]}"; do
             for n_features in "${FEATURE_COUNTS[@]}"; do
-                # Determine experiment name for this model
+                # Determine experiment name and config file for this model
+                config_file="$CONFIG_FILE"
                 if [[ "$model" == "pytorch_mlp" || "$model" == "keras_mlp" ]]; then
                     exp_name="eeg_deep_learning_feature_selection"
+                    config_file="$CONFIG_FILE_GPU"
                 elif [[ "$model" == "random_forest" || "$model" == "gradient_boosting" || "$model" == "extra_trees" ]]; then
                     exp_name="eeg_tree_models_feature_selection"
                 elif [[ "$model" == "logistic_regression" || "$model" == "svm" || "$model" == "sgd" ]]; then
@@ -287,7 +302,7 @@ if [[ "$1" == "--dry-run" ]]; then
                 else
                     exp_name="eeg_other_models_feature_selection"
                 fi
-                echo "MLFLOW_EXPERIMENT_NAME=$exp_name $PYTHON_CMD eeg_analysis/run_pipeline.py --config $CONFIG_FILE train --level $LEVEL --model-type $model --enable-feature-selection --n-features-select $n_features --fs-method $fs_method"
+                echo "MLFLOW_EXPERIMENT_NAME=$exp_name $PYTHON_CMD eeg_analysis/run_pipeline.py --config $config_file train --level $LEVEL --model-type $model --enable-feature-selection --n-features-select $n_features --fs-method $fs_method"
             done
         done
     done

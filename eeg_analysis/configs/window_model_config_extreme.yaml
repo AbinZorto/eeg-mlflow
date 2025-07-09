@@ -1,0 +1,98 @@
+# EXTREME Performance Configuration for Dual RTX 3090 Setup
+# Maximum GPU Utilization - Use both GPUs at full capacity
+
+# Data Configuration
+data:
+  feature_path: "data/processed/features/2s_window_features.parquet"
+  split:
+    test_size: 0.2
+    random_state: 42
+    stratify: true
+
+# Model Configuration - EXTREME GPU optimization
+model_type: "pytorch_mlp" # GPU-optimized model
+
+model:
+  name: "patient_model_extreme"
+
+  params:
+    random_forest:
+      n_estimators: 200
+      min_samples_leaf: 2
+      max_features: "sqrt"
+      class_weight: "balanced"
+      random_state: 42
+
+# EXTREME Deep Learning Configuration for Dual RTX 3090
+deep_learning:
+  pytorch_mlp:
+    hidden_layers: [1024, 512, 256, 128] # MUCH larger network for maximum GPU utilization
+    dropout_rate: 0.1 # Minimal dropout for maximum speed
+    weight_decay: 0.0001 # Minimal weight decay
+    learning_rate: 0.05 # Very aggressive learning rate
+    batch_size: 2048 # MASSIVE batch size to saturate both GPUs
+    epochs: 50 # Fewer epochs with aggressive learning
+    early_stopping_patience: 8 # Very low patience for speed
+    batch_norm: true
+    activation: "relu"
+    optimizer: "adam"
+    class_weight: "balanced"
+    random_state: 42
+
+  keras_mlp:
+    hidden_layers: [1024, 512, 256, 128] # MUCH larger network
+    dropout_rate: 0.1
+    l1_reg: 0.00001 # Minimal regularization
+    l2_reg: 0.0001 # Minimal regularization  
+    learning_rate: 0.05 # Very aggressive learning rate
+    batch_size: 2048 # MASSIVE batch size
+    epochs: 50 # Fewer epochs
+    early_stopping_patience: 8
+    batch_norm: true
+    activation: "relu"
+    optimizer: "adam"
+    class_weight: "balanced"
+    random_state: 42
+
+# Paths Configuration
+paths:
+  models: "models/window_level"
+  features: "data/processed/features"
+  logs: "logs"
+
+# Output Configuration
+output:
+  save_predictions: true
+  save_probabilities: true
+  feature_importance: true
+  performance_plots: true
+
+# MLflow Tracking
+mlflow:
+  experiment_name: "window_training_extreme"
+  tracking_uri: "file:./mlruns"
+  register_model: true
+  model_stage: "Development"
+  artifact_location: "./mlruns"
+
+# Evaluation Metrics
+metrics:
+  window_level:
+    - accuracy
+    - precision
+    - recall
+    - f1
+    - roc_auc
+  patient_level:
+    - accuracy
+    - precision
+    - recall
+    - f1
+    - roc_auc
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/window_training_extreme.log"
+  console: true 

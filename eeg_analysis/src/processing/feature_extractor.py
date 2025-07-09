@@ -496,7 +496,7 @@ class EEGFeatureExtractor:
     
     def _save_features(self, df: pd.DataFrame, output_path: str) -> None:
         """
-        Save the extracted features to files.
+        Save the extracted features to files and log as MLflow artifacts.
         
         Args:
             df: DataFrame containing features
@@ -510,6 +510,13 @@ class EEGFeatureExtractor:
             df.to_parquet(output_path)
             self.logger.info(f"Saved features to {output_path}")
             
+            # Log the main feature file as MLflow artifact
+            try:
+                mlflow.log_artifact(output_path, "features")
+                self.logger.info(f"Logged features parquet file as MLflow artifact: {output_path}")
+            except Exception as mlflow_e:
+                self.logger.warning(f"Failed to log features as MLflow artifact: {str(mlflow_e)}")
+            
             # Optionally save group-specific features if group column exists
             if self.save_interim and 'group' in df.columns:
                 for group in df['group'].unique():
@@ -517,6 +524,13 @@ class EEGFeatureExtractor:
                     group_path = output_dir / f"{group.lower()}_features.parquet"
                     group_df.to_parquet(group_path)
                     self.logger.info(f"Saved {group} features to {group_path}")
+                    
+                    # Log group-specific files as artifacts too
+                    try:
+                        mlflow.log_artifact(str(group_path), "features")
+                        self.logger.info(f"Logged {group} features as MLflow artifact: {group_path}")
+                    except Exception as mlflow_e:
+                        self.logger.warning(f"Failed to log {group} features as MLflow artifact: {str(mlflow_e)}")
                     
         except Exception as e:
             self.logger.error(f"Error saving features: {str(e)}")
@@ -626,10 +640,26 @@ def extract_eeg_features(config: Dict[str, Any], df: pd.DataFrame) -> pd.DataFra
     # Also update the config to reflect the new path
     config['paths']['features']['window'] = output_path
     
-    return extractor.extract_all_features(
+    # Extract features
+    result_df = extractor.extract_all_features(
         df,
         output_path=output_path
     )
+    
+    # Log feature extraction metadata to MLflow
+    try:
+        mlflow.log_params({
+            "window_size_seconds": window_seconds,
+            "feature_file_path": output_path,
+            "total_features": len(result_df.columns) - 2,  # Exclude Participant and Remission
+            "total_windows": len(result_df),
+            "total_participants": result_df['Participant'].nunique() if 'Participant' in result_df.columns else 0
+        })
+        logger.info("Logged feature extraction metadata to MLflow")
+    except Exception as e:
+        logger.warning(f"Failed to log feature extraction metadata to MLflow: {str(e)}")
+    
+    return result_df
 
 
 if __name__ == '__main__':

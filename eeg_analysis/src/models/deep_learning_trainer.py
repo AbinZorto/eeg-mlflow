@@ -82,6 +82,11 @@ class PyTorchMLPClassifier(BaseEstimator, ClassifierMixin):
         self.classes_ = None
         self.feature_names_in_ = None
         
+        # Multi-GPU setup for maximum performance
+        self.use_multi_gpu = torch.cuda.device_count() > 1
+        if self.use_multi_gpu:
+            print(f"🚀 MULTI-GPU MODE: Using {torch.cuda.device_count()} GPUs for training!")
+        
         # Set random seeds for reproducibility
         torch.manual_seed(random_state)
         np.random.seed(random_state)
@@ -160,6 +165,12 @@ class PyTorchMLPClassifier(BaseEstimator, ClassifierMixin):
         self.model = self._create_model(X_scaled.shape[1])
         self.model.to(self.device)
         
+        # Enable multi-GPU training for maximum performance
+        if self.use_multi_gpu:
+            self.model = nn.DataParallel(self.model)
+            print(f"💫 DataParallel enabled across {torch.cuda.device_count()} GPUs")
+            print(f"🔥 Effective batch size: {self.batch_size} per GPU = {self.batch_size * torch.cuda.device_count()} total")
+        
         # Prepare data
         X_tensor = torch.FloatTensor(X_scaled).to(self.device)
         y_tensor = torch.LongTensor(y).to(self.device)
@@ -169,7 +180,10 @@ class PyTorchMLPClassifier(BaseEstimator, ClassifierMixin):
         
         # Use smaller batch size for small datasets
         effective_batch_size = min(self.batch_size, len(X) // 4) if len(X) < 100 else self.batch_size
-        dataloader = DataLoader(dataset, batch_size=effective_batch_size, shuffle=True)
+        
+        # High-performance data loading (no pin_memory since data is already on GPU)
+        dataloader = DataLoader(dataset, batch_size=effective_batch_size, shuffle=True, 
+                              num_workers=0, pin_memory=False)
         
         # Loss function with class weights
         if self.class_weight == 'balanced':

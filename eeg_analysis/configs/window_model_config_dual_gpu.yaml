@@ -1,0 +1,98 @@
+# Dual GPU Configuration for RTX 3090 Setup
+# High Performance but Stable Configuration
+
+# Data Configuration
+data:
+  feature_path: "data/processed/features/2s_window_features.parquet"
+  split:
+    test_size: 0.2
+    random_state: 42
+    stratify: true
+
+# Model Configuration - Dual GPU optimization
+model_type: "pytorch_mlp" # GPU-optimized model
+
+model:
+  name: "patient_model_dual_gpu"
+
+  params:
+    random_forest:
+      n_estimators: 200
+      min_samples_leaf: 2
+      max_features: "sqrt"
+      class_weight: "balanced"
+      random_state: 42
+
+# Dual GPU Deep Learning Configuration for RTX 3090
+deep_learning:
+  pytorch_mlp:
+    hidden_layers: [512, 256, 128, 64] # Large network for GPU utilization
+    dropout_rate: 0.15 # Balanced dropout
+    weight_decay: 0.0005 # Minimal weight decay
+    learning_rate: 0.02 # Aggressive but stable learning rate
+    batch_size: 1024 # Large but stable batch size for dual GPU
+    epochs: 75 # Balanced epochs
+    early_stopping_patience: 10 # Reasonable patience
+    batch_norm: true
+    activation: "relu"
+    optimizer: "adam"
+    class_weight: "balanced"
+    random_state: 42
+
+  keras_mlp:
+    hidden_layers: [512, 256, 128, 64] # Large network
+    dropout_rate: 0.15
+    l1_reg: 0.00005 # Minimal regularization
+    l2_reg: 0.0005 # Minimal regularization  
+    learning_rate: 0.02 # Aggressive learning rate
+    batch_size: 1024 # Large batch size
+    epochs: 75 # Balanced epochs
+    early_stopping_patience: 10
+    batch_norm: true
+    activation: "relu"
+    optimizer: "adam"
+    class_weight: "balanced"
+    random_state: 42
+
+# Paths Configuration
+paths:
+  models: "models/window_level"
+  features: "data/processed/features"
+  logs: "logs"
+
+# Output Configuration
+output:
+  save_predictions: true
+  save_probabilities: true
+  feature_importance: true
+  performance_plots: true
+
+# MLflow Tracking
+mlflow:
+  experiment_name: "window_training_dual_gpu"
+  tracking_uri: "file:./mlruns"
+  register_model: true
+  model_stage: "Development"
+  artifact_location: "./mlruns"
+
+# Evaluation Metrics
+metrics:
+  window_level:
+    - accuracy
+    - precision
+    - recall
+    - f1
+    - roc_auc
+  patient_level:
+    - accuracy
+    - precision
+    - recall
+    - f1
+    - roc_auc
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/window_training_dual_gpu.log"
+  console: true 
