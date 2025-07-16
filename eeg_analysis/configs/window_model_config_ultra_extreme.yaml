@@ -1,0 +1,203 @@
+# ULTRA-EXTREME GPU CONFIGURATION for Dual RTX 3090
+# WARNING: This config pushes hardware beyond normal limits!
+# Designed to maximize VRAM usage and GPU utilization
+
+# Data Configuration
+data:
+  feature_path: "data/processed/features/2s_window_features.parquet"
+  split:
+    test_size: 0.2
+    random_state: 42
+    stratify: true
+
+# Model Configuration - ULTRA-EXTREME GPU utilization
+model_type: "pytorch_mlp" # GPU-optimized model
+
+model:
+  name: "patient_model_ultra_extreme"
+  use_smote: true
+  params:
+    random_forest:
+      n_estimators: 200
+      min_samples_leaf: 2
+      max_features: "sqrt"
+      class_weight: "balanced"
+      random_state: 42
+
+    gradient_boosting:
+      n_estimators: 200
+      learning_rate: 0.1
+      max_depth: 3
+      min_samples_leaf: 1
+      random_state: 42
+
+    xgboost_gpu:
+      n_estimators: 500  # More trees for better performance
+      max_depth: 8  # Deeper trees
+      learning_rate: 0.15  # Faster learning
+      tree_method: "hist"  # Modern tree method
+      device: "cuda:0"  # GPU acceleration (new API)
+      subsample: 0.9  # Slight regularization
+      colsample_bytree: 0.9  # Feature sampling
+      class_weight: "balanced"  # Handle class imbalance
+      random_state: 42
+
+    catboost_gpu:
+      iterations: 200  # Optimized for speed
+      depth: 6  # Optimized for faster training
+      learning_rate: 0.2  # Higher learning rate for fewer iterations
+      task_type: "GPU"  # GPU acceleration
+      devices: "0"  # Use first GPU
+      bootstrap_type: "Bernoulli"  # Better for GPU
+      subsample: 0.8  # More aggressive subsampling for speed
+      border_count: 128  # Reduced for faster GPU training
+      max_ctr_complexity: 1  # Simplified for speed
+      gpu_ram_part: 0.8  # Use more GPU memory for performance
+      # Note: colsample_bylevel (rsm) not supported in GPU mode for binary classification
+      class_weight: "balanced"  # Handle class imbalance
+      random_state: 42
+
+    lightgbm_gpu:
+      n_estimators: 500  # More estimators
+      max_depth: 8  # Deeper trees
+      learning_rate: 0.15  # Aggressive learning rate
+      device: "gpu"  # GPU acceleration
+      gpu_device_id: 0  # Use first GPU
+      num_leaves: 255  # Optimized for GPU
+      subsample: 0.9  # Regularization
+      colsample_bytree: 0.9  # Feature sampling
+      class_weight: "balanced"  # Handle class imbalance
+      random_state: 42
+
+    logistic_regression:
+      max_iter: 1000
+      class_weight: "balanced"
+      penalty: "l2"
+      solver: "lbfgs"
+      random_state: 42
+
+    logistic_regression_l1:
+      max_iter: 1000
+      class_weight: "balanced"
+      penalty: "l1"
+      solver: "liblinear"
+      random_state: 42
+
+    svm_rbf:
+      kernel: "rbf"
+      C: 1.0
+      class_weight: "balanced"
+      probability: true
+      random_state: 42
+
+    svm_linear:
+      kernel: "linear"
+      C: 1.0
+      class_weight: "balanced"
+      probability: true
+      random_state: 42
+
+    extra_trees:
+      n_estimators: 200
+      min_samples_leaf: 2
+      class_weight: "balanced"
+      random_state: 42
+
+    ada_boost:
+      n_estimators: 100
+      learning_rate: 0.1
+      random_state: 42
+
+    knn:
+      n_neighbors: 3
+      weights: "distance"
+
+    decision_tree:
+      min_samples_leaf: 2
+      class_weight: "balanced"
+      random_state: 42
+
+    sgd:
+      loss: "modified_huber"
+      penalty: "elasticnet"
+      class_weight: "balanced"
+      max_iter: 1000
+      random_state: 42
+
+# ULTRA-EXTREME GPU Configuration - MAXIMUM POSSIBLE
+deep_learning:
+  pytorch_mlp:
+    hidden_layers: [4096, 2048, 1024, 512, 256, 128] # ENORMOUS 6-layer network!
+    dropout_rate: 0.02 # Extremely minimal dropout for max computation
+    weight_decay: 0.000001 # Almost no weight decay
+    learning_rate: 0.001 # Aggressive but stable learning rate
+    batch_size: 8192 # MAXIMUM batch size - push VRAM to the limit!
+    epochs: 25 # Fewer epochs but massive computational load per epoch
+    early_stopping_patience: 3 # Very aggressive early stopping
+    batch_norm: true
+    activation: "relu"
+    optimizer: "adam"
+    class_weight: "balanced"
+    random_state: 42
+    # Additional extreme settings
+    gradient_accumulation_steps: 1 # Could be increased for even larger effective batch
+    mixed_precision: false # Enable for memory efficiency
+
+  keras_mlp:
+    hidden_layers: [4096, 2048, 1024, 512, 256, 128] # ENORMOUS 6-layer network!
+    dropout_rate: 0.02
+    l1_reg: 0.0000001 # Almost no regularization
+    l2_reg: 0.000001 # Almost no regularization  
+    learning_rate: 0.15 # INSANELY aggressive learning rate
+    batch_size: 8192 # MAXIMUM batch size per GPU = 16384 total effective!
+    epochs: 25 # Fewer epochs
+    early_stopping_patience: 3
+    batch_norm: true
+    activation: "relu"
+    optimizer: "adam"
+    class_weight: "balanced"
+    random_state: 42
+    mixed_precision: true
+
+# Paths Configuration
+paths:
+  models: "models/window_level"
+  features: "data/processed/features"
+  logs: "logs"
+
+# Output Configuration
+output:
+  save_predictions: true
+  save_probabilities: true
+  feature_importance: true
+  performance_plots: true
+
+# MLflow Tracking
+mlflow:
+  experiment_name: "window_training_ultra_extreme"
+  tracking_uri: "file:./mlruns"
+  register_model: true
+  model_stage: "Development"
+  artifact_location: "./mlruns"
+
+# Evaluation Metrics
+metrics:
+  window_level:
+    - accuracy
+    - precision
+    - recall
+    - f1
+    - roc_auc
+  patient_level:
+    - accuracy
+    - precision
+    - recall
+    - f1
+    - roc_auc
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/window_training_ultra_extreme.log"
+  console: true 

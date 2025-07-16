@@ -1,8 +1,10 @@
 import pandas as pd
 import numpy as np
-from typing import Dict, Any, Tuple
+from typing import Dict, Any, Tuple, Optional
 from sklearn.base import BaseEstimator
 import mlflow
+import mlflow.data
+from mlflow.data.pandas_dataset import PandasDataset
 from src.models.model_utils import create_classifier
 
 class BaseTrainer:
@@ -34,5 +36,93 @@ class BaseTrainer:
         predictions.to_csv(filename, index=False)
         mlflow.log_artifact(filename)
 
-    def train(self, data_path: str) -> BaseEstimator:
+    def _load_dataset_from_mlflow(self, run_id: Optional[str] = None) -> Optional[PandasDataset]:
+        """
+        Load dataset from MLflow. If run_id is provided, load from that run.
+        Otherwise, try to find a dataset in the current active run.
+        
+        Args:
+            run_id: Optional run ID to load dataset from
+            
+        Returns:
+            PandasDataset if found, None otherwise
+        """
+        try:
+            if run_id:
+                # Load from specific run
+                run = mlflow.get_run(run_id)
+                if hasattr(run, 'inputs') and run.inputs is not None and hasattr(run.inputs, 'dataset_inputs') and run.inputs.dataset_inputs:
+                    dataset_input = run.inputs.dataset_inputs[0]  # Get first dataset
+                    # Load the dataset
+                    dataset_source = mlflow.data.get_source(dataset_input.dataset)
+                    data_path = dataset_source.load()  # This should give us the local path
+                    df = pd.read_parquet(data_path)
+                    return mlflow.data.from_pandas(df, source=data_path, targets="Remission")
+            else:
+                # Try to get from current run
+                active_run = mlflow.active_run()
+                if active_run and hasattr(active_run, 'inputs') and active_run.inputs is not None and hasattr(active_run.inputs, 'dataset_inputs') and active_run.inputs.dataset_inputs:
+                    dataset_input = active_run.inputs.dataset_inputs[0]
+                    dataset_source = mlflow.data.get_source(dataset_input.dataset)
+                    data_path = dataset_source.load()
+                    df = pd.read_parquet(data_path)
+                    return mlflow.data.from_pandas(df, source=data_path, targets="Remission")
+                    
+        except Exception as e:
+            mlflow.log_param("dataset_load_from_mlflow_error", str(e))
+            print(f"Could not load dataset from MLflow: {e}")
+            
+        return None
+
+    def _load_data_from_source(self, data_source: Optional[str] = None, 
+                               dataset: Optional[PandasDataset] = None,
+                               prefer_mlflow: bool = True) -> pd.DataFrame:
+        """
+        Load data from various sources with priority: MLflow dataset > provided dataset > file path.
+        
+        Args:
+            data_source: Optional file path to data
+            dataset: Optional MLflow dataset 
+            prefer_mlflow: Whether to prefer MLflow dataset over file path
+            
+        Returns:
+            DataFrame with training data
+        """
+        # Try MLflow dataset first if preferred
+        if prefer_mlflow:
+            mlflow_dataset = self._load_dataset_from_mlflow()
+            if mlflow_dataset is not None:
+                mlflow.log_param("data_source", "mlflow_dataset")
+                mlflow.log_param("dataset_name", mlflow_dataset.name)
+                mlflow.log_param("dataset_digest", mlflow_dataset.digest)
+                return mlflow_dataset.df
+        
+        # Use provided dataset
+        if dataset is not None:
+            mlflow.log_param("data_source", "provided_dataset")
+            mlflow.log_param("dataset_name", dataset.name)
+            mlflow.log_param("dataset_digest", dataset.digest)
+            return dataset.df
+            
+        # Fall back to file path
+        if data_source:
+            df = pd.read_parquet(data_source)
+            mlflow.log_param("data_source", "file_path")
+            mlflow.log_param("data_file_path", data_source)
+            return df
+        
+        # If we get here, we have no data source
+        raise ValueError("No data source provided: neither MLflow dataset, provided dataset, nor file path available")
+
+    def train(self, data_path: Optional[str] = None, dataset: Optional[PandasDataset] = None) -> BaseEstimator:
+        """
+        Train a model. This method should be overridden by subclasses.
+        
+        Args:
+            data_path: Optional path to training data file
+            dataset: Optional MLflow dataset to use for training
+            
+        Returns:
+            Trained model
+        """
         raise NotImplementedError("Subclasses must implement train method")

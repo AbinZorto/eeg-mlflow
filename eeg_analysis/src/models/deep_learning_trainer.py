@@ -24,8 +24,14 @@ except ImportError:
 
 try:
     import tensorflow as tf
-    from tensorflow import keras
-    from tensorflow.keras import layers, regularizers, callbacks
+    # Handle different TensorFlow versions
+    try:
+        from tensorflow import keras
+        from tensorflow.keras import layers, regularizers, callbacks
+    except ImportError:
+        # For newer TensorFlow versions where keras is separate
+        import keras
+        from keras import layers, regularizers, callbacks
     TF_AVAILABLE = True
 except ImportError:
     TF_AVAILABLE = False
@@ -33,6 +39,7 @@ except ImportError:
 
 from src.models.base_trainer import BaseTrainer
 from src.models.evaluation import ModelEvaluator
+from mlflow.data.pandas_dataset import PandasDataset
 
 logger = logging.getLogger(__name__)
 
@@ -61,7 +68,9 @@ class PyTorchMLPClassifier(BaseEstimator, ClassifierMixin):
                  activation='relu',
                  optimizer='adam',
                  class_weight=None,
-                 random_state=42):
+                 random_state=42,
+                 mixed_precision=False,
+                 gradient_accumulation_steps=1):
         
         self.hidden_layers = hidden_layers
         self.dropout_rate = dropout_rate
@@ -75,12 +84,20 @@ class PyTorchMLPClassifier(BaseEstimator, ClassifierMixin):
         self.optimizer = optimizer
         self.class_weight = class_weight
         self.random_state = random_state
+        self.mixed_precision = mixed_precision
+        self.gradient_accumulation_steps = gradient_accumulation_steps
         
         self.model = None
         self.scaler = StandardScaler()
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.classes_ = None
         self.feature_names_in_ = None
+        
+        # Initialize mixed precision scaler for maximum performance
+        self.scaler_amp = None
+        if mixed_precision and torch.cuda.is_available():
+            self.scaler_amp = torch.cuda.amp.GradScaler()
+            print("🔥 MIXED PRECISION ENABLED: Using automatic mixed precision for maximum GPU utilization!")
         
         # Multi-GPU setup for maximum performance
         self.use_multi_gpu = torch.cuda.device_count() > 1
@@ -215,24 +232,42 @@ class PyTorchMLPClassifier(BaseEstimator, ClassifierMixin):
         best_loss = float('inf')
         patience_counter = 0
         
-        # Training loop
+        # Training loop with mixed precision support for maximum performance
         self.model.train()
         for epoch in range(self.epochs):
             epoch_loss = 0.0
             
-            for batch_X, batch_y in dataloader:
-                optimizer.zero_grad()
+            for batch_idx, (batch_X, batch_y) in enumerate(dataloader):
+                # Mixed precision training for maximum GPU utilization
+                if self.mixed_precision and self.scaler_amp is not None:
+                    with torch.cuda.amp.autocast():
+                        outputs = self.model(batch_X)
+                        loss = criterion(outputs, batch_y) / self.gradient_accumulation_steps
+                    
+                    self.scaler_amp.scale(loss).backward()
+                    
+                    if (batch_idx + 1) % self.gradient_accumulation_steps == 0:
+                        # Gradient clipping with mixed precision
+                        self.scaler_amp.unscale_(optimizer)
+                        torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=1.0)
+                        
+                        self.scaler_amp.step(optimizer)
+                        self.scaler_amp.update()
+                        optimizer.zero_grad()
+                else:
+                    # Standard training
+                    outputs = self.model(batch_X)
+                    loss = criterion(outputs, batch_y) / self.gradient_accumulation_steps
+                    
+                    loss.backward()
+                    
+                    if (batch_idx + 1) % self.gradient_accumulation_steps == 0:
+                        # Gradient clipping to prevent exploding gradients
+                        torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=1.0)
+                        optimizer.step()
+                        optimizer.zero_grad()
                 
-                outputs = self.model(batch_X)
-                loss = criterion(outputs, batch_y)
-                
-                loss.backward()
-                
-                # Gradient clipping to prevent exploding gradients
-                torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=1.0)
-                
-                optimizer.step()
-                epoch_loss += loss.item()
+                epoch_loss += loss.item() * self.gradient_accumulation_steps
             
             epoch_loss /= len(dataloader)
             scheduler.step(epoch_loss)
@@ -321,7 +356,9 @@ class KerasMLPClassifier(BaseEstimator, ClassifierMixin):
                  activation='relu',
                  optimizer='adam',
                  class_weight=None,
-                 random_state=42):
+                 random_state=42,
+                 mixed_precision=False,
+                 gradient_clip_norm=1.0):
         
         self.hidden_layers = hidden_layers
         self.dropout_rate = dropout_rate
@@ -336,57 +373,85 @@ class KerasMLPClassifier(BaseEstimator, ClassifierMixin):
         self.optimizer = optimizer
         self.class_weight = class_weight
         self.random_state = random_state
+        self.mixed_precision = mixed_precision
+        self.gradient_clip_norm = gradient_clip_norm
         
         self.model = None
         self.scaler = StandardScaler()
         self.classes_ = None
         self.feature_names_in_ = None
         
+        # Enable mixed precision for maximum performance
+        if mixed_precision:
+            keras.mixed_precision.set_global_policy('mixed_float16')
+            print("🔥 KERAS MIXED PRECISION ENABLED: Using mixed_float16 for maximum GPU utilization!")
+        
+        # Multi-GPU setup for maximum performance
+        self.strategy = None
+        if len(tf.config.list_physical_devices('GPU')) > 1:
+            self.strategy = tf.distribute.MirroredStrategy()
+            print(f"🚀 KERAS MULTI-GPU MODE: Using {self.strategy.num_replicas_in_sync} GPUs for training!")
+            print(f"💫 Keras model created with MirroredStrategy across {self.strategy.num_replicas_in_sync} GPUs")
+            print(f"🔥 Effective batch size: {self.batch_size} per GPU = {self.batch_size * self.strategy.num_replicas_in_sync} total")
+        
         # Set random seeds
         tf.random.set_seed(random_state)
         np.random.seed(random_state)
     
     def _create_model(self, n_features):
-        """Create the neural network model."""
-        model = keras.Sequential()
+        """Create the neural network model with multi-GPU support."""
         
-        # Input layer
-        model.add(layers.Input(shape=(n_features,)))
-        
-        # Hidden layers
-        for i, hidden_size in enumerate(self.hidden_layers):
-            # Dense layer with regularization
-            model.add(layers.Dense(
-                hidden_size,
-                activation=None,  # Add activation separately
-                kernel_regularizer=regularizers.l1_l2(l1=self.l1_reg, l2=self.l2_reg),
-                kernel_initializer='glorot_uniform'
-            ))
+        def create_model_fn():
+            model = keras.Sequential()
             
-            # Batch normalization
-            if self.batch_norm:
-                model.add(layers.BatchNormalization())
+            # Input layer
+            model.add(layers.Input(shape=(n_features,)))
             
-            # Activation
-            model.add(layers.Activation(self.activation))
+            # Hidden layers
+            for i, hidden_size in enumerate(self.hidden_layers):
+                # Dense layer with regularization
+                model.add(layers.Dense(
+                    hidden_size,
+                    activation=None,  # Add activation separately
+                    kernel_regularizer=regularizers.l1_l2(l1=self.l1_reg, l2=self.l2_reg),
+                    kernel_initializer='glorot_uniform'
+                ))
+                
+                # Batch normalization
+                if self.batch_norm:
+                    model.add(layers.BatchNormalization())
+                
+                # Activation
+                model.add(layers.Activation(self.activation))
+                
+                # Dropout
+                model.add(layers.Dropout(self.dropout_rate))
             
-            # Dropout
-            model.add(layers.Dropout(self.dropout_rate))
+            # Output layer
+            model.add(layers.Dense(2, activation='softmax'))
+            
+            # Compile model
+            if self.optimizer == 'adam':
+                opt = keras.optimizers.Adam(learning_rate=self.learning_rate, clipnorm=self.gradient_clip_norm, epsilon=1e-4)
+            elif self.optimizer == 'sgd':
+                opt = keras.optimizers.SGD(learning_rate=self.learning_rate, momentum=0.9, clipnorm=self.gradient_clip_norm)
+            
+            model.compile(
+                optimizer=opt,
+                loss='sparse_categorical_crossentropy',
+                metrics=['accuracy']
+            )
+            
+            return model
         
-        # Output layer
-        model.add(layers.Dense(2, activation='softmax'))
-        
-        # Compile model
-        if self.optimizer == 'adam':
-            opt = keras.optimizers.Adam(learning_rate=self.learning_rate)
-        elif self.optimizer == 'sgd':
-            opt = keras.optimizers.SGD(learning_rate=self.learning_rate, momentum=0.9)
-        
-        model.compile(
-            optimizer=opt,
-            loss='sparse_categorical_crossentropy',
-            metrics=['accuracy']
-        )
+        # Create model with multi-GPU strategy if available
+        if self.strategy is not None:
+            with self.strategy.scope():
+                model = create_model_fn()
+                print(f"💫 Keras model created with MirroredStrategy across {self.strategy.num_replicas_in_sync} GPUs")
+                print(f"🔥 Effective batch size: {self.batch_size} per GPU = {self.batch_size * self.strategy.num_replicas_in_sync} total")
+        else:
+            model = create_model_fn()
         
         return model
     
@@ -406,8 +471,22 @@ class KerasMLPClassifier(BaseEstimator, ClassifierMixin):
         if hasattr(y, 'values'):
             y = y.values
         
+        # DEBUG: Check input data for NaN values
+        print(f"🔍 DEBUG: Input X shape: {X.shape}, y shape: {y.shape}")
+        print(f"🔍 DEBUG: X contains NaN: {np.isnan(X).any()}")
+        print(f"🔍 DEBUG: y contains NaN: {np.isnan(y).any()}")
+        if np.isnan(X).any():
+            nan_count = np.isnan(X).sum()
+            print(f"🔍 DEBUG: Number of NaN values in X: {nan_count}")
+        
         # Scale features
         X_scaled = self.scaler.fit_transform(X)
+        
+        # DEBUG: Check scaled data for NaN values
+        print(f"🔍 DEBUG: X_scaled contains NaN: {np.isnan(X_scaled).any()}")
+        if np.isnan(X_scaled).any():
+            nan_count = np.isnan(X_scaled).sum()
+            print(f"🔍 DEBUG: Number of NaN values in X_scaled: {nan_count}")
         
         # Create model
         self.model = self._create_model(X_scaled.shape[1])
@@ -439,8 +518,24 @@ class KerasMLPClassifier(BaseEstimator, ClassifierMixin):
             )
         ]
         
-        # Use smaller batch size for small datasets
-        effective_batch_size = min(self.batch_size, len(X) // 4) if len(X) < 100 else self.batch_size
+        # Smart batch size handling for multi-GPU training
+        if self.strategy is not None:
+            # For multi-GPU, ensure batch size is divisible by number of GPUs
+            n_gpus = self.strategy.num_replicas_in_sync
+            # Also ensure it's not larger than the dataset size
+            max_batch_size = min(self.batch_size, len(X) // 2)  # Leave room for validation
+            effective_batch_size = (max_batch_size // n_gpus) * n_gpus
+            # Ensure minimum batch size
+            effective_batch_size = max(effective_batch_size, n_gpus * 32)
+        else:
+            # Single GPU batch size handling
+            effective_batch_size = min(self.batch_size, len(X) // 4) if len(X) < 100 else self.batch_size
+        
+        print(f"🔥 Keras batch size: {effective_batch_size} (data size: {len(X)})")
+        
+        # DEBUG: Final check before training
+        print(f"🔍 DEBUG: About to train - X_scaled contains NaN: {np.isnan(X_scaled).any()}")
+        print(f"🔍 DEBUG: About to train - y contains NaN: {np.isnan(y).any()}")
         
         # Train model
         self.model.fit(
@@ -451,6 +546,9 @@ class KerasMLPClassifier(BaseEstimator, ClassifierMixin):
             class_weight=class_weight_dict,
             verbose=0
         )
+        
+        # DEBUG: Check model weights after training
+        print(f"🔍 DEBUG: Model trained successfully")
         
         return self
     
@@ -479,11 +577,101 @@ class KerasMLPClassifier(BaseEstimator, ClassifierMixin):
         if hasattr(X, 'values'):
             X = X.values
         
+        # DEBUG: Check input data for NaN values
+        print(f"🔍 DEBUG: predict_proba - Input X shape: {X.shape}")
+        print(f"🔍 DEBUG: predict_proba - X contains NaN: {np.isnan(X).any()}")
+        if np.isnan(X).any():
+            nan_count = np.isnan(X).sum()
+            print(f"🔍 DEBUG: predict_proba - Number of NaN values in X: {nan_count}")
+        
         # Scale features
         X_scaled = self.scaler.transform(X)
         
+        # DEBUG: Check scaled data for NaN values
+        print(f"🔍 DEBUG: predict_proba - X_scaled contains NaN: {np.isnan(X_scaled).any()}")
+        if np.isnan(X_scaled).any():
+            nan_count = np.isnan(X_scaled).sum()
+            print(f"🔍 DEBUG: predict_proba - Number of NaN values in X_scaled: {nan_count}")
+        
         # Predict probabilities
-        return self.model.predict(X_scaled, verbose=0)
+        predictions = self.model.predict(X_scaled, verbose=0)
+        
+        # DEBUG: Check predictions for NaN values
+        print(f"🔍 DEBUG: predict_proba - predictions shape: {predictions.shape}")
+        print(f"🔍 DEBUG: predict_proba - predictions contains NaN: {np.isnan(predictions).any()}")
+        if np.isnan(predictions).any():
+            nan_count = np.isnan(predictions).sum()
+            print(f"🔍 DEBUG: predict_proba - Number of NaN values in predictions: {nan_count}")
+            print(f"🔍 DEBUG: predict_proba - predictions sample: {predictions[:5]}")
+            
+            # FALLBACK: Replace NaN predictions with neutral probabilities
+            print(f"🔧 FALLBACK: Replacing NaN predictions with neutral probabilities [0.5, 0.5]")
+            nan_mask = np.isnan(predictions)
+            predictions[nan_mask] = 0.5
+            print(f"🔧 FALLBACK: Fixed predictions - contains NaN: {np.isnan(predictions).any()}")
+        
+        return predictions
+    
+    def __getstate__(self):
+        """Custom serialization to handle TensorFlow objects."""
+        print("🔧 KERAS SERIALIZATION: Preparing model for serialization...")
+        state = self.__dict__.copy()
+        
+        # Remove unpickleable TensorFlow objects
+        if 'strategy' in state:
+            state['strategy'] = None  # Remove MirroredStrategy
+        
+        # Save model weights and architecture separately if model exists
+        if self.model is not None:
+            print("🔧 KERAS SERIALIZATION: Saving model weights and config...")
+            # Save model config and weights
+            state['model_config'] = self.model.get_config()
+            state['model_weights'] = self.model.get_weights()
+            state['model'] = None  # Remove the actual model object
+        else:
+            state['model_config'] = None
+            state['model_weights'] = None
+        
+        print("🔧 KERAS SERIALIZATION: Model prepared for serialization")
+        return state
+    
+    def __setstate__(self, state):
+        """Custom deserialization to rebuild TensorFlow objects."""
+        print("🔧 KERAS DESERIALIZATION: Restoring model from serialization...")
+        self.__dict__.update(state)
+        
+        # Rebuild model if config and weights exist
+        if state.get('model_config') is not None and state.get('model_weights') is not None:
+            print("🔧 KERAS DESERIALIZATION: Rebuilding model from config and weights...")
+            
+            # Recreate strategy if multiple GPUs available
+            if len(tf.config.list_physical_devices('GPU')) > 1:
+                self.strategy = tf.distribute.MirroredStrategy()
+                print(f"🔧 KERAS DESERIALIZATION: Recreated MirroredStrategy with {self.strategy.num_replicas_in_sync} GPUs")
+            else:
+                self.strategy = None
+            
+            # Recreate mixed precision policy if needed
+            if self.mixed_precision:
+                keras.mixed_precision.set_global_policy('mixed_float16')
+                print("🔧 KERAS DESERIALIZATION: Restored mixed precision policy")
+            
+            # Rebuild model
+            if self.strategy is not None:
+                with self.strategy.scope():
+                    self.model = keras.Sequential.from_config(state['model_config'])
+                    self.model.set_weights(state['model_weights'])
+            else:
+                self.model = keras.Sequential.from_config(state['model_config'])
+                self.model.set_weights(state['model_weights'])
+            
+            print("🔧 KERAS DESERIALIZATION: Model successfully restored")
+        else:
+            self.model = None
+            self.strategy = None
+            print("🔧 KERAS DESERIALIZATION: No model to restore")
+        
+        print("🔧 KERAS DESERIALIZATION: Deserialization complete")
 
 class DeepLearningTrainer(BaseTrainer):
     """
@@ -519,7 +707,9 @@ class DeepLearningTrainer(BaseTrainer):
                 'activation': 'relu',
                 'optimizer': 'adam',
                 'class_weight': 'balanced',
-                'random_state': config.get('random_seed', 42)
+                'random_state': config.get('random_seed', 42),
+                'mixed_precision': False,
+                'gradient_accumulation_steps': 1
             }
         elif self.model_type == 'keras_mlp':
             default_params = {
@@ -535,7 +725,9 @@ class DeepLearningTrainer(BaseTrainer):
                 'activation': 'relu',
                 'optimizer': 'adam',
                 'class_weight': 'balanced',
-                'random_state': config.get('random_seed', 42)
+                'random_state': config.get('random_seed', 42),
+                'mixed_precision': False,
+                'gradient_clip_norm': 1.0
             }
         else:
             default_params = {}
@@ -567,7 +759,7 @@ class DeepLearningTrainer(BaseTrainer):
         else:
             raise ValueError(f"Unknown deep learning model type: {self.model_type}")
     
-    def train(self, data_path: str = None) -> BaseEstimator:
+    def train(self, data_path: str = None, dataset: Optional[PandasDataset] = None) -> BaseEstimator:
         """
         Train a deep learning model using the existing LOGO cross-validation framework.
         
@@ -582,19 +774,26 @@ class DeepLearningTrainer(BaseTrainer):
         - Weight decay (L2 regularization)
         - Batch normalization
         - Learning rate scheduling
+        
+        Args:
+            data_path: Optional path to feature data
+            dataset: Optional MLflow dataset to use for training
         """
-        if data_path is None:
-            data_path = self.config['data']['feature_path']
+        # Determine data source with priority: MLflow dataset > provided dataset > config path > file path
+        final_data_path = data_path or self.config.get('data', {}).get('feature_path')
         
         evaluator = ModelEvaluator(metrics=self.metrics)
         
-        # Log the data path being used
-        mlflow.log_param("feature_path", data_path)
+        # Load data using the new base trainer method
+        df = self._load_data_from_source(
+            data_source=final_data_path,
+            dataset=dataset,
+            prefer_mlflow=True
+        )
+        
+        # Log model information
         mlflow.log_param("model_type", self.model_type)
         mlflow.log_params(self.model_params)
-        
-        # Load and prepare data
-        df = pd.read_parquet(data_path)
         X_orig, y, groups = self._prepare_data(df)
         
         # Feature Selection (inherited from existing framework)
@@ -641,24 +840,36 @@ class DeepLearningTrainer(BaseTrainer):
         patient_pred_labels = []
         patient_pred_probs = []
         
-        for fold_idx, (train_idx, test_idx) in enumerate(logo.split(X, y, groups)):
-            test_participant = groups.iloc[test_idx].unique()[0]
-            true_label = y.iloc[test_idx].iloc[0]
+        for fold_idx, (train_index, test_index) in enumerate(logo.split(X, y, groups=groups)):
+            X_train, X_test = X.iloc[train_index], X.iloc[test_index]
+            y_train, y_test = y.iloc[train_index], y.iloc[test_index]
+            
+            # Check for NaN values before training
+            if np.isnan(X_train).any().any() or np.isnan(y_train).any():
+                logger.error(f"NaN values found in training data for fold {fold_idx}. Skipping fold.")
+                continue
+            
+            test_participant = groups.iloc[test_index].unique()[0]
+            true_label = y.iloc[test_index].iloc[0]
             patient_true_labels.append(true_label)
             
             logger.info(f"\nFold {fold_idx + 1}/{n_splits}")
             logger.info(f"Testing on participant: {test_participant}")
-            logger.info(f"Training windows: {len(train_idx)}, Test windows: {len(test_idx)}")
+            logger.info(f"Training windows: {len(train_index)}, Test windows: {len(test_index)}")
             
             # Use nested runs for each fold
             with mlflow.start_run(run_name=f"fold_{fold_idx}", nested=True):
-                # Create and train model (with built-in overfitting prevention)
-                model = self._create_model_instance()
-                model.fit(X.iloc[train_idx], y.iloc[train_idx])
+                # Create a new model instance for each fold to ensure independence
+                self.model = self._create_model_instance()
+                
+                logger.info(f"Fold {fold_idx+1}/{n_splits}: Training on {len(X_train)} samples, testing on {len(X_test)} samples.")
+                
+                # Train model (with built-in overfitting prevention)
+                self.model.fit(X_train, y_train)
                 
                 # Make predictions
-                y_pred = model.predict(X.iloc[test_idx])
-                y_prob = model.predict_proba(X.iloc[test_idx])[:, 1]
+                y_pred = self.model.predict(X_test)
+                y_prob = self.model.predict_proba(X_test)[:, 1]
                 
                 # Calculate patient-level prediction (averaging window predictions)
                 patient_prob = np.mean(y_prob)
@@ -668,7 +879,7 @@ class DeepLearningTrainer(BaseTrainer):
                 
                 # Store predictions
                 window_predictions.extend(self._create_window_predictions(
-                    fold_idx, test_participant, y.iloc[test_idx], y_pred, y_prob))
+                    fold_idx, test_participant, y_test, y_pred, y_prob))
                 
                 patient_predictions.append({
                     'fold': fold_idx,
@@ -676,14 +887,14 @@ class DeepLearningTrainer(BaseTrainer):
                     'true_label': true_label,
                     'predicted_label': patient_pred,
                     'probability': patient_prob,
-                    'n_windows': len(test_idx),
+                    'n_windows': len(test_index),
                     'n_positive_windows': sum(y_pred == 1),
-                    'window_accuracy': np.mean(y_pred == y.iloc[test_idx])
+                    'window_accuracy': np.mean(y_pred == y_test)
                 })
                 
                 # Log fold-specific metrics
                 mlflow.log_metric(f"fold_{fold_idx}_patient_accuracy", int(true_label == patient_pred))
-                mlflow.log_metric(f"fold_{fold_idx}_window_accuracy", np.mean(y_pred == y.iloc[test_idx]))
+                mlflow.log_metric(f"fold_{fold_idx}_window_accuracy", np.mean(y_pred == y_test))
         
         # Calculate and log patient-level metrics
         patient_metrics = evaluator.evaluate_patient_predictions(
@@ -819,11 +1030,34 @@ class DeepLearningTrainer(BaseTrainer):
             mlflow.sklearn.log_model(model, "model", signature=signature, input_example=input_example)
         except Exception as e:
             logger.warning(f"Could not log model to MLflow: {e}")
-            # Save using joblib as fallback
-            import joblib
-            model_path = output_dir / f'{self.model_type}_model.joblib'
-            joblib.dump(model, model_path)
-            mlflow.log_artifact(str(model_path))
+            
+            # Handle different model types for fallback saving
+            try:
+                if self.model_type == 'keras_mlp' and hasattr(model, 'model') and model.model is not None:
+                    # Save Keras model using TensorFlow's native format
+                    model_path = output_dir / f'{self.model_type}_model.h5'
+                    model.model.save(str(model_path))
+                    mlflow.log_artifact(str(model_path))
+                    logger.info(f"Saved Keras model to {model_path}")
+                    
+                    # Also save the scaler separately
+                    scaler_path = output_dir / f'{self.model_type}_scaler.joblib'
+                    import joblib
+                    joblib.dump(model.scaler, scaler_path)
+                    mlflow.log_artifact(str(scaler_path))
+                    logger.info(f"Saved scaler to {scaler_path}")
+                    
+                else:
+                    # For PyTorch models, try joblib
+                    import joblib
+                    model_path = output_dir / f'{self.model_type}_model.joblib'
+                    joblib.dump(model, model_path)
+                    mlflow.log_artifact(str(model_path))
+                    logger.info(f"Saved model to {model_path}")
+                    
+            except Exception as e2:
+                logger.warning(f"Could not save model with fallback method: {e2}")
+                logger.info("Model training completed but serialization failed - results and metrics are still saved")
         
         logger.info(f"Saved model metadata and artifacts to {output_dir}")
     

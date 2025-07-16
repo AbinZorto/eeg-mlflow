@@ -14,7 +14,23 @@ paths:
 
 # Data Loader Parameters
 data_loader:
-  channels: ['af7', 'af8', 'tp9', 'tp10']
+  # Channel Selection: Customize which EEG channels to process
+  # Available channels: ['af7', 'af8', 'tp9', 'tp10']
+  # 
+  # Features extracted per channel combination:
+  # - Individual channel features (spectral, temporal, entropy for each channel)
+  # - Traditional asymmetry: frontal (af7/af8), temporal (tp9/tp10)
+  # - Hemispheric asymmetry: left hemisphere (af7+tp9) vs right hemisphere (af8+tp10)
+  # - Cross-regional: frontal-temporal ratios within each hemisphere
+  # - Diagonal cross-hemispheric: af7-tp10 and af8-tp9 interactions
+  # - Coherence/correlation between all channel pairs
+  #
+  channels: ['tp10']  # Current: All 4 channels (enables all features)
+  # channels: ['af7', 'af8']              # Frontal only (enables frontal asymmetry + coherence)
+  # channels: ['tp9', 'tp10']             # Temporal only (enables temporal asymmetry + coherence)
+  # channels: ['af7', 'tp9']              # Left hemisphere (enables cross-regional + coherence)
+  # channels: ['af8', 'tp10']             # Right hemisphere (enables cross-regional + coherence)
+  # channels: ['af7']                     # Single channel (individual features only)
   validate_data: true
   save_interim: true
   data_keys:

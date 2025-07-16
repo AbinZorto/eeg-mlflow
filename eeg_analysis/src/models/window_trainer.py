@@ -7,12 +7,15 @@ import mlflow
 from sklearn.model_selection import LeaveOneGroupOut
 from src.models.model_utils import save_model_results, log_feature_importance, create_classifier
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 import logging
 from sklearn.feature_selection import SelectKBest, f_classif, mutual_info_classif, SelectFromModel, RFE
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from mlflow.models.signature import infer_signature
+from imblearn.over_sampling import SMOTE
+from mlflow.data.pandas_dataset import PandasDataset
+
 
 logger = logging.getLogger(__name__)
 
@@ -32,13 +35,27 @@ class WindowLevelTrainer(BaseTrainer):
         self.output_dir = config['paths']['models']
         self.metrics = config['metrics']['window_level']
         self.feature_selection_config = config.get('feature_selection', {})
+        self.use_smote = config.get('use_smote', True)
         logger.info(f"WindowLevelTrainer initialized with model_type: {self.model_type}")
         logger.info(f"WindowLevelTrainer initialized with feature_selection_config: {self.feature_selection_config}")
+        if self.use_smote:
+            logger.info("SMOTE is enabled for window-level training.")
     
     def _create_model_instance(self) -> BaseEstimator:
         """Creates a model instance based on the trainer's configuration."""
         # Uses self.model_type and self.model_params which are specific to WindowLevelTrainer
         return create_classifier(self.model_type, self.model_params)
+
+    def _create_and_train_model(self, X_train: pd.DataFrame, y_train: pd.Series) -> BaseEstimator:
+        """Create and train model, disabling class weights if SMOTE is used."""
+        model_params = self.model_params.copy()
+        if self.use_smote:
+            logger.info(f"SMOTE is enabled, ensuring class_weight is None for model {self.model_type}")
+            model_params['class_weight'] = None
+
+        model = create_classifier(self.model_type, model_params)
+        model.fit(X_train, y_train)
+        return model
 
     def _get_feature_importances(self, model: BaseEstimator, feature_names: List[str]) -> pd.DataFrame:
         """Helper to get feature importances from a model."""
@@ -207,26 +224,31 @@ class WindowLevelTrainer(BaseTrainer):
         mlflow.log_param("feature_selection_method", selection_method)
         return selected_features
 
-    def train(self, data_path: str = None) -> BaseEstimator:
+    def train(self, data_path: str = None, dataset: Optional[PandasDataset] = None) -> BaseEstimator:
         """
         Train a window-level model.
         
         Args:
             data_path: Optional path to feature data. If None, uses config path.
+            dataset: Optional MLflow dataset to use for training
             
         Returns:
             Trained model
         """
-        if data_path is None:
-            data_path = self.config['data']['feature_path']
-            
+        # Determine data source with priority: MLflow dataset > provided dataset > config path > file path
+        final_data_path = data_path or self.config.get('data', {}).get('feature_path')
+        
         evaluator = ModelEvaluator(metrics=self.metrics)
         
-        # Log the data path being used
-        mlflow.log_param("feature_path", data_path)
+        # Load data using the new base trainer method
+        df = self._load_data_from_source(
+            data_source=final_data_path,
+            dataset=dataset,
+            prefer_mlflow=True
+        )
         
-        # Load and prepare data
-        df = pd.read_parquet(data_path)
+        # Log the data source information (already handled in _load_data_from_source)
+        
         X_orig, y, groups = self._prepare_data(df)
         
         # Feature Selection
@@ -313,21 +335,34 @@ class WindowLevelTrainer(BaseTrainer):
         patient_pred_probs = []
         
         for fold_idx, (train_idx, test_idx) in enumerate(logo.split(X, y, groups)):
+            X_train, X_test = X.iloc[train_idx], X.iloc[test_idx]
+            y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
+            
             test_participant = groups.iloc[test_idx].unique()[0]
-            true_label = y.iloc[test_idx].iloc[0]
+            true_label = y_test.iloc[0]
             patient_true_labels.append(true_label)
             
             logger.info(f"\nFold {fold_idx + 1}/{n_splits}")
             logger.info(f"Testing on participant: {test_participant} (true label: {true_label})")
-            logger.info(f"Training windows: {len(train_idx)}")
-            logger.info(f"Test windows: {len(test_idx)}")
-            
+            logger.info(f"Training windows: {len(train_idx)}, Test windows: {len(test_idx)}")
+
+            X_train_fold, y_train_fold = X_train, y_train
+            if self.use_smote:
+                logger.info(f"Applying SMOTE to fold {fold_idx + 1}...")
+                smote = SMOTE(random_state=self.config.get('random_seed', 42))
+                X_train_fold, y_train_fold = smote.fit_resample(X_train_fold, y_train_fold)
+                
+                original_balance = y_train.value_counts(normalize=True).get(1, 0)
+                smote_balance = y_train_fold.value_counts(normalize=True).get(1, 0)
+                logger.info(f"Original positive class balance: {original_balance:.2f}")
+                logger.info(f"SMOTE-balanced positive class balance: {smote_balance:.2f}")
+
             # Use nested runs for each fold
             with mlflow.start_run(run_name=f"fold_{fold_idx}", nested=True):
-                model = self._create_and_train_model(X.iloc[train_idx], y.iloc[train_idx])
-                y_pred = model.predict(X.iloc[test_idx])
-                y_prob = model.predict_proba(X.iloc[test_idx])[:, 1]
-                
+                model = self._create_and_train_model(X_train_fold, y_train_fold)
+                y_pred = model.predict(X_test)
+                y_prob = model.predict_proba(X_test)[:, 1]
+
                 # Calculate patient-level prediction
                 patient_prob = np.mean(y_prob)
                 patient_pred = 1 if patient_prob >= 0.5 else 0
@@ -336,8 +371,8 @@ class WindowLevelTrainer(BaseTrainer):
                 
                 # Store window-level predictions
                 window_predictions.extend(self._create_window_predictions(
-                    fold_idx, test_participant, y.iloc[test_idx], y_pred, y_prob))
-                
+                    fold_idx, test_participant, y_test, y_pred, y_prob))
+
                 # Store patient-level prediction
                 patient_predictions.append({
                     'fold': fold_idx,
@@ -347,15 +382,15 @@ class WindowLevelTrainer(BaseTrainer):
                     'probability': patient_prob,
                     'n_windows': len(test_idx),
                     'n_positive_windows': sum(y_pred == 1),
-                    'window_accuracy': np.mean(y_pred == y.iloc[test_idx])
+                    'window_accuracy': np.mean(y_pred == y_test)
                 })
-                
+
                 # Log fold-specific metrics
                 mlflow.log_metric(f"fold_{fold_idx}_patient_accuracy", 
                                 int(true_label == patient_pred))
                 mlflow.log_metric(f"fold_{fold_idx}_window_accuracy", 
-                                np.mean(y_pred == y.iloc[test_idx]))
-        
+                                np.mean(y_pred == y_test))
+
         # Calculate and log patient-level metrics
         patient_metrics = evaluator.evaluate_patient_predictions(
             np.array(patient_true_labels),
@@ -368,7 +403,14 @@ class WindowLevelTrainer(BaseTrainer):
         mlflow.log_params(self.model_params)
         
         # Train final model on all data
-        final_model = self._create_and_train_model(X, y)
+        logger.info("\nTraining final model on all data...")
+        X_final_train, y_final_train = X, y
+        if self.use_smote:
+            logger.info("Applying SMOTE to the full dataset for the final model.")
+            smote = SMOTE(random_state=self.config.get('random_seed', 42))
+            X_final_train, y_final_train = smote.fit_resample(X_final_train, y_final_train)
+
+        final_model = self._create_and_train_model(X_final_train, y_final_train)
         self._save_results(final_model, patient_metrics, window_predictions, 
                          patient_predictions, X)
         
@@ -412,145 +454,53 @@ class WindowLevelTrainer(BaseTrainer):
             'is_window': False
         }
 
-    def _save_results(self, model: BaseEstimator, patient_metrics: Dict[str, float],
-                     window_predictions: List[Dict[str, Any]], 
-                     patient_predictions: List[Dict[str, Any]], 
-                     X_final_train: pd.DataFrame) -> None:
-        """
-        Save model results and predictions.
-        
-        Args:
-            model: Trained model
-            patient_metrics: Dictionary of patient-level metrics
-            window_predictions: List of window-level predictions
-            patient_predictions: List of patient-level predictions
-            X_final_train: DataFrame used to train the final model (for signature and feature names)
-        """
-        feature_names = X_final_train.columns.tolist() # Get feature names from X_final_train
-        # Create DataFrames from predictions
-        window_df = pd.DataFrame(window_predictions)
-        patient_df = pd.DataFrame(patient_predictions)
-        
-        # Convert any numpy types in metrics to Python native types
-        for key, value in patient_metrics.items():
-            if hasattr(value, 'item'):  # Check if it's a numpy type
-                patient_metrics[key] = value.item()  # Convert to Python native type
-        
-        # Log metrics
-        mlflow.log_metrics(patient_metrics)
-        
-        
-
-        # Get window size from data path or config
-        window_size = None
-        if 'window_size' in self.config:
-            window_size = self.config['window_size']
-        else:
-            # Try to extract from data path
-            data_path = self.config['data']['feature_path']
-            if '{window_size}s' in data_path:
-                # The actual path should have the window size filled in
-                import re
-                match = re.search(r'(\d+)s_window_features', data_path)
-                if match:
-                    window_size = match.group(1)
-        
-        # Create output directory with window size
-        output_dir = Path(self.output_dir)
-        if window_size:
-            output_dir = output_dir / f"{window_size}s_window"
-        else:
-            output_dir = output_dir / "default_window"
-        
-        # Create directory if it doesn't exist
+    def _save_results(self, model: BaseEstimator, 
+                      patient_metrics: Dict[str, float], 
+                      window_predictions: List[Dict],
+                      patient_predictions: List[Dict], 
+                      X: pd.DataFrame):
+        """Save all results: model, predictions, metrics, etc."""
+        # Create output directory
+        output_dir = Path(self.output_dir) / self.model_type
         output_dir.mkdir(parents=True, exist_ok=True)
         
-        # Save predictions if configured
-        if self.config['output']['save_predictions']:
-            window_pred_path = output_dir / 'window_predictions.csv'
-            patient_pred_path = output_dir / 'patient_predictions.csv'
-            
-            window_df.to_csv(window_pred_path, index=False)
-            patient_df.to_csv(patient_pred_path, index=False)
-            
-            # Log to MLflow
-            mlflow.log_artifact(str(window_pred_path))
-            mlflow.log_artifact(str(patient_pred_path))
-            
-            logger.info(f"Saved window predictions to {window_pred_path}")
-            logger.info(f"Saved patient predictions to {patient_pred_path}")
+        # Save predictions
+        window_pred_df = pd.DataFrame(window_predictions)
+        window_pred_path = output_dir / 'window_level_predictions.csv'
+        window_pred_df.to_csv(window_pred_path, index=False)
+        mlflow.log_artifact(str(window_pred_path))
         
-        # Log feature importance if configured
-        if self.config['output']['feature_importance']:
-            # Try to get feature importances - handle both direct models and pipelines
-            importances = None
-            
-            # Check if it's a pipeline with a final estimator that has feature_importances_
-            if hasattr(model, 'steps') and hasattr(model, 'named_steps'):
-                # It's a pipeline - get the last step (usually the estimator)
-                final_estimator = model.steps[-1][1]
-                if hasattr(final_estimator, 'feature_importances_') or hasattr(final_estimator, 'coef_'):
-                    importances_df = self._get_feature_importances(model, feature_names)
-                    if importances_df is not None:
-                        importances = importances_df
-            # Check if it's a direct model with feature_importances_ or coef_
-            elif hasattr(model, 'feature_importances_') or hasattr(model, 'coef_'):
-                importances_df = self._get_feature_importances(model, feature_names)
-                if importances_df is not None:
-                    importances = importances_df
-            
-            # Save importances if we found them
-            if importances is not None and not importances.empty:
-                importance_path = output_dir / 'feature_importance.csv'
-                importances.to_csv(importance_path, index=False)
-                
-                # Log to MLflow
+        patient_pred_df = pd.DataFrame(patient_predictions)
+        patient_pred_path = output_dir / 'patient_level_predictions.csv'
+        patient_pred_df.to_csv(patient_pred_path, index=False)
+        mlflow.log_artifact(str(patient_pred_path))
+        
+        # Save feature importances if available
+        if self.config.get('output', {}).get('feature_importance', False):
+            feature_names = X.columns.tolist()
+            importances_df = self._get_feature_importances(model, feature_names)
+            if importances_df is not None:
+                importance_path = output_dir / 'feature_importances.csv'
+                importances_df.to_csv(importance_path, index=False)
                 mlflow.log_artifact(str(importance_path))
-                logger.info(f"Saved feature importance to {importance_path}")
-            else:
-                logger.warning("Could not extract feature importances from the model")
         
-        # Log model with signature
-        input_example = X_final_train.head()
-        try:
-            # Predict on a small sample to help infer output schema
-            # Ensure model is fitted if it's a freshly created one for some reason (though it should be fitted)
-            if hasattr(model, "predict"):
-                 prediction_example = model.predict(input_example)
-                 signature = infer_signature(input_example, prediction_example)
-            else: # Should not happen for sklearn models used here
-                signature = infer_signature(input_example)
-            mlflow.sklearn.log_model(model, "model", signature=signature, input_example=input_example)
-        except Exception as e:
-            logger.error(f"Failed to log model with signature: {e}. Logging model without signature.")
-            mlflow.sklearn.log_model(model, "model")
-
-        # Save model to disk
-        model_path = output_dir / 'model.joblib'
-        import joblib
-        joblib.dump(model, model_path)
-        logger.info(f"Saved model to {model_path}")
+        # Save model using MLflow
+        model_name = f"window_level_{self.model_type}"
+        signature = infer_signature(X, model.predict_proba(X))
         
-        # Save model metadata
-        metadata = {
-            'window_size': window_size,
-            'model_type': self.model_type,
-            'model_params': self.model_params,
-            'metrics': patient_metrics,
-            'timestamp': pd.Timestamp.now().isoformat()
-        }
+        mlflow.sklearn.log_model(
+            sk_model=model,
+            artifact_path="model",
+            registered_model_name=model_name,
+            signature=signature
+        )
         
-        import json
-        with open(output_dir / 'model_metadata.json', 'w') as f:
-            json.dump(metadata, f, indent=2)
+        logger.info(f"Model saved as {model_name} in MLflow registry.")
+        logger.info(f"Patient-level metrics: {patient_metrics}")
         
-        logger.info("\nMisclassified Patients:")
-        misclassified = patient_df[
-            patient_df['true_label'] != patient_df['predicted_label']
-        ]
-        for _, row in misclassified.iterrows():
-            logger.info(
-                f"Participant {row['participant']}: "
-                f"True={row['true_label']}, Pred={row['predicted_label']}, "
-                f"Confidence={row['probability']:.3f}"
-            )
+        # Optionally save performance plots
+        if self.config.get('output', {}).get('performance_plots', False):
+            # This would require an evaluation utility class - placeholder for now
+            pass
+            
+        logger.info(f"Results saved to {output_dir}")
