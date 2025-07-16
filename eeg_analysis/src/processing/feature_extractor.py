@@ -7,6 +7,8 @@ from pathlib import Path
 from typing import Dict, Any, List, Tuple, Optional
 from ..utils.logger import get_logger
 import mlflow
+import mlflow.data
+from mlflow.data.pandas_dataset import PandasDataset
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import os
@@ -65,11 +67,28 @@ class EEGFeatureExtractor:
         
         # Log configuration
         self.logger.info("Initialized EEG Feature Extractor:")
-        self.logger.info(f"- Channels: {self.channels}")
+        self.logger.info(f"- Channels: {self.channels} ({len(self.channels)} channels)")
         self.logger.info(f"- Frequency bands: {self.frequency_bands}")
         self.logger.info(f"- Statistical features: {self.statistical_features}")
         self.logger.info(f"- Entropy features: {self.entropy_features}")
         self.logger.info(f"- Complexity features: {self.complexity_features}")
+        
+        # Log asymmetry and cross-hemispheric feature availability
+        can_compute_frontal = 'af7' in self.channels and 'af8' in self.channels
+        can_compute_temporal = 'tp9' in self.channels and 'tp10' in self.channels
+        can_compute_hemispheric = all(ch in self.channels for ch in ['af7', 'af8', 'tp9', 'tp10'])
+        can_compute_left_regional = 'af7' in self.channels and 'tp9' in self.channels
+        can_compute_right_regional = 'af8' in self.channels and 'tp10' in self.channels
+        can_compute_diagonal = ('af7' in self.channels and 'tp10' in self.channels) or ('af8' in self.channels and 'tp9' in self.channels)
+        
+        self.logger.info(f"- Frontal asymmetry features: {'Available' if can_compute_frontal else 'Not available (requires af7 and af8)'}")
+        self.logger.info(f"- Temporal asymmetry features: {'Available' if can_compute_temporal else 'Not available (requires tp9 and tp10)'}")
+        self.logger.info(f"- Hemispheric asymmetry features: {'Available' if can_compute_hemispheric else 'Not available (requires all 4 channels)'}")
+        self.logger.info(f"- Cross-regional features: {'Available' if can_compute_left_regional or can_compute_right_regional else 'Not available'}")
+        self.logger.info(f"- Diagonal cross-hemispheric features: {'Available' if can_compute_diagonal else 'Not available'}")
+        self.logger.info(f"- Cross-channel coherence features: {'Available' if len(self.channels) >= 2 else 'Not available (requires at least 2 channels)'}")
+        self.logger.info("- Computation optimization: PSD and band powers cached to avoid redundancy")
+        self.logger.info("- New features added: relative band powers, PSD statistics, Hjorth parameters, and all complexity features per channel")
     
     def validate_signal(self, signal: np.ndarray) -> Tuple[bool, str]:
         """
@@ -99,26 +118,34 @@ class EEGFeatureExtractor:
         except Exception as e:
             return False, f"Validation error: {str(e)}"
     
-    def compute_band_power(self, signal: np.ndarray, band: Tuple[float, float]) -> float:
+    def compute_band_power(self, signal: np.ndarray = None, band: Tuple[float, float] = None, 
+                          freqs: np.ndarray = None, psd: np.ndarray = None) -> float:
         """
         Compute power in specific frequency band.
         
         Args:
-            signal: Input signal array
+            signal: Input signal array (if freqs/psd not provided)
             band: Tuple of (low_freq, high_freq)
+            freqs: Pre-computed frequency array (optional, for efficiency)
+            psd: Pre-computed PSD array (optional, for efficiency)
             
         Returns:
             Band power value
         """
         try:
-            # Compute PSD using Welch's method
-            freqs, psd = welch(signal, fs=self.sampling_rate, nperseg=min(256, len(signal)))
+            # Use pre-computed PSD if available, otherwise compute it
+            if freqs is not None and psd is not None:
+                freqs_use, psd_use = freqs, psd
+            elif signal is not None:
+                freqs_use, psd_use = welch(signal, fs=self.sampling_rate, nperseg=min(256, len(signal)))
+            else:
+                raise ValueError("Either signal or (freqs, psd) must be provided")
             
             # Find frequency band indices
-            idx_band = np.logical_and(freqs >= band[0], freqs <= band[1])
+            idx_band = np.logical_and(freqs_use >= band[0], freqs_use <= band[1])
             
             # Calculate band power
-            band_power = np.trapz(psd[idx_band], freqs[idx_band])
+            band_power = np.trapz(psd_use[idx_band], freqs_use[idx_band])
             
             return band_power
             
@@ -306,6 +333,11 @@ class EEGFeatureExtractor:
         """
         Extract all features from a single window.
         
+        This method is optimized to avoid redundant computations:
+        - PSD (Power Spectral Density) is computed once per channel and cached
+        - Band powers are computed once per channel and cached for reuse
+        - All asymmetry and cross-hemispheric features use cached band powers
+        
         Args:
             window_data: Dictionary containing window data
             
@@ -332,8 +364,11 @@ class EEGFeatureExtractor:
                     else:
                         features[new_col] = window_data[old_col]
             
-            # Extract features for each channel
+            # Extract features for each channel and cache computations
             channel_signals = {}
+            channel_band_powers = {}  # Cache band power calculations
+            channel_psd_data = {}    # Cache PSD calculations
+            
             for channel in self.channels:
                 # Get signal data
                 signal_key = 'data' if channel == window_data.get('channel') else channel
@@ -348,18 +383,57 @@ class EEGFeatureExtractor:
                 # Store signal for later asymmetry calculations
                 channel_signals[channel] = signal
                 
-                # Spectral features
+                # Compute PSD once per channel (used by multiple features)
+                freqs, psd = welch(signal, fs=self.sampling_rate, nperseg=min(256, len(signal)))
+                channel_psd_data[channel] = (freqs, psd)
+                
+                # Compute and cache band powers once per channel using cached PSD
+                band_powers = {}
+                total_power = 0
+                for band_name, (low, high) in self.frequency_bands.items():
+                    power = self.compute_band_power(band=(low, high), freqs=freqs, psd=psd)
+                    band_powers[band_name] = power
+                    total_power += power
+                channel_band_powers[channel] = band_powers
+                
+                # === SPECTRAL FEATURES ===
                 if self.compute_spectral:
-                    for band_name, (low, high) in self.frequency_bands.items():
-                        power = self.compute_band_power(signal, (low, high))
+                    # Band powers
+                    for band_name, power in band_powers.items():
                         features[f"{channel}_power_{band_name}"] = power
                     
-                    # Add frequency-weighted power
-                    freqs, psd = welch(signal, fs=self.sampling_rate)
+                    # Total power
+                    features[f"{channel}_total_power"] = total_power
+                    
+                    # Relative band powers (missing feature!)
+                    for band_name, power in band_powers.items():
+                        features[f"{channel}_relative_power_{band_name}"] = (
+                            power / total_power if total_power > 0 else np.nan
+                        )
+                    
+                    # Frequency-weighted power (using cached PSD)
                     features[f"{channel}_freq_weighted_power"] = np.sum(freqs * psd) / np.sum(psd) if np.sum(psd) > 0 else np.nan
+                    
+                    # Spectral edge frequencies (missing features!)
+                    def find_spectral_edge(psd_curve: np.ndarray, edge_percent: float) -> float:
+                        cumsum = np.cumsum(psd_curve)
+                        return np.interp(edge_percent * cumsum[-1], cumsum, freqs)
+                    
+                    features[f"{channel}_sef_90"] = find_spectral_edge(psd, 0.9)
+                    features[f"{channel}_sef_95"] = find_spectral_edge(psd, 0.95)
+                    
+                    # PSD summary statistics (missing features!)
+                    features[f"{channel}_psd_mean"] = np.mean(psd)
+                    features[f"{channel}_psd_std"] = np.std(psd)
+                    features[f"{channel}_psd_max"] = np.max(psd)
+                    features[f"{channel}_psd_min"] = np.min(psd)
+                    features[f"{channel}_psd_median"] = np.median(psd)
+                    features[f"{channel}_psd_skewness"] = skew(psd)
+                    features[f"{channel}_psd_kurtosis"] = kurtosis(psd)
                 
-                # Temporal features
+                # === TEMPORAL FEATURES ===
                 if self.compute_temporal:
+                    # Basic temporal statistics
                     features.update({
                         f"{channel}_mean": np.mean(signal),
                         f"{channel}_std": np.std(signal),
@@ -368,22 +442,91 @@ class EEGFeatureExtractor:
                         f"{channel}_kurtosis": kurtosis(signal),
                         f"{channel}_rms": np.sqrt(np.mean(np.square(signal))),
                         f"{channel}_peak_to_peak": np.ptp(signal),
-                        f"{channel}_zero_crossings": np.sum(np.diff(np.signbit(signal)))
+                        f"{channel}_zero_crossings": np.sum(np.diff(np.signbit(signal))),
+                        f"{channel}_mean_abs_deviation": np.mean(np.abs(signal - np.mean(signal)))
+                    })
+                    
+                    # Hjorth parameters (missing features!)
+                    diff_signal = np.diff(signal)
+                    diff_diff_signal = np.diff(diff_signal)
+                    
+                    activity = np.var(signal)
+                    mobility = np.sqrt(np.var(diff_signal) / activity) if activity > 0 else np.nan
+                    complexity = (
+                        np.sqrt(np.var(diff_diff_signal) * activity) / 
+                        np.var(diff_signal) if np.var(diff_signal) > 0 else np.nan
+                    )
+                    
+                    features.update({
+                        f"{channel}_hjorth_activity": activity,
+                        f"{channel}_hjorth_mobility": mobility,
+                        f"{channel}_hjorth_complexity": complexity
                     })
                 
-                # Entropy features
+                # === ENTROPY FEATURES ===
                 if self.compute_entropy:
+                    # Sample entropy (already computed correctly)
                     features[f"{channel}_sample_entropy"] = nolds.sampen(signal)
-                    freqs, psd = welch(signal, fs=self.sampling_rate)
+                    
+                    # Spectral entropy (using cached PSD)
                     psd_norm = psd / np.sum(psd)
                     features[f"{channel}_spectral_entropy"] = entropy(psd_norm)
+                
+                # === COMPLEXITY FEATURES (MISSING!) ===
+                if self.compute_complexity:
+                    # Prepare signal for complexity analysis
+                    complexity_signal = signal.copy()
+                    if len(complexity_signal) > 1000:  # Subsample for computational efficiency
+                        complexity_signal = complexity_signal[::2]
+                    
+                    try:
+                        # Correlation dimension
+                        features[f"{channel}_correlation_dim"] = nolds.corr_dim(complexity_signal, emb_dim=5)
+                    except Exception as e:
+                        self.logger.warning(f"Error computing correlation dimension for {channel}: {str(e)}")
+                        features[f"{channel}_correlation_dim"] = np.nan
+                    
+                    try:
+                        # Hurst exponent
+                        features[f"{channel}_hurst"] = nolds.hurst_rs(complexity_signal)
+                    except Exception as e:
+                        self.logger.warning(f"Error computing Hurst exponent for {channel}: {str(e)}")
+                        features[f"{channel}_hurst"] = np.nan
+                    
+                    try:
+                        # Lyapunov exponent
+                        features[f"{channel}_lyapunov"] = nolds.lyap_r(complexity_signal)
+                    except Exception as e:
+                        self.logger.warning(f"Error computing Lyapunov exponent for {channel}: {str(e)}")
+                        features[f"{channel}_lyapunov"] = np.nan
+                    
+                    try:
+                        # Detrended Fluctuation Analysis
+                        features[f"{channel}_dfa"] = nolds.dfa(complexity_signal)
+                    except Exception as e:
+                        self.logger.warning(f"Error computing DFA for {channel}: {str(e)}")
+                        features[f"{channel}_dfa"] = np.nan
             
-            # Compute asymmetry features
+            # === CONNECTIVITY FEATURES ===
+            if self.compute_connectivity and len(channel_signals) >= 2:
+                # Compute cross-correlation between all channel pairs
+                for i, ch1 in enumerate(self.channels):
+                    for j, ch2 in enumerate(self.channels[i+1:], i+1):
+                        if ch1 in channel_signals and ch2 in channel_signals:
+                            try:
+                                xcorr = np.correlate(channel_signals[ch1], channel_signals[ch2], mode='full')
+                                max_xcorr = np.max(np.abs(xcorr))
+                                features[f'xcorr_{ch1}_{ch2}'] = max_xcorr
+                            except Exception as e:
+                                self.logger.warning(f"Error computing cross-correlation for {ch1}-{ch2}: {str(e)}")
+                                features[f'xcorr_{ch1}_{ch2}'] = np.nan
+            
+            # Compute asymmetry features using cached band powers
             # Frontal asymmetry (AF7/AF8)
-            if 'af7' in channel_signals and 'af8' in channel_signals:
-                for band_name, (low, high) in self.frequency_bands.items():
-                    left_power = self.compute_band_power(channel_signals['af7'], (low, high))
-                    right_power = self.compute_band_power(channel_signals['af8'], (low, high))
+            if 'af7' in channel_band_powers and 'af8' in channel_band_powers:
+                for band_name in self.frequency_bands.keys():
+                    left_power = channel_band_powers['af7'][band_name]
+                    right_power = channel_band_powers['af8'][band_name]
                     
                     if left_power > 0 and right_power > 0:
                         asym_index = np.log(right_power / left_power)
@@ -393,10 +536,10 @@ class EEGFeatureExtractor:
                         features[f"frontal_asymmetry_ratio_{band_name}"] = asym_ratio
             
             # Temporal asymmetry (TP9/TP10)
-            if 'tp9' in channel_signals and 'tp10' in channel_signals:
-                for band_name, (low, high) in self.frequency_bands.items():
-                    left_power = self.compute_band_power(channel_signals['tp9'], (low, high))
-                    right_power = self.compute_band_power(channel_signals['tp10'], (low, high))
+            if 'tp9' in channel_band_powers and 'tp10' in channel_band_powers:
+                for band_name in self.frequency_bands.keys():
+                    left_power = channel_band_powers['tp9'][band_name]
+                    right_power = channel_band_powers['tp10'][band_name]
                     
                     if left_power > 0 and right_power > 0:
                         asym_index = np.log(right_power / left_power)
@@ -404,6 +547,116 @@ class EEGFeatureExtractor:
 
                         asym_ratio = (right_power - left_power) / (right_power + left_power)
                         features[f"temporal_asymmetry_ratio_{band_name}"] = asym_ratio
+            
+            # Cross-hemispheric features using cached band powers
+            # Left hemisphere (AF7/TP9) vs Right hemisphere (AF8/TP10)
+            if all(ch in channel_band_powers for ch in ['af7', 'af8', 'tp9', 'tp10']):
+                for band_name in self.frequency_bands.keys():
+                    # Left hemisphere: average of AF7 and TP9 (using cached powers)
+                    af7_power = channel_band_powers['af7'][band_name]
+                    tp9_power = channel_band_powers['tp9'][band_name]
+                    left_hemisphere_power = (af7_power + tp9_power) / 2
+                    
+                    # Right hemisphere: average of AF8 and TP10 (using cached powers)
+                    af8_power = channel_band_powers['af8'][band_name]
+                    tp10_power = channel_band_powers['tp10'][band_name]
+                    right_hemisphere_power = (af8_power + tp10_power) / 2
+                    
+                    if left_hemisphere_power > 0 and right_hemisphere_power > 0:
+                        # Hemispheric asymmetry
+                        hemispheric_asym = np.log(right_hemisphere_power / left_hemisphere_power)
+                        features[f"hemispheric_asymmetry_{band_name}"] = hemispheric_asym
+                        
+                        hemispheric_ratio = (right_hemisphere_power - left_hemisphere_power) / (right_hemisphere_power + left_hemisphere_power)
+                        features[f"hemispheric_asymmetry_ratio_{band_name}"] = hemispheric_ratio
+            
+            # Cross-regional features using cached band powers (Frontal-Temporal interactions)
+            # AF7-TP9 (Left side) vs AF8-TP10 (Right side)
+            if 'af7' in channel_band_powers and 'tp9' in channel_band_powers:
+                for band_name in self.frequency_bands.keys():
+                    af7_power = channel_band_powers['af7'][band_name]
+                    tp9_power = channel_band_powers['tp9'][band_name]
+                    
+                    if af7_power > 0 and tp9_power > 0:
+                        # Frontal-temporal ratio on left side
+                        left_ft_ratio = af7_power / tp9_power
+                        features[f"left_frontal_temporal_ratio_{band_name}"] = left_ft_ratio
+                        
+                        # Frontal-temporal difference on left side
+                        left_ft_diff = (af7_power - tp9_power) / (af7_power + tp9_power)
+                        features[f"left_frontal_temporal_diff_{band_name}"] = left_ft_diff
+            
+            if 'af8' in channel_band_powers and 'tp10' in channel_band_powers:
+                for band_name in self.frequency_bands.keys():
+                    af8_power = channel_band_powers['af8'][band_name]
+                    tp10_power = channel_band_powers['tp10'][band_name]
+                    
+                    if af8_power > 0 and tp10_power > 0:
+                        # Frontal-temporal ratio on right side
+                        right_ft_ratio = af8_power / tp10_power
+                        features[f"right_frontal_temporal_ratio_{band_name}"] = right_ft_ratio
+                        
+                        # Frontal-temporal difference on right side
+                        right_ft_diff = (af8_power - tp10_power) / (af8_power + tp10_power)
+                        features[f"right_frontal_temporal_diff_{band_name}"] = right_ft_diff
+            
+            # Diagonal cross-hemispheric features using cached band powers
+            # AF7-TP10 and AF8-TP9 (cross-hemisphere, cross-region)
+            if 'af7' in channel_band_powers and 'tp10' in channel_band_powers:
+                for band_name in self.frequency_bands.keys():
+                    af7_power = channel_band_powers['af7'][band_name]
+                    tp10_power = channel_band_powers['tp10'][band_name]
+                    
+                    if af7_power > 0 and tp10_power > 0:
+                        # Left frontal to right temporal
+                        af7_tp10_ratio = af7_power / tp10_power
+                        features[f"af7_tp10_ratio_{band_name}"] = af7_tp10_ratio
+                        
+                        af7_tp10_diff = (af7_power - tp10_power) / (af7_power + tp10_power)
+                        features[f"af7_tp10_diff_{band_name}"] = af7_tp10_diff
+            
+            if 'af8' in channel_band_powers and 'tp9' in channel_band_powers:
+                for band_name in self.frequency_bands.keys():
+                    af8_power = channel_band_powers['af8'][band_name]
+                    tp9_power = channel_band_powers['tp9'][band_name]
+                    
+                    if af8_power > 0 and tp9_power > 0:
+                        # Right frontal to left temporal
+                        af8_tp9_ratio = af8_power / tp9_power
+                        features[f"af8_tp9_ratio_{band_name}"] = af8_tp9_ratio
+                        
+                        af8_tp9_diff = (af8_power - tp9_power) / (af8_power + tp9_power)
+                        features[f"af8_tp9_diff_{band_name}"] = af8_tp9_diff
+            
+            # Cross-channel coherence and correlation features
+            # Compute coherence between all channel pairs
+            coherence_pairs = [
+                ('af7', 'af8', 'frontal_coherence'),
+                ('tp9', 'tp10', 'temporal_coherence'),
+                ('af7', 'tp9', 'left_hemisphere_coherence'),
+                ('af8', 'tp10', 'right_hemisphere_coherence'),
+                ('af7', 'tp10', 'af7_tp10_coherence'),
+                ('af8', 'tp9', 'af8_tp9_coherence')
+            ]
+            
+            for ch1, ch2, feature_name in coherence_pairs:
+                if ch1 in channel_signals and ch2 in channel_signals:
+                    # Compute cross-correlation as a proxy for coherence
+                    signal1 = channel_signals[ch1]
+                    signal2 = channel_signals[ch2]
+                    
+                    # Normalize signals
+                    signal1_norm = (signal1 - np.mean(signal1)) / (np.std(signal1) + 1e-8)
+                    signal2_norm = (signal2 - np.mean(signal2)) / (np.std(signal2) + 1e-8)
+                    
+                    # Compute cross-correlation
+                    xcorr = np.correlate(signal1_norm, signal2_norm, mode='full')
+                    max_xcorr = np.max(np.abs(xcorr))
+                    features[f"{feature_name}_max"] = max_xcorr
+                    
+                    # Compute Pearson correlation
+                    correlation = np.corrcoef(signal1, signal2)[0, 1]
+                    features[f"{feature_name}_pearson"] = correlation if not np.isnan(correlation) else 0.0
             
             return features
             
@@ -447,10 +700,6 @@ class EEGFeatureExtractor:
             
             self.logger.info(f"Extracted features columns: {result_df.columns.tolist()}")
             
-            # Save features if output path provided
-            if output_path:
-                self._save_features(result_df, output_path)
-            
             processing_time = time.time() - start_time
             logger.info(f"Feature extraction completed in {processing_time:.2f} seconds")
             
@@ -477,10 +726,12 @@ class EEGFeatureExtractor:
         
         # Log feature statistics by type
         feature_types = {
-            'spectral': ['bp_', 'rbp_', 'spectral_entropy', 'sef_'],
-            'temporal': ['mean', 'std', 'var', 'skew', 'hjorth_'],
-            'complexity': ['sample_entropy', 'correlation_dim', 'hurst', 'lyapunov', 'dfa'],
-            'connectivity': ['xcorr_']
+            'spectral': ['_power_', '_relative_power_', '_total_power', '_freq_weighted_power', '_sef_', '_psd_'],
+            'temporal': ['_mean', '_std', '_var', '_skew', '_kurtosis', '_rms', '_peak_to_peak', '_zero_crossings', '_mean_abs_deviation', '_hjorth_'],
+            'complexity': ['_correlation_dim', '_hurst', '_lyapunov', '_dfa'],
+            'entropy': ['_sample_entropy', '_spectral_entropy'],
+            'connectivity': ['xcorr_'],
+            'asymmetry': ['asymmetry_', '_coherence_', '_pearson']
         }
         
         for ftype, patterns in feature_types.items():
@@ -494,13 +745,17 @@ class EEGFeatureExtractor:
             if missing_pct > 0:
                 mlflow.log_metric(f"{col}_missing_pct", missing_pct)
     
-    def _save_features(self, df: pd.DataFrame, output_path: str) -> None:
+    def _save_features(self, df: pd.DataFrame, output_path: str, config: Dict[str, Any]) -> Tuple[str, PandasDataset]:
         """
-        Save the extracted features to files and log as MLflow artifacts.
+        Save the extracted features to files and log as MLflow dataset.
         
         Args:
             df: DataFrame containing features
             output_path: Path to save the features
+            config: Configuration dictionary containing window and channel info
+            
+        Returns:
+            Tuple of (output_path, mlflow_dataset)
         """
         try:
             output_dir = Path(output_path).parent
@@ -510,12 +765,43 @@ class EEGFeatureExtractor:
             df.to_parquet(output_path)
             self.logger.info(f"Saved features to {output_path}")
             
-            # Log the main feature file as MLflow artifact
+            # Create MLflow dataset from the saved parquet file
             try:
+                # Create dataset with descriptive name including window size and channels
+                window_seconds = config['window_slicer']['window_seconds']
+                channels = config['data_loader']['channels']
+                channels_str = "-".join(channels)
+                dataset_name = f"EEG_{window_seconds}s_{channels_str}_{len(df)}windows"
+                
+                dataset = mlflow.data.from_pandas(
+                    df=df,
+                    source=output_path,
+                    targets="Remission",
+                    name=dataset_name
+                )
+                self.logger.info(f"Created MLflow dataset: {dataset.name}")
+                self.logger.info(f"Dataset digest: {dataset.digest}")
+                self.logger.info(f"Dataset schema: {dataset.schema}")
+                self.logger.info(f"Dataset profile: {dataset.profile}")
+                
+                # Log the dataset to MLflow
+                mlflow.log_input(dataset, context="training")
+                self.logger.info(f"Logged dataset to MLflow with name: {dataset.name}")
+                
+                # Set tags to help training runs discover this dataset
+                mlflow.set_tag("mlflow.dataset.logged", "true")
+                mlflow.set_tag("mlflow.dataset.context", "training")
+                
+                # Also log the parquet file as an artifact for backup
                 mlflow.log_artifact(output_path, "features")
                 self.logger.info(f"Logged features parquet file as MLflow artifact: {output_path}")
+                
+                return output_path, dataset
+                
             except Exception as mlflow_e:
-                self.logger.warning(f"Failed to log features as MLflow artifact: {str(mlflow_e)}")
+                self.logger.warning(f"Failed to create/log MLflow dataset: {str(mlflow_e)}")
+                # Return None dataset if MLflow logging fails
+                return output_path, None
             
             # Optionally save group-specific features if group column exists
             if self.save_interim and 'group' in df.columns:
@@ -559,20 +845,40 @@ class EEGFeatureExtractor:
         # Feature categories
         feature_categories = {
             'Spectral Features': {
-                'prefix': ['bp_', 'rbp_'],
-                'description': 'Features related to frequency domain analysis'
+                'prefix': ['_power_', '_relative_power_', '_total_power', '_freq_weighted_power', '_sef_', '_psd_'],
+                'description': 'Frequency domain features including band powers, relative powers, PSD statistics, and spectral edge frequencies'
             },
             'Temporal Features': {
-                'prefix': ['mean', 'std', 'var', 'skew', 'hjorth_'],
-                'description': 'Time domain statistical features'
+                'prefix': ['_mean', '_std', '_var', '_skew', '_kurtosis', '_rms', '_peak_to_peak', '_zero_crossings', '_mean_abs_deviation', '_hjorth_'],
+                'description': 'Time domain statistical features and Hjorth parameters'
             },
             'Complexity Features': {
-                'prefix': ['sample_entropy', 'correlation_dim', 'hurst', 'lyapunov', 'dfa'],
-                'description': 'Nonlinear dynamics and complexity measures'
+                'prefix': ['_sample_entropy', '_correlation_dim', '_hurst', '_lyapunov', '_dfa'],
+                'description': 'Nonlinear dynamics and complexity measures computed per channel'
+            },
+            'Entropy Features': {
+                'prefix': ['_sample_entropy', '_spectral_entropy'],
+                'description': 'Information-theoretic measures of signal complexity'
+            },
+            'Asymmetry Features': {
+                'prefix': ['frontal_asymmetry', 'temporal_asymmetry'],
+                'description': 'Traditional asymmetry features between homologous electrode pairs'
+            },
+            'Cross-Hemispheric Features': {
+                'prefix': ['hemispheric_asymmetry', 'left_frontal_temporal', 'right_frontal_temporal'],
+                'description': 'Asymmetry features between left and right hemispheric regions'
+            },
+            'Diagonal Cross-Hemispheric Features': {
+                'prefix': ['af7_tp10', 'af8_tp9'],
+                'description': 'Cross-hemisphere, cross-region connectivity features'
+            },
+            'Coherence and Correlation Features': {
+                'prefix': ['coherence', '_pearson'],
+                'description': 'Inter-channel coherence and correlation measures'
             },
             'Connectivity Features': {
                 'prefix': ['xcorr_'],
-                'description': 'Inter-channel connectivity measures'
+                'description': 'Legacy inter-channel connectivity measures'
             }
         }
         
@@ -605,16 +911,16 @@ class EEGFeatureExtractor:
         return "".join(docs)
 
 
-def extract_eeg_features(config: Dict[str, Any], df: pd.DataFrame) -> pd.DataFrame:
+def extract_eeg_features(config: Dict[str, Any], df: pd.DataFrame) -> Tuple[pd.DataFrame, Optional[PandasDataset]]:
     """
-    Extract features from EEG data.
+    Extract features from EEG data and log as MLflow dataset.
     
     Args:
         config: Configuration dictionary
         df: Input DataFrame
         
     Returns:
-        DataFrame with extracted features
+        Tuple of (DataFrame with extracted features, MLflow dataset)
     """
     extractor = EEGFeatureExtractor(config)
     
@@ -628,7 +934,7 @@ def extract_eeg_features(config: Dict[str, Any], df: pd.DataFrame) -> pd.DataFra
     
     # Replace the filename with one that includes window size
     filename_without_ext = os.path.splitext(base_filename)[0]
-    new_filename = f"{window_seconds}s_window_features.parquet"
+    new_filename = f"{window_seconds}s_{config['data_loader']['channels']}_window_features.parquet"
     output_path = os.path.join(base_dir, new_filename)
     
     # Log the output path
@@ -646,6 +952,9 @@ def extract_eeg_features(config: Dict[str, Any], df: pd.DataFrame) -> pd.DataFra
         output_path=output_path
     )
     
+    # Save features and get MLflow dataset
+    saved_path, mlflow_dataset = extractor._save_features(result_df, output_path, config)
+    
     # Log feature extraction metadata to MLflow
     try:
         mlflow.log_params({
@@ -655,11 +964,21 @@ def extract_eeg_features(config: Dict[str, Any], df: pd.DataFrame) -> pd.DataFra
             "total_windows": len(result_df),
             "total_participants": result_df['Participant'].nunique() if 'Participant' in result_df.columns else 0
         })
+        
+        # Log dataset information if available
+        if mlflow_dataset:
+            mlflow.log_params({
+                "dataset_name": mlflow_dataset.name,
+                "dataset_digest": mlflow_dataset.digest,
+                "dataset_num_rows": mlflow_dataset.profile.get('num_rows', 0) if mlflow_dataset.profile else 0,
+                "dataset_num_elements": mlflow_dataset.profile.get('num_elements', 0) if mlflow_dataset.profile else 0
+            })
+        
         logger.info("Logged feature extraction metadata to MLflow")
     except Exception as e:
         logger.warning(f"Failed to log feature extraction metadata to MLflow: {str(e)}")
     
-    return result_df
+    return result_df, mlflow_dataset
 
 
 if __name__ == '__main__':
@@ -678,7 +997,7 @@ if __name__ == '__main__':
             input_df = pd.read_parquet(config['paths']['interim']['windowed'])
             
             # Extract features
-            features_df = extract_eeg_features(config, input_df)
+            features_df, mlflow_dataset = extract_eeg_features(config, input_df)
             
             # Log success
             mlflow.log_metric("feature_extraction_success", 1)

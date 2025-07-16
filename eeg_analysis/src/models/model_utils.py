@@ -7,6 +7,31 @@ from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
+
+# GPU-accelerated imports
+try:
+    import xgboost as xgb
+    XGBOOST_AVAILABLE = True
+    print("🚀 XGBoost GPU support available!")
+except ImportError:
+    XGBOOST_AVAILABLE = False
+    print("⚠️ XGBoost not available. Install with: pip install xgboost")
+
+try:
+    import catboost as cb
+    CATBOOST_AVAILABLE = True
+    print("🚀 CatBoost GPU support available!")
+except ImportError:
+    CATBOOST_AVAILABLE = False
+    print("⚠️ CatBoost not available. Install with: pip install catboost")
+
+try:
+    import lightgbm as lgb
+    LIGHTGBM_AVAILABLE = True
+    print("🚀 LightGBM GPU support available!")
+except ImportError:
+    LIGHTGBM_AVAILABLE = False
+    print("⚠️ LightGBM not available. Install with: pip install lightgbm")
 from sklearn.pipeline import Pipeline
 import mlflow
 import logging
@@ -45,8 +70,130 @@ class ModelBuilder:
                 'max_depth': 5,
                 'random_state': 42
             }
-            final_params = {**default_params, **user_params}
+            # Filter out unsupported parameters for GradientBoostingClassifier
+            supported_params = {
+                'n_estimators', 'learning_rate', 'max_depth', 'min_samples_split',
+                'min_samples_leaf', 'min_weight_fraction_leaf', 'subsample',
+                'max_features', 'max_leaf_nodes', 'min_impurity_decrease',
+                'random_state', 'verbose', 'warm_start', 'validation_fraction',
+                'n_iter_no_change', 'tol', 'ccp_alpha'
+            }
+            filtered_user_params = {k: v for k, v in user_params.items() if k in supported_params}
+            final_params = {**default_params, **filtered_user_params}
             model_instance = GradientBoostingClassifier(**final_params)
+            
+        elif name == 'xgboost_gpu':
+            if not XGBOOST_AVAILABLE:
+                raise ImportError("XGBoost not available. Install with: pip install xgboost")
+            
+            default_params = {
+                'n_estimators': 200,
+                'max_depth': 6,
+                'learning_rate': 0.1,
+                'tree_method': 'hist',  # Modern tree method
+                'device': 'cuda:0',  # GPU acceleration (new API)
+                'random_state': 42,
+                'eval_metric': 'logloss',
+                'use_label_encoder': False
+            }
+            
+            # XGBoost parameter mapping from sklearn-style names
+            param_mapping = {
+                'min_samples_leaf': 'min_child_weight',
+                'class_weight': 'scale_pos_weight'  # Handle class weights differently
+            }
+            
+            # Convert sklearn-style parameters to XGBoost parameters
+            xgb_params = {}
+            for key, value in user_params.items():
+                if key in param_mapping:
+                    if key == 'class_weight' and value == 'balanced':
+                        # Calculate scale_pos_weight automatically during fit
+                        continue
+                    else:
+                        xgb_params[param_mapping[key]] = value
+                elif key in ['n_estimators', 'max_depth', 'learning_rate', 'random_state', 
+                           'subsample', 'colsample_bytree', 'reg_alpha', 'reg_lambda']:
+                    xgb_params[key] = value
+            
+            final_params = {**default_params, **xgb_params}
+            print(f"🚀 Creating XGBoost GPU model with parameters: {final_params}")
+            model_instance = xgb.XGBClassifier(**final_params)
+            
+        elif name == 'catboost_gpu':
+            if not CATBOOST_AVAILABLE:
+                raise ImportError("CatBoost not available. Install with: pip install catboost")
+            
+            default_params = {
+                'iterations': 200,  # Reduced from 500 for speed
+                'depth': 6,  # Reduced from 8 for faster training
+                'learning_rate': 0.2,  # Increased to compensate for fewer iterations
+                'task_type': 'GPU',  # GPU acceleration!
+                'devices': '0',  # Use first GPU
+                'loss_function': 'Logloss',
+                'eval_metric': 'Logloss',  # Use Logloss instead of AUC (faster on GPU)
+                'random_seed': 42,
+                'verbose': False,
+                'allow_writing_files': False,
+                'bootstrap_type': 'Bernoulli',  # Better for GPU
+                'subsample': 0.8,  # Slightly more aggressive subsampling for speed
+                'border_count': 128,  # Reduced from default 254 for speed
+                'max_ctr_complexity': 1,  # Reduce complexity for speed
+                'gpu_ram_part': 0.8  # Use more GPU memory for better performance
+                # Note: colsample_bylevel (rsm) not supported in GPU mode for binary classification
+            }
+            
+            # CatBoost parameter mapping
+            catboost_params = {}
+            for key, value in user_params.items():
+                if key == 'n_estimators':
+                    catboost_params['iterations'] = value
+                elif key == 'max_depth':
+                    catboost_params['depth'] = value
+                elif key == 'class_weight' and value == 'balanced':
+                    catboost_params['auto_class_weights'] = 'Balanced'
+                elif key in ['learning_rate', 'random_state', 'subsample']:
+                    if key == 'random_state':
+                        catboost_params['random_seed'] = value
+                    else:
+                        catboost_params[key] = value
+            
+            final_params = {**default_params, **catboost_params}
+            print(f"🚀 Creating CatBoost GPU model with parameters: {final_params}")
+            model_instance = cb.CatBoostClassifier(**final_params)
+            
+        elif name == 'lightgbm_gpu':
+            if not LIGHTGBM_AVAILABLE:
+                raise ImportError("LightGBM not available. Install with: pip install lightgbm")
+            
+            default_params = {
+                'n_estimators': 500,
+                'max_depth': 8,
+                'learning_rate': 0.15,
+                'device': 'gpu',  # GPU acceleration!
+                'gpu_device_id': 0,  # Use first GPU
+                'objective': 'binary',
+                'metric': 'auc',
+                'random_state': 42,
+                'verbose': -1,
+                'subsample': 0.9,
+                'colsample_bytree': 0.9,
+                'num_leaves': 255,  # Optimized for GPU
+                'min_child_samples': 20
+            }
+            
+            # LightGBM parameter mapping
+            lgb_params = {}
+            for key, value in user_params.items():
+                if key == 'class_weight' and value == 'balanced':
+                    lgb_params['is_unbalance'] = True
+                elif key in ['n_estimators', 'max_depth', 'learning_rate', 'random_state', 
+                           'subsample', 'colsample_bytree', 'num_leaves', 'min_child_samples']:
+                    lgb_params[key] = value
+            
+            final_params = {**default_params, **lgb_params}
+            print(f"🚀 Creating LightGBM GPU model with parameters: {final_params}")
+            model_instance = lgb.LGBMClassifier(**final_params)
             
         elif name == 'logistic_regression':
             default_params = {
@@ -104,7 +251,12 @@ class ModelBuilder:
                 'learning_rate': 0.1,
                 'random_state': 42
             }
-            final_params = {**default_params, **user_params}
+            # Filter out unsupported parameters for AdaBoostClassifier
+            supported_params = {
+                'n_estimators', 'learning_rate', 'algorithm', 'random_state'
+            }
+            filtered_user_params = {k: v for k, v in user_params.items() if k in supported_params}
+            final_params = {**default_params, **filtered_user_params}
             model_instance = AdaBoostClassifier(**final_params)
             
         elif name == 'knn':
@@ -112,7 +264,13 @@ class ModelBuilder:
                 'n_neighbors': 3,
                 'weights': 'distance'
             }
-            final_params = {**default_params, **user_params}
+            # Filter out unsupported parameters for KNeighborsClassifier
+            supported_params = {
+                'n_neighbors', 'weights', 'algorithm', 'leaf_size', 'p',
+                'metric', 'metric_params', 'n_jobs'
+            }
+            filtered_user_params = {k: v for k, v in user_params.items() if k in supported_params}
+            final_params = {**default_params, **filtered_user_params}
             model_instance = KNeighborsClassifier(**final_params)
             
         elif name == 'decision_tree':
@@ -179,9 +337,10 @@ class ModelBuilder:
             
         else:
             supported_models = [
+                'xgboost_gpu', 'catboost_gpu', 'lightgbm_gpu', 'pytorch_mlp', 'keras_mlp',
+                # Legacy CPU models (deprecated)
                 'random_forest', 'gradient_boosting', 'logistic_regression', 'logistic_regression_l1',
-                'svm', 'svm_rbf', 'svm_linear', 'extra_trees', 'ada_boost', 'knn', 'decision_tree', 'sgd',
-                'pytorch_mlp', 'keras_mlp'
+                'svm', 'svm_rbf', 'svm_linear', 'extra_trees', 'ada_boost', 'knn', 'decision_tree', 'sgd'
             ]
             raise ValueError(f"Classifier {name} not supported. Choose from: {supported_models}")
         

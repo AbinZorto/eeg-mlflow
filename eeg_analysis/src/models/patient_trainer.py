@@ -7,12 +7,13 @@ from src.models.model_utils import save_model_results, log_feature_importance, c
 import mlflow
 from sklearn.model_selection import LeaveOneGroupOut
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 import logging
 from sklearn.feature_selection import SelectKBest, f_classif, mutual_info_classif, SelectFromModel, RFE
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from mlflow.models.signature import infer_signature
+from mlflow.data.pandas_dataset import PandasDataset
 
 logger = logging.getLogger(__name__)
 
@@ -246,30 +247,33 @@ class PatientLevelTrainer(BaseTrainer):
         
         return patient_df.reset_index()
 
-    def train(self, data_path: str = None) -> BaseEstimator:
+    def train(self, data_path: str = None, dataset: Optional[PandasDataset] = None) -> BaseEstimator:
         """
         Train a patient-level model with automatic classifier selection or single classifier.
         
         Args:
             data_path: Optional path to feature data. If None, uses config path.
+            dataset: Optional MLflow dataset to use for training
             
         Returns:
             Best trained model
         """
         evaluator = ModelEvaluator()
         
-        if data_path is None:
-            data_path = self.config['data']['feature_path']
+        # Determine data source with priority: MLflow dataset > provided dataset > config path > file path
+        final_data_path = data_path or self.config.get('data', {}).get('feature_path')
         
         # Check if there's already an active MLflow run
         active_run = mlflow.active_run()
         should_start_run = active_run is None
         
         def run_training():
-            # Log the data path being used
-            mlflow.log_param("feature_path", data_path)
-            
-            df = pd.read_parquet(data_path)
+            # Load data using the new base trainer method
+            df = self._load_data_from_source(
+                data_source=final_data_path,
+                dataset=dataset,
+                prefer_mlflow=True
+            )
             patient_df = self.aggregate_windows(df)
             X_orig, y, groups = self._prepare_data(patient_df)
             

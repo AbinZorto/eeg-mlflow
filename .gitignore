@@ -43,6 +43,7 @@ rapids-dask/
 
 # MLflow
 mlruns/
+mlruns-1/
 mlflow.db
 
 # Project specific

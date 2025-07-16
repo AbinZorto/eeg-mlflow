@@ -1,0 +1,19 @@
+[0;34m[2025-07-11 14:09:41][0m Starting EEG Analysis Complete Model Training
+[0;34m[2025-07-11 14:09:41][0m Using ULTRA-EXTREME unified configuration: eeg_analysis/configs/window_model_config_ultra_extreme.yaml
+[0;34m[2025-07-11 14:09:41][0m Log file: experiment_log_20250711_140941.txt
+[0;34m[2025-07-11 14:09:42][0m Total experiments to run: 49
+[0;34m[2025-07-11 14:09:42][0m === PHASE 1: Models without feature selection ===
+[0;34m[2025-07-11 14:09:42][0m Using ULTRA-EXTREME GPU configuration for xgboost_gpu 🚀
+[0;34m[2025-07-11 14:09:42][0m Starting experiment: xgboost_gpu_no_fs
+[0;34m[2025-07-11 14:09:42][0m MLflow experiment: eeg_boosting_gpu_baseline
+[0;34m[2025-07-11 14:09:42][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type xgboost_gpu
+[0;32m[SUCCESS][0m Completed: xgboost_gpu_no_fs
+[0;34m[2025-07-11 14:10:11][0m Using ULTRA-EXTREME GPU configuration for catboost_gpu 🚀
+[0;34m[2025-07-11 14:10:11][0m Starting experiment: catboost_gpu_no_fs
+[0;34m[2025-07-11 14:10:11][0m MLflow experiment: eeg_boosting_gpu_baseline
+[0;34m[2025-07-11 14:10:11][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type catboost_gpu
+[0;31m[ERROR][0m Failed: catboost_gpu_no_fs
+[0;34m[2025-07-11 14:10:19][0m Using ULTRA-EXTREME GPU configuration for lightgbm_gpu 🚀
+[0;34m[2025-07-11 14:10:19][0m Starting experiment: lightgbm_gpu_no_fs
+[0;34m[2025-07-11 14:10:19][0m MLflow experiment: eeg_boosting_gpu_baseline
+[0;34m[2025-07-11 14:10:19][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type lightgbm_gpu

@@ -103,6 +103,8 @@ class ModelSerializer:
         
         try:
             # Process X_sample and y_proba_sample before MLflow operations
+            X = None
+            y_proba = None
             if model_info and 'X_sample' in model_info:
                 X = model_info['X_sample']
                 if isinstance(X, pd.DataFrame):
@@ -113,33 +115,51 @@ class ModelSerializer:
                 if isinstance(y_proba, (np.ndarray, pd.Series)):
                     y_proba = np.asarray(y_proba)
             
-            # Save model using MLflow format if possible
-            if X is not None and y_proba is not None:
-                signature = infer_signature(X, y_proba)
-                mlflow.sklearn.save_model(
-                    sk_model=model,
-                    path=str(model_path),
-                    signature=signature
-                )
-            else:
-                logger.warning("No sample data provided for model signature inference")
-                mlflow.sklearn.save_model(
-                    sk_model=model,
-                    path=str(model_path)
-                )
+            # Check if this is a Keras model wrapper
+            is_keras_model = (hasattr(model, '__class__') and 
+                             'KerasMLPClassifier' in str(model.__class__))
             
-            # Extract and process model parameters
-            if hasattr(model, 'get_params'):
-                params = self._make_json_serializable(model.get_params())
-            elif hasattr(model, 'named_steps') and 'clf' in model.named_steps:
-                params = self._make_json_serializable(
-                    model.named_steps['clf'].get_params()
-                )
+            if is_keras_model:
+                logger.info("🔧 SERIALIZATION: Detected Keras model, using custom serialization...")
+                # For Keras models, use joblib directly (our custom __getstate__ will handle TF objects)
+                os.makedirs(model_path, exist_ok=True)  # Ensure directory exists
+                joblib.dump(model, model_path / 'model.joblib')
+                logger.info("🔧 SERIALIZATION: Keras model saved successfully with joblib")
+                
+                # Extract and process model parameters
+                if hasattr(model, 'get_params'):
+                    params = self._make_json_serializable(model.get_params())
+                else:
+                    params = {}
             else:
-                params = {}
+                # For non-Keras models, use MLflow format if possible
+                if X is not None and y_proba is not None:
+                    signature = infer_signature(X, y_proba)
+                    mlflow.sklearn.save_model(
+                        sk_model=model,
+                        path=str(model_path),
+                        signature=signature
+                    )
+                else:
+                    logger.warning("No sample data provided for model signature inference")
+                    mlflow.sklearn.save_model(
+                        sk_model=model,
+                        path=str(model_path)
+                    )
+                
+                # Extract and process model parameters
+                if hasattr(model, 'get_params'):
+                    params = self._make_json_serializable(model.get_params())
+                elif hasattr(model, 'named_steps') and 'clf' in model.named_steps:
+                    params = self._make_json_serializable(
+                        model.named_steps['clf'].get_params()
+                    )
+                else:
+                    params = {}
                 
         except Exception as e:
             logger.warning(f"Could not save model in MLflow format: {str(e)}. Falling back to joblib.")
+            os.makedirs(model_path, exist_ok=True)  # Ensure directory exists for fallback
             joblib.dump(model, model_path / 'model.joblib')
             params = {}
         
@@ -171,12 +191,18 @@ class ModelSerializer:
         
         model_path = Path(self.metadata['models'][model_id]['path'])
         
+        # Check if joblib file exists (indicates Keras model or fallback)
+        joblib_path = model_path / 'model.joblib'
+        if joblib_path.exists():
+            logger.info("🔧 DESERIALIZATION: Loading model from joblib...")
+            return joblib.load(joblib_path)
+        
         # Try loading with MLflow first
         try:
             return mlflow.sklearn.load_model(str(model_path))
-        except Exception:
-            # Fall back to joblib if MLflow fails
-            return joblib.load(model_path / 'model.joblib')
+        except Exception as e:
+            logger.error(f"Failed to load model from both joblib and MLflow: {e}")
+            raise
 
     def get_model_info(self, model_id: str) -> Dict[str, Any]:
         return self.metadata['models'].get(model_id, {})
