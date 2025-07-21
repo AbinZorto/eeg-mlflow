@@ -65,6 +65,55 @@ window_slicer:
 
 # Feature Extraction Parameters
 feature_extractor:
+  # Feature computation control - set to false to disable entire feature categories
+  compute_spectral: true      # Band powers, relative powers, PSD statistics, spectral edge frequencies
+  compute_temporal: true      # Statistical features, Hjorth parameters
+  compute_entropy: true       # Sample entropy, spectral entropy
+  compute_complexity: true    # Correlation dimension, Hurst exponent, Lyapunov, DFA
+  compute_connectivity: true  # Cross-correlation between channel pairs
+  compute_asymmetry: true     # Frontal and temporal asymmetry features
+  compute_cross_hemispheric: true  # Hemispheric asymmetry and cross-regional features
+  compute_coherence: true     # Inter-channel coherence and correlation measures
+  
+  # Detailed feature selection within each category
+  spectral_features:
+    band_powers: true         # Individual frequency band powers per channel (5 features: delta, theta, alpha, beta, gamma)
+    relative_powers: true    # Relative band powers (normalized by total power)
+    total_power: true        # Total power across all bands
+    freq_weighted_power: true # Frequency-weighted power
+    spectral_edge_freq: true  # SEF 90% and 95%
+    psd_statistics: true     # PSD mean, std, max, min, median, skewness, kurtosis
+  
+  temporal_features:
+    basic_statistics: true    # mean, std, var, skew, kurtosis, rms, peak_to_peak, etc.
+    hjorth_parameters: true   # Activity, mobility, complexity
+  
+  entropy_features:
+    sample_entropy: true      # Sample entropy per channel (1 feature)
+    spectral_entropy: true   # Spectral entropy per channel
+  
+  complexity_features:
+    correlation_dimension: true   # Correlation dimension
+    hurst_exponent: true         # Hurst exponent
+    lyapunov_exponent: true      # Lyapunov exponent
+    dfa: true                    # Detrended Fluctuation Analysis
+  
+  connectivity_features:
+    cross_correlation: true   # Cross-correlation between channel pairs
+  
+  asymmetry_features:
+    frontal_asymmetry: true   # AF7/AF8 asymmetry (requires both channels)
+    temporal_asymmetry: true  # TP9/TP10 asymmetry (requires both channels)
+  
+  cross_hemispheric_features:
+    hemispheric_asymmetry: true     # Left vs right hemisphere (requires all 4 channels)
+    frontal_temporal_ratios: true   # Within-hemisphere frontal-temporal ratios
+    diagonal_cross_hemispheric: true # AF7-TP10 and AF8-TP9 interactions
+  
+  coherence_features:
+    max_coherence: true       # Maximum coherence between channel pairs
+    pearson_correlation: true # Pearson correlation between channel pairs
+  
   frequency_bands:
     delta: [0.5, 4]
     theta: [4, 8]
@@ -72,6 +121,7 @@ feature_extractor:
     beta: [12, 30]
     gamma: [30, 60]
   
+  # Legacy feature lists (for backward compatibility) - keeping for reference but using new structure above
   statistical_features:
     - mean
     - std
@@ -83,21 +133,12 @@ feature_extractor:
     - peak_to_peak
     - mean_abs_deviation
   
-  entropy_features:
-    - sample_entropy
-    - spectral_entropy
-  
-  complexity_features:
-    - hfd
-    - correlation_dimension
-    - hurst_exponent
-    - lyapunov_exponent
-    - dfa
-  
   validation:
     check_nan: true
     check_infinite: true
     remove_invalid: false
+  
+  save_interim: true
 
 # MLflow Tracking
 mlflow:
