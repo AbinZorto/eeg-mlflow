@@ -1,0 +1,12 @@
+{
+  "versions": {
+    "v_2025-07-21T12-50-42.760938": {
+      "hash": "9da16962cba0891873c91f770234314b",
+      "timestamp": "2025-07-21T12:50:42.760938",
+      "path": "data/processed/versions/v_2025-07-21T12-50-42.760938.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    }
+  }
+}

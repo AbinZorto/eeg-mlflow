@@ -4,7 +4,7 @@
 
 # Data Configuration
 data:
-  feature_path: "data/processed/features/2s_window_features.parquet"
+  feature_path: "data/processed/features/2s_tp10_window_features.parquet"
   split:
     test_size: 0.2
     random_state: 42

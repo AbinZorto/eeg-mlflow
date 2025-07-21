@@ -10,6 +10,7 @@ if [ "$1" == "start" ]; then
     echo "MLflow started with PID $(cat mlflow.pid)"
 elif [ "$1" == "stop" ]; then
     echo "Stopping MLflow..."
+    fuser -k 5000/tcp
     if [ -f mlflow.pid ]; then
         kill $(cat mlflow.pid) && rm mlflow.pid
         echo "MLflow stopped."
