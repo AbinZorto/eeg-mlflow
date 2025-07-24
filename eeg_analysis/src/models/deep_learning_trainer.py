@@ -796,6 +796,22 @@ class DeepLearningTrainer(BaseTrainer):
         mlflow.log_params(self.model_params)
         X_orig, y, groups = self._prepare_data(df)
         
+        # *** CRITICAL FIX: Handle NaN values before any feature selection or cross-validation ***
+        # This prevents failures in sklearn algorithms that cannot handle missing values
+        if np.isnan(X_orig).any().any():
+            logger.warning("NaN values detected in dataset. Applying median imputation before feature selection...")
+            from sklearn.impute import SimpleImputer
+            imputer = SimpleImputer(strategy='median')
+            X_orig = pd.DataFrame(
+                imputer.fit_transform(X_orig),
+                columns=X_orig.columns,
+                index=X_orig.index
+            )
+            logger.info("Global NaN imputation completed before feature selection")
+            mlflow.log_param("global_nan_imputation_applied", True)
+        else:
+            mlflow.log_param("global_nan_imputation_applied", False)
+        
         # Feature Selection (inherited from existing framework)
         perform_selection = self.feature_selection_config.get('enabled', False)
         if perform_selection:
@@ -828,6 +844,12 @@ class DeepLearningTrainer(BaseTrainer):
         
         self._log_dataset_info(X, y, groups)
         
+        # Note: NaN values should have been handled globally at the start of train()
+        # This check should not be necessary, but kept for safety
+        if np.isnan(X).any().any():
+            logger.error("Unexpected NaN values detected after global imputation. This should not happen.")
+            raise ValueError("Data contains NaN values after global imputation")
+        
         # Cross-validation with LOGO (prevents overfitting through proper validation)
         logo = LeaveOneGroupOut()
         n_splits = logo.get_n_splits(X, y, groups)
@@ -844,9 +866,9 @@ class DeepLearningTrainer(BaseTrainer):
             X_train, X_test = X.iloc[train_index], X.iloc[test_index]
             y_train, y_test = y.iloc[train_index], y.iloc[test_index]
             
-            # Check for NaN values before training
+            # Double-check for NaN values (should not happen after global imputation)
             if np.isnan(X_train).any().any() or np.isnan(y_train).any():
-                logger.error(f"NaN values found in training data for fold {fold_idx}. Skipping fold.")
+                logger.error(f"Unexpected NaN values found in training data for fold {fold_idx} after global imputation. Skipping fold.")
                 continue
             
             test_participant = groups.iloc[test_index].unique()[0]
@@ -908,6 +930,12 @@ class DeepLearningTrainer(BaseTrainer):
         
         # Train final model on all data
         logger.info("\nTraining final model on all data...")
+        
+        # Ensure no NaN values in final training data (should not be needed)
+        if np.isnan(X).any().any():
+            logger.error("Unexpected NaN values detected in final training data after global imputation.")
+            raise ValueError("Data contains NaN values after global imputation")
+        
         final_model = self._create_model_instance()
         final_model.fit(X, y)
         

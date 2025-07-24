@@ -251,6 +251,22 @@ class WindowLevelTrainer(BaseTrainer):
         
         X_orig, y, groups = self._prepare_data(df)
         
+        # *** CRITICAL FIX: Handle NaN values before any feature selection or cross-validation ***
+        # This prevents failures in sklearn algorithms that cannot handle missing values
+        if np.isnan(X_orig).any().any():
+            logger.warning("NaN values detected in dataset. Applying median imputation before feature selection...")
+            from sklearn.impute import SimpleImputer
+            imputer = SimpleImputer(strategy='median')
+            X_orig = pd.DataFrame(
+                imputer.fit_transform(X_orig),
+                columns=X_orig.columns,
+                index=X_orig.index
+            )
+            logger.info("Global NaN imputation completed before feature selection")
+            mlflow.log_param("global_nan_imputation_applied", True)
+        else:
+            mlflow.log_param("global_nan_imputation_applied", False)
+        
         # Feature Selection
         perform_selection = self.feature_selection_config.get('enabled', False)
         logger.info(f"In train method: perform_selection is {perform_selection}, feature_selection_config: {self.feature_selection_config}")
@@ -349,6 +365,13 @@ class WindowLevelTrainer(BaseTrainer):
             X_train_fold, y_train_fold = X_train, y_train
             if self.use_smote:
                 logger.info(f"Applying SMOTE to fold {fold_idx + 1}...")
+                
+                # Note: NaN values should have been handled globally before cross-validation
+                # Only check for unexpected NaN values that shouldn't exist
+                if np.isnan(X_train_fold).any().any():
+                    logger.error(f"Unexpected NaN values in training data for fold {fold_idx + 1} after global imputation. This should not happen.")
+                    continue  # Skip this fold to avoid crashes
+                
                 smote = SMOTE(random_state=self.config.get('random_seed', 42))
                 X_train_fold, y_train_fold = smote.fit_resample(X_train_fold, y_train_fold)
                 
@@ -407,8 +430,15 @@ class WindowLevelTrainer(BaseTrainer):
         X_final_train, y_final_train = X, y
         if self.use_smote:
             logger.info("Applying SMOTE to the full dataset for the final model.")
-            smote = SMOTE(random_state=self.config.get('random_seed', 42))
-            X_final_train, y_final_train = smote.fit_resample(X_final_train, y_final_train)
+            
+            # Note: NaN values should have been handled globally at the start
+            if np.isnan(X_final_train).any().any():
+                logger.error("Unexpected NaN values in final training data after global imputation. This should not happen.")
+                # Continue without SMOTE to avoid crashes
+                logger.warning("Skipping SMOTE due to unexpected NaN values.")
+            else:
+                smote = SMOTE(random_state=self.config.get('random_seed', 42))
+                X_final_train, y_final_train = smote.fit_resample(X_final_train, y_final_train)
 
         final_model = self._create_and_train_model(X_final_train, y_final_train)
         self._save_results(final_model, patient_metrics, window_predictions, 

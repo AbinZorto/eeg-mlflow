@@ -1,0 +1,12 @@
+[0;34m[2025-07-22 15:16:28][0m Starting EEG Analysis Complete Model Training
+[0;34m[2025-07-22 15:16:28][0m Using ULTRA-EXTREME unified configuration: eeg_analysis/configs/window_model_config_ultra_extreme.yaml
+[0;34m[2025-07-22 15:16:28][0m Log file: experiment_log_20250722_151628.txt
+[0;34m[2025-07-22 15:16:28][0m Current processing configuration:
+[0;34m[2025-07-22 15:16:28][0m   - Channels: 
+[0;34m[2025-07-22 15:16:28][0m   - Window size: s
+[0;34m[2025-07-22 15:16:28][0m Dataset selection: Automatic with channel filtering
+[0;34m[2025-07-22 15:16:28][0m   - Will look for full 4-channel dataset and filter as needed
+[0;34m[2025-07-22 15:16:28][0m   - Will filter to: s__window_features.parquet
+[0;34m[2025-07-22 15:16:28][0m   (To use a specific dataset, run with --dataset-run-id <run_id>)
+[0;34m[2025-07-22 15:16:28][0m   (To list available datasets, run: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml list-datasets)
+[0;31m[ERROR][0m Configuration file not found: eeg_analysis/configs/window_model_config_ultra_extreme.yaml

@@ -1,0 +1,50 @@
+[0;34m[2025-07-24 18:10:03][0m Starting EEG Analysis Complete Model Training
+[0;34m[2025-07-24 18:10:03][0m Using ULTRA-EXTREME unified configuration: eeg_analysis/configs/window_model_config_ultra_extreme.yaml
+[0;34m[2025-07-24 18:10:03][0m Dataset ordering method: sequential
+[0;34m[2025-07-24 18:10:03][0m 🎯 Running experiments for selected model only: keras_mlp
+[0;34m[2025-07-24 18:10:04][0m Log file: experiment_log_20250724_181003.txt
+[0;34m[2025-07-24 18:10:04][0m 🔍 Extracting window sizes from processing configuration...
+[0;34m[2025-07-24 18:10:04][0m Window sizes from config: 2 4 6 8 10s
+[0;34m[2025-07-24 18:10:04][0m 📡 Extracting selected channels from processing configuration...
+[0;34m[2025-07-24 18:10:04][0m Selected channels: af7 af8 tp10
+[0;34m[2025-07-24 18:10:04][0m Experiments per window size: 7
+[0;34m[2025-07-24 18:10:04][0m Total experiments across all window sizes: 35
+[0;34m[2025-07-24 18:10:04][0m 
+[0;34m[2025-07-24 18:10:04][0m 🔥 ==================== WINDOW SIZE: 2s ====================
+[0;34m[2025-07-24 18:10:04][0m 🔎 Searching for 4-channel dataset with window size 2s...
+[0;34m[2025-07-24 18:10:04][0m 🎯 Looking specifically for sequential ordering method
+[0;34m[2025-07-24 18:10:04][0m 🔍 Searching for 4-channel dataset with window size: 2s
+[0;34m[2025-07-24 18:10:04][0m 🎯 Filtering for ordering method: sequential
+[0;32m[SUCCESS][0m Found 4-channel dataset: EEG_2s_af7-af8-tp9-tp10_6015windows_seq
+[0;34m[2025-07-24 18:10:05][0m Dataset run ID: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;32m[SUCCESS][0m ✅ Found 4-channel dataset for 2s
+[0;34m[2025-07-24 18:10:05][0m 🔧 Filtering dataset for selected channels...
+[0;34m[2025-07-24 18:10:05][0m 🔧 Filtering dataset columns for channels: af7 af8 tp10
+[0;34m[2025-07-24 18:10:05][0m Creating filtered dataset: EEG_2s_af7-af8-tp10_filtered
+[0;34m[2025-07-24 18:10:05][0m Output path: data/processed/features/EEG_2s_af7-af8-tp10_filtered.parquet
+[0;32m[SUCCESS][0m Created filtered dataset: EEG_2s_af7-af8-tp10_filtered
+[0;34m[2025-07-24 18:10:08][0m New dataset run ID: 6257ea04a8874142aa93a48bdd118568
+[0;32m[SUCCESS][0m ✅ Dataset prepared for training with selected channels
+[0;34m[2025-07-24 18:10:08][0m 📋 Using dataset run ID: 6257ea04a8874142aa93a48bdd118568
+[0;34m[2025-07-24 18:10:08][0m 🚀 Starting experiments for 2s windows with:
+[0;34m[2025-07-24 18:10:08][0m   - Channels: af7 af8 tp10
+[0;34m[2025-07-24 18:10:08][0m   - Dataset run ID: 6257ea04a8874142aa93a48bdd118568
+[0;34m[2025-07-24 18:10:08][0m === PHASE 1 (2s): Models without feature selection ===
+[0;34m[2025-07-24 18:10:08][0m Using ULTRA-EXTREME GPU configuration for keras_mlp 🚀
+[0;34m[2025-07-24 18:10:08][0m Using dataset from run: 6257ea04a8874142aa93a48bdd118568
+[0;34m[2025-07-24 18:10:08][0m Starting experiment: keras_mlp_no_fs
+[0;34m[2025-07-24 18:10:08][0m MLflow experiment: eeg_deep_learning_gpu_baseline
+[0;34m[2025-07-24 18:10:08][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type keras_mlp --use-dataset-from-run 6257ea04a8874142aa93a48bdd118568
+[0;32m[SUCCESS][0m Completed: keras_mlp_no_fs
+[0;34m[2025-07-24 18:13:38][0m === PHASE 2 (2s): Models with feature selection ===
+[0;34m[2025-07-24 18:13:38][0m Using ULTRA-EXTREME GPU configuration for keras_mlp 🚀
+[0;34m[2025-07-24 18:13:38][0m Using dataset from run: 6257ea04a8874142aa93a48bdd118568
+[0;34m[2025-07-24 18:13:38][0m Starting experiment: keras_mlp_fs_select_k_best_f_classif_10
+[0;34m[2025-07-24 18:13:38][0m MLflow experiment: eeg_deep_learning_gpu_feature_selection
+[0;34m[2025-07-24 18:13:38][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type keras_mlp --use-dataset-from-run 6257ea04a8874142aa93a48bdd118568 --enable-feature-selection --n-features-select 10 --fs-method select_k_best_f_classif
+[0;32m[SUCCESS][0m Completed: keras_mlp_fs_select_k_best_f_classif_10
+[0;34m[2025-07-24 18:17:02][0m Using ULTRA-EXTREME GPU configuration for keras_mlp 🚀
+[0;34m[2025-07-24 18:17:02][0m Using dataset from run: 6257ea04a8874142aa93a48bdd118568
+[0;34m[2025-07-24 18:17:02][0m Starting experiment: keras_mlp_fs_select_k_best_f_classif_15
+[0;34m[2025-07-24 18:17:02][0m MLflow experiment: eeg_deep_learning_gpu_feature_selection
+[0;34m[2025-07-24 18:17:02][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type keras_mlp --use-dataset-from-run 6257ea04a8874142aa93a48bdd118568 --enable-feature-selection --n-features-select 15 --fs-method select_k_best_f_classif

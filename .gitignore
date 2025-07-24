@@ -42,7 +42,8 @@ rapids-dask/
 .settings/
 
 # MLflow
-
+mlruns/*
+mlruns/
 
 # Project specific
 data/raw/*

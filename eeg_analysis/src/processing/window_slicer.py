@@ -70,12 +70,13 @@ class EEGWindowSlicer:
             logger.error(f"Error slicing signal: {str(e)}")
             return []
     
-    def process_window(self, window_data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def process_window(self, window_data: Dict[str, Any], parent_window_id: int = None) -> List[Dict[str, Any]]:
         """
-        Process a single window of data.
+        Process a single window of data by splitting it into sequential sub-windows.
         
         Args:
             window_data: Dictionary containing window data
+            parent_window_id: ID of the parent window for tracking
             
         Returns:
             List of processed window dictionaries
@@ -88,7 +89,6 @@ class EEGWindowSlicer:
             }
             
             processed_windows = []
-            window_length = self.window_seconds * self.sampling_rate
             
             # Get all channel data first
             channel_data = {}
@@ -97,19 +97,29 @@ class EEGWindowSlicer:
                     continue
                 channel_data[channel] = window_data[channel]
             
-            # Calculate number of windows based on first channel
-            first_channel = next(iter(channel_data.values()))
-            num_samples = len(first_channel)
-            num_windows = (num_samples - window_length) // self.step_size + 1
+            if not channel_data:
+                self.logger.warning("No channel data found in window")
+                return []
             
-            # Create windows preserving all channels
-            for i in range(num_windows):
-                start_idx = i * self.step_size
-                end_idx = start_idx + window_length
+            # Get the length of the input window (should be 2560 samples after processing)
+            first_channel = next(iter(channel_data.values()))
+            total_samples = len(first_channel)
+            
+            self.logger.debug(f"Processing parent window {parent_window_id} with {total_samples} samples into {self.window_seconds}s sub-windows ({self.window_length} samples each)")
+            
+            # Calculate how many complete windows we can fit
+            num_complete_windows = total_samples // self.window_length
+            
+            # Create sequential sub-windows
+            for i in range(num_complete_windows):
+                start_idx = i * self.window_length
+                end_idx = start_idx + self.window_length
                 
                 window = {
                     'participant_id': metadata['participant_id'],
                     'group': metadata['group'],
+                    'parent_window_id': parent_window_id,
+                    'sub_window_id': i,
                     'window_start': start_idx,
                     'window_end': end_idx,
                 }
@@ -121,12 +131,39 @@ class EEGWindowSlicer:
                 
                 processed_windows.append(window)
             
+            # Handle remaining samples if there are any (partial window)
+            remaining_samples = total_samples % self.window_length
+            if remaining_samples > 0:
+                start_idx = num_complete_windows * self.window_length
+                end_idx = total_samples
+                
+                # Only include partial window if it has at least half the required samples
+                min_samples = self.window_length // 2
+                if remaining_samples >= min_samples:
+                    window = {
+                        'participant_id': metadata['participant_id'],
+                        'group': metadata['group'],
+                        'parent_window_id': parent_window_id,
+                        'sub_window_id': num_complete_windows,  # Next sequential ID
+                        'window_start': start_idx,
+                        'window_end': end_idx,
+                    }
+                    
+                    # Add all channels to the partial window
+                    for channel in self.channels:
+                        if channel in channel_data:
+                            window[channel] = channel_data[channel][start_idx:end_idx]
+                    
+                    processed_windows.append(window)
+                    self.logger.debug(f"Added partial window: parent_{parent_window_id}_sub_{num_complete_windows} ({start_idx}-{end_idx}, {remaining_samples} samples)")
+            
+            self.logger.debug(f"Created {len(processed_windows)} sub-windows from parent window {parent_window_id}")
             return processed_windows
             
         except Exception as e:
             self.logger.error(f"Error processing window: {str(e)}")
             raise
-    
+
     def slice_data(self, df: pd.DataFrame, output_path: str = None) -> pd.DataFrame:
         """
         Slice EEG data into windows.
@@ -145,16 +182,28 @@ class EEGWindowSlicer:
             all_windows = []
             total_windows = len(df)
             
-            # Process each original window
+            # Process each original window with proper tracking
             for idx, row in df.iterrows():
                 if idx % 100 == 0:
                     logger.info(f"Processing window {idx+1}/{total_windows}")
                 
-                processed_windows = self.process_window(row.to_dict())
+                # Use the original DataFrame index as parent_window_id for tracking
+                processed_windows = self.process_window(row.to_dict(), parent_window_id=idx)
                 all_windows.extend(processed_windows)
             
             # Create output DataFrame
             result_df = pd.DataFrame(all_windows)
+            
+            # Sort the DataFrame to ensure proper sequential order
+            # First by participant, then by parent window, then by sub-window
+            if len(result_df) > 0:
+                result_df = result_df.sort_values([
+                    'participant_id', 
+                    'parent_window_id', 
+                    'sub_window_id'
+                ]).reset_index(drop=True)
+                
+                logger.info(f"Sorted windows by participant -> parent_window_id -> sub_window_id")
             
             # Log processing statistics
             self._log_statistics(df, result_df)
