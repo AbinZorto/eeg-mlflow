@@ -15,9 +15,21 @@ class BaseTrainer:
         self.classifier_params = config.get('classifier_params', {})
 
     def _prepare_data(self, df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.Series, pd.Series]:
-        X = df.drop(['Participant', 'Remission'], axis=1)
+        # Extract y and groups BEFORE dropping columns
         y = df['Remission']
         groups = df['Participant']
+        
+        # Drop metadata columns that should not be used as features
+        # Note: We keep 'Participant' and 'Remission' for extraction above, but drop them from features
+        metadata_columns_to_drop = ['Participant', 'Remission', 'sub_window_id', 'parent_window_id']
+        existing_metadata_to_drop = [col for col in metadata_columns_to_drop if col in df.columns]
+        
+        if existing_metadata_to_drop:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.info(f"Dropping metadata columns from features: {existing_metadata_to_drop}")
+        
+        X = df.drop(existing_metadata_to_drop, axis=1)
         return X, y, groups
 
     def _create_and_train_model(self, X_train: pd.DataFrame, y_train: pd.Series) -> BaseEstimator:

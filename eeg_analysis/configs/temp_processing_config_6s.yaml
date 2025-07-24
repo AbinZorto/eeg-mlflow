@@ -1,0 +1,122 @@
+data_loader:
+  channels:
+  - af7
+  - af8
+  - tp9
+  - tp10
+  data_keys:
+    non_remission: EEG_windows_Non_remission
+    remission: EEG_windows_Remission
+  save_interim: true
+  validate_data: true
+downsampler:
+  factor: 2
+  method: decimate
+  save_interim: true
+feature_extractor:
+  asymmetry_features:
+    frontal_asymmetry: true
+    temporal_asymmetry: true
+  coherence_features:
+    max_coherence: true
+    pearson_correlation: true
+  complexity_features:
+    correlation_dimension: true
+    dfa: true
+    hurst_exponent: true
+    lyapunov_exponent: true
+  compute_asymmetry: true
+  compute_coherence: true
+  compute_complexity: true
+  compute_connectivity: true
+  compute_cross_hemispheric: true
+  compute_entropy: true
+  compute_spectral: true
+  compute_temporal: true
+  connectivity_features:
+    cross_correlation: true
+  cross_hemispheric_features:
+    diagonal_cross_hemispheric: true
+    frontal_temporal_ratios: true
+    hemispheric_asymmetry: true
+  entropy_features:
+    sample_entropy: true
+    spectral_entropy: true
+  frequency_bands:
+    alpha:
+    - 8
+    - 12
+    beta:
+    - 12
+    - 30
+    delta:
+    - 0.5
+    - 4
+    gamma:
+    - 30
+    - 60
+    theta:
+    - 4
+    - 8
+  ordering_method: completion
+  preserve_window_order: true
+  save_interim: true
+  spectral_features:
+    band_powers: true
+    freq_weighted_power: true
+    psd_statistics: true
+    relative_powers: true
+    spectral_edge_freq: true
+    total_power: true
+  statistical_features:
+  - mean
+  - std
+  - variance
+  - skewness
+  - kurtosis
+  - rms
+  - zero_crossings
+  - peak_to_peak
+  - mean_abs_deviation
+  temporal_features:
+    basic_statistics: true
+    hjorth_parameters: true
+  validation:
+    check_infinite: true
+    check_nan: true
+    remove_invalid: false
+filter:
+  cutoff_frequency: 60
+  order: 4
+  sampling_rate: 256
+  save_interim: true
+  type: butterworth
+logging:
+  console: true
+  file: logs/processing.log
+  format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  level: INFO
+mlflow:
+  experiment_name: eeg_processing
+  run_name: processing_6s_window
+  tracking_uri: mlruns
+paths:
+  features:
+    patient: data/processed/features/patient_features.parquet
+    window: data/processed/features/window_features.parquet
+  interim:
+    downsampled: data/processed/interim/downsampled
+    filtered: data/processed/interim/filtered
+    upsampled: data/processed/interim/upsampled
+    windowed: data/processed/interim/windowed
+  raw_data: eeg_analysis/data/raw/MDD_21_subjects_EC_EEG_data_remission_and_non_remission_seperated.mat
+upsampler:
+  factor: 2
+  method: linear
+  save_interim: true
+window_slicer:
+  min_windows: 10
+  overlap_seconds: 0
+  sampling_rate: 256
+  save_interim: true
+  window_seconds: 6

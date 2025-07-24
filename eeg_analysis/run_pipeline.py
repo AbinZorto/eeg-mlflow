@@ -235,8 +235,8 @@ def process(ctx):
             # Load data
             logger.info("Loading raw EEG data...")
             raw_data = load_eeg_data(config)
-            version_id = data_versioner.save_version(raw_data, {'stage': 'raw'})
-            logger.info(f"Raw data loaded and versioned. Version ID: {version_id}")
+            #version_id = data_versioner.save_version(raw_data, {'stage': 'raw'})
+            #logger.info(f"Raw data loaded and versioned. Version ID: {version_id}")
             
             # Process pipeline
             logger.info("Starting EEG processing pipeline...")
@@ -254,16 +254,16 @@ def process(ctx):
             # Save final features with enhanced metadata
             final_version_metadata = {
                 'stage': 'features',
-                'parent_version': version_id,
+                #'parent_version': version_id,
                 'processing_config': config, # Log the config used for this feature set
                 'mlflow_dataset_name': mlflow_dataset.name if mlflow_dataset else None,
                 'mlflow_dataset_digest': mlflow_dataset.digest if mlflow_dataset else None
             }
-            final_version = data_versioner.save_version(features, final_version_metadata)
-            logger.info(f"Final features saved and versioned. Version ID: {final_version}")
+            #final_version = data_versioner.save_version(features, final_version_metadata)
+            #logger.info(f"Final features saved and versioned. Version ID: {final_version}")
             
             mlflow.log_metric("processing_success", 1)
-            mlflow.log_param("final_feature_version_id", final_version)
+            #mlflow.log_param("final_feature_version_id", final_version)
             
             # Store dataset info for potential use in training
             if mlflow_dataset:
@@ -298,13 +298,13 @@ def list_datasets(ctx):
             window_seconds = processing_config['window_slicer']['window_seconds']
             channels = processing_config['data_loader']['channels']
             
-        channels_str = "-".join(channels)
-        dataset_name_pattern = f"EEG_{window_seconds}s_{channels_str}_"
+        # Look for all datasets with this window size (regardless of channel configuration)
+        window_pattern = f"EEG_{window_seconds}s_"
         
-        print(f"\n🔍 Searching for datasets matching current configuration:")
-        print(f"   Window size: {window_seconds}s")
-        print(f"   Channels: {channels}")
-        print(f"   Pattern: {dataset_name_pattern}*")
+        print(f"\n🔍 Searching for all datasets with window size: {window_seconds}s")
+        print(f"   Current config channels: {channels}")
+        print(f"   Will look for 4-channel datasets to filter from")
+        print(f"   Pattern: {window_pattern}*")
         print("-" * 80)
         
         # Set up MLflow tracking
@@ -383,8 +383,16 @@ def list_datasets(ctx):
                         dataset_info['participants'] = 'unknown'
                         dataset_info['features'] = 'unknown'
                     
-                    if dataset_name.startswith(dataset_name_pattern):
-                        matching_datasets.append(dataset_info)
+                    # Check if this dataset matches the window size
+                    if dataset_name.startswith(window_pattern):
+                        # Further classify as 4-channel vs other
+                        is_4_channel = any(all_4_ch in dataset_name for all_4_ch in ['af7-af8-tp9-tp10', 'af7-af8-tp10-tp9', 'af8-af7-tp9-tp10', 'af8-af7-tp10-tp9', 'tp9-tp10-af7-af8', 'tp10-tp9-af7-af8'])
+                        if is_4_channel:
+                            dataset_info['type'] = '4-channel (can be filtered)'
+                            matching_datasets.append(dataset_info)
+                        else:
+                            dataset_info['type'] = 'filtered/subset'
+                            matching_datasets.append(dataset_info)
                     else:
                         other_datasets.append(dataset_info)
                         
@@ -393,16 +401,16 @@ def list_datasets(ctx):
                 
         # Display matching datasets
         if matching_datasets:
-            print(f"✅ Found {len(matching_datasets)} datasets matching your configuration:")
+            print(f"✅ Found {len(matching_datasets)} datasets with {window_seconds}s window size:")
             print()
             for i, ds in enumerate(matching_datasets, 1):
-                print(f"{i}. 📈 {ds['name']}")
+                print(f"{i}. 📈 {ds['name']} ({ds.get('type', 'unknown')})")
                 print(f"   Run ID: {ds['run_id']}")
                 print(f"   Created: {ds['start_time']}")
                 print(f"   Rows: {ds['rows']}, Participants: {ds['participants']}, Features: {ds['features']}")
                 print()
         else:
-            print("❌ No datasets found matching your current configuration.")
+            print(f"❌ No datasets found with {window_seconds}s window size.")
             
         # Display other datasets for reference
         if other_datasets:
@@ -421,17 +429,22 @@ def list_datasets(ctx):
         print("💡 Usage instructions:")
         print()
         if matching_datasets:
+            print("Dataset Selection Strategy:")
+            print("1. 4-channel datasets can be automatically filtered for any channel subset")
+            print("2. Filtered datasets are ready to use as-is")
+            print()
             print("To use a specific dataset, run:")
             print(f"   python run_pipeline.py --config <config> train --model-type <model> --use-dataset-from-run <run_id>")
             print()
             print("To run all experiments with automatic dataset selection:")
             print("   ./run_all_experiments.sh")
-            print("   (This will automatically use the most recent matching dataset)")
+            print("   (This will find a 4-channel dataset and filter it for your channel config)")
         else:
-            print("No matching datasets found. You may need to:")
-            print("1. Run the processing pipeline first:")
-            print(f"   python run_pipeline.py --config configs/processing_config.yaml process")
-            print("2. Or modify your processing_config.yaml to match an existing dataset")
+            print(f"No datasets found with {window_seconds}s window size. You may need to:")
+            print("1. Run the processing pipeline first with all 4 channels:")
+            print("   - Edit configs/processing_config.yaml: channels: ['af7', 'af8', 'tp9', 'tp10']")
+            print(f"   - Run: python run_pipeline.py --config configs/processing_config.yaml process")
+            print("2. Then you can filter this 4-channel dataset for any channel subset")
         print()
         
     except Exception as e:

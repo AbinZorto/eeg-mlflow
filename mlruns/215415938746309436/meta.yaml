@@ -1,6 +1,0 @@
-artifact_location: /home/abin/Documents/GitHub/eeg-mlflow/mlruns/215415938746309436
-creation_time: 1753100110076
-experiment_id: '215415938746309436'
-last_update_time: 1753100110076
-lifecycle_stage: active
-name: eeg_processing

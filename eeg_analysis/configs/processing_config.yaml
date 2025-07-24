@@ -25,7 +25,7 @@ data_loader:
   # - Diagonal cross-hemispheric: af7-tp10 and af8-tp9 interactions
   # - Coherence/correlation between all channel pairs
   #
-  channels: ['tp10']  # Current: All 4 channels (enables all features)
+  channels: ['af7', 'af8', 'tp9', 'tp10']  # Current: All 4 channels (enables all features)
   # channels: ['af7', 'af8']              # Frontal only (enables frontal asymmetry + coherence)
   # channels: ['tp9', 'tp10']             # Temporal only (enables temporal asymmetry + coherence)
   # channels: ['af7', 'tp9']              # Left hemisphere (enables cross-regional + coherence)
@@ -57,7 +57,7 @@ downsampler:
 
 # Window Slicer Parameters
 window_slicer:
-  window_seconds: 2
+  window_seconds: [2, 4, 6, 8, 10]
   sampling_rate: 256  # After downsampling
   overlap_seconds: 0
   min_windows: 10  # Minimum windows per participant
@@ -65,6 +65,21 @@ window_slicer:
 
 # Feature Extraction Parameters
 feature_extractor:
+  # Window Ordering Configuration - NEW FEATURE
+  # Controls how windows are ordered in the final feature dataset
+  preserve_window_order: true   # Set to false for legacy behavior
+  ordering_method: "completion"  # Options: "sequential" or "completion"
+  # 
+  # SEQUENTIAL (recommended): Preserves temporal relationships
+  # - Windows appear in the same order as input (participant -> parent_window -> sub_window)
+  # - Better for ML models as it maintains temporal context
+  # - Slightly slower due to result reordering
+  # 
+  # COMPLETION (legacy): Processes in parallel completion order  
+  # - Windows appear in the order parallel processing completes them
+  # - Faster processing but scrambles temporal relationships
+  # - May hurt ML model performance due to random ordering
+  
   # Feature computation control - set to false to disable entire feature categories
   compute_spectral: true      # Band powers, relative powers, PSD statistics, spectral edge frequencies
   compute_temporal: true      # Statistical features, Hjorth parameters

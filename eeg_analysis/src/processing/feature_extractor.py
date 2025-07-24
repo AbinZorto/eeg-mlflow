@@ -23,6 +23,10 @@ class EEGFeatureExtractor:
         # Get feature extraction configuration
         feature_config = config['feature_extractor']
         
+        # Ordering configuration - NEW FEATURE
+        self.preserve_window_order = feature_config.get('preserve_window_order', True)
+        self.ordering_method = feature_config.get('ordering_method', 'sequential')  # 'sequential' or 'completion'
+        
         # Main feature computation flags with defaults
         self.compute_spectral = feature_config.get('compute_spectral', True)
         self.compute_temporal = feature_config.get('compute_temporal', True)
@@ -118,6 +122,12 @@ class EEGFeatureExtractor:
         self.logger.info("Initialized EEG Feature Extractor:")
         self.logger.info(f"- Channels: {self.channels} ({len(self.channels)} channels)")
         self.logger.info(f"- Frequency bands: {self.frequency_bands}")
+        
+        # Log ordering configuration
+        if self.preserve_window_order:
+            self.logger.info(f"- Window ordering: {self.ordering_method.upper()} (preserves temporal relationships)")
+        else:
+            self.logger.info("- Window ordering: COMPLETION (legacy parallel processing)")
         
         # Log enabled feature categories
         enabled_categories = []
@@ -806,38 +816,91 @@ class EEGFeatureExtractor:
             raise
     
     def extract_all_features(self, df: pd.DataFrame, output_path: Optional[str] = None) -> pd.DataFrame:
-        """Extract features from all windows."""
+        """Extract features from all windows with configurable ordering."""
         try:
             logger.info("Starting feature extraction")
             start_time = time.time()
             
-            # Process windows in parallel
-            all_features = []
             total_windows = len(df)
             
             # Debug first window
             first_window = df.iloc[0].to_dict()
             self.logger.debug(f"First window data: {first_window.keys()}")
             
-            with ThreadPoolExecutor() as executor:
-                future_to_window = {
-                    executor.submit(self.extract_features, row.to_dict()): idx 
-                    for idx, row in df.iterrows()
-                }
+            if self.preserve_window_order and self.ordering_method == 'sequential':
+                # NEW METHOD: Preserve original window ordering (recommended for ML)
+                self.logger.info("Using SEQUENTIAL ordering (preserves temporal relationships)")
                 
-                for future in as_completed(future_to_window):
-                    idx = future_to_window[future]
-                    if idx % 100 == 0:
-                        logger.info(f"Processed window {idx+1}/{total_windows}")
+                # Create a list to store results in original order
+                all_features = [None] * total_windows
+                
+                with ThreadPoolExecutor() as executor:
+                    # Submit all tasks with their original indices
+                    future_to_index = {
+                        executor.submit(self.extract_features, row.to_dict()): idx 
+                        for idx, row in df.iterrows()
+                    }
                     
-                    try:
-                        features = future.result()
-                        all_features.append(features)
-                    except Exception as e:
-                        logger.error(f"Error processing window {idx}: {str(e)}")
-            
-            # Create output DataFrame
-            result_df = pd.DataFrame(all_features)
+                    completed_count = 0
+                    # Collect results as they complete, but store them in original order
+                    for future in as_completed(future_to_index):
+                        original_idx = future_to_index[future]
+                        completed_count += 1
+                        
+                        if completed_count % 100 == 0:
+                            logger.info(f"Processed window {completed_count}/{total_windows}")
+                        
+                        try:
+                            features = future.result()
+                            # Store result at original index to preserve order
+                            all_features[original_idx] = features
+                        except Exception as e:
+                            logger.error(f"Error processing window {original_idx}: {str(e)}")
+                            # Store empty dict to maintain array structure
+                            all_features[original_idx] = {}
+                
+                # Filter out any None values (shouldn't happen, but safety check)
+                all_features = [f for f in all_features if f is not None]
+                
+                # Create output DataFrame
+                result_df = pd.DataFrame(all_features)
+                
+                # Preserve metadata columns if they exist in the input
+                metadata_columns = ['parent_window_id', 'sub_window_id']
+                for col in metadata_columns:
+                    if col in df.columns:
+                        # Ensure the metadata columns are preserved in the same order
+                        result_df[col] = df[col].values
+                
+                self.logger.info(f"Preserved original window ordering with {len(result_df)} rows")
+                
+            else:
+                # LEGACY METHOD: Process in completion order (faster but scrambles order)
+                self.logger.info("Using COMPLETION ordering (legacy - may scramble temporal relationships)")
+                
+                all_features = []
+                
+                with ThreadPoolExecutor() as executor:
+                    future_to_window = {
+                        executor.submit(self.extract_features, row.to_dict()): idx 
+                        for idx, row in df.iterrows()
+                    }
+                    
+                    for future in as_completed(future_to_window):
+                        idx = future_to_window[future]
+                        if idx % 100 == 0:
+                            logger.info(f"Processed window {idx+1}/{total_windows}")
+                        
+                        try:
+                            features = future.result()
+                            all_features.append(features)
+                        except Exception as e:
+                            logger.error(f"Error processing window {idx}: {str(e)}")
+                
+                # Create output DataFrame
+                result_df = pd.DataFrame(all_features)
+                
+                self.logger.info(f"Processed {len(result_df)} windows in completion order")
             
             self.logger.info(f"Extracted features columns: {result_df.columns.tolist()}")
             
@@ -908,11 +971,22 @@ class EEGFeatureExtractor:
             
             # Create MLflow dataset from the saved parquet file
             try:
-                # Create dataset with descriptive name including window size and channels
+                # Create dataset with descriptive name including window size, channels, and ordering method
                 window_seconds = config['window_slicer']['window_seconds']
                 channels = config['data_loader']['channels']
                 channels_str = "-".join(channels)
-                dataset_name = f"EEG_{window_seconds}s_{channels_str}_{len(df)}windows"
+                
+                # Add ordering method to dataset name
+                ordering_suffix = ""
+                if self.preserve_window_order:
+                    if self.ordering_method == 'sequential':
+                        ordering_suffix = "_seq"
+                    elif self.ordering_method == 'completion':
+                        ordering_suffix = "_comp"
+                else:
+                    ordering_suffix = "_comp"  # Legacy behavior = completion
+                
+                dataset_name = f"EEG_{window_seconds}s_{channels_str}_{len(df)}windows{ordering_suffix}"
                 
                 dataset = mlflow.data.from_pandas(
                     df=df,
@@ -1068,21 +1142,35 @@ def extract_eeg_features(config: Dict[str, Any], df: pd.DataFrame) -> Tuple[pd.D
     # Get the window size from config
     window_seconds = config['window_slicer']['window_seconds']
     
-    # Create a filename based on window size
+    # Create a filename based on window size and ordering method
     base_path = config['paths']['features']['window']
     base_dir = os.path.dirname(base_path)
     base_filename = os.path.basename(base_path)
     
-    # Replace the filename with one that includes window size
+    # Determine ordering suffix for filename
+    ordering_suffix = ""
+    feature_config = config.get('feature_extractor', {})
+    preserve_order = feature_config.get('preserve_window_order', True)
+    ordering_method = feature_config.get('ordering_method', 'sequential')
+    
+    if preserve_order:
+        if ordering_method == 'sequential':
+            ordering_suffix = "_seq"
+        elif ordering_method == 'completion':
+            ordering_suffix = "_comp"
+    else:
+        ordering_suffix = "_comp"  # Legacy behavior = completion
+    
+    # Replace the filename with one that includes window size and ordering method
     filename_without_ext = os.path.splitext(base_filename)[0]
-    new_filename = f"{window_seconds}s_{'_'.join(config['data_loader']['channels'])}_window_features.parquet"
+    new_filename = f"{window_seconds}s_{'_'.join(config['data_loader']['channels'])}_window_features{ordering_suffix}.parquet"
     
     # Keep the path relative to the eeg_analysis directory where the script runs
     # This ensures the file is saved in eeg_analysis/data/processed/features/
     output_path = os.path.join(base_dir, new_filename)
     
     # Log the output path
-    logger.info(f"Saving features to {output_path} (window size: {window_seconds}s)")
+    logger.info(f"Saving features to {output_path} (window size: {window_seconds}s, ordering: {ordering_method})")
     
     # Create directory if it doesn't exist
     os.makedirs(base_dir, exist_ok=True)

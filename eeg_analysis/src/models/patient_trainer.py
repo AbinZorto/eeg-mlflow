@@ -208,7 +208,13 @@ class PatientLevelTrainer(BaseTrainer):
         Enhanced aggregation of window-level features to patient-level features.
         Includes mean, std, min, max, median, and percentiles.
         """
-        feature_cols = df.columns.difference(['Participant', 'Remission'])
+        # Exclude metadata columns that should not be used as features
+        metadata_cols = ['Participant', 'Remission', 'sub_window_id', 'parent_window_id']
+        existing_metadata_cols = [col for col in metadata_cols if col in df.columns]
+        feature_cols = df.columns.difference(metadata_cols)
+        
+        if any(col in df.columns for col in ['sub_window_id', 'parent_window_id']):
+            logger.info(f"Excluding metadata columns from aggregation: {[col for col in ['sub_window_id', 'parent_window_id'] if col in df.columns]}")
         
         # Define aggregation functions
         agg_funcs = {col: ['mean', 'std', 'min', 'max', 'median'] 
@@ -276,6 +282,22 @@ class PatientLevelTrainer(BaseTrainer):
             )
             patient_df = self.aggregate_windows(df)
             X_orig, y, groups = self._prepare_data(patient_df)
+            
+            # *** CRITICAL FIX: Handle NaN values before any feature selection or cross-validation ***
+            # This prevents failures in sklearn algorithms that cannot handle missing values
+            if np.isnan(X_orig).any().any():
+                logger.warning("NaN values detected in dataset. Applying median imputation before feature selection...")
+                from sklearn.impute import SimpleImputer
+                imputer = SimpleImputer(strategy='median')
+                X_orig = pd.DataFrame(
+                    imputer.fit_transform(X_orig),
+                    columns=X_orig.columns,
+                    index=X_orig.index
+                )
+                logger.info("Global NaN imputation completed before feature selection")
+                mlflow.log_param("global_nan_imputation_applied", True)
+            else:
+                mlflow.log_param("global_nan_imputation_applied", False)
             
             # Feature Selection
             perform_selection = self.feature_selection_config.get('enabled', False)

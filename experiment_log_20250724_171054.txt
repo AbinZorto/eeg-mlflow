@@ -1,0 +1,322 @@
+[0;34m[2025-07-24 17:10:54][0m Starting EEG Analysis Complete Model Training
+[0;34m[2025-07-24 17:10:54][0m Using ULTRA-EXTREME unified configuration: eeg_analysis/configs/window_model_config_ultra_extreme.yaml
+[0;34m[2025-07-24 17:10:54][0m Dataset ordering method: sequential
+[0;34m[2025-07-24 17:10:54][0m Log file: experiment_log_20250724_171054.txt
+[0;34m[2025-07-24 17:10:54][0m 🔍 Extracting window sizes from processing configuration...
+[0;34m[2025-07-24 17:10:54][0m Window sizes from config: 2 4 6 8 10s
+[0;34m[2025-07-24 17:10:54][0m 📡 Extracting selected channels from processing configuration...
+[0;34m[2025-07-24 17:10:54][0m Selected channels: af7 af8 tp9 tp10
+[0;34m[2025-07-24 17:10:54][0m Experiments per window size: 49
+[0;34m[2025-07-24 17:10:54][0m Total experiments across all window sizes: 245
+[0;34m[2025-07-24 17:10:54][0m 
+[0;34m[2025-07-24 17:10:54][0m 🔥 ==================== WINDOW SIZE: 2s ====================
+[0;34m[2025-07-24 17:10:54][0m 🔎 Searching for 4-channel dataset with window size 2s...
+[0;34m[2025-07-24 17:10:54][0m 🎯 Looking specifically for sequential ordering method
+[0;34m[2025-07-24 17:10:54][0m 🔍 Searching for 4-channel dataset with window size: 2s
+[0;34m[2025-07-24 17:10:54][0m 🎯 Filtering for ordering method: sequential
+[0;32m[SUCCESS][0m Found 4-channel dataset: EEG_2s_af7-af8-tp9-tp10_6015windows_seq
+[0;34m[2025-07-24 17:10:56][0m Dataset run ID: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;32m[SUCCESS][0m ✅ Found 4-channel dataset for 2s
+[0;34m[2025-07-24 17:10:56][0m 🔧 Filtering dataset for selected channels...
+[0;34m[2025-07-24 17:10:56][0m 🔧 Filtering dataset columns for channels: af7 af8 tp9 tp10
+[0;34m[2025-07-24 17:10:56][0m All 4 channels selected, no filtering needed
+[0;32m[SUCCESS][0m ✅ Dataset prepared for training with selected channels
+[0;34m[2025-07-24 17:10:56][0m 📋 Using dataset run ID: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:10:56][0m 🚀 Starting experiments for 2s windows with:
+[0;34m[2025-07-24 17:10:56][0m   - Channels: af7 af8 tp9 tp10
+[0;34m[2025-07-24 17:10:56][0m   - Dataset run ID: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:10:56][0m === PHASE 1 (2s): Models without feature selection ===
+[0;34m[2025-07-24 17:10:56][0m Using ULTRA-EXTREME GPU configuration for xgboost_gpu 🚀
+[0;34m[2025-07-24 17:10:56][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:10:56][0m Starting experiment: xgboost_gpu_no_fs
+[0;34m[2025-07-24 17:10:56][0m MLflow experiment: eeg_boosting_gpu_baseline
+[0;34m[2025-07-24 17:10:56][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type xgboost_gpu --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf
+[0;32m[SUCCESS][0m Completed: xgboost_gpu_no_fs
+[0;34m[2025-07-24 17:11:42][0m Using ULTRA-EXTREME GPU configuration for catboost_gpu 🚀
+[0;34m[2025-07-24 17:11:42][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:11:42][0m Starting experiment: catboost_gpu_no_fs
+[0;34m[2025-07-24 17:11:42][0m MLflow experiment: eeg_boosting_gpu_baseline
+[0;34m[2025-07-24 17:11:42][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type catboost_gpu --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf
+[0;32m[SUCCESS][0m Completed: catboost_gpu_no_fs
+[0;34m[2025-07-24 17:12:33][0m Using ULTRA-EXTREME GPU configuration for lightgbm_gpu 🚀
+[0;34m[2025-07-24 17:12:33][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:12:33][0m Starting experiment: lightgbm_gpu_no_fs
+[0;34m[2025-07-24 17:12:33][0m MLflow experiment: eeg_boosting_gpu_baseline
+[0;34m[2025-07-24 17:12:33][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type lightgbm_gpu --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf
+[0;32m[SUCCESS][0m Completed: lightgbm_gpu_no_fs
+[0;34m[2025-07-24 17:14:02][0m Using ULTRA-EXTREME GPU configuration for pytorch_mlp 🚀
+[0;34m[2025-07-24 17:14:02][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:14:02][0m Starting experiment: pytorch_mlp_no_fs
+[0;34m[2025-07-24 17:14:02][0m MLflow experiment: eeg_deep_learning_gpu_baseline
+[0;34m[2025-07-24 17:14:02][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type pytorch_mlp --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf
+[0;32m[SUCCESS][0m Completed: pytorch_mlp_no_fs
+[0;34m[2025-07-24 17:15:29][0m Using ULTRA-EXTREME GPU configuration for keras_mlp 🚀
+[0;34m[2025-07-24 17:15:29][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:15:29][0m Starting experiment: keras_mlp_no_fs
+[0;34m[2025-07-24 17:15:29][0m MLflow experiment: eeg_deep_learning_gpu_baseline
+[0;34m[2025-07-24 17:15:29][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type keras_mlp --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf
+[0;32m[SUCCESS][0m Completed: keras_mlp_no_fs
+[0;34m[2025-07-24 17:18:52][0m Using ULTRA-EXTREME GPU configuration for random_forest 🚀
+[0;34m[2025-07-24 17:18:52][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:18:52][0m Starting experiment: random_forest_no_fs
+[0;34m[2025-07-24 17:18:52][0m MLflow experiment: eeg_traditional_models_baseline
+[0;34m[2025-07-24 17:18:52][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type random_forest --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf
+[0;32m[SUCCESS][0m Completed: random_forest_no_fs
+[0;34m[2025-07-24 17:26:18][0m Using ULTRA-EXTREME GPU configuration for svm_rbf 🚀
+[0;34m[2025-07-24 17:26:18][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:26:18][0m Starting experiment: svm_rbf_no_fs
+[0;34m[2025-07-24 17:26:18][0m MLflow experiment: eeg_traditional_models_baseline
+[0;34m[2025-07-24 17:26:18][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type svm_rbf --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf
+[0;31m[ERROR][0m Failed: svm_rbf_no_fs
+[0;34m[2025-07-24 17:29:17][0m === PHASE 2 (2s): Models with feature selection ===
+[0;34m[2025-07-24 17:29:17][0m Using ULTRA-EXTREME GPU configuration for xgboost_gpu 🚀
+[0;34m[2025-07-24 17:29:17][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:29:17][0m Starting experiment: xgboost_gpu_fs_select_k_best_f_classif_10
+[0;34m[2025-07-24 17:29:17][0m MLflow experiment: eeg_boosting_gpu_feature_selection
+[0;34m[2025-07-24 17:29:17][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type xgboost_gpu --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 10 --fs-method select_k_best_f_classif
+[0;31m[ERROR][0m Failed: xgboost_gpu_fs_select_k_best_f_classif_10
+[0;34m[2025-07-24 17:29:28][0m Using ULTRA-EXTREME GPU configuration for xgboost_gpu 🚀
+[0;34m[2025-07-24 17:29:28][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:29:28][0m Starting experiment: xgboost_gpu_fs_select_k_best_f_classif_15
+[0;34m[2025-07-24 17:29:28][0m MLflow experiment: eeg_boosting_gpu_feature_selection
+[0;34m[2025-07-24 17:29:28][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type xgboost_gpu --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 15 --fs-method select_k_best_f_classif
+[0;31m[ERROR][0m Failed: xgboost_gpu_fs_select_k_best_f_classif_15
+[0;34m[2025-07-24 17:29:39][0m Using ULTRA-EXTREME GPU configuration for xgboost_gpu 🚀
+[0;34m[2025-07-24 17:29:39][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:29:39][0m Starting experiment: xgboost_gpu_fs_select_k_best_f_classif_20
+[0;34m[2025-07-24 17:29:39][0m MLflow experiment: eeg_boosting_gpu_feature_selection
+[0;34m[2025-07-24 17:29:39][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type xgboost_gpu --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 20 --fs-method select_k_best_f_classif
+[0;31m[ERROR][0m Failed: xgboost_gpu_fs_select_k_best_f_classif_20
+[0;34m[2025-07-24 17:29:49][0m Using ULTRA-EXTREME GPU configuration for xgboost_gpu 🚀
+[0;34m[2025-07-24 17:29:49][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:29:49][0m Starting experiment: xgboost_gpu_fs_select_k_best_mutual_info_10
+[0;34m[2025-07-24 17:29:49][0m MLflow experiment: eeg_boosting_gpu_feature_selection
+[0;34m[2025-07-24 17:29:49][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type xgboost_gpu --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 10 --fs-method select_k_best_mutual_info
+[0;31m[ERROR][0m Failed: xgboost_gpu_fs_select_k_best_mutual_info_10
+[0;34m[2025-07-24 17:30:00][0m Using ULTRA-EXTREME GPU configuration for xgboost_gpu 🚀
+[0;34m[2025-07-24 17:30:00][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:30:00][0m Starting experiment: xgboost_gpu_fs_select_k_best_mutual_info_15
+[0;34m[2025-07-24 17:30:00][0m MLflow experiment: eeg_boosting_gpu_feature_selection
+[0;34m[2025-07-24 17:30:00][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type xgboost_gpu --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 15 --fs-method select_k_best_mutual_info
+[0;31m[ERROR][0m Failed: xgboost_gpu_fs_select_k_best_mutual_info_15
+[0;34m[2025-07-24 17:30:10][0m Using ULTRA-EXTREME GPU configuration for xgboost_gpu 🚀
+[0;34m[2025-07-24 17:30:10][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:30:10][0m Starting experiment: xgboost_gpu_fs_select_k_best_mutual_info_20
+[0;34m[2025-07-24 17:30:10][0m MLflow experiment: eeg_boosting_gpu_feature_selection
+[0;34m[2025-07-24 17:30:10][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type xgboost_gpu --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 20 --fs-method select_k_best_mutual_info
+[0;31m[ERROR][0m Failed: xgboost_gpu_fs_select_k_best_mutual_info_20
+[0;34m[2025-07-24 17:30:21][0m Using ULTRA-EXTREME GPU configuration for catboost_gpu 🚀
+[0;34m[2025-07-24 17:30:21][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:30:21][0m Starting experiment: catboost_gpu_fs_select_k_best_f_classif_10
+[0;34m[2025-07-24 17:30:21][0m MLflow experiment: eeg_boosting_gpu_feature_selection
+[0;34m[2025-07-24 17:30:21][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type catboost_gpu --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 10 --fs-method select_k_best_f_classif
+[0;31m[ERROR][0m Failed: catboost_gpu_fs_select_k_best_f_classif_10
+[0;34m[2025-07-24 17:30:32][0m Using ULTRA-EXTREME GPU configuration for catboost_gpu 🚀
+[0;34m[2025-07-24 17:30:32][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:30:32][0m Starting experiment: catboost_gpu_fs_select_k_best_f_classif_15
+[0;34m[2025-07-24 17:30:32][0m MLflow experiment: eeg_boosting_gpu_feature_selection
+[0;34m[2025-07-24 17:30:32][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type catboost_gpu --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 15 --fs-method select_k_best_f_classif
+[0;31m[ERROR][0m Failed: catboost_gpu_fs_select_k_best_f_classif_15
+[0;34m[2025-07-24 17:30:42][0m Using ULTRA-EXTREME GPU configuration for catboost_gpu 🚀
+[0;34m[2025-07-24 17:30:42][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:30:42][0m Starting experiment: catboost_gpu_fs_select_k_best_f_classif_20
+[0;34m[2025-07-24 17:30:42][0m MLflow experiment: eeg_boosting_gpu_feature_selection
+[0;34m[2025-07-24 17:30:42][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type catboost_gpu --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 20 --fs-method select_k_best_f_classif
+[0;31m[ERROR][0m Failed: catboost_gpu_fs_select_k_best_f_classif_20
+[0;34m[2025-07-24 17:30:53][0m Using ULTRA-EXTREME GPU configuration for catboost_gpu 🚀
+[0;34m[2025-07-24 17:30:53][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:30:53][0m Starting experiment: catboost_gpu_fs_select_k_best_mutual_info_10
+[0;34m[2025-07-24 17:30:53][0m MLflow experiment: eeg_boosting_gpu_feature_selection
+[0;34m[2025-07-24 17:30:53][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type catboost_gpu --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 10 --fs-method select_k_best_mutual_info
+[0;31m[ERROR][0m Failed: catboost_gpu_fs_select_k_best_mutual_info_10
+[0;34m[2025-07-24 17:31:03][0m Using ULTRA-EXTREME GPU configuration for catboost_gpu 🚀
+[0;34m[2025-07-24 17:31:03][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:31:03][0m Starting experiment: catboost_gpu_fs_select_k_best_mutual_info_15
+[0;34m[2025-07-24 17:31:03][0m MLflow experiment: eeg_boosting_gpu_feature_selection
+[0;34m[2025-07-24 17:31:03][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type catboost_gpu --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 15 --fs-method select_k_best_mutual_info
+[0;31m[ERROR][0m Failed: catboost_gpu_fs_select_k_best_mutual_info_15
+[0;34m[2025-07-24 17:31:14][0m Using ULTRA-EXTREME GPU configuration for catboost_gpu 🚀
+[0;34m[2025-07-24 17:31:14][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:31:14][0m Starting experiment: catboost_gpu_fs_select_k_best_mutual_info_20
+[0;34m[2025-07-24 17:31:14][0m MLflow experiment: eeg_boosting_gpu_feature_selection
+[0;34m[2025-07-24 17:31:14][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type catboost_gpu --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 20 --fs-method select_k_best_mutual_info
+[0;31m[ERROR][0m Failed: catboost_gpu_fs_select_k_best_mutual_info_20
+[0;34m[2025-07-24 17:31:25][0m Using ULTRA-EXTREME GPU configuration for lightgbm_gpu 🚀
+[0;34m[2025-07-24 17:31:25][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:31:25][0m Starting experiment: lightgbm_gpu_fs_select_k_best_f_classif_10
+[0;34m[2025-07-24 17:31:25][0m MLflow experiment: eeg_boosting_gpu_feature_selection
+[0;34m[2025-07-24 17:31:25][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type lightgbm_gpu --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 10 --fs-method select_k_best_f_classif
+[0;31m[ERROR][0m Failed: lightgbm_gpu_fs_select_k_best_f_classif_10
+[0;34m[2025-07-24 17:31:35][0m Using ULTRA-EXTREME GPU configuration for lightgbm_gpu 🚀
+[0;34m[2025-07-24 17:31:35][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:31:35][0m Starting experiment: lightgbm_gpu_fs_select_k_best_f_classif_15
+[0;34m[2025-07-24 17:31:35][0m MLflow experiment: eeg_boosting_gpu_feature_selection
+[0;34m[2025-07-24 17:31:35][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type lightgbm_gpu --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 15 --fs-method select_k_best_f_classif
+[0;31m[ERROR][0m Failed: lightgbm_gpu_fs_select_k_best_f_classif_15
+[0;34m[2025-07-24 17:31:46][0m Using ULTRA-EXTREME GPU configuration for lightgbm_gpu 🚀
+[0;34m[2025-07-24 17:31:46][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:31:46][0m Starting experiment: lightgbm_gpu_fs_select_k_best_f_classif_20
+[0;34m[2025-07-24 17:31:46][0m MLflow experiment: eeg_boosting_gpu_feature_selection
+[0;34m[2025-07-24 17:31:46][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type lightgbm_gpu --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 20 --fs-method select_k_best_f_classif
+[0;31m[ERROR][0m Failed: lightgbm_gpu_fs_select_k_best_f_classif_20
+[0;34m[2025-07-24 17:31:57][0m Using ULTRA-EXTREME GPU configuration for lightgbm_gpu 🚀
+[0;34m[2025-07-24 17:31:57][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:31:57][0m Starting experiment: lightgbm_gpu_fs_select_k_best_mutual_info_10
+[0;34m[2025-07-24 17:31:57][0m MLflow experiment: eeg_boosting_gpu_feature_selection
+[0;34m[2025-07-24 17:31:57][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type lightgbm_gpu --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 10 --fs-method select_k_best_mutual_info
+[0;31m[ERROR][0m Failed: lightgbm_gpu_fs_select_k_best_mutual_info_10
+[0;34m[2025-07-24 17:32:07][0m Using ULTRA-EXTREME GPU configuration for lightgbm_gpu 🚀
+[0;34m[2025-07-24 17:32:07][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:32:07][0m Starting experiment: lightgbm_gpu_fs_select_k_best_mutual_info_15
+[0;34m[2025-07-24 17:32:07][0m MLflow experiment: eeg_boosting_gpu_feature_selection
+[0;34m[2025-07-24 17:32:07][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type lightgbm_gpu --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 15 --fs-method select_k_best_mutual_info
+[0;31m[ERROR][0m Failed: lightgbm_gpu_fs_select_k_best_mutual_info_15
+[0;34m[2025-07-24 17:32:18][0m Using ULTRA-EXTREME GPU configuration for lightgbm_gpu 🚀
+[0;34m[2025-07-24 17:32:18][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:32:18][0m Starting experiment: lightgbm_gpu_fs_select_k_best_mutual_info_20
+[0;34m[2025-07-24 17:32:18][0m MLflow experiment: eeg_boosting_gpu_feature_selection
+[0;34m[2025-07-24 17:32:18][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type lightgbm_gpu --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 20 --fs-method select_k_best_mutual_info
+[0;31m[ERROR][0m Failed: lightgbm_gpu_fs_select_k_best_mutual_info_20
+[0;34m[2025-07-24 17:32:28][0m Using ULTRA-EXTREME GPU configuration for pytorch_mlp 🚀
+[0;34m[2025-07-24 17:32:28][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:32:28][0m Starting experiment: pytorch_mlp_fs_select_k_best_f_classif_10
+[0;34m[2025-07-24 17:32:28][0m MLflow experiment: eeg_deep_learning_gpu_feature_selection
+[0;34m[2025-07-24 17:32:28][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type pytorch_mlp --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 10 --fs-method select_k_best_f_classif
+[0;31m[ERROR][0m Failed: pytorch_mlp_fs_select_k_best_f_classif_10
+[0;34m[2025-07-24 17:32:39][0m Using ULTRA-EXTREME GPU configuration for pytorch_mlp 🚀
+[0;34m[2025-07-24 17:32:39][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:32:39][0m Starting experiment: pytorch_mlp_fs_select_k_best_f_classif_15
+[0;34m[2025-07-24 17:32:39][0m MLflow experiment: eeg_deep_learning_gpu_feature_selection
+[0;34m[2025-07-24 17:32:39][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type pytorch_mlp --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 15 --fs-method select_k_best_f_classif
+[0;31m[ERROR][0m Failed: pytorch_mlp_fs_select_k_best_f_classif_15
+[0;34m[2025-07-24 17:32:50][0m Using ULTRA-EXTREME GPU configuration for pytorch_mlp 🚀
+[0;34m[2025-07-24 17:32:50][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:32:50][0m Starting experiment: pytorch_mlp_fs_select_k_best_f_classif_20
+[0;34m[2025-07-24 17:32:50][0m MLflow experiment: eeg_deep_learning_gpu_feature_selection
+[0;34m[2025-07-24 17:32:50][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type pytorch_mlp --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 20 --fs-method select_k_best_f_classif
+[0;31m[ERROR][0m Failed: pytorch_mlp_fs_select_k_best_f_classif_20
+[0;34m[2025-07-24 17:33:00][0m Using ULTRA-EXTREME GPU configuration for pytorch_mlp 🚀
+[0;34m[2025-07-24 17:33:00][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:33:00][0m Starting experiment: pytorch_mlp_fs_select_k_best_mutual_info_10
+[0;34m[2025-07-24 17:33:00][0m MLflow experiment: eeg_deep_learning_gpu_feature_selection
+[0;34m[2025-07-24 17:33:00][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type pytorch_mlp --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 10 --fs-method select_k_best_mutual_info
+[0;31m[ERROR][0m Failed: pytorch_mlp_fs_select_k_best_mutual_info_10
+[0;34m[2025-07-24 17:33:11][0m Using ULTRA-EXTREME GPU configuration for pytorch_mlp 🚀
+[0;34m[2025-07-24 17:33:11][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:33:11][0m Starting experiment: pytorch_mlp_fs_select_k_best_mutual_info_15
+[0;34m[2025-07-24 17:33:11][0m MLflow experiment: eeg_deep_learning_gpu_feature_selection
+[0;34m[2025-07-24 17:33:11][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type pytorch_mlp --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 15 --fs-method select_k_best_mutual_info
+[0;31m[ERROR][0m Failed: pytorch_mlp_fs_select_k_best_mutual_info_15
+[0;34m[2025-07-24 17:33:21][0m Using ULTRA-EXTREME GPU configuration for pytorch_mlp 🚀
+[0;34m[2025-07-24 17:33:21][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:33:21][0m Starting experiment: pytorch_mlp_fs_select_k_best_mutual_info_20
+[0;34m[2025-07-24 17:33:21][0m MLflow experiment: eeg_deep_learning_gpu_feature_selection
+[0;34m[2025-07-24 17:33:21][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type pytorch_mlp --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 20 --fs-method select_k_best_mutual_info
+[0;31m[ERROR][0m Failed: pytorch_mlp_fs_select_k_best_mutual_info_20
+[0;34m[2025-07-24 17:33:32][0m Using ULTRA-EXTREME GPU configuration for keras_mlp 🚀
+[0;34m[2025-07-24 17:33:32][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:33:32][0m Starting experiment: keras_mlp_fs_select_k_best_f_classif_10
+[0;34m[2025-07-24 17:33:32][0m MLflow experiment: eeg_deep_learning_gpu_feature_selection
+[0;34m[2025-07-24 17:33:32][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type keras_mlp --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 10 --fs-method select_k_best_f_classif
+[0;31m[ERROR][0m Failed: keras_mlp_fs_select_k_best_f_classif_10
+[0;34m[2025-07-24 17:33:43][0m Using ULTRA-EXTREME GPU configuration for keras_mlp 🚀
+[0;34m[2025-07-24 17:33:43][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:33:43][0m Starting experiment: keras_mlp_fs_select_k_best_f_classif_15
+[0;34m[2025-07-24 17:33:43][0m MLflow experiment: eeg_deep_learning_gpu_feature_selection
+[0;34m[2025-07-24 17:33:43][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type keras_mlp --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 15 --fs-method select_k_best_f_classif
+[0;31m[ERROR][0m Failed: keras_mlp_fs_select_k_best_f_classif_15
+[0;34m[2025-07-24 17:33:53][0m Using ULTRA-EXTREME GPU configuration for keras_mlp 🚀
+[0;34m[2025-07-24 17:33:53][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:33:53][0m Starting experiment: keras_mlp_fs_select_k_best_f_classif_20
+[0;34m[2025-07-24 17:33:53][0m MLflow experiment: eeg_deep_learning_gpu_feature_selection
+[0;34m[2025-07-24 17:33:53][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type keras_mlp --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 20 --fs-method select_k_best_f_classif
+[0;31m[ERROR][0m Failed: keras_mlp_fs_select_k_best_f_classif_20
+[0;34m[2025-07-24 17:34:04][0m Using ULTRA-EXTREME GPU configuration for keras_mlp 🚀
+[0;34m[2025-07-24 17:34:04][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:34:04][0m Starting experiment: keras_mlp_fs_select_k_best_mutual_info_10
+[0;34m[2025-07-24 17:34:04][0m MLflow experiment: eeg_deep_learning_gpu_feature_selection
+[0;34m[2025-07-24 17:34:04][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type keras_mlp --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 10 --fs-method select_k_best_mutual_info
+[0;31m[ERROR][0m Failed: keras_mlp_fs_select_k_best_mutual_info_10
+[0;34m[2025-07-24 17:34:14][0m Using ULTRA-EXTREME GPU configuration for keras_mlp 🚀
+[0;34m[2025-07-24 17:34:14][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:34:14][0m Starting experiment: keras_mlp_fs_select_k_best_mutual_info_15
+[0;34m[2025-07-24 17:34:14][0m MLflow experiment: eeg_deep_learning_gpu_feature_selection
+[0;34m[2025-07-24 17:34:15][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type keras_mlp --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 15 --fs-method select_k_best_mutual_info
+[0;31m[ERROR][0m Failed: keras_mlp_fs_select_k_best_mutual_info_15
+[0;34m[2025-07-24 17:34:25][0m Using ULTRA-EXTREME GPU configuration for keras_mlp 🚀
+[0;34m[2025-07-24 17:34:25][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:34:25][0m Starting experiment: keras_mlp_fs_select_k_best_mutual_info_20
+[0;34m[2025-07-24 17:34:25][0m MLflow experiment: eeg_deep_learning_gpu_feature_selection
+[0;34m[2025-07-24 17:34:25][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type keras_mlp --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 20 --fs-method select_k_best_mutual_info
+[0;31m[ERROR][0m Failed: keras_mlp_fs_select_k_best_mutual_info_20
+[0;34m[2025-07-24 17:34:36][0m Using ULTRA-EXTREME GPU configuration for random_forest 🚀
+[0;34m[2025-07-24 17:34:36][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:34:36][0m Starting experiment: random_forest_fs_select_k_best_f_classif_10
+[0;34m[2025-07-24 17:34:36][0m MLflow experiment: eeg_traditional_models_feature_selection
+[0;34m[2025-07-24 17:34:36][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type random_forest --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 10 --fs-method select_k_best_f_classif
+[0;31m[ERROR][0m Failed: random_forest_fs_select_k_best_f_classif_10
+[0;34m[2025-07-24 17:34:46][0m Using ULTRA-EXTREME GPU configuration for random_forest 🚀
+[0;34m[2025-07-24 17:34:46][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:34:46][0m Starting experiment: random_forest_fs_select_k_best_f_classif_15
+[0;34m[2025-07-24 17:34:46][0m MLflow experiment: eeg_traditional_models_feature_selection
+[0;34m[2025-07-24 17:34:46][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type random_forest --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 15 --fs-method select_k_best_f_classif
+[0;31m[ERROR][0m Failed: random_forest_fs_select_k_best_f_classif_15
+[0;34m[2025-07-24 17:34:57][0m Using ULTRA-EXTREME GPU configuration for random_forest 🚀
+[0;34m[2025-07-24 17:34:57][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:34:57][0m Starting experiment: random_forest_fs_select_k_best_f_classif_20
+[0;34m[2025-07-24 17:34:57][0m MLflow experiment: eeg_traditional_models_feature_selection
+[0;34m[2025-07-24 17:34:57][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type random_forest --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 20 --fs-method select_k_best_f_classif
+[0;31m[ERROR][0m Failed: random_forest_fs_select_k_best_f_classif_20
+[0;34m[2025-07-24 17:35:08][0m Using ULTRA-EXTREME GPU configuration for random_forest 🚀
+[0;34m[2025-07-24 17:35:08][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:35:08][0m Starting experiment: random_forest_fs_select_k_best_mutual_info_10
+[0;34m[2025-07-24 17:35:08][0m MLflow experiment: eeg_traditional_models_feature_selection
+[0;34m[2025-07-24 17:35:08][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type random_forest --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 10 --fs-method select_k_best_mutual_info
+[0;31m[ERROR][0m Failed: random_forest_fs_select_k_best_mutual_info_10
+[0;34m[2025-07-24 17:35:18][0m Using ULTRA-EXTREME GPU configuration for random_forest 🚀
+[0;34m[2025-07-24 17:35:18][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:35:18][0m Starting experiment: random_forest_fs_select_k_best_mutual_info_15
+[0;34m[2025-07-24 17:35:18][0m MLflow experiment: eeg_traditional_models_feature_selection
+[0;34m[2025-07-24 17:35:18][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type random_forest --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 15 --fs-method select_k_best_mutual_info
+[0;31m[ERROR][0m Failed: random_forest_fs_select_k_best_mutual_info_15
+[0;34m[2025-07-24 17:35:29][0m Using ULTRA-EXTREME GPU configuration for random_forest 🚀
+[0;34m[2025-07-24 17:35:29][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:35:29][0m Starting experiment: random_forest_fs_select_k_best_mutual_info_20
+[0;34m[2025-07-24 17:35:29][0m MLflow experiment: eeg_traditional_models_feature_selection
+[0;34m[2025-07-24 17:35:29][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type random_forest --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 20 --fs-method select_k_best_mutual_info
+[0;31m[ERROR][0m Failed: random_forest_fs_select_k_best_mutual_info_20
+[0;34m[2025-07-24 17:35:39][0m Using ULTRA-EXTREME GPU configuration for svm_rbf 🚀
+[0;34m[2025-07-24 17:35:39][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:35:39][0m Starting experiment: svm_rbf_fs_select_k_best_f_classif_10
+[0;34m[2025-07-24 17:35:39][0m MLflow experiment: eeg_traditional_models_feature_selection
+[0;34m[2025-07-24 17:35:39][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type svm_rbf --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 10 --fs-method select_k_best_f_classif
+[0;31m[ERROR][0m Failed: svm_rbf_fs_select_k_best_f_classif_10
+[0;34m[2025-07-24 17:35:50][0m Using ULTRA-EXTREME GPU configuration for svm_rbf 🚀
+[0;34m[2025-07-24 17:35:50][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:35:50][0m Starting experiment: svm_rbf_fs_select_k_best_f_classif_15
+[0;34m[2025-07-24 17:35:50][0m MLflow experiment: eeg_traditional_models_feature_selection
+[0;34m[2025-07-24 17:35:50][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type svm_rbf --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 15 --fs-method select_k_best_f_classif
+[0;31m[ERROR][0m Failed: svm_rbf_fs_select_k_best_f_classif_15
+[0;34m[2025-07-24 17:36:01][0m Using ULTRA-EXTREME GPU configuration for svm_rbf 🚀
+[0;34m[2025-07-24 17:36:01][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:36:01][0m Starting experiment: svm_rbf_fs_select_k_best_f_classif_20
+[0;34m[2025-07-24 17:36:01][0m MLflow experiment: eeg_traditional_models_feature_selection
+[0;34m[2025-07-24 17:36:01][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type svm_rbf --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 20 --fs-method select_k_best_f_classif
+[0;31m[ERROR][0m Failed: svm_rbf_fs_select_k_best_f_classif_20
+[0;34m[2025-07-24 17:36:11][0m Using ULTRA-EXTREME GPU configuration for svm_rbf 🚀
+[0;34m[2025-07-24 17:36:11][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:36:11][0m Starting experiment: svm_rbf_fs_select_k_best_mutual_info_10
+[0;34m[2025-07-24 17:36:11][0m MLflow experiment: eeg_traditional_models_feature_selection
+[0;34m[2025-07-24 17:36:11][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type svm_rbf --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 10 --fs-method select_k_best_mutual_info
+[0;31m[ERROR][0m Failed: svm_rbf_fs_select_k_best_mutual_info_10
+[0;34m[2025-07-24 17:36:22][0m Using ULTRA-EXTREME GPU configuration for svm_rbf 🚀
+[0;34m[2025-07-24 17:36:22][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:36:22][0m Starting experiment: svm_rbf_fs_select_k_best_mutual_info_15
+[0;34m[2025-07-24 17:36:22][0m MLflow experiment: eeg_traditional_models_feature_selection
+[0;34m[2025-07-24 17:36:22][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type svm_rbf --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 15 --fs-method select_k_best_mutual_info
+[0;31m[ERROR][0m Failed: svm_rbf_fs_select_k_best_mutual_info_15
+[0;34m[2025-07-24 17:36:33][0m Using ULTRA-EXTREME GPU configuration for svm_rbf 🚀
+[0;34m[2025-07-24 17:36:33][0m Using dataset from run: 85d41b3ac9d84c18a4c40d8643109bcf
+[0;34m[2025-07-24 17:36:33][0m Starting experiment: svm_rbf_fs_select_k_best_mutual_info_20
+[0;34m[2025-07-24 17:36:33][0m MLflow experiment: eeg_traditional_models_feature_selection
+[0;34m[2025-07-24 17:36:33][0m Command: python eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml train --level window --model-type svm_rbf --use-dataset-from-run 85d41b3ac9d84c18a4c40d8643109bcf --enable-feature-selection --n-features-select 20 --fs-method select_k_best_mutual_info
