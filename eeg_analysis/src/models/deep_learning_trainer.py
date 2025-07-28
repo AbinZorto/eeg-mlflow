@@ -37,6 +37,15 @@ except ImportError:
     TF_AVAILABLE = False
     warnings.warn("TensorFlow not available. Keras models will not be functional.")
 
+# Import SMOTE and NearMiss for handling class imbalance
+try:
+    from imblearn.over_sampling import SMOTE
+    from imblearn.under_sampling import NearMiss
+    IMBALANCE_AVAILABLE = True
+except ImportError:
+    IMBALANCE_AVAILABLE = False
+    warnings.warn("SMOTE/NearMiss not available. Install imbalanced-learn for better handling of class imbalance.")
+
 from src.models.base_trainer import BaseTrainer
 from src.models.evaluation import ModelEvaluator
 from mlflow.data.pandas_dataset import PandasDataset
@@ -70,7 +79,10 @@ class PyTorchMLPClassifier(BaseEstimator, ClassifierMixin):
                  class_weight=None,
                  random_state=42,
                  mixed_precision=False,
-                 gradient_accumulation_steps=1):
+                 gradient_accumulation_steps=1,
+                 use_smote=False,  # Add SMOTE parameter
+                 use_nearmiss=False,  # Add NearMiss parameter
+                 nearmiss_version=1):  # NearMiss version (1, 2, or 3)
         
         self.hidden_layers = hidden_layers
         self.dropout_rate = dropout_rate
@@ -86,6 +98,9 @@ class PyTorchMLPClassifier(BaseEstimator, ClassifierMixin):
         self.random_state = random_state
         self.mixed_precision = mixed_precision
         self.gradient_accumulation_steps = gradient_accumulation_steps
+        self.use_smote = use_smote  # Store SMOTE setting
+        self.use_nearmiss = use_nearmiss  # Store NearMiss setting
+        self.nearmiss_version = nearmiss_version  # Store NearMiss version
         
         self.model = None
         self.scaler = StandardScaler()
@@ -169,6 +184,38 @@ class PyTorchMLPClassifier(BaseEstimator, ClassifierMixin):
         if hasattr(X, 'columns'):
             self.feature_names_in_ = X.columns.tolist()
         
+        # Apply SMOTE for class balance if enabled
+        if self.use_smote and SMOTE_AVAILABLE:
+            print(f"   🔄 SMOTE ENABLED: Balancing classes for better remission detection...")
+            print(f"   Original class distribution: {np.bincount(y)}")
+            
+            try:
+                smote = SMOTE(random_state=self.random_state)
+                X_resampled, y_resampled = smote.fit_resample(X, y)
+                
+                # Convert back to DataFrame/Series if needed
+                if hasattr(X, 'columns'):
+                    X_resampled = pd.DataFrame(X_resampled, columns=X.columns)
+                if hasattr(y, 'name'):
+                    y_resampled = pd.Series(y_resampled, name=y.name)
+                
+                print(f"   ✅ SMOTE applied successfully!")
+                print(f"   New class distribution: {np.bincount(y_resampled)}")
+                print(f"   Original samples: {len(X)}, Resampled samples: {len(X_resampled)}")
+                
+                # Update X and y with resampled data
+                X = X_resampled
+                y = y_resampled
+                
+            except Exception as e:
+                print(f"   ⚠️  SMOTE failed: {e}. Continuing without SMOTE...")
+                self.use_smote = False
+        elif self.use_smote and not SMOTE_AVAILABLE:
+            print(f"   ⚠️  SMOTE requested but not available. Install imbalanced-learn package.")
+            self.use_smote = False
+        else:
+            print(f"   ℹ️  SMOTE disabled. Using original class distribution: {np.bincount(y)}")
+        
         # Convert to numpy if pandas
         if hasattr(X, 'values'):
             X = X.values
@@ -202,13 +249,18 @@ class PyTorchMLPClassifier(BaseEstimator, ClassifierMixin):
         dataloader = DataLoader(dataset, batch_size=effective_batch_size, shuffle=True, 
                               num_workers=0, pin_memory=False)
         
-        # Loss function with class weights
-        if self.class_weight == 'balanced':
+        # Loss function with class weights - SMOTE/NearMiss-aware
+        if self.use_smote or self.use_nearmiss:
+            print(f"   ℹ️  {'SMOTE' if self.use_smote else 'NearMiss'} enabled - disabling class weights in loss function")
+            class_weights = None
+        elif self.class_weight == 'balanced':
             class_counts = np.bincount(y)
             class_weights = len(y) / (len(np.unique(y)) * class_counts)
             class_weights = torch.FloatTensor(class_weights).to(self.device)
+            print(f"   ⚖️  Using balanced class weights: {class_weights.cpu().numpy()}")
         else:
             class_weights = None
+            print(f"   ℹ️  No class weights applied")
         
         criterion = nn.CrossEntropyLoss(weight=class_weights)
         
@@ -358,7 +410,10 @@ class KerasMLPClassifier(BaseEstimator, ClassifierMixin):
                  class_weight=None,
                  random_state=42,
                  mixed_precision=False,
-                 gradient_clip_norm=1.0):
+                 gradient_clip_norm=1.0,
+                 use_smote=False,  # Add SMOTE parameter
+                 use_nearmiss=False,  # Add NearMiss parameter
+                 nearmiss_version=1):  # NearMiss version (1, 2, or 3)
         
         self.hidden_layers = hidden_layers
         self.dropout_rate = dropout_rate
@@ -375,6 +430,9 @@ class KerasMLPClassifier(BaseEstimator, ClassifierMixin):
         self.random_state = random_state
         self.mixed_precision = mixed_precision
         self.gradient_clip_norm = gradient_clip_norm
+        self.use_smote = use_smote  # Store SMOTE setting
+        self.use_nearmiss = use_nearmiss  # Store NearMiss setting
+        self.nearmiss_version = nearmiss_version  # Store NearMiss version
         
         self.model = None
         self.scaler = StandardScaler()
@@ -465,6 +523,38 @@ class KerasMLPClassifier(BaseEstimator, ClassifierMixin):
         if hasattr(X, 'columns'):
             self.feature_names_in_ = X.columns.tolist()
         
+        # Apply SMOTE for class balance if enabled
+        if self.use_smote and SMOTE_AVAILABLE:
+            print(f"   🔄 SMOTE ENABLED: Balancing classes for better remission detection...")
+            print(f"   Original class distribution: {np.bincount(y)}")
+            
+            try:
+                smote = SMOTE(random_state=self.random_state)
+                X_resampled, y_resampled = smote.fit_resample(X, y)
+                
+                # Convert back to DataFrame/Series if needed
+                if hasattr(X, 'columns'):
+                    X_resampled = pd.DataFrame(X_resampled, columns=X.columns)
+                if hasattr(y, 'name'):
+                    y_resampled = pd.Series(y_resampled, name=y.name)
+                
+                print(f"   ✅ SMOTE applied successfully!")
+                print(f"   New class distribution: {np.bincount(y_resampled)}")
+                print(f"   Original samples: {len(X)}, Resampled samples: {len(X_resampled)}")
+                
+                # Update X and y with resampled data
+                X = X_resampled
+                y = y_resampled
+                
+            except Exception as e:
+                print(f"   ⚠️  SMOTE failed: {e}. Continuing without SMOTE...")
+                self.use_smote = False
+        elif self.use_smote and not SMOTE_AVAILABLE:
+            print(f"   ⚠️  SMOTE requested but not available. Install imbalanced-learn package.")
+            self.use_smote = False
+        else:
+            print(f"   ℹ️  SMOTE disabled. Using original class distribution: {np.bincount(y)}")
+        
         # Convert to numpy if pandas
         if hasattr(X, 'values'):
             X = X.values
@@ -491,13 +581,18 @@ class KerasMLPClassifier(BaseEstimator, ClassifierMixin):
         # Create model
         self.model = self._create_model(X_scaled.shape[1])
         
-        # Calculate class weights if needed
-        if self.class_weight == 'balanced':
+        # Calculate class weights if needed - SMOTE/NearMiss-aware
+        if self.use_smote or self.use_nearmiss:
+            print(f"   ℹ️  {'SMOTE' if self.use_smote else 'NearMiss'} enabled - disabling class weights in loss function")
+            class_weight_dict = None
+        elif self.class_weight == 'balanced':
             class_counts = np.bincount(y)
             class_weights = len(y) / (len(np.unique(y)) * class_counts)
             class_weight_dict = {i: weight for i, weight in enumerate(class_weights)}
+            print(f"   ⚖️  Using balanced class weights: {class_weights}")
         else:
             class_weight_dict = None
+            print(f"   ℹ️  No class weights applied")
         
         # Callbacks for overfitting prevention
         callbacks_list = [
@@ -673,152 +768,301 @@ class KerasMLPClassifier(BaseEstimator, ClassifierMixin):
         
         print("🔧 KERAS DESERIALIZATION: Deserialization complete")
 
-class Hybrid1DCNNLSTMClassifier(BaseEstimator, ClassifierMixin):
+class AdvancedHybrid1DCNNLSTMClassifier(BaseEstimator, ClassifierMixin):
     """
-    Hybrid 1D CNN-LSTM Classifier for EEG signal processing.
+    OPTIMIZED Advanced Hybrid 1D CNN-LSTM Classifier for maximum speed and GPU utilization.
     
-    This model combines:
-    - 1D CNN layers for spatial feature extraction from EEG channels
-    - LSTM layers for temporal sequence modeling
-    - Dense layers for final classification
-    
-    Features:
-    - Bidirectional LSTM for better temporal modeling
-    - Attention mechanism for focusing on important time steps
-    - Residual connections in CNN for better gradient flow
-    - Batch normalization for training stability
-    - Mixed precision training for GPU efficiency
+    Key optimizations:
+    - Simplified architecture for faster training
+    - Proper CUDA utilization with mixed precision
+    - Optimized batch processing
+    - Reduced debugging output
+    - Consistent random seed handling
     """
     
     def __init__(self,
-                 cnn_filters=[64, 128, 256],
-                 cnn_kernel_sizes=[3, 3, 3],
-                 cnn_pool_sizes=[2, 2, 2],
-                 cnn_dropout=0.1,
-                 lstm_units=[256, 128, 64],
-                 lstm_dropout=0.2,
-                 lstm_recurrent_dropout=0.1,
-                 dense_layers=[128, 64],
-                 dense_dropout=0.3,
-                 learning_rate=0.001,
+                 cnn_blocks=None,
+                 normalization='layer_norm',
+                 cnn_dropout=None,
+                 spatial_dropout=True,
+                 gaussian_noise=0.01,
+                 lstm_architecture=None,
+                 attention_config=None,
+                 fusion_strategy='concat_attention',
+                 feature_pyramid=True,
+                 dense_architecture=None,
+                 optimizer_config=None,
+                 lr_schedule=None,
                  batch_size=32,
-                 epochs=100,
-                 early_stopping_patience=10,
-                 optimizer='adam',
-                 class_weight=None,
+                 epochs=200,
+                 early_stopping=None,
+                 augmentation=None,
+                 preprocessing=None,
+                 regularization=None,
+                 ensemble=None,
+                 loss_config=None,
+                 architecture_enhancements=None,
+                 validation=None,
+                 monitoring=None,
+                 hardware_optimization=None,
                  random_state=42,
-                 sequence_length=1000,
-                 n_channels=4,
-                 normalize=True,
-                 bidirectional_lstm=True,
-                 attention_mechanism=True,
-                 residual_connections=True,
-                 batch_norm=True,
-                 mixed_precision=True,
-                 weight_decay=1e-5,
-                 gradient_clip_norm=None):
+                 deterministic_training=True,
+                 post_training=None,
+                 use_smote=False,  # Add SMOTE parameter
+                 use_nearmiss=False,  # Add NearMiss parameter
+                 nearmiss_version=1):  # NearMiss version (1, 2, or 3)
         
-        self.cnn_filters = cnn_filters
-        self.cnn_kernel_sizes = cnn_kernel_sizes
-        self.cnn_pool_sizes = cnn_pool_sizes
+        # Store all configurations
+        self.cnn_blocks = cnn_blocks
+        self.normalization = normalization
         self.cnn_dropout = cnn_dropout
-        self.lstm_units = lstm_units
-        self.lstm_dropout = lstm_dropout
-        self.lstm_recurrent_dropout = lstm_recurrent_dropout
-        self.dense_layers = dense_layers
-        self.dense_dropout = dense_dropout
-        self.learning_rate = learning_rate
+        self.spatial_dropout = spatial_dropout
+        self.gaussian_noise = gaussian_noise
+        self.lstm_architecture = lstm_architecture
+        self.attention_config = attention_config
+        self.fusion_strategy = fusion_strategy
+        self.feature_pyramid = feature_pyramid
+        self.dense_architecture = dense_architecture
+        self.optimizer_config = optimizer_config
+        self.lr_schedule = lr_schedule
         self.batch_size = batch_size
         self.epochs = epochs
-        self.early_stopping_patience = early_stopping_patience
-        self.optimizer = optimizer
-        self.class_weight = class_weight
+        self.early_stopping = early_stopping
+        self.augmentation = augmentation
+        self.preprocessing = preprocessing
+        self.regularization = regularization
+        self.ensemble = ensemble
+        self.loss_config = loss_config
+        self.architecture_enhancements = architecture_enhancements
+        self.validation = validation
+        self.monitoring = monitoring
+        self.hardware_optimization = hardware_optimization
         self.random_state = random_state
-        self.sequence_length = sequence_length
-        self.n_channels = n_channels
-        self.normalize = normalize
-        self.bidirectional_lstm = bidirectional_lstm
-        self.attention_mechanism = attention_mechanism
-        self.residual_connections = residual_connections
-        self.batch_norm = batch_norm
-        self.mixed_precision = mixed_precision
-        self.weight_decay = weight_decay
-        self.gradient_clip_norm = gradient_clip_norm
+        self.deterministic_training = deterministic_training
+        self.post_training = post_training
+        self.use_smote = use_smote  # Store SMOTE setting
+        self.use_nearmiss = use_nearmiss  # Store NearMiss setting
+        self.nearmiss_version = nearmiss_version  # Store NearMiss version
         
+        # Validate that only one class balancing technique is enabled
+        if self.use_smote and self.use_nearmiss:
+            raise ValueError("❌ ERROR: Both SMOTE and NearMiss cannot be enabled simultaneously. Please choose only one class balancing technique.")
+        
+        # Initialize model components
         self.model = None
-        self.scaler = StandardScaler()
+        self.scaler = None
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.classes_ = None
         self.feature_names_in_ = None
         self.scaler_amp = None
         
-        if mixed_precision and torch.cuda.is_available():
-            self.scaler_amp = torch.cuda.amp.GradScaler()
-            print("🔥 MIXED PRECISION ENABLED: Using automatic mixed precision for maximum GPU utilization!")
+        # CRITICAL: Set random seeds FIRST before any other operations
+        self._set_random_seeds()
+        
+        # Set up CUDA optimizations
+        self._setup_cuda_optimizations()
+        
+        # Print device info
+        print(f"🚀 ADVANCED HYBRID MODEL - DEVICE: {self.device}")
+        if torch.cuda.is_available():
+            print(f"   CUDA Device: {torch.cuda.get_device_name()}")
+            print(f"   CUDA Memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.1f} GB")
+            print(f"   Mixed Precision: {'ENABLED' if self.scaler_amp else 'DISABLED'}")
+    
+    def _set_random_seeds(self):
+        """Set all random seeds consistently."""
+        # Set Python random seed
+        import random
+        random.seed(self.random_state)
+        
+        # Set NumPy random seed
+        np.random.seed(self.random_state)
+        
+        # Set PyTorch random seeds
+        torch.manual_seed(self.random_state)
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed(self.random_state)
+            torch.cuda.manual_seed_all(self.random_state)
+        
+        # Set deterministic training if enabled
+        if self.deterministic_training:
+            torch.backends.cudnn.deterministic = True
+            torch.backends.cudnn.benchmark = False
+            print(f"🔒 DETERMINISTIC TRAINING ENABLED (seed: {self.random_state})")
+        else:
+            torch.backends.cudnn.benchmark = True
+            print(f"⚡ BENCHMARK MODE ENABLED for maximum speed")
+    
+    def _setup_cuda_optimizations(self):
+        """Set up CUDA optimizations for maximum performance."""
+        if torch.cuda.is_available():
+            # Enable mixed precision for maximum speed
+            if self.hardware_optimization and self.hardware_optimization.get('mixed_precision', True):
+                self.scaler_amp = torch.cuda.amp.GradScaler()
+                print("🔥 MIXED PRECISION ENABLED: Using automatic mixed precision for maximum GPU utilization!")
+            
+            # Set memory fraction to prevent OOM
+            torch.cuda.empty_cache()
+            
+            # Enable memory efficient attention if available
+            if hasattr(torch.backends.cuda, 'enable_flash_sdp'):
+                torch.backends.cuda.enable_flash_sdp(True)
+                print("⚡ FLASH ATTENTION ENABLED: Using memory efficient attention!")
     
     def _create_model(self, n_features):
-        """Create the hybrid 1D CNN-LSTM model architecture."""
+        """Create an OPTIMIZED advanced hybrid model architecture."""
         if not TORCH_AVAILABLE:
             raise ImportError("PyTorch not available. Please install torch.")
         
-        class Hybrid1DCNNLSTM(nn.Module):
-            def __init__(self, n_features, cnn_filters, cnn_kernel_sizes, cnn_pool_sizes,
-                         cnn_dropout, lstm_units, lstm_dropout, lstm_recurrent_dropout,
-                         dense_layers, dense_dropout, n_channels, bidirectional_lstm,
-                         attention_mechanism, residual_connections, batch_norm):
-                super(Hybrid1DCNNLSTM, self).__init__()
+        class OptimizedHybridModel(nn.Module):
+            def __init__(self, n_features, cnn_blocks, normalization, cnn_dropout, spatial_dropout,
+                         gaussian_noise, lstm_architecture, attention_config, fusion_strategy,
+                         feature_pyramid, dense_architecture, architecture_enhancements):
+                super(OptimizedHybridModel, self).__init__()
                 
-                self.n_channels = n_channels
-                self.bidirectional_lstm = bidirectional_lstm
-                self.attention_mechanism = attention_mechanism
-                self.residual_connections = residual_connections
-                self.batch_norm = batch_norm
+                self.n_features = n_features
+                self.cnn_blocks = cnn_blocks
+                self.normalization = normalization
+                self.cnn_dropout = cnn_dropout
+                self.spatial_dropout = spatial_dropout
+                self.gaussian_noise = gaussian_noise
+                self.lstm_architecture = lstm_architecture
+                self.attention_config = attention_config
+                self.fusion_strategy = fusion_strategy
+                self.feature_pyramid = feature_pyramid
+                self.dense_architecture = dense_architecture
+                self.architecture_enhancements = architecture_enhancements
                 
-                # For feature-based data, we treat features as a 1D signal
-                # Use n_features as the sequence length and 1 as the channel dimension
-                self.sequence_length = n_features
+                # OPTIMIZED: Simplified feature embedding
+                self.feature_embedding = nn.Sequential(
+                    nn.Linear(n_features, 128),  # Reduced from n_features * 2
+                    nn.BatchNorm1d(128),
+                    nn.ReLU(),  # Faster than SiLU
+                    nn.Dropout(0.1)
+                )
                 
-                # CNN layers for feature extraction
-                self.cnn_layers = nn.ModuleList()
-                in_channels = 1  # Single channel for feature-based data
+                # OPTIMIZED: Direct reshape to CNN input size
+                self.reshape_layer = nn.Linear(128, 64)
                 
-                for i, (filters, kernel_size, pool_size) in enumerate(zip(cnn_filters, cnn_kernel_sizes, cnn_pool_sizes)):
-                    conv_layer = nn.Sequential(
-                        nn.Conv1d(in_channels, filters, kernel_size, padding=kernel_size//2),
-                        nn.BatchNorm1d(filters) if batch_norm else nn.Identity(),
-                        nn.ReLU(),
-                        nn.MaxPool1d(pool_size),
-                        nn.Dropout(cnn_dropout)
+                # OPTIMIZED: Simplified Gaussian noise
+                if gaussian_noise > 0:
+                    self.gaussian_noise_layer = lambda x: x + torch.randn_like(x) * gaussian_noise if self.training else x
+                else:
+                    self.gaussian_noise_layer = lambda x: x
+                
+                # OPTIMIZED: Simplified CNN blocks
+                self.cnn_blocks_layers = nn.ModuleList()
+                self.feature_pyramid_features = [] if feature_pyramid else None
+                
+                in_channels = 1
+                for i, block_config in enumerate(cnn_blocks):
+                    block = self._create_optimized_cnn_block(in_channels, block_config, i)
+                    self.cnn_blocks_layers.append(block)
+                    in_channels = block_config['filters'][-1]
+                    
+                    if feature_pyramid:
+                        self.feature_pyramid_features.append(in_channels)
+                
+                # OPTIMIZED: Simplified LSTM layers
+                self.lstm_layers = nn.ModuleList()
+                lstm_input_size = in_channels
+                
+                for i, lstm_config in enumerate(lstm_architecture):
+                    lstm_layer = self._create_optimized_lstm_layer(lstm_input_size, lstm_config, i)
+                    self.lstm_layers.append(lstm_layer)
+                    lstm_input_size = lstm_config['units'] * (2 if lstm_config['bidirectional'] else 1)
+                
+                # OPTIMIZED: Simplified attention mechanism
+                if attention_config['attention_type'] == 'multi_head':
+                    self.attention = nn.MultiheadAttention(
+                        embed_dim=lstm_input_size,
+                        num_heads=attention_config['num_heads'],
+                        dropout=attention_config['dropout'],
+                        batch_first=True
                     )
-                    self.cnn_layers.append(conv_layer)
-                    in_channels = filters
+                    self.attention_norm = nn.LayerNorm(lstm_input_size)
+                    self.attention_dropout = nn.Dropout(attention_config['dropout'])
                 
-                # For feature-based data, we'll use a much simpler approach
-                # Use dynamic calculation to avoid dimension issues
-                cnn_output_size = cnn_filters[-1]  # Use the last CNN layer's output size
-                
-                # Projection layer to map CNN output to dense input size
-                self.cnn_to_dense = nn.Linear(cnn_output_size, dense_layers[0])
-                
-                # Dense layers for classification
+                # OPTIMIZED: Simplified dense layers
                 self.dense_layers = nn.ModuleList()
-                dense_input_size = dense_layers[0]
+                dense_input_size = lstm_input_size
                 
-                for units in dense_layers[1:]:  # Skip first layer as it's handled by projection
-                    dense_layer = nn.Sequential(
-                        nn.Linear(dense_input_size, units),
-                        nn.BatchNorm1d(units) if batch_norm else nn.Identity(),
-                        nn.ReLU(),
-                        nn.Dropout(dense_dropout)
-                    )
-                    self.dense_layers.append(dense_layer)
-                    dense_input_size = units
+                # Account for feature pyramid fusion
+                if feature_pyramid and len(cnn_blocks) > 1:
+                    pyramid_features_size = sum(block['filters'][-1] for block in cnn_blocks)
+                    dense_input_size += pyramid_features_size
+                
+                for i, dense_config in enumerate(dense_architecture):
+                    dense_block = self._create_optimized_dense_block(dense_input_size, dense_config, i)
+                    self.dense_layers.append(dense_block)
+                    dense_input_size = dense_config['units']
                 
                 # Output layer
                 self.output_layer = nn.Linear(dense_input_size, 2)
                 
                 # Initialize weights
                 self._init_weights()
+            
+            def _create_optimized_cnn_block(self, in_channels, block_config, block_idx):
+                """Create an optimized CNN block."""
+                layers = []
+                
+                for i, (filters, kernel_size, dilation_rate) in enumerate(zip(
+                    block_config['filters'], block_config['kernel_sizes'], block_config['dilation_rates'])):
+                    
+                    # OPTIMIZED: Use regular convolutions instead of separable for speed
+                    conv = nn.Conv1d(in_channels, filters, kernel_size, 
+                                   padding=kernel_size//2, dilation=dilation_rate)
+                    layers.append(conv)
+                    
+                    # OPTIMIZED: Use BatchNorm1d for speed
+                    layers.append(nn.BatchNorm1d(filters))
+                    
+                    # OPTIMIZED: Use ReLU for speed
+                    layers.append(nn.ReLU())
+                    
+                    # OPTIMIZED: Simplified dropout
+                    if self.spatial_dropout:
+                        layers.append(nn.Dropout1d(self.cnn_dropout[block_idx]))
+                    else:
+                        layers.append(nn.Dropout(self.cnn_dropout[block_idx]))
+                    
+                    in_channels = filters
+                
+                # Pooling
+                if block_config['pool_size'] > 1:
+                    layers.append(nn.MaxPool1d(block_config['pool_size']))
+                
+                return nn.Sequential(*layers)
+            
+            def _create_optimized_lstm_layer(self, input_size, lstm_config, layer_idx):
+                """Create an optimized LSTM layer."""
+                lstm = nn.LSTM(
+                    input_size=input_size,
+                    hidden_size=lstm_config['units'],
+                    num_layers=1,
+                    batch_first=True,
+                    bidirectional=lstm_config['bidirectional'],
+                    dropout=lstm_config['dropout'] if layer_idx < len(self.lstm_architecture) - 1 else 0,
+                )
+                return lstm
+            
+            def _create_optimized_dense_block(self, input_size, dense_config, block_idx):
+                """Create an optimized dense block."""
+                layers = []
+                
+                # OPTIMIZED: Single linear layer instead of double
+                layers.append(nn.Linear(input_size, dense_config['units']))
+                
+                if dense_config.get('batch_norm', False):
+                    layers.append(nn.BatchNorm1d(dense_config['units']))
+                
+                # OPTIMIZED: Use ReLU for speed
+                layers.append(nn.ReLU())
+                
+                layers.append(nn.Dropout(dense_config['dropout']))
+                
+                return nn.Sequential(*layers)
             
             def _init_weights(self):
                 """Initialize model weights."""
@@ -839,132 +1083,178 @@ class Hybrid1DCNNLSTMClassifier(BaseEstimator, ClassifierMixin):
                                 nn.init.zeros_(param)
             
             def forward(self, x):
-                # For feature-based data, we'll use a much simpler approach
-                # Treat features as a 1D signal and use CNN for feature extraction
-                batch_size = x.size(0)
-                n_features = x.size(1)
+                """OPTIMIZED forward pass - minimal debugging."""
+                # Feature embedding
+                x = self.feature_embedding(x)
                 
-                # DEBUG: Print input tensor info
-                if batch_size == 1:  # Only print for first batch to avoid spam
-                    print(f"   🔍 Forward pass - Input: {x.shape}, range: [{x.min():.3f}, {x.max():.3f}]")
+                # Reshape tabular features to sequence format
+                x = self.reshape_layer(x)
                 
-                # Reshape to (batch, 1, features) for 1D convolution
-                x = x.unsqueeze(1)  # Add channel dimension
+                # Gaussian noise for robustness
+                x = self.gaussian_noise_layer(x)
                 
-                # CNN layers for feature extraction
-                cnn_output = x
-                for i, cnn_layer in enumerate(self.cnn_layers):
-                    if self.residual_connections and i > 0 and cnn_output.size(1) == cnn_layer[0].out_channels:
-                        residual = cnn_output
-                        cnn_output = cnn_layer(cnn_output)
-                        cnn_output = cnn_output + residual
-                    else:
-                        cnn_output = cnn_layer(cnn_output)
-                    
-                    # DEBUG: Print CNN layer outputs
-                    if batch_size == 1:
-                        print(f"   CNN layer {i+1}: {cnn_output.shape}, range: [{cnn_output.min():.3f}, {cnn_output.max():.3f}]")
+                # Reshape for CNN - treat features as sequence
+                x = x.unsqueeze(1)  # Add channel dimension: (batch, 1, 64)
+                
+                # Multi-scale CNN blocks with feature pyramid
+                cnn_outputs = []
+                for i, cnn_block in enumerate(self.cnn_blocks_layers):
+                    x = cnn_block(x)
+                    if self.feature_pyramid:
+                        cnn_outputs.append(x)
                 
                 # Global average pooling over the sequence dimension
-                cnn_output = torch.mean(cnn_output, dim=2)  # (batch, channels)
+                cnn_output = torch.mean(x, dim=2)  # (batch, channels)
                 
-                if batch_size == 1:
-                    print(f"   After pooling: {cnn_output.shape}, range: [{cnn_output.min():.3f}, {cnn_output.max():.3f}]")
+                # Hierarchical LSTM layers
+                lstm_output = cnn_output.unsqueeze(1)  # Add sequence dimension
                 
-                # Use a simple approach: flatten and pass through dense layers directly
-                # Skip LSTM for now to avoid dimension issues
-                cnn_output = cnn_output.view(batch_size, -1)  # Flatten
+                for i, lstm_layer in enumerate(self.lstm_layers):
+                    lstm_output, _ = lstm_layer(lstm_output)
                 
-                if batch_size == 1:
-                    print(f"   After flattening: {cnn_output.shape}, range: [{cnn_output.min():.3f}, {cnn_output.max():.3f}]")
+                # Multi-head attention
+                if self.attention_config['attention_type'] == 'multi_head':
+                    attn_output, _ = self.attention(lstm_output, lstm_output, lstm_output)
+                    attn_output = self.attention_norm(attn_output + lstm_output)  # Residual connection
+                    attn_output = self.attention_dropout(attn_output)
+                    lstm_output = attn_output
                 
-                # Project CNN output to dense input size
-                dense_output = self.cnn_to_dense(cnn_output)
+                # Global average pooling over sequence dimension
+                lstm_output = torch.mean(lstm_output, dim=1)  # (batch, features)
                 
-                if batch_size == 1:
-                    print(f"   After projection: {dense_output.shape}, range: [{dense_output.min():.3f}, {dense_output.max():.3f}]")
+                # Feature fusion if using feature pyramid
+                if self.feature_pyramid and len(cnn_outputs) > 1:
+                    # Use features from multiple CNN levels
+                    pyramid_features = []
+                    for cnn_out in cnn_outputs:
+                        pooled = torch.mean(cnn_out, dim=2)  # Global average pooling
+                        pyramid_features.append(pooled)
+                    
+                    # Concatenate pyramid features
+                    fused_features = torch.cat(pyramid_features, dim=1)
+                    lstm_output = torch.cat([lstm_output, fused_features], dim=1)
                 
-                # Dense layers for classification
+                # Dense layers
+                dense_output = lstm_output
                 for i, dense_layer in enumerate(self.dense_layers):
                     dense_output = dense_layer(dense_output)
-                    if batch_size == 1:
-                        print(f"   Dense layer {i+1}: {dense_output.shape}, range: [{dense_output.min():.3f}, {dense_output.max():.3f}]")
                 
                 # Output layer
                 output = self.output_layer(dense_output)
                 
-                if batch_size == 1:
-                    print(f"   Final output: {output.shape}, range: [{output.min():.3f}, {output.max():.3f}]")
-                
                 return output
         
-        return Hybrid1DCNNLSTM(
+        return OptimizedHybridModel(
             n_features=n_features,
-            cnn_filters=self.cnn_filters,
-            cnn_kernel_sizes=self.cnn_kernel_sizes,
-            cnn_pool_sizes=self.cnn_pool_sizes,
+            cnn_blocks=self.cnn_blocks,
+            normalization=self.normalization,
             cnn_dropout=self.cnn_dropout,
-            lstm_units=self.lstm_units,
-            lstm_dropout=self.lstm_dropout,
-            lstm_recurrent_dropout=self.lstm_recurrent_dropout,
-            dense_layers=self.dense_layers,
-            dense_dropout=self.dense_dropout,
-            n_channels=self.n_channels,
-            bidirectional_lstm=self.bidirectional_lstm,
-            attention_mechanism=self.attention_mechanism,
-            residual_connections=self.residual_connections,
-            batch_norm=self.batch_norm
+            spatial_dropout=self.spatial_dropout,
+            gaussian_noise=self.gaussian_noise,
+            lstm_architecture=self.lstm_architecture,
+            attention_config=self.attention_config,
+            fusion_strategy=self.fusion_strategy,
+            feature_pyramid=self.feature_pyramid,
+            dense_architecture=self.dense_architecture,
+            architecture_enhancements=self.architecture_enhancements
         )
     
     def fit(self, X, y):
-        """Train the hybrid model with comprehensive debugging."""
+        """OPTIMIZED training with maximum speed and proper CUDA usage."""
         if not TORCH_AVAILABLE:
             raise ImportError("PyTorch not available. Please install torch.")
         
-        print(f"\n🔍 HYBRID MODEL DEBUGGING:")
+        print(f"\n🚀 OPTIMIZED ADVANCED HYBRID MODEL TRAINING:")
         print(f"   Input X shape: {X.shape}")
         print(f"   Input y shape: {y.shape}")
         print(f"   Classes: {np.unique(y)}")
-        print(f"   Class distribution: {np.bincount(y)}")
         print(f"   Device: {self.device}")
-        
-        # Set random seeds
-        torch.manual_seed(self.random_state)
-        np.random.seed(self.random_state)
+        print(f"   Random seed: {self.random_state}")
         
         # Store classes
         self.classes_ = np.unique(y)
         self.feature_names_in_ = X.columns.tolist() if hasattr(X, 'columns') else None
         
-        print(f"   Feature names: {len(self.feature_names_in_)} features")
-        if self.feature_names_in_:
-            print(f"   Sample features: {self.feature_names_in_[:5]}...")
-        
-        # Check for NaN values
+        # Check for NaN values and handle them
         if np.isnan(X).any().any():
-            print(f"   ⚠️  WARNING: NaN values detected in input data!")
-            nan_count = np.isnan(X).sum().sum()
-            print(f"   NaN count: {nan_count}")
-        else:
-            print(f"   ✅ No NaN values in input data")
+            print(f"   ⚠️  WARNING: NaN values detected in input data! Applying median imputation...")
+            from sklearn.impute import SimpleImputer
+            imputer = SimpleImputer(strategy='median')
+            X = pd.DataFrame(
+                imputer.fit_transform(X),
+                columns=X.columns,
+                index=X.index
+            )
         
-        # Normalize features
+        # Apply class balancing techniques if enabled
+        if self.use_smote and IMBALANCE_AVAILABLE:
+            print(f"   🔄 SMOTE ENABLED: Balancing classes for better remission detection...")
+            print(f"   Original class distribution: {np.bincount(y)}")
+            
+            try:
+                smote = SMOTE(random_state=self.random_state)
+                X_resampled, y_resampled = smote.fit_resample(X, y)
+                
+                # Convert back to DataFrame/Series if needed
+                if hasattr(X, 'columns'):
+                    X_resampled = pd.DataFrame(X_resampled, columns=X.columns)
+                if hasattr(y, 'name'):
+                    y_resampled = pd.Series(y_resampled, name=y.name)
+                
+                print(f"   ✅ SMOTE applied successfully!")
+                print(f"   New class distribution: {np.bincount(y_resampled)}")
+                print(f"   Original samples: {len(X)}, Resampled samples: {len(X_resampled)}")
+                
+                # Update X and y with resampled data
+                X = X_resampled
+                y = y_resampled
+                
+            except Exception as e:
+                print(f"   ⚠️  SMOTE failed: {e}. Continuing without SMOTE...")
+                self.use_smote = False
+        elif self.use_nearmiss and IMBALANCE_AVAILABLE:
+            print(f"   🔄 NEARMISS ENABLED: Undersampling majority class for balanced dataset...")
+            print(f"   Original class distribution: {np.bincount(y)}")
+            
+            try:
+                # NearMiss doesn't support random_state in all versions, so we'll set it manually
+                np.random.seed(self.random_state)
+                nearmiss = NearMiss(version=self.nearmiss_version)
+                X_resampled, y_resampled = nearmiss.fit_resample(X, y)
+                
+                # Convert back to DataFrame/Series if needed
+                if hasattr(X, 'columns'):
+                    X_resampled = pd.DataFrame(X_resampled, columns=X.columns)
+                if hasattr(y, 'name'):
+                    y_resampled = pd.Series(y_resampled, name=y.name)
+                
+                print(f"   ✅ NearMiss (v{self.nearmiss_version}) applied successfully!")
+                print(f"   New class distribution: {np.bincount(y_resampled)}")
+                print(f"   Original samples: {len(X)}, Resampled samples: {len(X_resampled)}")
+                
+                # Update X and y with resampled data
+                X = X_resampled
+                y = y_resampled
+                
+            except Exception as e:
+                print(f"   ⚠️  NearMiss failed: {e}. Continuing without NearMiss...")
+                self.use_nearmiss = False
+        elif (self.use_smote or self.use_nearmiss) and not IMBALANCE_AVAILABLE:
+            print(f"   ⚠️  SMOTE/NearMiss requested but not available. Install imbalanced-learn package.")
+            self.use_smote = False
+            self.use_nearmiss = False
+        else:
+            print(f"   ℹ️  No class balancing enabled. Using original class distribution: {np.bincount(y)}")
+        
+        # OPTIMIZED: Use StandardScaler for speed
+        from sklearn.preprocessing import StandardScaler
+        self.scaler = StandardScaler()
         X_scaled = self.scaler.fit_transform(X)
         X_tensor = torch.FloatTensor(X_scaled).to(self.device)
         y_tensor = torch.LongTensor(y.values if hasattr(y, 'values') else y).to(self.device)
         
-        print(f"   Scaled X shape: {X_scaled.shape}")
-        print(f"   X tensor shape: {X_tensor.shape}")
-        print(f"   Y tensor shape: {y_tensor.shape}")
-        
-        # Check scaled data for NaN
-        if np.isnan(X_scaled).any():
-            print(f"   ⚠️  WARNING: NaN values in scaled data!")
-        else:
-            print(f"   ✅ No NaN values in scaled data")
-        
         # Create model
-        print(f"\n🏗️  Creating model for {X.shape[1]} features...")
+        print(f"\n🏗️  Creating optimized model for {X.shape[1]} features...")
         self.model = self._create_model(X.shape[1]).to(self.device)
         
         # Print model summary
@@ -972,117 +1262,172 @@ class Hybrid1DCNNLSTMClassifier(BaseEstimator, ClassifierMixin):
         trainable_params = sum(p.numel() for p in self.model.parameters() if p.requires_grad)
         print(f"   Model parameters: {total_params:,} total, {trainable_params:,} trainable")
         
-        # Loss function with class weights
-        if self.class_weight == 'balanced':
-            class_weights = torch.FloatTensor([
-                len(y) / (2 * (y == 0).sum()),
-                len(y) / (2 * (y == 0).sum())
-            ]).to(self.device)
-            print(f"   Class weights: {class_weights.cpu().numpy()}")
+        # OPTIMIZED: Simplified loss function with SMOTE-aware class weights
+        if self.loss_config and self.loss_config.get('primary_loss') == 'focal_loss':
+            from torch.nn import functional as F
+            class FocalLoss(nn.Module):
+                def __init__(self, alpha=1, gamma=2):
+                    super(FocalLoss, self).__init__()
+                    self.alpha = alpha
+                    self.gamma = gamma
+                
+                def forward(self, inputs, targets):
+                    ce_loss = F.cross_entropy(inputs, targets, reduction='none')
+                    pt = torch.exp(-ce_loss)
+                    focal_loss = self.alpha * (1-pt)**self.gamma * ce_loss
+                    return focal_loss.mean()
+            
+            criterion = FocalLoss()
         else:
-            class_weights = None
-            print(f"   No class weights applied")
+            # Standard cross-entropy with class weights
+            # If SMOTE or NearMiss is used, disable class weights since data is already balanced
+            if self.use_smote or self.use_nearmiss:
+                print(f"   ℹ️  {'SMOTE' if self.use_smote else 'NearMiss'} enabled - disabling class weights in loss function")
+                class_weights = None
+            elif self.loss_config and self.loss_config.get('class_weights') == 'balanced':
+                class_weights = torch.FloatTensor([
+                    len(y) / (2 * (y == 0).sum()),
+                    len(y) / (2 * (y == 1).sum())
+                ]).to(self.device)
+                print(f"   ⚖️  Using balanced class weights: {class_weights.cpu().numpy()}")
+            else:
+                class_weights = None
+                print(f"   ℹ️  No class weights applied")
+            
+            criterion = nn.CrossEntropyLoss(weight=class_weights, 
+                                          label_smoothing=self.regularization.get('label_smoothing', 0.0) if self.regularization else 0.0)
         
-        criterion = nn.CrossEntropyLoss(weight=class_weights)
-        
-        # Optimizer with configurable weight decay
-        weight_decay = getattr(self, 'weight_decay', 1e-5)
-        if self.optimizer.lower() == 'adam':
-            optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate, weight_decay=weight_decay)
+        # OPTIMIZED: Use AdamW for better performance
+        if self.optimizer_config and self.optimizer_config.get('name') == 'adamw':
+            optimizer = optim.AdamW(
+                self.model.parameters(),
+                lr=self.optimizer_config.get('learning_rate', 0.001),
+                weight_decay=self.optimizer_config.get('weight_decay', 0.01),
+                betas=(self.optimizer_config.get('beta_1', 0.9), self.optimizer_config.get('beta_2', 0.999)),
+                eps=float(self.optimizer_config.get('epsilon', 1e-7))
+            )
         else:
-            optimizer = optim.SGD(self.model.parameters(), lr=self.learning_rate, momentum=0.9, weight_decay=weight_decay)
+            optimizer = optim.Adam(
+                self.model.parameters(),
+                lr=self.optimizer_config.get('learning_rate', 0.001) if self.optimizer_config else 0.001,
+                weight_decay=self.optimizer_config.get('weight_decay', 0.01) if self.optimizer_config else 0.01
+            )
         
-        print(f"   Optimizer: {self.optimizer}")
-        print(f"   Learning rate: {self.learning_rate}")
-        
-        # Learning rate scheduler
-        scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5, verbose=True)
+        # OPTIMIZED: Simplified learning rate scheduler
+        if self.lr_schedule and self.lr_schedule.get('type') == 'cosine_annealing_warm_restarts':
+            scheduler = optim.lr_scheduler.CosineAnnealingWarmRestarts(
+                optimizer,
+                T_0=self.lr_schedule.get('cycle_length'),
+                T_mult=self.lr_schedule.get('cycle_mult'),
+                eta_min=float(self.lr_schedule.get('min_lr'))
+            )
+        else:
+            scheduler = optim.lr_scheduler.ReduceLROnPlateau(
+                optimizer, mode='min', factor=0.5, patience=10, verbose=False
+            )
         
         # Early stopping
         best_loss = float('inf')
         patience_counter = 0
+        best_model_state = None
         
-        print(f"\n🚀 Starting training for {self.epochs} epochs...")
+        print(f"\n🚀 Starting optimized training for {self.epochs} epochs...")
         
-        # Training loop
+        # OPTIMIZED: Better batch size handling
+        effective_batch_size = min(self.batch_size, len(X) // 2) if len(X) < 100 else self.batch_size
+        effective_batch_size = max(effective_batch_size, 16)  # Minimum batch size
+        
+        # Create data loader with optimizations
+        dataset = torch.utils.data.TensorDataset(X_tensor, y_tensor)
+        dataloader = torch.utils.data.DataLoader(
+            dataset, 
+            batch_size=effective_batch_size, 
+            shuffle=True,
+            num_workers=0,  # Keep 0 for simplicity
+            pin_memory=False  # Disable since tensors are already on GPU
+        )
+        
+        print(f"   Effective batch size: {effective_batch_size}")
+        print(f"   Number of batches per epoch: {len(dataloader)}")
+        
+        # OPTIMIZED: Training loop with minimal overhead
         self.model.train()
         for epoch in range(self.epochs):
-            # Forward pass
-            if self.mixed_precision and self.scaler_amp:
-                with torch.cuda.amp.autocast():
-                    outputs = self.model(X_tensor)
-                    loss = criterion(outputs, y_tensor)
-                
-                # Backward pass with mixed precision
-                self.scaler_amp.scale(loss).backward()
-                self.scaler_amp.step(optimizer)
-                self.scaler_amp.update()
-                optimizer.zero_grad()
-            else:
-                outputs = self.model(X_tensor)
-                loss = criterion(outputs, y_tensor)
-                
-                optimizer.zero_grad()
-                loss.backward()
-                
-                # Gradient clipping if specified
-                if hasattr(self, 'gradient_clip_norm'):
-                    torch.nn.utils.clip_grad_norm_(self.model.parameters(), self.gradient_clip_norm)
-                
-                optimizer.step()
+            epoch_loss = 0.0
+            epoch_correct = 0
+            epoch_total = 0
             
-            # Calculate accuracy for this epoch
-            with torch.no_grad():
-                _, predicted = torch.max(outputs, 1)
-                accuracy = (predicted == y_tensor).float().mean().item()
+            for batch_idx, (batch_X, batch_y) in enumerate(dataloader):
+                # OPTIMIZED: Mixed precision training
+                if self.scaler_amp:
+                    with torch.cuda.amp.autocast():
+                        outputs = self.model(batch_X)
+                        loss = criterion(outputs, batch_y)
+                    
+                    self.scaler_amp.scale(loss).backward()
+                    
+                    # Gradient clipping
+                    if self.regularization and self.regularization.get('gradient_clip_norm'):
+                        self.scaler_amp.unscale_(optimizer)
+                        torch.nn.utils.clip_grad_norm_(self.model.parameters(), self.regularization['gradient_clip_norm'])
+                    
+                    self.scaler_amp.step(optimizer)
+                    self.scaler_amp.update()
+                    optimizer.zero_grad()
+                else:
+                    outputs = self.model(batch_X)
+                    loss = criterion(outputs, batch_y)
+                    
+                    optimizer.zero_grad()
+                    loss.backward()
+                    
+                    # Gradient clipping
+                    if self.regularization and self.regularization.get('gradient_clip_norm'):
+                        torch.nn.utils.clip_grad_norm_(self.model.parameters(), self.regularization['gradient_clip_norm'])
+                    
+                    optimizer.step()
+                
+                # Calculate accuracy for this batch
+                with torch.no_grad():
+                    _, predicted = torch.max(outputs, 1)
+                    epoch_correct += (predicted == batch_y).sum().item()
+                    epoch_total += batch_y.size(0)
+                
+                epoch_loss += loss.item()
+            
+            # Calculate epoch accuracy
+            accuracy = epoch_correct / epoch_total if epoch_total > 0 else 0.0
             
             # Learning rate scheduling
-            scheduler.step(loss)
+            if self.lr_schedule and self.lr_schedule.get('type') == 'cosine_annealing_warm_restarts':
+                scheduler.step()
+            else:
+                scheduler.step(loss)
             
             # Early stopping
             if loss.item() < best_loss:
                 best_loss = loss.item()
                 patience_counter = 0
+                best_model_state = self.model.state_dict().copy()
             else:
                 patience_counter += 1
                 
-            if patience_counter >= self.early_stopping_patience:
+            if self.early_stopping and patience_counter >= self.early_stopping.get('patience', 30):
                 print(f"   ⏹️  Early stopping at epoch {epoch + 1}")
                 break
             
+            # OPTIMIZED: Less frequent logging
             if (epoch + 1) % 5 == 0 or epoch == 0:
-                print(f"   Epoch {epoch + 1:3d}/{self.epochs}: Loss={loss.item():.4f}, Acc={accuracy:.4f}")
+                current_lr = optimizer.param_groups[0]['lr']
+                print(f"   Epoch {epoch + 1:3d}/{self.epochs}: Loss={loss.item():.4f}, Acc={accuracy:.4f}, LR={current_lr:.6f}")
         
-        print(f"\n✅ Training completed!")
+        # Load best model state
+        if best_model_state is not None:
+            self.model.load_state_dict(best_model_state)
+        
+        print(f"\n✅ Optimized training completed!")
         print(f"   Final loss: {loss.item():.4f}")
         print(f"   Final accuracy: {accuracy:.4f}")
-        
-        # Calculate final metrics on training data
-        self.model.eval()
-        with torch.no_grad():
-            final_outputs = self.model(X_tensor)
-            final_probs = torch.softmax(final_outputs, dim=1)
-            _, final_preds = torch.max(final_outputs, 1)
-            
-            # Calculate metrics
-            from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-            
-            y_np = y_tensor.cpu().numpy()
-            pred_np = final_preds.cpu().numpy()
-            prob_np = final_probs[:, 1].cpu().numpy()  # Probability of positive class
-            
-            final_accuracy = accuracy_score(y_np, pred_np)
-            final_precision = precision_score(y_np, pred_np, zero_division=0)
-            final_recall = recall_score(y_np, pred_np, zero_division=0)
-            final_f1 = f1_score(y_np, pred_np, zero_division=0)
-            
-            print(f"\n📊 FINAL TRAINING METRICS:")
-            print(f"   Accuracy:  {final_accuracy:.4f}")
-            print(f"   Precision: {final_precision:.4f}")
-            print(f"   Recall:    {final_recall:.4f}")
-            print(f"   F1-Score:  {final_f1:.4f}")
-            print(f"   Class predictions: {np.bincount(pred_np)}")
-            print(f"   True labels:       {np.bincount(y_np)}")
         
         return self
     
@@ -1146,12 +1491,32 @@ class DeepLearningTrainer(BaseTrainer):
         if 'random_state' not in self.model_params:
             self.model_params['random_state'] = config.get('random_seed', 42)
         
+        # Add SMOTE and NearMiss parameters from config - check both root level and model section
+        self.use_smote = config.get('use_smote', config.get('model', {}).get('use_smote', False))
+        self.use_nearmiss = config.get('use_nearmiss', config.get('model', {}).get('use_nearmiss', False))
+        self.nearmiss_version = config.get('nearmiss_version', config.get('model', {}).get('nearmiss_version', 1))
+        
+        # Validate that only one class balancing technique is enabled
+        if self.use_smote and self.use_nearmiss:
+            raise ValueError("❌ ERROR: Both SMOTE and NearMiss cannot be enabled simultaneously in the config. Please set only one to 'true'.")
+        
+        self.model_params['use_smote'] = self.use_smote
+        self.model_params['use_nearmiss'] = self.use_nearmiss
+        self.model_params['nearmiss_version'] = self.nearmiss_version
+        
+        # Log class balancing configuration
+        logger.info(f"SMOTE enabled: {self.use_smote}")
+        logger.info(f"NearMiss enabled: {self.use_nearmiss}")
+        if self.use_nearmiss:
+            logger.info(f"NearMiss version: {self.nearmiss_version}")
+        
         self.output_dir = config['paths']['models']
         self.metrics = config.get('metrics', {}).get('window_level', ['accuracy', 'precision', 'recall', 'f1', 'roc_auc'])
         self.feature_selection_config = config.get('feature_selection', {})
         
         logger.info(f"DeepLearningTrainer initialized with model_type: {self.model_type}")
         logger.info(f"Model parameters: {self.model_params}")
+        logger.info(f"SMOTE enabled: {self.use_smote}")
     
     def _create_model_instance(self) -> BaseEstimator:
         """Create a deep learning model instance."""
@@ -1168,7 +1533,12 @@ class DeepLearningTrainer(BaseTrainer):
         elif self.model_type == 'hybrid_1dcnn_lstm':
             if not TORCH_AVAILABLE:
                 raise ImportError("PyTorch not available. Please install torch.")
-            return Hybrid1DCNNLSTMClassifier(**self.model_params)
+            return AdvancedHybrid1DCNNLSTMClassifier(**self.model_params)
+        
+        elif self.model_type == 'advanced_hybrid_1dcnn_lstm':
+            if not TORCH_AVAILABLE:
+                raise ImportError("PyTorch not available. Please install torch.")
+            return AdvancedHybrid1DCNNLSTMClassifier(**self.model_params)
         
         else:
             raise ValueError(f"Unknown deep learning model type: {self.model_type}")
@@ -1379,7 +1749,7 @@ class DeepLearningTrainer(BaseTrainer):
         # Calculate average window-level accuracy across all folds
         avg_window_accuracy = np.mean([p['window_accuracy'] for p in patient_predictions])
         
-        print(f"📊 PATIENT-LEVEL RESULTS:")
+        print(f"\n📊 PATIENT-LEVEL RESULTS:")
         print(f"   Overall patient accuracy: {patient_metrics['accuracy']:.4f}")
         print(f"   Overall patient precision: {patient_metrics['precision']:.4f}")
         print(f"   Overall patient recall: {patient_metrics['recall']:.4f}")
@@ -1471,6 +1841,8 @@ class DeepLearningTrainer(BaseTrainer):
         
         logger.info(f"Selected features: {len(selected_features)}")
         return selected_features
+    
+
     
     def _save_results(self, model: BaseEstimator, patient_metrics: Dict[str, float],
                      window_predictions: List[Dict[str, Any]], 

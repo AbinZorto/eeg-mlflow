@@ -87,8 +87,10 @@ def load_config(config_path: str, env: Optional[str] = None) -> Dict[str, Any]:
     """
     try:
         # Load base configuration
+        print(f"🔍 DEBUG: Loading config from: {config_path}")
         with open(config_path, 'r') as f:
             config = yaml.safe_load(f)
+        print(f"🔍 DEBUG: Config loaded successfully from {config_path}")
         
         # Load environment-specific configuration if provided
         if env:
