@@ -649,7 +649,7 @@ def train(ctx, level, window_size, model_type, enable_feature_selection, n_featu
                 logger.warning(f"Failed to search for processing runs: {e}")
     
     # Create appropriate trainer
-    if model_type in ['pytorch_mlp', 'keras_mlp', 'hybrid_1dcnn_lstm']:
+    if model_type in ['pytorch_mlp', 'keras_mlp', 'hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm']:
         trainer = DeepLearningTrainer(config)
     else:
         trainer_cls = PatientLevelTrainer if level == 'patient' else WindowLevelTrainer
