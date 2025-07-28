@@ -22,6 +22,7 @@ from src.models.patient_trainer import PatientLevelTrainer
 from src.models.window_trainer import WindowLevelTrainer
 from src.models.deep_learning_trainer import DeepLearningTrainer
 from src.models.evaluation import ModelEvaluator
+from src.utils.feature_filter import FeatureFilter
 
 logger = setup_logger(__name__)
 
@@ -484,9 +485,10 @@ def get_available_models_from_config(config_path):
               type=click.Choice(['model_based', 'select_k_best_f_classif', 'select_k_best_mutual_info', 'select_from_model_l1', 'rfe']), 
               default='model_based', 
               help='Feature selection method.')
+@click.option('--feature-categories', type=str, help='Comma-separated list of feature categories to include (e.g., "spectral_features,psd_statistics,temporal_features"). Use "list" to see available categories.')
 @click.option('--use-dataset-from-run', type=str, help='MLflow run ID to load dataset from (optional)')
 @click.pass_context
-def train(ctx, level, window_size, model_type, enable_feature_selection, n_features_select, fs_method, use_dataset_from_run):
+def train(ctx, level, window_size, model_type, enable_feature_selection, n_features_select, fs_method, feature_categories, use_dataset_from_run):
     """Train the model"""
     config = ctx.obj['config']
     logger.info(f"CLI train inputs: level='{level}', window_size={window_size}, model_type='{model_type}', enable_feature_selection={enable_feature_selection}, n_features_select={n_features_select}, fs_method='{fs_method}', use_dataset_from_run='{use_dataset_from_run}'")
@@ -547,6 +549,21 @@ def train(ctx, level, window_size, model_type, enable_feature_selection, n_featu
         'method': fs_method
     }
     logger.info(f"Config for feature selection set to: {config['feature_selection']}")
+    
+    # Add feature filtering config
+    if feature_categories and feature_categories.lower() != 'list':
+        # Parse feature categories for config
+        feature_categories_list = [cat.strip() for cat in feature_categories.split(',')]
+        config['feature_filtering'] = {
+            'enabled': True,
+            'categories': feature_categories_list,
+            'channels': channels
+        }
+        logger.info(f"Config for feature filtering set to: {config['feature_filtering']}")
+    else:
+        config['feature_filtering'] = {
+            'enabled': False
+        }
     
     # Set up MLflow tracking
     tracking_uri = config.get('mlflow', {}).get('tracking_uri', "file:./mlruns")
@@ -648,6 +665,83 @@ def train(ctx, level, window_size, model_type, enable_feature_selection, n_featu
             except Exception as e:
                 logger.warning(f"Failed to search for processing runs: {e}")
     
+    # Handle feature categories filtering
+    if feature_categories:
+        if feature_categories.lower() == 'list':
+            # Show available feature categories
+            categories = FeatureFilter.list_available_categories()
+            subcategories = FeatureFilter.list_available_subcategories()
+            
+            print("\n=== Available Feature Categories ===")
+            for category, description in categories.items():
+                print(f"\n{category}: {description}")
+                if category in subcategories:
+                    print("  Subcategories:")
+                    for subcat, subdesc in subcategories[category].items():
+                        print(f"    - {subcat}: {subdesc}")
+            
+            print(f"\n=== Usage Examples ===")
+            print("--feature-categories=spectral_features,psd_statistics")
+            print("--feature-categories=temporal_features,basic_statistics")
+            print("--feature-categories=entropy_features,complexity_features")
+            print("--feature-categories=spectral_features,temporal_features,entropy_features")
+            return
+        
+        # Parse feature categories
+        feature_categories_list = [cat.strip() for cat in feature_categories.split(',')]
+        logger.info(f"Feature filtering enabled with categories: {feature_categories_list}")
+        
+        # Validate feature categories
+        try:
+            feature_filter = FeatureFilter(channels, feature_categories_list)
+            logger.info("Feature categories validated successfully")
+        except ValueError as e:
+            logger.error(f"Invalid feature categories: {e}")
+            print(f"\nError: {e}")
+            print("Use --feature-categories=list to see available categories")
+            return
+        
+        # Apply feature filtering to dataset if available
+        if dataset_to_use:
+            logger.info("Applying feature filtering to MLflow dataset...")
+            try:
+                original_df = dataset_to_use.df
+                filtered_df = feature_filter.filter_features(original_df)
+                
+                # Create new filtered dataset
+                filtered_dataset = mlflow.data.from_pandas(
+                    df=filtered_df,
+                    source=dataset_to_use.source,
+                    targets="Remission",
+                    name=f"{dataset_to_use.name}_filtered_{'_'.join(feature_categories_list)}"
+                )
+                
+                dataset_to_use = filtered_dataset
+                logger.info(f"Applied feature filtering: {len(original_df.columns)} -> {len(filtered_df.columns)} columns")
+                
+                # Store feature filtering info for later logging (don't log here to avoid MLflow run conflicts)
+                feature_filtering_info = {
+                    "feature_filtering_applied": True,
+                    "feature_categories": feature_categories,
+                    "original_features": len(original_df.columns) - 2,
+                    "filtered_features": len(filtered_df.columns) - 2
+                }
+                
+            except Exception as e:
+                logger.error(f"Failed to apply feature filtering: {e}")
+                raise
+        else:
+            logger.warning("Feature filtering requested but no dataset available. Will be applied during training.")
+            feature_filtering_info = {
+                "feature_filtering_applied": False,
+                "feature_categories": feature_categories
+            }
+    else:
+        logger.info("No feature filtering requested")
+        feature_filtering_info = {
+            "feature_filtering_applied": False
+        }
+    
     # Create appropriate trainer
     if model_type in ['pytorch_mlp', 'keras_mlp', 'hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm']:
         trainer = DeepLearningTrainer(config)
@@ -677,6 +771,10 @@ def train(ctx, level, window_size, model_type, enable_feature_selection, n_featu
                 mlflow.log_param("used_mlflow_dataset", False)
                 mlflow.log_param("dataset_selection_method", "file_fallback")
                 logger.info("No MLflow dataset available, trainer will fall back to file path")
+            
+            # Log feature filtering info
+            for key, value in feature_filtering_info.items():
+                mlflow.log_param(key, value)
             
             # Train model with dataset
             model = trainer.train(dataset=dataset_to_use)

@@ -6,6 +6,7 @@ import mlflow
 import mlflow.data
 from mlflow.data.pandas_dataset import PandasDataset
 from src.models.model_utils import create_classifier
+from src.utils.feature_filter import FeatureFilter
 
 class BaseTrainer:
     def __init__(self, config: Dict[str, Any]):
@@ -107,24 +108,59 @@ class BaseTrainer:
                 mlflow.log_param("data_source", "mlflow_dataset")
                 mlflow.log_param("dataset_name", mlflow_dataset.name)
                 mlflow.log_param("dataset_digest", mlflow_dataset.digest)
-                return mlflow_dataset.df
+                df = mlflow_dataset.df
+            else:
+                df = None
+        else:
+            df = None
         
         # Use provided dataset
-        if dataset is not None:
+        if df is None and dataset is not None:
             mlflow.log_param("data_source", "provided_dataset")
             mlflow.log_param("dataset_name", dataset.name)
             mlflow.log_param("dataset_digest", dataset.digest)
-            return dataset.df
+            df = dataset.df
             
         # Fall back to file path
-        if data_source:
+        if df is None and data_source:
             df = pd.read_parquet(data_source)
             mlflow.log_param("data_source", "file_path")
             mlflow.log_param("data_file_path", data_source)
-            return df
         
         # If we get here, we have no data source
-        raise ValueError("No data source provided: neither MLflow dataset, provided dataset, nor file path available")
+        if df is None:
+            raise ValueError("No data source provided: neither MLflow dataset, provided dataset, nor file path available")
+        
+        # Apply feature filtering if enabled
+        feature_filtering_config = self.config.get('feature_filtering', {})
+        if feature_filtering_config.get('enabled', False):
+            try:
+                channels = feature_filtering_config.get('channels', [])
+                categories = feature_filtering_config.get('categories', [])
+                
+                if channels and categories:
+                    import logging
+                    logger = logging.getLogger(__name__)
+                    logger.info(f"Applying feature filtering: channels={channels}, categories={categories}")
+                    
+                    feature_filter = FeatureFilter(channels, categories)
+                    original_df = df.copy()
+                    df = feature_filter.filter_features(original_df)
+                    
+                    mlflow.log_param("feature_filtering_applied", True)
+                    mlflow.log_param("feature_categories", ",".join(categories))
+                    mlflow.log_param("original_features", len(original_df.columns) - 2)
+                    mlflow.log_param("filtered_features", len(df.columns) - 2)
+                    
+                    logger.info(f"Feature filtering applied: {len(original_df.columns)} -> {len(df.columns)} columns")
+                    
+            except Exception as e:
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.error(f"Failed to apply feature filtering: {e}")
+                mlflow.log_param("feature_filtering_error", str(e))
+        
+        return df
 
     def train(self, data_path: Optional[str] = None, dataset: Optional[PandasDataset] = None) -> BaseEstimator:
         """
