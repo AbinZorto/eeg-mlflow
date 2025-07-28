@@ -44,6 +44,8 @@ rapids-dask/
 # MLflow
 mlruns/*
 mlruns/
+experiment_log_*.txt
+processing_log_*.txt
 
 # Project specific
 data/raw/*

@@ -386,9 +386,13 @@ class WindowLevelTrainer(BaseTrainer):
                 y_pred = model.predict(X_test)
                 y_prob = model.predict_proba(X_test)[:, 1]
 
-                # Calculate patient-level prediction
-                patient_prob = np.mean(y_prob)
-                patient_pred = 1 if patient_prob >= 0.5 else 0
+                # Calculate patient-level prediction (using window predictions, not probabilities)
+                # If most windows are predicted as positive, predict patient as positive
+                # If most windows are predicted as negative, predict patient as negative
+                positive_window_count = sum(y_pred == 1)
+                total_windows = len(y_pred)
+                patient_pred = 1 if positive_window_count > total_windows / 2 else 0
+                patient_prob = positive_window_count / total_windows  # Proportion of positive windows
                 patient_pred_labels.append(patient_pred)
                 patient_pred_probs.append(patient_prob)
                 
@@ -404,15 +408,18 @@ class WindowLevelTrainer(BaseTrainer):
                     'predicted_label': patient_pred,
                     'probability': patient_prob,
                     'n_windows': len(test_idx),
-                    'n_positive_windows': sum(y_pred == 1),
+                    'n_positive_windows': positive_window_count,
                     'window_accuracy': np.mean(y_pred == y_test)
                 })
 
                 # Log fold-specific metrics
-                mlflow.log_metric(f"fold_{fold_idx}_patient_accuracy", 
-                                int(true_label == patient_pred))
-                mlflow.log_metric(f"fold_{fold_idx}_window_accuracy", 
-                                np.mean(y_pred == y_test))
+                patient_accuracy = int(true_label == patient_pred)
+                print(f"   🔍 DEBUG: true_label={true_label}, patient_pred={patient_pred}, patient_accuracy={patient_accuracy}")
+                mlflow.log_metric(f"fold_{fold_idx}_patient_accuracy", patient_accuracy)
+                mlflow.log_metric(f"fold_{fold_idx}_window_accuracy", np.mean(y_pred == y_test))
+                mlflow.log_param(f"fold_{fold_idx}_patient_id", test_participant)
+                mlflow.log_param(f"fold_{fold_idx}_true_remission", true_label)
+                mlflow.log_param(f"fold_{fold_idx}_predicted_remission", patient_pred)
 
         # Calculate and log patient-level metrics
         patient_metrics = evaluator.evaluate_patient_predictions(
@@ -472,15 +479,20 @@ class WindowLevelTrainer(BaseTrainer):
         } for idx, (pred, prob) in enumerate(zip(y_pred, y_prob))]
 
     def _create_patient_prediction(self, fold_idx, groups, y_true, y_pred, y_prob):
-        avg_prob = np.mean(y_prob)
+        # Use majority vote of window predictions instead of averaged probabilities
+        positive_window_count = sum(y_pred == 1)
+        total_windows = len(y_pred)
+        patient_pred = 1 if positive_window_count > total_windows / 2 else 0
+        patient_prob = positive_window_count / total_windows  # Proportion of positive windows
+        
         return {
             'fold': fold_idx,
             'participant': groups.iloc[0],
             'true_label': y_true.iloc[0],
-            'predicted_label': 1 if avg_prob >= 0.5 else 0,
-            'probability': avg_prob,
+            'predicted_label': patient_pred,
+            'probability': patient_prob,
             'n_windows': len(y_true),
-            'n_positive_windows': sum(y_pred == 1),
+            'n_positive_windows': positive_window_count,
             'is_window': False
         }
 

@@ -4,7 +4,7 @@
 
 # Data Configuration
 data:
-  feature_path: "data/processed/features/2s_tp10_window_features.parquet"
+  feature_path: "data/processed/features/{window_size}s_{channels}_window_features.parquet"
   split:
     test_size: 0.2
     random_state: 42
@@ -158,6 +158,45 @@ deep_learning:
     class_weight: "balanced"
     random_state: 42
     mixed_precision: true
+
+  hybrid_1dcnn_lstm:
+    # Ultra-aggressive architecture to catch positive cases
+    cnn_filters: [128, 256]  # Much larger capacity
+    cnn_kernel_sizes: [3, 3]
+    cnn_pool_sizes: [2, 2]
+    cnn_dropout: 0.1  # Minimal dropout for aggressive learning
+    
+    # Larger LSTM
+    lstm_units: [256]  # Much larger capacity
+    lstm_dropout: 0.1  # Minimal dropout
+    lstm_recurrent_dropout: 0.05  # Minimal dropout
+    
+    # Deeper dense layers
+    dense_layers: [128, 64, 32]  # Much deeper network
+    dense_dropout: 0.2  # Minimal dropout
+    
+    # Aggressive training configuration
+    learning_rate: 0.005  # Higher learning rate
+    batch_size: 256  # Larger batch size
+    epochs: 200  # More epochs
+    early_stopping_patience: 30  # More patience
+    
+    # Regularization
+    optimizer: 'adam'
+    class_weight: 'balanced'
+    random_state: 42
+    sequence_length: 100
+    n_channels: 1
+    normalize: True
+    bidirectional_lstm: False
+    attention_mechanism: False
+    residual_connections: False
+    batch_norm: True
+    mixed_precision: True
+    
+    # Minimal regularization for maximum sensitivity
+    weight_decay: 0.00001  # Very minimal L2 regularization
+    gradient_clip_norm: 20.0  # Higher gradient clipping
 
 # Paths Configuration
 paths:

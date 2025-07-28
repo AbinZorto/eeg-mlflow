@@ -207,6 +207,7 @@ def cli(ctx, config):
     """EEG Analysis Pipeline CLI"""
     ctx.ensure_object(dict)
     ctx.obj['config'] = load_config(config)
+    ctx.obj['config_path'] = config
 
 @cli.command()
 @click.pass_context
@@ -451,10 +452,32 @@ def list_datasets(ctx):
         logger.error(f"Error listing datasets: {str(e)}")
         print(f"❌ Error: {str(e)}")
 
+def get_available_models_from_config(config_path):
+    """Extract available model types from the config file."""
+    try:
+        with open(config_path, 'r') as f:
+            config = yaml.safe_load(f)
+        
+        available_models = []
+        
+        # Get traditional models from model.params section
+        if 'model' in config and 'params' in config['model']:
+            available_models.extend(list(config['model']['params'].keys()))
+        
+        # Get deep learning models from deep_learning section
+        if 'deep_learning' in config:
+            available_models.extend(list(config['deep_learning'].keys()))
+        
+        return available_models
+    except Exception as e:
+        logger.warning(f"Failed to load models from config: {e}")
+        # Return default models as fallback
+        return ['random_forest', 'gradient_boosting', 'logistic_regression', 'svm', 'svm_rbf', 'pytorch_mlp', 'keras_mlp', 'xgboost_gpu', 'catboost_gpu', 'lightgbm_gpu', 'hybrid_1dcnn_lstm']
+
 @cli.command()
 @click.option('--level', type=click.Choice(['patient', 'window']), required=True)
 @click.option('--window-size', type=int, help='Window size in seconds (overrides config)')
-@click.option('--model-type', type=click.Choice(['random_forest', 'gradient_boosting', 'logistic_regression', 'svm', 'svm_rbf', 'pytorch_mlp', 'keras_mlp', 'xgboost_gpu', 'catboost_gpu', 'lightgbm_gpu']), required=True)
+@click.option('--model-type', type=str, required=True, help='Model type (will be validated against available models)')
 @click.option('--enable-feature-selection', is_flag=True, help='Enable feature selection.')
 @click.option('--n-features-select', type=int, default=10, help='Number of features to select if feature selection is enabled.')
 @click.option('--fs-method', 
@@ -468,26 +491,49 @@ def train(ctx, level, window_size, model_type, enable_feature_selection, n_featu
     config = ctx.obj['config']
     logger.info(f"CLI train inputs: level='{level}', window_size={window_size}, model_type='{model_type}', enable_feature_selection={enable_feature_selection}, n_features_select={n_features_select}, fs_method='{fs_method}', use_dataset_from_run='{use_dataset_from_run}'")
 
+    # Validate model type against available models from config
+    config_path = ctx.obj.get('config_path', 'configs/window_model_config_ultra_extreme.yaml')
+    available_models = get_available_models_from_config(config_path)
+    
+    if model_type not in available_models:
+        logger.error(f"Invalid model type '{model_type}'. Available models: {', '.join(available_models)}")
+        raise click.BadParameter(f"Model type '{model_type}' not found in config. Available models: {', '.join(available_models)}")
+    
+    logger.info(f"Model type '{model_type}' validated against available models: {', '.join(available_models)}")
+
     model_serializer = create_model_serializer(config['paths']['models'])
     
-    # Load processing config to get window size if not provided
-    if window_size is None:
-        try:
-            script_dir = Path(__file__).parent
-            config_path = script_dir / 'configs' / 'processing_config.yaml'
-            with open(config_path, 'r') as f:
-                processing_config = yaml.safe_load(f)
-                window_size = processing_config['window_slicer']['window_seconds']
-        except Exception as e:
-            logger.error(f"Failed to load window size from processing config: {str(e)}")
-            raise
+    # Load processing config to get window size, channels, and ordering if not provided
+    try:
+        script_dir = Path(__file__).parent
+        processing_config_path = script_dir / 'configs' / 'processing_config.yaml'
+        with open(processing_config_path, 'r') as f:
+            processing_config = yaml.safe_load(f)
+            
+        if window_size is None:
+            window_size = processing_config['window_slicer']['window_seconds']
+        
+        channels = processing_config['data_loader']['channels']
+        ordering_method = processing_config['feature_extractor']['ordering_method']
+        
+        # Create channels string for path
+        channels_str = "-".join(channels)
+        
+    except Exception as e:
+        logger.error(f"Failed to load processing config: {str(e)}")
+        raise
     
     logger.info(f"Using window size: {window_size}s")
+    logger.info(f"Using channels: {channels}")
+    logger.info(f"Using ordering method: {ordering_method}")
     logger.info(f"Using model type: {model_type}")
     
-    # Format the feature path with the window size (fallback if no MLflow dataset)
-    if '{window_size}' in config['data']['feature_path']:
-        config['data']['feature_path'] = config['data']['feature_path'].format(window_size=window_size)
+    # Format the feature path with dynamic parameters
+    if '{window_size}' in config['data']['feature_path'] or '{channels}' in config['data']['feature_path']:
+        config['data']['feature_path'] = config['data']['feature_path'].format(
+            window_size=window_size,
+            channels=channels_str
+        )
         logger.info(f"Fallback feature path: {config['data']['feature_path']}")
     
     # Add window_size to config so trainers can access it directly
@@ -603,7 +649,7 @@ def train(ctx, level, window_size, model_type, enable_feature_selection, n_featu
                 logger.warning(f"Failed to search for processing runs: {e}")
     
     # Create appropriate trainer
-    if model_type in ['pytorch_mlp', 'keras_mlp']:
+    if model_type in ['pytorch_mlp', 'keras_mlp', 'hybrid_1dcnn_lstm']:
         trainer = DeepLearningTrainer(config)
     else:
         trainer_cls = PatientLevelTrainer if level == 'patient' else WindowLevelTrainer
@@ -709,12 +755,27 @@ def evaluate(ctx, model_id, data_path, window_size):
                     with open('configs/processing_config.yaml', 'r') as f:
                         processing_config = yaml.safe_load(f)
                         window_size = processing_config['window_slicer']['window_seconds']
+                        channels = processing_config['data_loader']['channels']
+                        channels_str = "-".join(channels)
                 except Exception as e:
                     logger.error(f"Failed to determine window size: {str(e)}")
                     raise
+            else:
+                # Get channels from processing config
+                try:
+                    with open('configs/processing_config.yaml', 'r') as f:
+                        processing_config = yaml.safe_load(f)
+                        channels = processing_config['data_loader']['channels']
+                        channels_str = "-".join(channels)
+                except Exception as e:
+                    logger.error(f"Failed to load channels from processing config: {str(e)}")
+                    raise
         
-        # Format the feature path with the window size
-        data_path = config['data']['feature_path'].format(window_size=window_size)
+        # Format the feature path with the window size and channels
+        data_path = config['data']['feature_path'].format(
+            window_size=window_size,
+            channels=channels_str
+        )
         logger.info(f"Using feature path: {data_path}")
     
     # Set up MLflow tracking
