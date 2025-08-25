@@ -473,7 +473,11 @@ def get_available_models_from_config(config_path):
     except Exception as e:
         logger.warning(f"Failed to load models from config: {e}")
         # Return default models as fallback
-        return ['random_forest', 'gradient_boosting', 'logistic_regression', 'svm', 'svm_rbf', 'pytorch_mlp', 'keras_mlp', 'xgboost_gpu', 'catboost_gpu', 'lightgbm_gpu', 'hybrid_1dcnn_lstm']
+        return [
+                'random_forest', 'gradient_boosting', 'xgboost_gpu', 'catboost_gpu', 'lightgbm_gpu', 'logistic_regression', 
+                'logistic_regression_l1', 'svm_rbf', 'svm_linear', 'extra_trees', 'ada_boost', 'knn', 'decision_tree', 'sgd', 
+                'pytorch_mlp', 'keras_mlp', 'hybrid_1dcnn_lstm', 'advanced_1dcnn', 'advanced_lstm', 'advanced_hybrid_1dcnn_lstm'
+            ]
 
 @cli.command()
 @click.option('--level', type=click.Choice(['patient', 'window']), required=True)
