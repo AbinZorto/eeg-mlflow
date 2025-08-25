@@ -23,12 +23,21 @@ class WindowLevelTrainer(BaseTrainer):
     def __init__(self, config: Dict[str, Any]):
         super().__init__(config)
         self.model_type = config['model_type']
-        # Use fallback approach for model params like patient_trainer does
-        all_model_params = config.get('model', {}).get('params', {})
-        self.model_params = all_model_params.get(self.model_type, {})
+        
+        # Check if this is a deep learning model
+        deep_learning_models = ['pytorch_mlp', 'keras_mlp', 'hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm', 'advanced_1dcnn', 'advanced_lstm']
+        
+        if self.model_type in deep_learning_models:
+            # For deep learning models, get parameters from deep_learning section
+            all_model_params = config.get('deep_learning', {})
+            self.model_params = all_model_params.get(self.model_type, {})
+        else:
+            # For traditional models, get parameters from model.params section
+            all_model_params = config.get('model', {}).get('params', {})
+            self.model_params = all_model_params.get(self.model_type, {})
         
         # If the model type doesn't exist in config params, use empty dict (create_classifier will use defaults)
-        if not self.model_params and self.model_type not in all_model_params:
+        if not self.model_params:
             logger.info(f"Model type '{self.model_type}' not found in config params. Using default parameters.")
             self.model_params = {}
             

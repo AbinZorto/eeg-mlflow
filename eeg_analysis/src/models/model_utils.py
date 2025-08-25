@@ -293,7 +293,7 @@ class ModelBuilder:
             final_params = {**default_params, **user_params}
             model_instance = SGDClassifier(**final_params)
             
-        elif name in ['pytorch_mlp', 'keras_mlp', 'hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm']:
+        elif name in ['pytorch_mlp', 'keras_mlp', 'hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm', 'advanced_1dcnn', 'advanced_lstm']:
             # Deep learning models are handled by DeepLearningTrainer
             # Return a placeholder that will be replaced by actual DL model
             from .deep_learning_trainer import PyTorchMLPClassifier, KerasMLPClassifier, AdvancedHybrid1DCNNLSTMClassifier
@@ -335,10 +335,10 @@ class ModelBuilder:
                 final_params = {**default_params, **user_params}
                 return KerasMLPClassifier(**final_params)  # Return directly, not as pipeline
                 
-            elif name in ['hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm']:
-                # Hybrid models use the advanced implementation
+            elif name in ['hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm', 'advanced_1dcnn', 'advanced_lstm']:
+                # All advanced models use the same implementation with different configurations
                 # Filter out incompatible parameters for advanced models
-                if name == 'advanced_hybrid_1dcnn_lstm':
+                if name in ['advanced_hybrid_1dcnn_lstm', 'advanced_1dcnn', 'advanced_lstm']:
                     # Remove parameters that don't belong in the advanced model
                     filtered_params = {k: v for k, v in user_params.items() 
                                      if k not in ['class_weight', 'optimizer', 'learning_rate', 
@@ -349,11 +349,9 @@ class ModelBuilder:
             
         else:
             supported_models = [
-                'xgboost_gpu', 'catboost_gpu', 'lightgbm_gpu', 'pytorch_mlp', 'keras_mlp',
-                'hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm',
-                # Legacy CPU models (deprecated)
-                'random_forest', 'gradient_boosting', 'logistic_regression', 'logistic_regression_l1',
-                'svm', 'svm_rbf', 'svm_linear', 'extra_trees', 'ada_boost', 'knn', 'decision_tree', 'sgd'
+                'random_forest', 'gradient_boosting', 'xgboost_gpu', 'catboost_gpu', 'lightgbm_gpu', 'logistic_regression', 
+                'logistic_regression_l1', 'svm_rbf', 'svm_linear', 'extra_trees', 'ada_boost', 'knn', 'decision_tree', 'sgd', 
+                'pytorch_mlp', 'keras_mlp', 'hybrid_1dcnn_lstm', 'advanced_1dcnn', 'advanced_lstm', 'advanced_hybrid_1dcnn_lstm'
             ]
             raise ValueError(f"Classifier {name} not supported. Choose from: {supported_models}")
         
