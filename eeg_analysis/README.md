@@ -81,8 +81,7 @@ black src/ tests/
 
 ## License
 
-[Your License]
+
 
 ## Contributors
 
-[Your Name]
