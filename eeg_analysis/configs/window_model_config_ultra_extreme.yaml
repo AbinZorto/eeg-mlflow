@@ -371,9 +371,40 @@ deep_learning:
       quantization: 'none'
       onnx_export: False
 
-  advanced_1dcnn:
-    # OPTIMIZED 1D CNN architecture for maximum speed and GPU utilization
-    cnn_blocks:
+  efficient_tabular_mlp:
+    # Lean, high-performance MLP for tabular window features
+    hidden_layers: [1024, 512, 256, 128]
+    dropout_rate: 0.3
+    batch_norm: true
+    
+    # Training config
+    optimizer_config:
+      name: 'adamw'
+      learning_rate: 0.001
+      weight_decay: 0.01
+      beta_1: 0.9
+      beta_2: 0.999
+      epsilon: 1e-7
+    lr_schedule:
+      type: 'cosine_annealing_warm_restarts'
+      initial_lr: 0.001
+      min_lr: 1e-6
+      cycle_length: 20
+      cycle_mult: 1
+    regularization:
+      label_smoothing: 0.05
+      gradient_clip_norm: 1.0
+    batch_size: 1024
+    epochs: 100
+    early_stopping:
+      patience: 10
+      restore_best_weights: true
+      monitor: 'loss'
+      min_delta: 0.001
+    mixed_precision: true
+    class_weight: 'balanced'
+    random_state: 42
+ 
       - filters: [64, 64]
         kernel_sizes: [5, 3]  # Optimized kernel sizes
         pool_size: 2

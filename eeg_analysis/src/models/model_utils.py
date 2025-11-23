@@ -293,10 +293,10 @@ class ModelBuilder:
             final_params = {**default_params, **user_params}
             model_instance = SGDClassifier(**final_params)
             
-        elif name in ['pytorch_mlp', 'keras_mlp', 'hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm', 'advanced_1dcnn', 'advanced_lstm']:
+        elif name in ['pytorch_mlp', 'keras_mlp', 'efficient_tabular_mlp', 'hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm', 'advanced_1dcnn', 'advanced_lstm']:
             # Deep learning models are handled by DeepLearningTrainer
             # Return a placeholder that will be replaced by actual DL model
-            from .deep_learning_trainer import PyTorchMLPClassifier, KerasMLPClassifier, AdvancedHybrid1DCNNLSTMClassifier
+            from .deep_learning_trainer import PyTorchMLPClassifier, KerasMLPClassifier, AdvancedHybrid1DCNNLSTMClassifier, EfficientTabularMLPClassifier
             
             if name == 'pytorch_mlp':
                 default_params = {
@@ -347,11 +347,50 @@ class ModelBuilder:
                     filtered_params = user_params
                 return AdvancedHybrid1DCNNLSTMClassifier(**filtered_params)  # Return directly, not as pipeline
             
+            elif name == 'efficient_tabular_mlp':
+                default_params = {
+                    'hidden_layers': [512, 256, 128],
+                    'dropout_rate': 0.3,
+                    'batch_norm': True,
+                    'batch_size': 1024,
+                    'epochs': 100,
+                    'optimizer_config': {
+                        'name': 'adamw',
+                        'learning_rate': 0.001,
+                        'weight_decay': 0.01,
+                        'beta_1': 0.9,
+                        'beta_2': 0.999,
+                        'epsilon': 1e-7
+                    },
+                    'lr_schedule': {
+                        'type': 'cosine_annealing_warm_restarts',
+                        'initial_lr': 0.001,
+                        'min_lr': 1e-6,
+                        'cycle_length': 20,
+                        'cycle_mult': 1
+                    },
+                    'regularization': {
+                        'label_smoothing': 0.05,
+                        'gradient_clip_norm': 1.0
+                    },
+                    'early_stopping': {
+                        'patience': 10,
+                        'restore_best_weights': True,
+                        'monitor': 'loss',
+                        'min_delta': 0.001
+                    },
+                    'mixed_precision': True,
+                    'class_weight': 'balanced',
+                    'random_state': 42
+                }
+                final_params = {**default_params, **user_params}
+                return EfficientTabularMLPClassifier(**final_params)
+            
         else:
             supported_models = [
                 'random_forest', 'gradient_boosting', 'xgboost_gpu', 'catboost_gpu', 'lightgbm_gpu', 'logistic_regression', 
                 'logistic_regression_l1', 'svm_rbf', 'svm_linear', 'extra_trees', 'ada_boost', 'knn', 'decision_tree', 'sgd', 
-                'pytorch_mlp', 'keras_mlp', 'hybrid_1dcnn_lstm', 'advanced_1dcnn', 'advanced_lstm', 'advanced_hybrid_1dcnn_lstm'
+                'pytorch_mlp', 'keras_mlp', 'efficient_tabular_mlp', 'hybrid_1dcnn_lstm', 'advanced_1dcnn', 'advanced_lstm', 'advanced_hybrid_1dcnn_lstm'
             ]
             raise ValueError(f"Classifier {name} not supported. Choose from: {supported_models}")
         
