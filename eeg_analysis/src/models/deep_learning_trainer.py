@@ -768,6 +768,275 @@ class KerasMLPClassifier(BaseEstimator, ClassifierMixin):
         
         print("🔧 KERAS DESERIALIZATION: Deserialization complete")
 
+class EfficientTabularMLPClassifier(BaseEstimator, ClassifierMixin):
+    """
+    Efficient tabular MLP optimized for window-level features.
+    - AdamW (or Adam) optimizer
+    - Optional cosine warm restarts
+    - Label smoothing and gradient clipping
+    - Early stopping on training loss (no validation split here)
+    - Mixed precision support
+    - SMOTE/NearMiss-aware class weighting
+    """
+    
+    def __init__(self,
+                 hidden_layers=[512, 256, 128],
+                 dropout_rate=0.3,
+                 batch_norm=True,
+                 batch_size=1024,
+                 epochs=100,
+                 optimizer_config=None,
+                 lr_schedule=None,
+                 regularization=None,
+                 early_stopping=None,
+                 mixed_precision=True,
+                 class_weight='balanced',
+                 random_state=42,
+                 use_smote=False,
+                 use_nearmiss=False,
+                 nearmiss_version=1):
+        self.hidden_layers = hidden_layers
+        self.dropout_rate = dropout_rate
+        self.batch_norm = batch_norm
+        self.batch_size = batch_size
+        self.epochs = epochs
+        self.optimizer_config = optimizer_config or {
+            'name': 'adamw',
+            'learning_rate': 0.001,
+            'weight_decay': 0.01,
+            'beta_1': 0.9,
+            'beta_2': 0.999,
+            'epsilon': 1e-7
+        }
+        self.lr_schedule = lr_schedule or {
+            'type': 'cosine_annealing_warm_restarts',
+            'initial_lr': 0.001,
+            'min_lr': 1e-6,
+            'cycle_length': 20,
+            'cycle_mult': 1
+        }
+        self.regularization = regularization or {
+            'label_smoothing': 0.05,
+            'gradient_clip_norm': 1.0
+        }
+        self.early_stopping = early_stopping or {
+            'patience': 10,
+            'restore_best_weights': True,
+            'monitor': 'loss',
+            'min_delta': 0.001
+        }
+        self.mixed_precision = mixed_precision
+        self.class_weight = class_weight
+        self.random_state = random_state
+        self.use_smote = use_smote
+        self.use_nearmiss = use_nearmiss
+        self.nearmiss_version = nearmiss_version
+        
+        self.model = None
+        self.scaler = StandardScaler()
+        self.device = torch.device('cuda' if (TORCH_AVAILABLE and torch.cuda.is_available()) else 'cpu')
+        self.scaler_amp = None
+        if self.mixed_precision and TORCH_AVAILABLE and torch.cuda.is_available():
+            self.scaler_amp = torch.cuda.amp.GradScaler()
+        
+        # Seeds
+        np.random.seed(self.random_state)
+        if TORCH_AVAILABLE:
+            torch.manual_seed(self.random_state)
+            if torch.cuda.is_available():
+                torch.cuda.manual_seed_all(self.random_state)
+    
+    def _create_model(self, n_features: int):
+        if not TORCH_AVAILABLE:
+            raise ImportError("PyTorch not available. Please install torch.")
+        
+        class MLP(nn.Module):
+            def __init__(self, n_in: int, layers: List[int], dropout: float, use_bn: bool):
+                super().__init__()
+                modules = []
+                in_features = n_in
+                for units in layers:
+                    modules.append(nn.Linear(in_features, units))
+                    if use_bn:
+                        modules.append(nn.BatchNorm1d(units))
+                    modules.append(nn.ReLU())
+                    modules.append(nn.Dropout(dropout))
+                    in_features = units
+                modules.append(nn.Linear(in_features, 2))
+                self.net = nn.Sequential(*modules)
+                self._init_weights()
+            
+            def _init_weights(self):
+                for m in self.modules():
+                    if isinstance(m, nn.Linear):
+                        nn.init.xavier_uniform_(m.weight)
+                        if m.bias is not None:
+                            nn.init.zeros_(m.bias)
+            
+            def forward(self, x):
+                return self.net(x)
+        
+        return MLP(n_features, self.hidden_layers, self.dropout_rate, self.batch_norm)
+    
+    def fit(self, X, y):
+        if not TORCH_AVAILABLE:
+            raise ImportError("PyTorch not available. Please install torch.")
+        
+        # Optional SMOTE
+        if self.use_smote and IMBALANCE_AVAILABLE:
+            try:
+                smote = SMOTE(random_state=self.random_state)
+                X, y = smote.fit_resample(X, y)
+            except Exception:
+                self.use_smote = False
+        elif self.use_nearmiss and IMBALANCE_AVAILABLE:
+            try:
+                nm = NearMiss(version=self.nearmiss_version)
+                X, y = nm.fit_resample(X, y)
+            except Exception:
+                self.use_nearmiss = False
+        
+        # Pandas to numpy
+        if hasattr(X, 'values'):
+            X = X.values
+        if hasattr(y, 'values'):
+            y = y.values
+        
+        # Scale
+        X_scaled = self.scaler.fit_transform(X)
+        X_tensor = torch.FloatTensor(X_scaled).to(self.device)
+        y_tensor = torch.LongTensor(y).to(self.device)
+        
+        # Model
+        self.model = self._create_model(X_scaled.shape[1]).to(self.device)
+        
+        # Loss (label smoothing + optional class weights)
+        if self.use_smote or self.use_nearmiss:
+            weight_tensor = None
+        elif self.class_weight == 'balanced':
+            class_counts = np.bincount(y)
+            class_weights = len(y) / (len(np.unique(y)) * class_counts)
+            weight_tensor = torch.FloatTensor(class_weights).to(self.device)
+        else:
+            weight_tensor = None
+        criterion = nn.CrossEntropyLoss(weight=weight_tensor, 
+                                        label_smoothing=float(self.regularization.get('label_smoothing', 0.0)))
+        
+        # Optimizer
+        if self.optimizer_config.get('name') == 'adamw':
+            optimizer = optim.AdamW(
+                self.model.parameters(),
+                lr=float(self.optimizer_config.get('learning_rate', 0.001)),
+                weight_decay=float(self.optimizer_config.get('weight_decay', 0.01)),
+                betas=(float(self.optimizer_config.get('beta_1', 0.9)), float(self.optimizer_config.get('beta_2', 0.999))),
+                eps=float(self.optimizer_config.get('epsilon', 1e-7))
+            )
+        else:
+            optimizer = optim.Adam(
+                self.model.parameters(),
+                lr=float(self.optimizer_config.get('learning_rate', 0.001)),
+                weight_decay=float(self.optimizer_config.get('weight_decay', 0.01))
+            )
+        
+        # Scheduler
+        if self.lr_schedule and self.lr_schedule.get('type') == 'cosine_annealing_warm_restarts':
+            scheduler = optim.lr_scheduler.CosineAnnealingWarmRestarts(
+                optimizer,
+                T_0=int(self.lr_schedule.get('cycle_length', 20)),
+                T_mult=int(self.lr_schedule.get('cycle_mult', 1)),
+                eta_min=float(self.lr_schedule.get('min_lr', 1e-6))
+            )
+            use_plateau = False
+        else:
+            scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=10, verbose=False)
+            use_plateau = True
+        
+        # Dataloader
+        effective_batch_size = min(self.batch_size, max(16, len(X_tensor) // 2)) if len(X_tensor) < 100 else self.batch_size
+        dataloader = torch.utils.data.DataLoader(
+            torch.utils.data.TensorDataset(X_tensor, y_tensor),
+            batch_size=effective_batch_size,
+            shuffle=True,
+            num_workers=0,
+            pin_memory=False
+        )
+        
+        # Early stopping
+        best_loss = float('inf')
+        patience_counter = 0
+        best_state = None
+        
+        self.model.train()
+        for epoch in range(self.epochs):
+            epoch_loss = 0.0
+            for batch_X, batch_y in dataloader:
+                if self.scaler_amp:
+                    with torch.cuda.amp.autocast():
+                        outputs = self.model(batch_X)
+                        loss = criterion(outputs, batch_y)
+                    self.scaler_amp.scale(loss).backward()
+                    # clip
+                    clip_norm = float(self.regularization.get('gradient_clip_norm', 0.0) or 0.0)
+                    if clip_norm > 0:
+                        self.scaler_amp.unscale_(optimizer)
+                        torch.nn.utils.clip_grad_norm_(self.model.parameters(), clip_norm)
+                    self.scaler_amp.step(optimizer)
+                    self.scaler_amp.update()
+                    optimizer.zero_grad()
+                else:
+                    outputs = self.model(batch_X)
+                    loss = criterion(outputs, batch_y)
+                    optimizer.zero_grad()
+                    loss.backward()
+                    clip_norm = float(self.regularization.get('gradient_clip_norm', 0.0) or 0.0)
+                    if clip_norm > 0:
+                        torch.nn.utils.clip_grad_norm_(self.model.parameters(), clip_norm)
+                    optimizer.step()
+                epoch_loss += loss.item()
+            epoch_loss /= max(1, len(dataloader))
+            if use_plateau:
+                scheduler.step(epoch_loss)
+            else:
+                scheduler.step()
+            if epoch_loss + float(self.early_stopping.get('min_delta', 0.0)) < best_loss:
+                best_loss = epoch_loss
+                patience_counter = 0
+                if self.early_stopping.get('restore_best_weights', True):
+                    best_state = self.model.state_dict().copy()
+            else:
+                patience_counter += 1
+                if patience_counter >= int(self.early_stopping.get('patience', 10)):
+                    break
+        if best_state is not None:
+            self.model.load_state_dict(best_state)
+        return self
+    
+    def predict(self, X):
+        if not TORCH_AVAILABLE or self.model is None:
+            raise ValueError("Model not trained or PyTorch not available.")
+        if hasattr(X, 'values'):
+            X = X.values
+        X_scaled = self.scaler.transform(X)
+        X_tensor = torch.FloatTensor(X_scaled).to(self.device)
+        self.model.eval()
+        with torch.no_grad():
+            outputs = self.model(X_tensor)
+            _, preds = torch.max(outputs, 1)
+        return preds.cpu().numpy()
+    
+    def predict_proba(self, X):
+        if not TORCH_AVAILABLE or self.model is None:
+            raise ValueError("Model not trained or PyTorch not available.")
+        if hasattr(X, 'values'):
+            X = X.values
+        X_scaled = self.scaler.transform(X)
+        X_tensor = torch.FloatTensor(X_scaled).to(self.device)
+        self.model.eval()
+        with torch.no_grad():
+            outputs = self.model(X_tensor)
+            probs = F.softmax(outputs, dim=1)
+        return probs.cpu().numpy()
+
 class AdvancedHybrid1DCNNLSTMClassifier(BaseEstimator, ClassifierMixin):
     """
     OPTIMIZED Advanced Hybrid 1D CNN-LSTM Classifier for maximum speed and GPU utilization.
@@ -1529,6 +1798,11 @@ class DeepLearningTrainer(BaseTrainer):
             if not TF_AVAILABLE:
                 raise ImportError("TensorFlow not available. Please install tensorflow.")
             return KerasMLPClassifier(**self.model_params)
+        
+        elif self.model_type == 'efficient_tabular_mlp':
+            if not TORCH_AVAILABLE:
+                raise ImportError("PyTorch not available. Please install torch.")
+            return EfficientTabularMLPClassifier(**self.model_params)
         
         elif self.model_type == 'hybrid_1dcnn_lstm':
             if not TORCH_AVAILABLE:
