@@ -108,7 +108,7 @@ def filter_dataset_columns(run_id, selected_channels, window_seconds):
         # Create new dataset name
         channels_str = "-".join(selected_channels_list)
         new_dataset_name = f"EEG_{window_seconds}s_{channels_str}_filtered"
-        new_dataset_path = f"data/processed/features/{new_dataset_name}.parquet"
+        new_dataset_path = f"eeg_analysis/data/processed/features/{new_dataset_name}.parquet"
         
         # Save filtered dataset
         output_path = Path(new_dataset_path)

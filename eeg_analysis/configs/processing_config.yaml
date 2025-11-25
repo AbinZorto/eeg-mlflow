@@ -2,15 +2,16 @@
 
 # Paths
 paths:
-  raw_data: "eeg_analysis/data/raw/MDD_21_subjects_EC_EEG_data_remission_and_non_remission_seperated.mat"
+  raw_data: "/home/abin/eeg-mlflow/eeg_analysis/data/raw/MDD_21_subjects_EC_EEG_data_remission_and_non_remission_seperated.mat"
   interim:
-    upsampled: "data/processed/interim/upsampled"
-    filtered: "data/processed/interim/filtered"
-    downsampled: "data/processed/interim/downsampled"
-    windowed: "data/processed/interim/windowed"
+    upsampled: "/home/abin/eeg-mlflow/eeg_analysis/data/processed/interim/upsampled"
+    filtered: "/home/abin/eeg-mlflow/eeg_analysis/data/processed/interim/filtered"
+    downsampled: "/home/abin/eeg-mlflow/eeg_analysis/data/processed/interim/downsampled"
+    windowed: "/home/abin/eeg-mlflow/eeg_analysis/data/processed/interim/windowed"
+    dc_removed: "/home/abin/eeg-mlflow/eeg_analysis/data/processed/interim/dc_removed"
   features:
-    window: "data/processed/features/window_features.parquet"
-    patient: "data/processed/features/patient_features.parquet"
+    window: "/home/abin/eeg-mlflow/eeg_analysis/data/processed/features/window_features.parquet"
+    patient: "/home/abin/eeg-mlflow/eeg_analysis/data/processed/features/patient_features.parquet"
 
 # Data Loader Parameters
 data_loader:
@@ -61,6 +62,13 @@ window_slicer:
   sampling_rate: 256  # After downsampling
   overlap_seconds: 0
   min_windows: 10  # Minimum windows per participant
+  save_interim: true
+
+# DC Offset Removal (per-window, per-channel)
+dc_offset_removal:
+  enabled: true
+  method: "mean"        # Options: "mean" or "median"
+  per_channel: true     # Always per channel for windowed arrays
   save_interim: true
 
 # Feature Extraction Parameters

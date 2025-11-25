@@ -1166,7 +1166,7 @@ def extract_eeg_features(config: Dict[str, Any], df: pd.DataFrame) -> Tuple[pd.D
     new_filename = f"{window_seconds}s_{'_'.join(config['data_loader']['channels'])}_window_features{ordering_suffix}.parquet"
     
     # Keep the path relative to the eeg_analysis directory where the script runs
-    # This ensures the file is saved in eeg_analysis/data/processed/features/
+    # This ensures the file is saved in eeg_analysis/eeg_analysis/data/processed/features/
     output_path = os.path.join(base_dir, new_filename)
     
     # Log the output path

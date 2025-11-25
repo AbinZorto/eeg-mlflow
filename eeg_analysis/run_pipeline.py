@@ -17,6 +17,7 @@ from src.processing.upsampler import upsample_eeg_data
 from src.processing.downsampler import downsample_eeg_data
 from src.processing.window_slicer import slice_eeg_windows
 from src.processing.feature_extractor import extract_eeg_features as run_feature_extraction
+from src.processing.dc_offset import remove_dc_offset_eeg_data
 
 from src.models.patient_trainer import PatientLevelTrainer
 from src.models.window_trainer import WindowLevelTrainer
@@ -250,7 +251,9 @@ def process(ctx):
             logger.info("Downsampling complete.")
             windowed = slice_eeg_windows(config, downsampled)
             logger.info("Window slicing complete.")
-            features, mlflow_dataset = run_feature_extraction(config, windowed)
+            dc_removed = remove_dc_offset_eeg_data(config, windowed)
+            logger.info("DC offset removal complete.")
+            features, mlflow_dataset = run_feature_extraction(config, dc_removed)
             logger.info("Feature extraction complete.")
             
             # Save final features with enhanced metadata

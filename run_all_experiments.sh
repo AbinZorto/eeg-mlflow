@@ -202,7 +202,7 @@ filter_dataset_columns() {
     
     local channels_str=$(echo "$selected_channels" | tr ' ' '-')
     local new_dataset_name="EEG_${window_seconds}s_${channels_str}_filtered"
-    local new_dataset_path="data/processed/features/${new_dataset_name}.parquet"
+    local new_dataset_path="eeg_analysis/data/processed/features/${new_dataset_name}.parquet"
     
     log_message "Creating filtered dataset: $new_dataset_name" >&2
     log_message "Output path: $new_dataset_path" >&2
