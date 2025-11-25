@@ -102,13 +102,13 @@ mlflow:
   tracking_uri: mlruns
 paths:
   features:
-    patient: data/processed/features/patient_features.parquet
-    window: data/processed/features/window_features.parquet
+    patient: eeg_analysis/data/processed/features/patient_features.parquet
+    window: eeg_analysis/data/processed/features/window_features.parquet
   interim:
-    downsampled: data/processed/interim/downsampled
-    filtered: data/processed/interim/filtered
-    upsampled: data/processed/interim/upsampled
-    windowed: data/processed/interim/windowed
+    downsampled: eeg_analysis/data/processed/interim/downsampled
+    filtered: eeg_analysis/data/processed/interim/filtered
+    upsampled: eeg_analysis/data/processed/interim/upsampled
+    windowed: eeg_analysis/data/processed/interim/windowed
   raw_data: eeg_analysis/data/raw/MDD_21_subjects_EC_EEG_data_remission_and_non_remission_seperated.mat
 upsampler:
   factor: 2

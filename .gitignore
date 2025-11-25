@@ -50,9 +50,9 @@ processing_log_*.txt
 
 # Project specific
 data/raw/*
-data/processed/*
+eeg_analysis/data/processed/*
 !data/raw/.gitkeep
-!data/processed/.gitkeep
+!eeg_analysis/data/processed/.gitkeep
 models/*
 !models/.gitkeep
 *.parquet

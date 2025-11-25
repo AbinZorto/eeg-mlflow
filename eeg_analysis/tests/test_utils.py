@@ -55,10 +55,10 @@ class TestConfig:
             'paths': {
                 'raw_data': 'data/raw/eeg_data.mat',
                 'interim': {
-                    'upsampled': 'data/processed/interim/upsampled',
-                    'filtered': 'data/processed/interim/filtered'
+                    'upsampled': 'eeg_analysis/data/processed/interim/upsampled',
+                    'filtered': 'eeg_analysis/data/processed/interim/filtered'
                 },
-                'features': 'data/processed/features'
+                'features': 'eeg_analysis/data/processed/features'
             },
             'data_loader': {'sampling_rate': 256},
             'upsampler': {'factor': 2},

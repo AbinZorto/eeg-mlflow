@@ -1,9 +1,2711 @@
 {
   "versions": {
-    "v_2025-07-21T12-50-42.760938": {
+    "v_2025-07-09T14-05-19.235248": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-07-09T14:05:19.235248",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-09T14-05-19.235248.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-09T14-06-25.555197": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-07-09T14:06:25.555197",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-09T14-06-25.555197.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-09T14-40-31.500273": {
+      "hash": "819ffae5f9884bde69a9a9455bd366d3",
+      "timestamp": "2025-07-09T14:40:31.500273",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-09T14-40-31.500273.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-07-09T14-06-25.555197",
+        "processing_config": {
+          "paths": {
+            "raw_data": "eeg_analysis/data/raw/MDD_21_subjects_EC_EEG_data_remission_and_non_remission_seperated.mat",
+            "interim": {
+              "upsampled": "eeg_analysis/data/processed/interim/upsampled",
+              "filtered": "eeg_analysis/data/processed/interim/filtered",
+              "downsampled": "eeg_analysis/data/processed/interim/downsampled",
+              "windowed": "eeg_analysis/data/processed/interim/windowed"
+            },
+            "features": {
+              "window": "eeg_analysis/data/processed/features/2s_window_features.parquet",
+              "patient": "eeg_analysis/data/processed/features/patient_features.parquet"
+            }
+          },
+          "data_loader": {
+            "channels": [
+              "af7",
+              "af8",
+              "tp9",
+              "tp10"
+            ],
+            "validate_data": true,
+            "save_interim": true,
+            "data_keys": {
+              "non_remission": "EEG_windows_Non_remission",
+              "remission": "EEG_windows_Remission"
+            }
+          },
+          "upsampler": {
+            "factor": 2,
+            "method": "linear",
+            "save_interim": true
+          },
+          "filter": {
+            "type": "butterworth",
+            "order": 4,
+            "cutoff_frequency": 60,
+            "sampling_rate": 256,
+            "save_interim": true
+          },
+          "downsampler": {
+            "factor": 2,
+            "method": "decimate",
+            "save_interim": true
+          },
+          "window_slicer": {
+            "window_seconds": 2,
+            "sampling_rate": 256,
+            "overlap_seconds": 0,
+            "min_windows": 10,
+            "save_interim": true
+          },
+          "feature_extractor": {
+            "frequency_bands": {
+              "delta": [
+                0.5,
+                4
+              ],
+              "theta": [
+                4,
+                8
+              ],
+              "alpha": [
+                8,
+                12
+              ],
+              "beta": [
+                12,
+                30
+              ],
+              "gamma": [
+                30,
+                60
+              ]
+            },
+            "statistical_features": [
+              "mean",
+              "std",
+              "variance",
+              "skewness",
+              "kurtosis",
+              "rms",
+              "zero_crossings",
+              "peak_to_peak",
+              "mean_abs_deviation"
+            ],
+            "entropy_features": [
+              "sample_entropy",
+              "spectral_entropy"
+            ],
+            "complexity_features": [
+              "hfd",
+              "correlation_dimension",
+              "hurst_exponent",
+              "lyapunov_exponent",
+              "dfa"
+            ],
+            "validation": {
+              "check_nan": true,
+              "check_infinite": true,
+              "remove_invalid": false
+            }
+          },
+          "mlflow": {
+            "experiment_name": "eeg_processing",
+            "tracking_uri": "mlruns",
+            "run_name": "{window_size}s_window"
+          },
+          "logging": {
+            "level": "INFO",
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "file": "logs/processing.log",
+            "console": true
+          }
+        }
+      }
+    },
+    "v_2025-07-09T22-13-02.895088": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-07-09T22:13:02.895088",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-09T22-13-02.895088.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-11T15-10-44.183132": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-07-11T15:10:44.183132",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-11T15-10-44.183132.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-11T15-44-25.861091": {
+      "hash": "c143f2eceb257c4d1f7eb798e3491061",
+      "timestamp": "2025-07-11T15:44:25.861091",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-11T15-44-25.861091.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-07-11T15-10-44.183132",
+        "processing_config": {
+          "paths": {
+            "raw_data": "eeg_analysis/data/raw/MDD_21_subjects_EC_EEG_data_remission_and_non_remission_seperated.mat",
+            "interim": {
+              "upsampled": "eeg_analysis/data/processed/interim/upsampled",
+              "filtered": "eeg_analysis/data/processed/interim/filtered",
+              "downsampled": "eeg_analysis/data/processed/interim/downsampled",
+              "windowed": "eeg_analysis/data/processed/interim/windowed"
+            },
+            "features": {
+              "window": "eeg_analysis/data/processed/features/2s_window_features.parquet",
+              "patient": "eeg_analysis/data/processed/features/patient_features.parquet"
+            }
+          },
+          "data_loader": {
+            "channels": [
+              "af7",
+              "af8",
+              "tp9",
+              "tp10"
+            ],
+            "validate_data": true,
+            "save_interim": true,
+            "data_keys": {
+              "non_remission": "EEG_windows_Non_remission",
+              "remission": "EEG_windows_Remission"
+            }
+          },
+          "upsampler": {
+            "factor": 2,
+            "method": "linear",
+            "save_interim": true
+          },
+          "filter": {
+            "type": "butterworth",
+            "order": 4,
+            "cutoff_frequency": 60,
+            "sampling_rate": 256,
+            "save_interim": true
+          },
+          "downsampler": {
+            "factor": 2,
+            "method": "decimate",
+            "save_interim": true
+          },
+          "window_slicer": {
+            "window_seconds": 2,
+            "sampling_rate": 256,
+            "overlap_seconds": 0,
+            "min_windows": 10,
+            "save_interim": true
+          },
+          "feature_extractor": {
+            "frequency_bands": {
+              "delta": [
+                0.5,
+                4
+              ],
+              "theta": [
+                4,
+                8
+              ],
+              "alpha": [
+                8,
+                12
+              ],
+              "beta": [
+                12,
+                30
+              ],
+              "gamma": [
+                30,
+                60
+              ]
+            },
+            "statistical_features": [
+              "mean",
+              "std",
+              "variance",
+              "skewness",
+              "kurtosis",
+              "rms",
+              "zero_crossings",
+              "peak_to_peak",
+              "mean_abs_deviation"
+            ],
+            "entropy_features": [
+              "sample_entropy",
+              "spectral_entropy"
+            ],
+            "complexity_features": [
+              "hfd",
+              "correlation_dimension",
+              "hurst_exponent",
+              "lyapunov_exponent",
+              "dfa"
+            ],
+            "validation": {
+              "check_nan": true,
+              "check_infinite": true,
+              "remove_invalid": false
+            }
+          },
+          "mlflow": {
+            "experiment_name": "eeg_processing",
+            "tracking_uri": "mlruns",
+            "run_name": "{window_size}s_window"
+          },
+          "logging": {
+            "level": "INFO",
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "file": "logs/processing.log",
+            "console": true
+          }
+        },
+        "mlflow_dataset_name": "EEG_Features_6015_windows",
+        "mlflow_dataset_digest": "260cbd59"
+      }
+    },
+    "v_2025-07-15T14-39-05.405263": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-07-15T14:39:05.405263",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-15T14-39-05.405263.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-15T15-00-32.849561": {
+      "hash": "3cf2e99dd58af626e39883f08e94979f",
+      "timestamp": "2025-07-15T15:00:32.849561",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-15T15-00-32.849561.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-07-15T14-39-05.405263",
+        "processing_config": {
+          "paths": {
+            "raw_data": "eeg_analysis/data/raw/MDD_21_subjects_EC_EEG_data_remission_and_non_remission_seperated.mat",
+            "interim": {
+              "upsampled": "eeg_analysis/data/processed/interim/upsampled",
+              "filtered": "eeg_analysis/data/processed/interim/filtered",
+              "downsampled": "eeg_analysis/data/processed/interim/downsampled",
+              "windowed": "eeg_analysis/data/processed/interim/windowed"
+            },
+            "features": {
+              "window": "eeg_analysis/data/processed/features/2s_window_features.parquet",
+              "patient": "eeg_analysis/data/processed/features/patient_features.parquet"
+            }
+          },
+          "data_loader": {
+            "channels": [
+              "af7",
+              "af8",
+              "tp9",
+              "tp10"
+            ],
+            "validate_data": true,
+            "save_interim": true,
+            "data_keys": {
+              "non_remission": "EEG_windows_Non_remission",
+              "remission": "EEG_windows_Remission"
+            }
+          },
+          "upsampler": {
+            "factor": 2,
+            "method": "linear",
+            "save_interim": true
+          },
+          "filter": {
+            "type": "butterworth",
+            "order": 4,
+            "cutoff_frequency": 60,
+            "sampling_rate": 256,
+            "save_interim": true
+          },
+          "downsampler": {
+            "factor": 2,
+            "method": "decimate",
+            "save_interim": true
+          },
+          "window_slicer": {
+            "window_seconds": 2,
+            "sampling_rate": 256,
+            "overlap_seconds": 0,
+            "min_windows": 10,
+            "save_interim": true
+          },
+          "feature_extractor": {
+            "frequency_bands": {
+              "delta": [
+                0.5,
+                4
+              ],
+              "theta": [
+                4,
+                8
+              ],
+              "alpha": [
+                8,
+                12
+              ],
+              "beta": [
+                12,
+                30
+              ],
+              "gamma": [
+                30,
+                60
+              ]
+            },
+            "statistical_features": [
+              "mean",
+              "std",
+              "variance",
+              "skewness",
+              "kurtosis",
+              "rms",
+              "zero_crossings",
+              "peak_to_peak",
+              "mean_abs_deviation"
+            ],
+            "entropy_features": [
+              "sample_entropy",
+              "spectral_entropy"
+            ],
+            "complexity_features": [
+              "hfd",
+              "correlation_dimension",
+              "hurst_exponent",
+              "lyapunov_exponent",
+              "dfa"
+            ],
+            "validation": {
+              "check_nan": true,
+              "check_infinite": true,
+              "remove_invalid": false
+            }
+          },
+          "mlflow": {
+            "experiment_name": "eeg_processing",
+            "tracking_uri": "mlruns",
+            "run_name": "{window_size}s_window"
+          },
+          "logging": {
+            "level": "INFO",
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "file": "logs/processing.log",
+            "console": true
+          }
+        },
+        "mlflow_dataset_name": null,
+        "mlflow_dataset_digest": null
+      }
+    },
+    "v_2025-07-15T15-05-56.296793": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-07-15T15:05:56.296793",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-15T15-05-56.296793.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-15T15-08-02.232666": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-07-15T15:08:02.232666",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-15T15-08-02.232666.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-15T15-31-22.663025": {
+      "hash": "53dbdd0958875967cff9f486d1684575",
+      "timestamp": "2025-07-15T15:31:22.663025",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-15T15-31-22.663025.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-07-15T15-08-02.232666",
+        "processing_config": {
+          "paths": {
+            "raw_data": "eeg_analysis/data/raw/MDD_21_subjects_EC_EEG_data_remission_and_non_remission_seperated.mat",
+            "interim": {
+              "upsampled": "eeg_analysis/data/processed/interim/upsampled",
+              "filtered": "eeg_analysis/data/processed/interim/filtered",
+              "downsampled": "eeg_analysis/data/processed/interim/downsampled",
+              "windowed": "eeg_analysis/data/processed/interim/windowed"
+            },
+            "features": {
+              "window": "eeg_analysis/data/processed/features/2s_window_features.parquet",
+              "patient": "eeg_analysis/data/processed/features/patient_features.parquet"
+            }
+          },
+          "data_loader": {
+            "channels": [
+              "af7",
+              "af8",
+              "tp9",
+              "tp10"
+            ],
+            "validate_data": true,
+            "save_interim": true,
+            "data_keys": {
+              "non_remission": "EEG_windows_Non_remission",
+              "remission": "EEG_windows_Remission"
+            }
+          },
+          "upsampler": {
+            "factor": 2,
+            "method": "linear",
+            "save_interim": true
+          },
+          "filter": {
+            "type": "butterworth",
+            "order": 4,
+            "cutoff_frequency": 60,
+            "sampling_rate": 256,
+            "save_interim": true
+          },
+          "downsampler": {
+            "factor": 2,
+            "method": "decimate",
+            "save_interim": true
+          },
+          "window_slicer": {
+            "window_seconds": 2,
+            "sampling_rate": 256,
+            "overlap_seconds": 0,
+            "min_windows": 10,
+            "save_interim": true
+          },
+          "feature_extractor": {
+            "frequency_bands": {
+              "delta": [
+                0.5,
+                4
+              ],
+              "theta": [
+                4,
+                8
+              ],
+              "alpha": [
+                8,
+                12
+              ],
+              "beta": [
+                12,
+                30
+              ],
+              "gamma": [
+                30,
+                60
+              ]
+            },
+            "statistical_features": [
+              "mean",
+              "std",
+              "variance",
+              "skewness",
+              "kurtosis",
+              "rms",
+              "zero_crossings",
+              "peak_to_peak",
+              "mean_abs_deviation"
+            ],
+            "entropy_features": [
+              "sample_entropy",
+              "spectral_entropy"
+            ],
+            "complexity_features": [
+              "hfd",
+              "correlation_dimension",
+              "hurst_exponent",
+              "lyapunov_exponent",
+              "dfa"
+            ],
+            "validation": {
+              "check_nan": true,
+              "check_infinite": true,
+              "remove_invalid": false
+            }
+          },
+          "mlflow": {
+            "experiment_name": "eeg_processing",
+            "tracking_uri": "mlruns",
+            "run_name": "{window_size}s_window"
+          },
+          "logging": {
+            "level": "INFO",
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "file": "logs/processing.log",
+            "console": true
+          }
+        },
+        "mlflow_dataset_name": "EEG_2s_af7-af8-tp9-tp10_6015windows",
+        "mlflow_dataset_digest": "fb0ebf3e"
+      }
+    },
+    "v_2025-07-15T16-09-51.906919": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-07-15T16:09:51.906919",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-15T16-09-51.906919.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-15T16-31-23.521600": {
+      "hash": "dca725ef77550252149381ab3f31bbfc",
+      "timestamp": "2025-07-15T16:31:23.521600",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-15T16-31-23.521600.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-07-15T16-09-51.906919",
+        "processing_config": {
+          "paths": {
+            "raw_data": "eeg_analysis/data/raw/MDD_21_subjects_EC_EEG_data_remission_and_non_remission_seperated.mat",
+            "interim": {
+              "upsampled": "eeg_analysis/data/processed/interim/upsampled",
+              "filtered": "eeg_analysis/data/processed/interim/filtered",
+              "downsampled": "eeg_analysis/data/processed/interim/downsampled",
+              "windowed": "eeg_analysis/data/processed/interim/windowed"
+            },
+            "features": {
+              "window": "eeg_analysis/data/processed/features/2s_window_features.parquet",
+              "patient": "eeg_analysis/data/processed/features/patient_features.parquet"
+            }
+          },
+          "data_loader": {
+            "channels": [
+              "af7",
+              "af8",
+              "tp9",
+              "tp10"
+            ],
+            "validate_data": true,
+            "save_interim": true,
+            "data_keys": {
+              "non_remission": "EEG_windows_Non_remission",
+              "remission": "EEG_windows_Remission"
+            }
+          },
+          "upsampler": {
+            "factor": 2,
+            "method": "linear",
+            "save_interim": true
+          },
+          "filter": {
+            "type": "butterworth",
+            "order": 4,
+            "cutoff_frequency": 60,
+            "sampling_rate": 256,
+            "save_interim": true
+          },
+          "downsampler": {
+            "factor": 2,
+            "method": "decimate",
+            "save_interim": true
+          },
+          "window_slicer": {
+            "window_seconds": 2,
+            "sampling_rate": 256,
+            "overlap_seconds": 0,
+            "min_windows": 10,
+            "save_interim": true
+          },
+          "feature_extractor": {
+            "frequency_bands": {
+              "delta": [
+                0.5,
+                4
+              ],
+              "theta": [
+                4,
+                8
+              ],
+              "alpha": [
+                8,
+                12
+              ],
+              "beta": [
+                12,
+                30
+              ],
+              "gamma": [
+                30,
+                60
+              ]
+            },
+            "statistical_features": [
+              "mean",
+              "std",
+              "variance",
+              "skewness",
+              "kurtosis",
+              "rms",
+              "zero_crossings",
+              "peak_to_peak",
+              "mean_abs_deviation"
+            ],
+            "entropy_features": [
+              "sample_entropy",
+              "spectral_entropy"
+            ],
+            "complexity_features": [
+              "hfd",
+              "correlation_dimension",
+              "hurst_exponent",
+              "lyapunov_exponent",
+              "dfa"
+            ],
+            "validation": {
+              "check_nan": true,
+              "check_infinite": true,
+              "remove_invalid": false
+            }
+          },
+          "mlflow": {
+            "experiment_name": "eeg_processing",
+            "tracking_uri": "mlruns",
+            "run_name": "{window_size}s_window"
+          },
+          "logging": {
+            "level": "INFO",
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "file": "logs/processing.log",
+            "console": true
+          }
+        },
+        "mlflow_dataset_name": "EEG_2s_af7-af8-tp9-tp10_6015windows",
+        "mlflow_dataset_digest": "c06240e2"
+      }
+    },
+    "v_2025-07-16T00-37-05.912740": {
       "hash": "9da16962cba0891873c91f770234314b",
-      "timestamp": "2025-07-21T12:50:42.760938",
-      "path": "data/processed/versions/v_2025-07-21T12-50-42.760938.parquet",
+      "timestamp": "2025-07-16T00:37:05.912740",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-16T00-37-05.912740.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-16T00-39-01.439998": {
+      "hash": "9da16962cba0891873c91f770234314b",
+      "timestamp": "2025-07-16T00:39:01.439998",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-16T00-39-01.439998.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-16T00-46-09.210275": {
+      "hash": "6952c0d7ed7aab96f594404438acd625",
+      "timestamp": "2025-07-16T00:46:09.210275",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-16T00-46-09.210275.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-07-16T00-39-01.439998",
+        "processing_config": {
+          "paths": {
+            "raw_data": "eeg_analysis/data/raw/MDD_21_subjects_EC_EEG_data_remission_and_non_remission_seperated.mat",
+            "interim": {
+              "upsampled": "eeg_analysis/data/processed/interim/upsampled",
+              "filtered": "eeg_analysis/data/processed/interim/filtered",
+              "downsampled": "eeg_analysis/data/processed/interim/downsampled",
+              "windowed": "eeg_analysis/data/processed/interim/windowed"
+            },
+            "features": {
+              "window": "eeg_analysis/data/processed/features/2s_['tp10']_window_features.parquet",
+              "patient": "eeg_analysis/data/processed/features/patient_features.parquet"
+            }
+          },
+          "data_loader": {
+            "channels": [
+              "tp10"
+            ],
+            "validate_data": true,
+            "save_interim": true,
+            "data_keys": {
+              "non_remission": "EEG_windows_Non_remission",
+              "remission": "EEG_windows_Remission"
+            }
+          },
+          "upsampler": {
+            "factor": 2,
+            "method": "linear",
+            "save_interim": true
+          },
+          "filter": {
+            "type": "butterworth",
+            "order": 4,
+            "cutoff_frequency": 60,
+            "sampling_rate": 256,
+            "save_interim": true
+          },
+          "downsampler": {
+            "factor": 2,
+            "method": "decimate",
+            "save_interim": true
+          },
+          "window_slicer": {
+            "window_seconds": 2,
+            "sampling_rate": 256,
+            "overlap_seconds": 0,
+            "min_windows": 10,
+            "save_interim": true
+          },
+          "feature_extractor": {
+            "frequency_bands": {
+              "delta": [
+                0.5,
+                4
+              ],
+              "theta": [
+                4,
+                8
+              ],
+              "alpha": [
+                8,
+                12
+              ],
+              "beta": [
+                12,
+                30
+              ],
+              "gamma": [
+                30,
+                60
+              ]
+            },
+            "statistical_features": [
+              "mean",
+              "std",
+              "variance",
+              "skewness",
+              "kurtosis",
+              "rms",
+              "zero_crossings",
+              "peak_to_peak",
+              "mean_abs_deviation"
+            ],
+            "entropy_features": [
+              "sample_entropy",
+              "spectral_entropy"
+            ],
+            "complexity_features": [
+              "hfd",
+              "correlation_dimension",
+              "hurst_exponent",
+              "lyapunov_exponent",
+              "dfa"
+            ],
+            "validation": {
+              "check_nan": true,
+              "check_infinite": true,
+              "remove_invalid": false
+            }
+          },
+          "mlflow": {
+            "experiment_name": "eeg_processing",
+            "tracking_uri": "mlruns",
+            "run_name": "{window_size}s_window"
+          },
+          "logging": {
+            "level": "INFO",
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "file": "logs/processing.log",
+            "console": true
+          }
+        },
+        "mlflow_dataset_name": "EEG_2s_tp10_6015windows",
+        "mlflow_dataset_digest": "71333241"
+      }
+    },
+    "v_2025-07-20T20-33-22.705311": {
+      "hash": "9da16962cba0891873c91f770234314b",
+      "timestamp": "2025-07-20T20:33:22.705311",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-20T20-33-22.705311.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-20T20-38-44.758751": {
+      "hash": "9da16962cba0891873c91f770234314b",
+      "timestamp": "2025-07-20T20:38:44.758751",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-20T20-38-44.758751.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-20T21-31-43.827218": {
+      "hash": "009b165493a9972cf88099eb9ceb44de",
+      "timestamp": "2025-07-20T21:31:43.827218",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-20T21-31-43.827218.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-07-20T20-38-44.758751",
+        "processing_config": {
+          "paths": {
+            "raw_data": "eeg_analysis/data/raw/MDD_21_subjects_EC_EEG_data_remission_and_non_remission_seperated.mat",
+            "interim": {
+              "upsampled": "eeg_analysis/data/processed/interim/upsampled",
+              "filtered": "eeg_analysis/data/processed/interim/filtered",
+              "downsampled": "eeg_analysis/data/processed/interim/downsampled",
+              "windowed": "eeg_analysis/data/processed/interim/windowed"
+            },
+            "features": {
+              "window": "eeg_analysis/data/processed/features/2s_['tp10']_window_features.parquet",
+              "patient": "eeg_analysis/data/processed/features/patient_features.parquet"
+            }
+          },
+          "data_loader": {
+            "channels": [
+              "tp10"
+            ],
+            "validate_data": true,
+            "save_interim": true,
+            "data_keys": {
+              "non_remission": "EEG_windows_Non_remission",
+              "remission": "EEG_windows_Remission"
+            }
+          },
+          "upsampler": {
+            "factor": 2,
+            "method": "linear",
+            "save_interim": true
+          },
+          "filter": {
+            "type": "butterworth",
+            "order": 4,
+            "cutoff_frequency": 60,
+            "sampling_rate": 256,
+            "save_interim": true
+          },
+          "downsampler": {
+            "factor": 2,
+            "method": "decimate",
+            "save_interim": true
+          },
+          "window_slicer": {
+            "window_seconds": 2,
+            "sampling_rate": 256,
+            "overlap_seconds": 0,
+            "min_windows": 10,
+            "save_interim": true
+          },
+          "feature_extractor": {
+            "frequency_bands": {
+              "delta": [
+                0.5,
+                4
+              ],
+              "theta": [
+                4,
+                8
+              ],
+              "alpha": [
+                8,
+                12
+              ],
+              "beta": [
+                12,
+                30
+              ],
+              "gamma": [
+                30,
+                60
+              ]
+            },
+            "statistical_features": [
+              "mean",
+              "std",
+              "variance",
+              "skewness",
+              "kurtosis",
+              "rms",
+              "zero_crossings",
+              "peak_to_peak",
+              "mean_abs_deviation"
+            ],
+            "entropy_features": [
+              "sample_entropy",
+              "spectral_entropy"
+            ],
+            "complexity_features": [
+              "hfd",
+              "correlation_dimension",
+              "hurst_exponent",
+              "lyapunov_exponent",
+              "dfa"
+            ],
+            "validation": {
+              "check_nan": true,
+              "check_infinite": true,
+              "remove_invalid": false
+            }
+          },
+          "mlflow": {
+            "experiment_name": "eeg_processing",
+            "tracking_uri": "mlruns",
+            "run_name": "{window_size}s_window"
+          },
+          "logging": {
+            "level": "INFO",
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "file": "logs/processing.log",
+            "console": true
+          }
+        },
+        "mlflow_dataset_name": "EEG_2s_tp10_6015windows",
+        "mlflow_dataset_digest": "e841e9c0"
+      }
+    },
+    "v_2025-07-20T22-40-30.279865": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-07-20T22:40:30.279865",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-20T22-40-30.279865.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-20T22-41-08.122204": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-07-20T22:41:08.122204",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-20T22-41-08.122204.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-21T02-00-48.101028": {
+      "hash": "8942c333f59a1bb03a51c4a302015acd",
+      "timestamp": "2025-07-21T02:00:48.101028",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-21T02-00-48.101028.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-07-20T22-41-08.122204",
+        "processing_config": {
+          "paths": {
+            "raw_data": "eeg_analysis/data/raw/MDD_21_subjects_EC_EEG_data_remission_and_non_remission_seperated.mat",
+            "interim": {
+              "upsampled": "eeg_analysis/data/processed/interim/upsampled",
+              "filtered": "eeg_analysis/data/processed/interim/filtered",
+              "downsampled": "eeg_analysis/data/processed/interim/downsampled",
+              "windowed": "eeg_analysis/data/processed/interim/windowed"
+            },
+            "features": {
+              "window": "../eeg_analysis/data/processed/features/2s_af7_af8_tp9_tp10_window_features.parquet",
+              "patient": "eeg_analysis/data/processed/features/patient_features.parquet"
+            }
+          },
+          "data_loader": {
+            "channels": [
+              "af7",
+              "af8",
+              "tp9",
+              "tp10"
+            ],
+            "validate_data": true,
+            "save_interim": true,
+            "data_keys": {
+              "non_remission": "EEG_windows_Non_remission",
+              "remission": "EEG_windows_Remission"
+            }
+          },
+          "upsampler": {
+            "factor": 2,
+            "method": "linear",
+            "save_interim": true
+          },
+          "filter": {
+            "type": "butterworth",
+            "order": 4,
+            "cutoff_frequency": 60,
+            "sampling_rate": 256,
+            "save_interim": true
+          },
+          "downsampler": {
+            "factor": 2,
+            "method": "decimate",
+            "save_interim": true
+          },
+          "window_slicer": {
+            "window_seconds": 2,
+            "sampling_rate": 256,
+            "overlap_seconds": 0,
+            "min_windows": 10,
+            "save_interim": true
+          },
+          "feature_extractor": {
+            "frequency_bands": {
+              "delta": [
+                0.5,
+                4
+              ],
+              "theta": [
+                4,
+                8
+              ],
+              "alpha": [
+                8,
+                12
+              ],
+              "beta": [
+                12,
+                30
+              ],
+              "gamma": [
+                30,
+                60
+              ]
+            },
+            "statistical_features": [
+              "mean",
+              "std",
+              "variance",
+              "skewness",
+              "kurtosis",
+              "rms",
+              "zero_crossings",
+              "peak_to_peak",
+              "mean_abs_deviation"
+            ],
+            "entropy_features": [
+              "sample_entropy",
+              "spectral_entropy"
+            ],
+            "complexity_features": [
+              "hfd",
+              "correlation_dimension",
+              "hurst_exponent",
+              "lyapunov_exponent",
+              "dfa"
+            ],
+            "validation": {
+              "check_nan": true,
+              "check_infinite": true,
+              "remove_invalid": false
+            }
+          },
+          "mlflow": {
+            "experiment_name": "eeg_processing",
+            "tracking_uri": "mlruns",
+            "run_name": "{window_size}s_window"
+          },
+          "logging": {
+            "level": "INFO",
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "file": "logs/processing.log",
+            "console": true
+          }
+        },
+        "mlflow_dataset_name": "EEG_2s_af7-af8-tp9-tp10_6015windows",
+        "mlflow_dataset_digest": "bda20d0e"
+      }
+    },
+    "v_2025-07-21T12-30-30.599182": {
+      "hash": "9da16962cba0891873c91f770234314b",
+      "timestamp": "2025-07-21T12:30:30.599182",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-21T12-30-30.599182.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-21T12-34-39.189588": {
+      "hash": "9da16962cba0891873c91f770234314b",
+      "timestamp": "2025-07-21T12:34:39.189588",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-21T12-34-39.189588.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-21T12-35-33.625309": {
+      "hash": "9da16962cba0891873c91f770234314b",
+      "timestamp": "2025-07-21T12:35:33.625309",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-21T12-35-33.625309.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-21T12-36-30.403625": {
+      "hash": "9da16962cba0891873c91f770234314b",
+      "timestamp": "2025-07-21T12:36:30.403625",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-21T12-36-30.403625.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-21T12-37-33.529960": {
+      "hash": "9da16962cba0891873c91f770234314b",
+      "timestamp": "2025-07-21T12:37:33.529960",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-21T12-37-33.529960.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-21T12-44-49.811120": {
+      "hash": "825a1ea30b8c3a40f42a3fd291daeb1e",
+      "timestamp": "2025-07-21T12:44:49.811120",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-21T12-44-49.811120.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-07-21T12-37-33.529960",
+        "processing_config": {
+          "paths": {
+            "raw_data": "eeg_analysis/data/raw/MDD_21_subjects_EC_EEG_data_remission_and_non_remission_seperated.mat",
+            "interim": {
+              "upsampled": "eeg_analysis/data/processed/interim/upsampled",
+              "filtered": "eeg_analysis/data/processed/interim/filtered",
+              "downsampled": "eeg_analysis/data/processed/interim/downsampled",
+              "windowed": "eeg_analysis/data/processed/interim/windowed"
+            },
+            "features": {
+              "window": "../eeg_analysis/data/processed/features/2s_tp10_window_features.parquet",
+              "patient": "eeg_analysis/data/processed/features/patient_features.parquet"
+            }
+          },
+          "data_loader": {
+            "channels": [
+              "tp10"
+            ],
+            "validate_data": true,
+            "save_interim": true,
+            "data_keys": {
+              "non_remission": "EEG_windows_Non_remission",
+              "remission": "EEG_windows_Remission"
+            }
+          },
+          "upsampler": {
+            "factor": 2,
+            "method": "linear",
+            "save_interim": true
+          },
+          "filter": {
+            "type": "butterworth",
+            "order": 4,
+            "cutoff_frequency": 60,
+            "sampling_rate": 256,
+            "save_interim": true
+          },
+          "downsampler": {
+            "factor": 2,
+            "method": "decimate",
+            "save_interim": true
+          },
+          "window_slicer": {
+            "window_seconds": 2,
+            "sampling_rate": 256,
+            "overlap_seconds": 0,
+            "min_windows": 10,
+            "save_interim": true
+          },
+          "feature_extractor": {
+            "compute_spectral": true,
+            "compute_temporal": false,
+            "compute_entropy": true,
+            "compute_complexity": false,
+            "compute_connectivity": false,
+            "compute_asymmetry": false,
+            "compute_cross_hemispheric": false,
+            "compute_coherence": false,
+            "spectral_features": {
+              "band_powers": true,
+              "relative_powers": false,
+              "total_power": false,
+              "freq_weighted_power": false,
+              "spectral_edge_freq": false,
+              "psd_statistics": false
+            },
+            "temporal_features": {
+              "basic_statistics": false,
+              "hjorth_parameters": false
+            },
+            "entropy_features": {
+              "sample_entropy": true,
+              "spectral_entropy": false
+            },
+            "complexity_features": {
+              "correlation_dimension": false,
+              "hurst_exponent": false,
+              "lyapunov_exponent": false,
+              "dfa": false
+            },
+            "connectivity_features": {
+              "cross_correlation": false
+            },
+            "asymmetry_features": {
+              "frontal_asymmetry": false,
+              "temporal_asymmetry": false
+            },
+            "cross_hemispheric_features": {
+              "hemispheric_asymmetry": false,
+              "frontal_temporal_ratios": false,
+              "diagonal_cross_hemispheric": false
+            },
+            "coherence_features": {
+              "max_coherence": false,
+              "pearson_correlation": false
+            },
+            "frequency_bands": {
+              "delta": [
+                0.5,
+                4
+              ],
+              "theta": [
+                4,
+                8
+              ],
+              "alpha": [
+                8,
+                12
+              ],
+              "beta": [
+                12,
+                30
+              ],
+              "gamma": [
+                30,
+                60
+              ]
+            },
+            "statistical_features": [
+              "mean",
+              "std",
+              "variance",
+              "skewness",
+              "kurtosis",
+              "rms",
+              "zero_crossings",
+              "peak_to_peak",
+              "mean_abs_deviation"
+            ],
+            "validation": {
+              "check_nan": true,
+              "check_infinite": true,
+              "remove_invalid": false
+            },
+            "save_interim": true
+          },
+          "mlflow": {
+            "experiment_name": "eeg_processing",
+            "tracking_uri": "mlruns",
+            "run_name": "{window_size}s_window"
+          },
+          "logging": {
+            "level": "INFO",
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "file": "logs/processing.log",
+            "console": true
+          }
+        },
+        "mlflow_dataset_name": "EEG_2s_tp10_6015windows",
+        "mlflow_dataset_digest": "6f8615f9"
+      }
+    },
+    "v_2025-07-21T13-00-25.705282": {
+      "hash": "9da16962cba0891873c91f770234314b",
+      "timestamp": "2025-07-21T13:00:25.705282",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-21T13-00-25.705282.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-21T13-06-42.722117": {
+      "hash": "802004cbab9db7b983f7134f2479241a",
+      "timestamp": "2025-07-21T13:06:42.722117",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-21T13-06-42.722117.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-07-21T13-00-25.705282",
+        "processing_config": {
+          "paths": {
+            "raw_data": "eeg_analysis/data/raw/MDD_21_subjects_EC_EEG_data_remission_and_non_remission_seperated.mat",
+            "interim": {
+              "upsampled": "eeg_analysis/data/processed/interim/upsampled",
+              "filtered": "eeg_analysis/data/processed/interim/filtered",
+              "downsampled": "eeg_analysis/data/processed/interim/downsampled",
+              "windowed": "eeg_analysis/data/processed/interim/windowed"
+            },
+            "features": {
+              "window": "eeg_analysis/data/processed/features/2s_tp10_window_features.parquet",
+              "patient": "eeg_analysis/data/processed/features/patient_features.parquet"
+            }
+          },
+          "data_loader": {
+            "channels": [
+              "tp10"
+            ],
+            "validate_data": true,
+            "save_interim": true,
+            "data_keys": {
+              "non_remission": "EEG_windows_Non_remission",
+              "remission": "EEG_windows_Remission"
+            }
+          },
+          "upsampler": {
+            "factor": 2,
+            "method": "linear",
+            "save_interim": true
+          },
+          "filter": {
+            "type": "butterworth",
+            "order": 4,
+            "cutoff_frequency": 60,
+            "sampling_rate": 256,
+            "save_interim": true
+          },
+          "downsampler": {
+            "factor": 2,
+            "method": "decimate",
+            "save_interim": true
+          },
+          "window_slicer": {
+            "window_seconds": 2,
+            "sampling_rate": 256,
+            "overlap_seconds": 0,
+            "min_windows": 10,
+            "save_interim": true
+          },
+          "feature_extractor": {
+            "compute_spectral": true,
+            "compute_temporal": false,
+            "compute_entropy": true,
+            "compute_complexity": false,
+            "compute_connectivity": false,
+            "compute_asymmetry": false,
+            "compute_cross_hemispheric": false,
+            "compute_coherence": false,
+            "spectral_features": {
+              "band_powers": true,
+              "relative_powers": false,
+              "total_power": false,
+              "freq_weighted_power": false,
+              "spectral_edge_freq": false,
+              "psd_statistics": false
+            },
+            "temporal_features": {
+              "basic_statistics": false,
+              "hjorth_parameters": false
+            },
+            "entropy_features": {
+              "sample_entropy": true,
+              "spectral_entropy": false
+            },
+            "complexity_features": {
+              "correlation_dimension": false,
+              "hurst_exponent": false,
+              "lyapunov_exponent": false,
+              "dfa": false
+            },
+            "connectivity_features": {
+              "cross_correlation": false
+            },
+            "asymmetry_features": {
+              "frontal_asymmetry": false,
+              "temporal_asymmetry": false
+            },
+            "cross_hemispheric_features": {
+              "hemispheric_asymmetry": false,
+              "frontal_temporal_ratios": false,
+              "diagonal_cross_hemispheric": false
+            },
+            "coherence_features": {
+              "max_coherence": false,
+              "pearson_correlation": false
+            },
+            "frequency_bands": {
+              "delta": [
+                0.5,
+                4
+              ],
+              "theta": [
+                4,
+                8
+              ],
+              "alpha": [
+                8,
+                12
+              ],
+              "beta": [
+                12,
+                30
+              ],
+              "gamma": [
+                30,
+                60
+              ]
+            },
+            "statistical_features": [
+              "mean",
+              "std",
+              "variance",
+              "skewness",
+              "kurtosis",
+              "rms",
+              "zero_crossings",
+              "peak_to_peak",
+              "mean_abs_deviation"
+            ],
+            "validation": {
+              "check_nan": true,
+              "check_infinite": true,
+              "remove_invalid": false
+            },
+            "save_interim": true
+          },
+          "mlflow": {
+            "experiment_name": "eeg_processing",
+            "tracking_uri": "mlruns",
+            "run_name": "{window_size}s_window"
+          },
+          "logging": {
+            "level": "INFO",
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "file": "logs/processing.log",
+            "console": true
+          }
+        },
+        "mlflow_dataset_name": "EEG_2s_tp10_6015windows",
+        "mlflow_dataset_digest": "0a5859a1"
+      }
+    },
+    "v_2025-07-21T13-15-10.973809": {
+      "hash": "9da16962cba0891873c91f770234314b",
+      "timestamp": "2025-07-21T13:15:10.973809",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-21T13-15-10.973809.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-21T13-46-08.027304": {
+      "hash": "10c1a1ca4e25252db9d4a867c4133a67",
+      "timestamp": "2025-07-21T13:46:08.027304",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-21T13-46-08.027304.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-07-21T13-15-10.973809",
+        "processing_config": {
+          "paths": {
+            "raw_data": "eeg_analysis/data/raw/MDD_21_subjects_EC_EEG_data_remission_and_non_remission_seperated.mat",
+            "interim": {
+              "upsampled": "eeg_analysis/data/processed/interim/upsampled",
+              "filtered": "eeg_analysis/data/processed/interim/filtered",
+              "downsampled": "eeg_analysis/data/processed/interim/downsampled",
+              "windowed": "eeg_analysis/data/processed/interim/windowed"
+            },
+            "features": {
+              "window": "eeg_analysis/data/processed/features/2s_tp10_window_features.parquet",
+              "patient": "eeg_analysis/data/processed/features/patient_features.parquet"
+            }
+          },
+          "data_loader": {
+            "channels": [
+              "tp10"
+            ],
+            "validate_data": true,
+            "save_interim": true,
+            "data_keys": {
+              "non_remission": "EEG_windows_Non_remission",
+              "remission": "EEG_windows_Remission"
+            }
+          },
+          "upsampler": {
+            "factor": 2,
+            "method": "linear",
+            "save_interim": true
+          },
+          "filter": {
+            "type": "butterworth",
+            "order": 4,
+            "cutoff_frequency": 60,
+            "sampling_rate": 256,
+            "save_interim": true
+          },
+          "downsampler": {
+            "factor": 2,
+            "method": "decimate",
+            "save_interim": true
+          },
+          "window_slicer": {
+            "window_seconds": 2,
+            "sampling_rate": 256,
+            "overlap_seconds": 0,
+            "min_windows": 10,
+            "save_interim": true
+          },
+          "feature_extractor": {
+            "compute_spectral": true,
+            "compute_temporal": true,
+            "compute_entropy": true,
+            "compute_complexity": true,
+            "compute_connectivity": true,
+            "compute_asymmetry": true,
+            "compute_cross_hemispheric": true,
+            "compute_coherence": true,
+            "spectral_features": {
+              "band_powers": true,
+              "relative_powers": true,
+              "total_power": true,
+              "freq_weighted_power": true,
+              "spectral_edge_freq": true,
+              "psd_statistics": true
+            },
+            "temporal_features": {
+              "basic_statistics": true,
+              "hjorth_parameters": true
+            },
+            "entropy_features": {
+              "sample_entropy": true,
+              "spectral_entropy": true
+            },
+            "complexity_features": {
+              "correlation_dimension": true,
+              "hurst_exponent": true,
+              "lyapunov_exponent": true,
+              "dfa": true
+            },
+            "connectivity_features": {
+              "cross_correlation": true
+            },
+            "asymmetry_features": {
+              "frontal_asymmetry": true,
+              "temporal_asymmetry": true
+            },
+            "cross_hemispheric_features": {
+              "hemispheric_asymmetry": true,
+              "frontal_temporal_ratios": true,
+              "diagonal_cross_hemispheric": true
+            },
+            "coherence_features": {
+              "max_coherence": true,
+              "pearson_correlation": true
+            },
+            "frequency_bands": {
+              "delta": [
+                0.5,
+                4
+              ],
+              "theta": [
+                4,
+                8
+              ],
+              "alpha": [
+                8,
+                12
+              ],
+              "beta": [
+                12,
+                30
+              ],
+              "gamma": [
+                30,
+                60
+              ]
+            },
+            "statistical_features": [
+              "mean",
+              "std",
+              "variance",
+              "skewness",
+              "kurtosis",
+              "rms",
+              "zero_crossings",
+              "peak_to_peak",
+              "mean_abs_deviation"
+            ],
+            "validation": {
+              "check_nan": true,
+              "check_infinite": true,
+              "remove_invalid": false
+            },
+            "save_interim": true
+          },
+          "mlflow": {
+            "experiment_name": "eeg_processing",
+            "tracking_uri": "mlruns",
+            "run_name": "{window_size}s_window"
+          },
+          "logging": {
+            "level": "INFO",
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "file": "logs/processing.log",
+            "console": true
+          }
+        },
+        "mlflow_dataset_name": "EEG_2s_tp10_6015windows",
+        "mlflow_dataset_digest": "c867676d"
+      }
+    },
+    "v_2025-07-21T14-22-10.277680": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-07-21T14:22:10.277680",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-21T14-22-10.277680.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-21T16-15-39.523142": {
+      "hash": "996d468e242795cf629696ecc0f4e95b",
+      "timestamp": "2025-07-21T16:15:39.523142",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-21T16-15-39.523142.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-07-21T14-22-10.277680",
+        "processing_config": {
+          "paths": {
+            "raw_data": "eeg_analysis/data/raw/MDD_21_subjects_EC_EEG_data_remission_and_non_remission_seperated.mat",
+            "interim": {
+              "upsampled": "eeg_analysis/data/processed/interim/upsampled",
+              "filtered": "eeg_analysis/data/processed/interim/filtered",
+              "downsampled": "eeg_analysis/data/processed/interim/downsampled",
+              "windowed": "eeg_analysis/data/processed/interim/windowed"
+            },
+            "features": {
+              "window": "eeg_analysis/data/processed/features/2s_af7_af8_tp9_tp10_window_features.parquet",
+              "patient": "eeg_analysis/data/processed/features/patient_features.parquet"
+            }
+          },
+          "data_loader": {
+            "channels": [
+              "af7",
+              "af8",
+              "tp9",
+              "tp10"
+            ],
+            "validate_data": true,
+            "save_interim": true,
+            "data_keys": {
+              "non_remission": "EEG_windows_Non_remission",
+              "remission": "EEG_windows_Remission"
+            }
+          },
+          "upsampler": {
+            "factor": 2,
+            "method": "linear",
+            "save_interim": true
+          },
+          "filter": {
+            "type": "butterworth",
+            "order": 4,
+            "cutoff_frequency": 60,
+            "sampling_rate": 256,
+            "save_interim": true
+          },
+          "downsampler": {
+            "factor": 2,
+            "method": "decimate",
+            "save_interim": true
+          },
+          "window_slicer": {
+            "window_seconds": 2,
+            "sampling_rate": 256,
+            "overlap_seconds": 0,
+            "min_windows": 10,
+            "save_interim": true
+          },
+          "feature_extractor": {
+            "compute_spectral": true,
+            "compute_temporal": true,
+            "compute_entropy": true,
+            "compute_complexity": true,
+            "compute_connectivity": true,
+            "compute_asymmetry": true,
+            "compute_cross_hemispheric": true,
+            "compute_coherence": true,
+            "spectral_features": {
+              "band_powers": true,
+              "relative_powers": true,
+              "total_power": true,
+              "freq_weighted_power": true,
+              "spectral_edge_freq": true,
+              "psd_statistics": true
+            },
+            "temporal_features": {
+              "basic_statistics": true,
+              "hjorth_parameters": true
+            },
+            "entropy_features": {
+              "sample_entropy": true,
+              "spectral_entropy": true
+            },
+            "complexity_features": {
+              "correlation_dimension": true,
+              "hurst_exponent": true,
+              "lyapunov_exponent": true,
+              "dfa": true
+            },
+            "connectivity_features": {
+              "cross_correlation": true
+            },
+            "asymmetry_features": {
+              "frontal_asymmetry": true,
+              "temporal_asymmetry": true
+            },
+            "cross_hemispheric_features": {
+              "hemispheric_asymmetry": true,
+              "frontal_temporal_ratios": true,
+              "diagonal_cross_hemispheric": true
+            },
+            "coherence_features": {
+              "max_coherence": true,
+              "pearson_correlation": true
+            },
+            "frequency_bands": {
+              "delta": [
+                0.5,
+                4
+              ],
+              "theta": [
+                4,
+                8
+              ],
+              "alpha": [
+                8,
+                12
+              ],
+              "beta": [
+                12,
+                30
+              ],
+              "gamma": [
+                30,
+                60
+              ]
+            },
+            "statistical_features": [
+              "mean",
+              "std",
+              "variance",
+              "skewness",
+              "kurtosis",
+              "rms",
+              "zero_crossings",
+              "peak_to_peak",
+              "mean_abs_deviation"
+            ],
+            "validation": {
+              "check_nan": true,
+              "check_infinite": true,
+              "remove_invalid": false
+            },
+            "save_interim": true
+          },
+          "mlflow": {
+            "experiment_name": "eeg_processing",
+            "tracking_uri": "mlruns",
+            "run_name": "{window_size}s_window"
+          },
+          "logging": {
+            "level": "INFO",
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "file": "logs/processing.log",
+            "console": true
+          }
+        },
+        "mlflow_dataset_name": "EEG_2s_af7-af8-tp9-tp10_6015windows",
+        "mlflow_dataset_digest": "dbd8b24f"
+      }
+    },
+    "v_2025-07-21T18-27-54.937727": {
+      "hash": "9da16962cba0891873c91f770234314b",
+      "timestamp": "2025-07-21T18:27:54.937727",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-21T18-27-54.937727.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-21T18-56-43.088051": {
+      "hash": "cf8022c0eaa65a601dfb37147694af6a",
+      "timestamp": "2025-07-21T18:56:43.088051",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-21T18-56-43.088051.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-07-21T18-27-54.937727",
+        "processing_config": {
+          "paths": {
+            "raw_data": "eeg_analysis/data/raw/MDD_21_subjects_EC_EEG_data_remission_and_non_remission_seperated.mat",
+            "interim": {
+              "upsampled": "eeg_analysis/data/processed/interim/upsampled",
+              "filtered": "eeg_analysis/data/processed/interim/filtered",
+              "downsampled": "eeg_analysis/data/processed/interim/downsampled",
+              "windowed": "eeg_analysis/data/processed/interim/windowed"
+            },
+            "features": {
+              "window": "eeg_analysis/data/processed/features/2s_af7_window_features.parquet",
+              "patient": "eeg_analysis/data/processed/features/patient_features.parquet"
+            }
+          },
+          "data_loader": {
+            "channels": [
+              "af7"
+            ],
+            "validate_data": true,
+            "save_interim": true,
+            "data_keys": {
+              "non_remission": "EEG_windows_Non_remission",
+              "remission": "EEG_windows_Remission"
+            }
+          },
+          "upsampler": {
+            "factor": 2,
+            "method": "linear",
+            "save_interim": true
+          },
+          "filter": {
+            "type": "butterworth",
+            "order": 4,
+            "cutoff_frequency": 60,
+            "sampling_rate": 256,
+            "save_interim": true
+          },
+          "downsampler": {
+            "factor": 2,
+            "method": "decimate",
+            "save_interim": true
+          },
+          "window_slicer": {
+            "window_seconds": 2,
+            "sampling_rate": 256,
+            "overlap_seconds": 0,
+            "min_windows": 10,
+            "save_interim": true
+          },
+          "feature_extractor": {
+            "compute_spectral": true,
+            "compute_temporal": true,
+            "compute_entropy": true,
+            "compute_complexity": true,
+            "compute_connectivity": true,
+            "compute_asymmetry": true,
+            "compute_cross_hemispheric": true,
+            "compute_coherence": true,
+            "spectral_features": {
+              "band_powers": true,
+              "relative_powers": true,
+              "total_power": true,
+              "freq_weighted_power": true,
+              "spectral_edge_freq": true,
+              "psd_statistics": true
+            },
+            "temporal_features": {
+              "basic_statistics": true,
+              "hjorth_parameters": true
+            },
+            "entropy_features": {
+              "sample_entropy": true,
+              "spectral_entropy": true
+            },
+            "complexity_features": {
+              "correlation_dimension": true,
+              "hurst_exponent": true,
+              "lyapunov_exponent": true,
+              "dfa": true
+            },
+            "connectivity_features": {
+              "cross_correlation": true
+            },
+            "asymmetry_features": {
+              "frontal_asymmetry": true,
+              "temporal_asymmetry": true
+            },
+            "cross_hemispheric_features": {
+              "hemispheric_asymmetry": true,
+              "frontal_temporal_ratios": true,
+              "diagonal_cross_hemispheric": true
+            },
+            "coherence_features": {
+              "max_coherence": true,
+              "pearson_correlation": true
+            },
+            "frequency_bands": {
+              "delta": [
+                0.5,
+                4
+              ],
+              "theta": [
+                4,
+                8
+              ],
+              "alpha": [
+                8,
+                12
+              ],
+              "beta": [
+                12,
+                30
+              ],
+              "gamma": [
+                30,
+                60
+              ]
+            },
+            "statistical_features": [
+              "mean",
+              "std",
+              "variance",
+              "skewness",
+              "kurtosis",
+              "rms",
+              "zero_crossings",
+              "peak_to_peak",
+              "mean_abs_deviation"
+            ],
+            "validation": {
+              "check_nan": true,
+              "check_infinite": true,
+              "remove_invalid": false
+            },
+            "save_interim": true
+          },
+          "mlflow": {
+            "experiment_name": "eeg_processing",
+            "tracking_uri": "mlruns",
+            "run_name": "{window_size}s_window"
+          },
+          "logging": {
+            "level": "INFO",
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "file": "logs/processing.log",
+            "console": true
+          }
+        },
+        "mlflow_dataset_name": "EEG_2s_af7_6015windows",
+        "mlflow_dataset_digest": "6edc72f7"
+      }
+    },
+    "v_2025-07-22T00-13-44.711594": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-07-22T00:13:44.711594",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-22T00-13-44.711594.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-22T01-35-08.574361": {
+      "hash": "266fb30ed9124948cd171ed5f0596d36",
+      "timestamp": "2025-07-22T01:35:08.574361",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-22T01-35-08.574361.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-07-22T00-13-44.711594",
+        "processing_config": {
+          "paths": {
+            "raw_data": "eeg_analysis/data/raw/MDD_21_subjects_EC_EEG_data_remission_and_non_remission_seperated.mat",
+            "interim": {
+              "upsampled": "eeg_analysis/data/processed/interim/upsampled",
+              "filtered": "eeg_analysis/data/processed/interim/filtered",
+              "downsampled": "eeg_analysis/data/processed/interim/downsampled",
+              "windowed": "eeg_analysis/data/processed/interim/windowed"
+            },
+            "features": {
+              "window": "eeg_analysis/data/processed/features/10s_af7_af8_tp9_tp10_window_features.parquet",
+              "patient": "eeg_analysis/data/processed/features/patient_features.parquet"
+            }
+          },
+          "data_loader": {
+            "channels": [
+              "af7",
+              "af8",
+              "tp9",
+              "tp10"
+            ],
+            "validate_data": true,
+            "save_interim": true,
+            "data_keys": {
+              "non_remission": "EEG_windows_Non_remission",
+              "remission": "EEG_windows_Remission"
+            }
+          },
+          "upsampler": {
+            "factor": 2,
+            "method": "linear",
+            "save_interim": true
+          },
+          "filter": {
+            "type": "butterworth",
+            "order": 4,
+            "cutoff_frequency": 60,
+            "sampling_rate": 256,
+            "save_interim": true
+          },
+          "downsampler": {
+            "factor": 2,
+            "method": "decimate",
+            "save_interim": true
+          },
+          "window_slicer": {
+            "window_seconds": 10,
+            "sampling_rate": 256,
+            "overlap_seconds": 0,
+            "min_windows": 10,
+            "save_interim": true
+          },
+          "feature_extractor": {
+            "compute_spectral": true,
+            "compute_temporal": true,
+            "compute_entropy": true,
+            "compute_complexity": true,
+            "compute_connectivity": true,
+            "compute_asymmetry": true,
+            "compute_cross_hemispheric": true,
+            "compute_coherence": true,
+            "spectral_features": {
+              "band_powers": true,
+              "relative_powers": true,
+              "total_power": true,
+              "freq_weighted_power": true,
+              "spectral_edge_freq": true,
+              "psd_statistics": true
+            },
+            "temporal_features": {
+              "basic_statistics": true,
+              "hjorth_parameters": true
+            },
+            "entropy_features": {
+              "sample_entropy": true,
+              "spectral_entropy": true
+            },
+            "complexity_features": {
+              "correlation_dimension": true,
+              "hurst_exponent": true,
+              "lyapunov_exponent": true,
+              "dfa": true
+            },
+            "connectivity_features": {
+              "cross_correlation": true
+            },
+            "asymmetry_features": {
+              "frontal_asymmetry": true,
+              "temporal_asymmetry": true
+            },
+            "cross_hemispheric_features": {
+              "hemispheric_asymmetry": true,
+              "frontal_temporal_ratios": true,
+              "diagonal_cross_hemispheric": true
+            },
+            "coherence_features": {
+              "max_coherence": true,
+              "pearson_correlation": true
+            },
+            "frequency_bands": {
+              "delta": [
+                0.5,
+                4
+              ],
+              "theta": [
+                4,
+                8
+              ],
+              "alpha": [
+                8,
+                12
+              ],
+              "beta": [
+                12,
+                30
+              ],
+              "gamma": [
+                30,
+                60
+              ]
+            },
+            "statistical_features": [
+              "mean",
+              "std",
+              "variance",
+              "skewness",
+              "kurtosis",
+              "rms",
+              "zero_crossings",
+              "peak_to_peak",
+              "mean_abs_deviation"
+            ],
+            "validation": {
+              "check_nan": true,
+              "check_infinite": true,
+              "remove_invalid": false
+            },
+            "save_interim": true
+          },
+          "mlflow": {
+            "experiment_name": "eeg_processing",
+            "tracking_uri": "mlruns",
+            "run_name": "{window_size}s_window"
+          },
+          "logging": {
+            "level": "INFO",
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "file": "logs/processing.log",
+            "console": true
+          }
+        },
+        "mlflow_dataset_name": "EEG_10s_af7-af8-tp9-tp10_1203windows",
+        "mlflow_dataset_digest": "5481529a"
+      }
+    },
+    "v_2025-07-22T15-03-15.861558": {
+      "hash": "9da16962cba0891873c91f770234314b",
+      "timestamp": "2025-07-22T15:03:15.861558",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-22T15-03-15.861558.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-22T17-01-53.943717": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-07-22T17:01:53.943717",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-22T17-01-53.943717.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-22T18-05-26.152704": {
+      "hash": "ae277f6e3ce79362747e6f8050cbbcea",
+      "timestamp": "2025-07-22T18:05:26.152704",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-22T18-05-26.152704.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-07-22T17-01-53.943717",
+        "processing_config": {
+          "paths": {
+            "raw_data": "eeg_analysis/data/raw/MDD_21_subjects_EC_EEG_data_remission_and_non_remission_seperated.mat",
+            "interim": {
+              "upsampled": "eeg_analysis/data/processed/interim/upsampled",
+              "filtered": "eeg_analysis/data/processed/interim/filtered",
+              "downsampled": "eeg_analysis/data/processed/interim/downsampled",
+              "windowed": "eeg_analysis/data/processed/interim/windowed"
+            },
+            "features": {
+              "window": "eeg_analysis/data/processed/features/4s_af7_af8_tp9_tp10_window_features.parquet",
+              "patient": "eeg_analysis/data/processed/features/patient_features.parquet"
+            }
+          },
+          "data_loader": {
+            "channels": [
+              "af7",
+              "af8",
+              "tp9",
+              "tp10"
+            ],
+            "validate_data": true,
+            "save_interim": true,
+            "data_keys": {
+              "non_remission": "EEG_windows_Non_remission",
+              "remission": "EEG_windows_Remission"
+            }
+          },
+          "upsampler": {
+            "factor": 2,
+            "method": "linear",
+            "save_interim": true
+          },
+          "filter": {
+            "type": "butterworth",
+            "order": 4,
+            "cutoff_frequency": 60,
+            "sampling_rate": 256,
+            "save_interim": true
+          },
+          "downsampler": {
+            "factor": 2,
+            "method": "decimate",
+            "save_interim": true
+          },
+          "window_slicer": {
+            "window_seconds": 4,
+            "sampling_rate": 256,
+            "overlap_seconds": 0,
+            "min_windows": 10,
+            "save_interim": true
+          },
+          "feature_extractor": {
+            "compute_spectral": true,
+            "compute_temporal": true,
+            "compute_entropy": true,
+            "compute_complexity": true,
+            "compute_connectivity": true,
+            "compute_asymmetry": true,
+            "compute_cross_hemispheric": true,
+            "compute_coherence": true,
+            "spectral_features": {
+              "band_powers": true,
+              "relative_powers": true,
+              "total_power": true,
+              "freq_weighted_power": true,
+              "spectral_edge_freq": true,
+              "psd_statistics": true
+            },
+            "temporal_features": {
+              "basic_statistics": true,
+              "hjorth_parameters": true
+            },
+            "entropy_features": {
+              "sample_entropy": true,
+              "spectral_entropy": true
+            },
+            "complexity_features": {
+              "correlation_dimension": true,
+              "hurst_exponent": true,
+              "lyapunov_exponent": true,
+              "dfa": true
+            },
+            "connectivity_features": {
+              "cross_correlation": true
+            },
+            "asymmetry_features": {
+              "frontal_asymmetry": true,
+              "temporal_asymmetry": true
+            },
+            "cross_hemispheric_features": {
+              "hemispheric_asymmetry": true,
+              "frontal_temporal_ratios": true,
+              "diagonal_cross_hemispheric": true
+            },
+            "coherence_features": {
+              "max_coherence": true,
+              "pearson_correlation": true
+            },
+            "frequency_bands": {
+              "delta": [
+                0.5,
+                4
+              ],
+              "theta": [
+                4,
+                8
+              ],
+              "alpha": [
+                8,
+                12
+              ],
+              "beta": [
+                12,
+                30
+              ],
+              "gamma": [
+                30,
+                60
+              ]
+            },
+            "statistical_features": [
+              "mean",
+              "std",
+              "variance",
+              "skewness",
+              "kurtosis",
+              "rms",
+              "zero_crossings",
+              "peak_to_peak",
+              "mean_abs_deviation"
+            ],
+            "validation": {
+              "check_nan": true,
+              "check_infinite": true,
+              "remove_invalid": false
+            },
+            "save_interim": true
+          },
+          "mlflow": {
+            "experiment_name": "eeg_processing",
+            "tracking_uri": "mlruns",
+            "run_name": "{window_size}s_window"
+          },
+          "logging": {
+            "level": "INFO",
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "file": "logs/processing.log",
+            "console": true
+          }
+        },
+        "mlflow_dataset_name": "EEG_4s_af7-af8-tp9-tp10_2406windows",
+        "mlflow_dataset_digest": "5d8fe6ee"
+      }
+    },
+    "v_2025-07-22T23-15-08.521475": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-07-22T23:15:08.521475",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-22T23-15-08.521475.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-23T00-07-41.823788": {
+      "hash": "8adb8d2d6d7faef239cfdad435f4ad69",
+      "timestamp": "2025-07-23T00:07:41.823788",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-23T00-07-41.823788.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-07-22T23-15-08.521475",
+        "processing_config": {
+          "paths": {
+            "raw_data": "eeg_analysis/data/raw/MDD_21_subjects_EC_EEG_data_remission_and_non_remission_seperated.mat",
+            "interim": {
+              "upsampled": "eeg_analysis/data/processed/interim/upsampled",
+              "filtered": "eeg_analysis/data/processed/interim/filtered",
+              "downsampled": "eeg_analysis/data/processed/interim/downsampled",
+              "windowed": "eeg_analysis/data/processed/interim/windowed"
+            },
+            "features": {
+              "window": "eeg_analysis/data/processed/features/6s_af7_af8_tp9_tp10_window_features.parquet",
+              "patient": "eeg_analysis/data/processed/features/patient_features.parquet"
+            }
+          },
+          "data_loader": {
+            "channels": [
+              "af7",
+              "af8",
+              "tp9",
+              "tp10"
+            ],
+            "validate_data": true,
+            "save_interim": true,
+            "data_keys": {
+              "non_remission": "EEG_windows_Non_remission",
+              "remission": "EEG_windows_Remission"
+            }
+          },
+          "upsampler": {
+            "factor": 2,
+            "method": "linear",
+            "save_interim": true
+          },
+          "filter": {
+            "type": "butterworth",
+            "order": 4,
+            "cutoff_frequency": 60,
+            "sampling_rate": 256,
+            "save_interim": true
+          },
+          "downsampler": {
+            "factor": 2,
+            "method": "decimate",
+            "save_interim": true
+          },
+          "window_slicer": {
+            "window_seconds": 6,
+            "sampling_rate": 256,
+            "overlap_seconds": 0,
+            "min_windows": 10,
+            "save_interim": true
+          },
+          "feature_extractor": {
+            "compute_spectral": true,
+            "compute_temporal": true,
+            "compute_entropy": true,
+            "compute_complexity": true,
+            "compute_connectivity": true,
+            "compute_asymmetry": true,
+            "compute_cross_hemispheric": true,
+            "compute_coherence": true,
+            "spectral_features": {
+              "band_powers": true,
+              "relative_powers": true,
+              "total_power": true,
+              "freq_weighted_power": true,
+              "spectral_edge_freq": true,
+              "psd_statistics": true
+            },
+            "temporal_features": {
+              "basic_statistics": true,
+              "hjorth_parameters": true
+            },
+            "entropy_features": {
+              "sample_entropy": true,
+              "spectral_entropy": true
+            },
+            "complexity_features": {
+              "correlation_dimension": true,
+              "hurst_exponent": true,
+              "lyapunov_exponent": true,
+              "dfa": true
+            },
+            "connectivity_features": {
+              "cross_correlation": true
+            },
+            "asymmetry_features": {
+              "frontal_asymmetry": true,
+              "temporal_asymmetry": true
+            },
+            "cross_hemispheric_features": {
+              "hemispheric_asymmetry": true,
+              "frontal_temporal_ratios": true,
+              "diagonal_cross_hemispheric": true
+            },
+            "coherence_features": {
+              "max_coherence": true,
+              "pearson_correlation": true
+            },
+            "frequency_bands": {
+              "delta": [
+                0.5,
+                4
+              ],
+              "theta": [
+                4,
+                8
+              ],
+              "alpha": [
+                8,
+                12
+              ],
+              "beta": [
+                12,
+                30
+              ],
+              "gamma": [
+                30,
+                60
+              ]
+            },
+            "statistical_features": [
+              "mean",
+              "std",
+              "variance",
+              "skewness",
+              "kurtosis",
+              "rms",
+              "zero_crossings",
+              "peak_to_peak",
+              "mean_abs_deviation"
+            ],
+            "validation": {
+              "check_nan": true,
+              "check_infinite": true,
+              "remove_invalid": false
+            },
+            "save_interim": true
+          },
+          "mlflow": {
+            "experiment_name": "eeg_processing",
+            "tracking_uri": "mlruns",
+            "run_name": "{window_size}s_window"
+          },
+          "logging": {
+            "level": "INFO",
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "file": "logs/processing.log",
+            "console": true
+          }
+        },
+        "mlflow_dataset_name": "EEG_6s_af7-af8-tp9-tp10_1203windows",
+        "mlflow_dataset_digest": "b556c18a"
+      }
+    },
+    "v_2025-07-23T13-48-22.956867": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-07-23T13:48:22.956867",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-23T13-48-22.956867.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-23T14-43-45.094696": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-07-23T14:43:45.094696",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-23T14-43-45.094696.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-23T16-09-38.784158": {
+      "hash": "b1459b9009925981903fc5be08f12955",
+      "timestamp": "2025-07-23T16:09:38.784158",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-23T16-09-38.784158.parquet",
+      "info": {
+        "stage": "features",
+        "parent_version": "v_2025-07-23T14-43-45.094696",
+        "processing_config": {
+          "paths": {
+            "raw_data": "eeg_analysis/data/raw/MDD_21_subjects_EC_EEG_data_remission_and_non_remission_seperated.mat",
+            "interim": {
+              "upsampled": "eeg_analysis/data/processed/interim/upsampled",
+              "filtered": "eeg_analysis/data/processed/interim/filtered",
+              "downsampled": "eeg_analysis/data/processed/interim/downsampled",
+              "windowed": "eeg_analysis/data/processed/interim/windowed"
+            },
+            "features": {
+              "window": "eeg_analysis/data/processed/features/4s_af7_af8_tp9_tp10_window_features.parquet",
+              "patient": "eeg_analysis/data/processed/features/patient_features.parquet"
+            }
+          },
+          "data_loader": {
+            "channels": [
+              "af7",
+              "af8",
+              "tp9",
+              "tp10"
+            ],
+            "validate_data": true,
+            "save_interim": true,
+            "data_keys": {
+              "non_remission": "EEG_windows_Non_remission",
+              "remission": "EEG_windows_Remission"
+            }
+          },
+          "upsampler": {
+            "factor": 2,
+            "method": "linear",
+            "save_interim": true
+          },
+          "filter": {
+            "type": "butterworth",
+            "order": 4,
+            "cutoff_frequency": 60,
+            "sampling_rate": 256,
+            "save_interim": true
+          },
+          "downsampler": {
+            "factor": 2,
+            "method": "decimate",
+            "save_interim": true
+          },
+          "window_slicer": {
+            "window_seconds": 4,
+            "sampling_rate": 256,
+            "overlap_seconds": 0,
+            "min_windows": 10,
+            "save_interim": true
+          },
+          "feature_extractor": {
+            "compute_spectral": true,
+            "compute_temporal": true,
+            "compute_entropy": true,
+            "compute_complexity": true,
+            "compute_connectivity": true,
+            "compute_asymmetry": true,
+            "compute_cross_hemispheric": true,
+            "compute_coherence": true,
+            "spectral_features": {
+              "band_powers": true,
+              "relative_powers": true,
+              "total_power": true,
+              "freq_weighted_power": true,
+              "spectral_edge_freq": true,
+              "psd_statistics": true
+            },
+            "temporal_features": {
+              "basic_statistics": true,
+              "hjorth_parameters": true
+            },
+            "entropy_features": {
+              "sample_entropy": true,
+              "spectral_entropy": true
+            },
+            "complexity_features": {
+              "correlation_dimension": true,
+              "hurst_exponent": true,
+              "lyapunov_exponent": true,
+              "dfa": true
+            },
+            "connectivity_features": {
+              "cross_correlation": true
+            },
+            "asymmetry_features": {
+              "frontal_asymmetry": true,
+              "temporal_asymmetry": true
+            },
+            "cross_hemispheric_features": {
+              "hemispheric_asymmetry": true,
+              "frontal_temporal_ratios": true,
+              "diagonal_cross_hemispheric": true
+            },
+            "coherence_features": {
+              "max_coherence": true,
+              "pearson_correlation": true
+            },
+            "frequency_bands": {
+              "delta": [
+                0.5,
+                4
+              ],
+              "theta": [
+                4,
+                8
+              ],
+              "alpha": [
+                8,
+                12
+              ],
+              "beta": [
+                12,
+                30
+              ],
+              "gamma": [
+                30,
+                60
+              ]
+            },
+            "statistical_features": [
+              "mean",
+              "std",
+              "variance",
+              "skewness",
+              "kurtosis",
+              "rms",
+              "zero_crossings",
+              "peak_to_peak",
+              "mean_abs_deviation"
+            ],
+            "validation": {
+              "check_nan": true,
+              "check_infinite": true,
+              "remove_invalid": false
+            },
+            "save_interim": true
+          },
+          "mlflow": {
+            "experiment_name": "eeg_processing",
+            "tracking_uri": "mlruns",
+            "run_name": "{window_size}s_window"
+          },
+          "logging": {
+            "level": "INFO",
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "file": "logs/processing.log",
+            "console": true
+          }
+        },
+        "mlflow_dataset_name": "EEG_4s_af7-af8-tp9-tp10_3609windows",
+        "mlflow_dataset_digest": "0b71a5a1"
+      }
+    },
+    "v_2025-07-23T16-17-38.607730": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-07-23T16:17:38.607730",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-23T16-17-38.607730.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-23T16-20-14.770047": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-07-23T16:20:14.770047",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-23T16-20-14.770047.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-23T16-21-48.284803": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-07-23T16:21:48.284803",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-23T16-21-48.284803.parquet",
+      "info": {
+        "stage": "raw"
+      }
+    },
+    "v_2025-07-23T16-23-10.318997": {
+      "hash": "9de9fedcc915003df0e65d4802b1374b",
+      "timestamp": "2025-07-23T16:23:10.318997",
+      "path": "eeg_analysis/data/processed/versions/v_2025-07-23T16-23-10.318997.parquet",
       "info": {
         "stage": "raw"
       }

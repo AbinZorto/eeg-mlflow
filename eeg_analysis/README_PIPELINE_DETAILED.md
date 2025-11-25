@@ -138,7 +138,7 @@ Window Imbalance Ratio: 2:1 (Non-remission:Remission)
 Shape: ~4,725 windows × 124 features
 Size: ~585,900 data points
 Memory: ~5-10MB as compressed parquet
-File: data/processed/features/2s_window_features.parquet
+File: eeg_analysis/data/processed/features/2s_window_features.parquet
 ```
 
 ## Training Pipeline
@@ -356,7 +356,7 @@ Patient-Level Models:
 ## File Structure
 
 ```
-data/processed/features/
+eeg_analysis/data/processed/features/
 ├── 2s_window_features.parquet          # Main feature dataset (130MB)
 ├── window_visualizations/              # QC plots
 └── versions/                           # Data versioning

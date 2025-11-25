@@ -4,7 +4,7 @@
 
 # Data Configuration
 data:
-  feature_path: "data/processed/features/{window_size}s_{channels}_window_features.parquet"
+  feature_path: "eeg_analysis/data/processed/features/{window_size}s_{channels}_window_features.parquet"
   split:
     test_size: 0.2
     random_state: 42
@@ -728,7 +728,7 @@ deep_learning:
 # Paths Configuration
 paths:
   models: "models/window_level"
-  features: "data/processed/features"
+  features: "eeg_analysis/data/processed/features"
   logs: "logs"
 
 # Output Configuration
