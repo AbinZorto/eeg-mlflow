@@ -1,0 +1,16 @@
+paths:
+  source_root: "/home/abin/ds003478-download/"
+  output_npz: "eeg_analysis/secondarydata/raw/combined_secondary_data.npz"
+
+processing:
+  target_sampling_rate: 256
+  convert_to_microvolts: true
+  keep_all_channels: true
+  register_with_mlflow: true
+
+# Optional MLflow overrides (tracking URI and experiment name)
+mlflow:
+  tracking_uri: "file:./mlruns"
+  experiment_name: "eeg_processing"
+
+
