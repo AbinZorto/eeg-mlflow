@@ -1,7 +1,6 @@
 #!/bin/bash
-conda init
 PORT=5000
-conda activate eeg-env
+source .venv/bin/activate
 if [ "$1" == "start" ]; then
     echo "Starting MLflow UI on port $PORT..."
     mlflow ui --port $PORT &
