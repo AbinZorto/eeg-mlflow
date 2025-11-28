@@ -6,11 +6,20 @@ from typing import Dict, List, Any, Tuple
 
 import mlflow
 import numpy as np
+import pandas as pd
+import yaml
+import mne
 
 from src.utils.logger import setup_logger
 from .loader import load_eeglab_run
 from .resampler import resample_raw_to_target
-from .saver import save_npz_run
+from .saver import (
+    build_run_windows_records,
+    save_parquet_table,
+    save_parquet_streaming,
+    log_parquet_as_mlflow_dataset,
+    save_parquet_run,
+)
 
 logger = setup_logger(__name__)
 
@@ -89,6 +98,22 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
     if not source_root or not output_npz:
         raise ValueError("Config must include paths.source_root and paths.output_npz")
 
+    # Load windowing parameters from processing_config.yaml (shared with primary pipeline)
+    try:
+        processing_cfg_path = Path("/home/abin/eeg-mlflow/eeg_analysis/configs/processing_config.yaml")
+        with open(processing_cfg_path, "r") as f:
+            processing_cfg = yaml.safe_load(f)
+        window_seconds = float(processing_cfg["window_slicer"]["window_seconds"])
+        overlap_seconds = float(processing_cfg["window_slicer"].get("overlap_seconds", 0))
+    except Exception as e:
+        logger.warning(f"Failed to load window settings from processing_config.yaml: {e}. Falling back to 10s, 0 overlap.")
+        window_seconds = 10.0
+        overlap_seconds = 0.0
+
+    window_length = int(window_seconds * target_sfreq)
+    overlap_length = int(overlap_seconds * target_sfreq)
+    step_size = max(1, window_length - overlap_length)  # guard
+
     # MLflow setup similar to existing pipeline
     tracking_uri = config.get("mlflow", {}).get("tracking_uri", "file:./mlruns")
     mlflow.set_tracking_uri(tracking_uri)
@@ -108,7 +133,7 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
             }
         )
         mlflow.set_tag("dataset.context", "pretraining")
-        mlflow.set_tag("dataset.type", "secondary_eeg_npz")
+        mlflow.set_tag("dataset.type", "secondary_eeg_parquet_runs")
         mlflow.set_tag("dataset.version", "v1")
 
         # Discover files
@@ -125,12 +150,13 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
         global_convert_to_uV = bool(enable_uV)
         mlflow.log_param("secondary.global_convert_to_microvolts", bool(global_convert_to_uV))
 
-        # Prepare output directory (use parent of configured output_npz for per-run files)
+        # Prepare output directory (use parent of configured output_npz)
         output_base_dir = str(Path(output_npz).parent)
         mlflow.log_param("secondary.output_dir", output_base_dir)
 
-        # Process each run
+        # Process each run into its own parquet (avoid giant single file)
         run_process_start = time.time()
+        total_windows = 0
         runs_saved = 0
         for subject_id, files in subject_to_files.items():
             for fp in files:
@@ -147,38 +173,55 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
                 # Resample
                 resampled = resample_raw_to_target(raw, target_sfreq)
                 resampled_data = resampled.get_data().astype(np.float32, copy=False)
+                resampled_ch_names = [nm.upper() for nm in list(resampled.ch_names)]
 
-                # Save per run
-                units = "uV" if (enable_uV and global_convert_to_uV) else "V"
-                saved_file = save_npz_run(
-                    output_dir=output_base_dir,
+                # Window and build DataFrame
+                records = build_run_windows_records(
                     subject_id=subject_id,
                     run_name=meta["run_name"],
                     data=resampled_data,
-                    channel_names=list(resampled.ch_names),
-                    sampling_rate=target_sfreq,
-                    original_sampling_rate=meta["original_sampling_rate"],
-                    units=units,
-                    metadata_version="v1",
+                    channel_names=resampled_ch_names,
+                    window_length=window_length,
+                    step_size=step_size,
+                )
+                total_windows += len(records)
+                run_df = pd.DataFrame(records)
+                # Sort within run for consistency
+                if not run_df.empty:
+                    run_df = run_df.sort_values(
+                        ["participant", "run", "parent_window_id", "sub_window_id"]
+                    ).reset_index(drop=True)
+
+                # Save per-run parquet under output_base_dir/<subject>/<run>.parquet
+                abs_run_path = save_parquet_run(
+                    output_dir=output_base_dir,
+                    subject_id=subject_id,
+                    run_name=meta["run_name"],
+                    df=run_df,
+                    channel_names=resampled_ch_names,
+                    window_length=window_length,
                 )
                 runs_saved += 1
-                # Log artifact for this run immediately
+                # Log artifact for this run
                 try:
-                    mlflow.log_artifact(saved_file, artifact_path=f"secondary_dataset/{subject_id}")
+                    mlflow.log_artifact(abs_run_path, artifact_path=f"secondary_runs/{subject_id}")
                 except Exception as e:
-                    logger.warning(f"Failed to log artifact for {saved_file}: {e}")
+                    logger.warning(f"Failed to log artifact for {abs_run_path}: {e}")
 
         # Final metrics
         duration_s = time.time() - t0
         build_duration_s = time.time() - run_process_start
         mlflow.log_metric("secondary.build_duration_s", build_duration_s)
         mlflow.log_metric("secondary.total_duration_s", duration_s)
+        mlflow.log_metric("secondary.total_windows", total_windows)
+        mlflow.log_param("secondary.window_seconds", window_seconds)
+        mlflow.log_param("secondary.overlap_seconds", overlap_seconds)
+        mlflow.log_param("secondary.window_length_samples", window_length)
         mlflow.set_tag("mlflow.dataset.logged", "true")
         mlflow.set_tag("mlflow.dataset.context", "pretraining")
         logger.info(
-            f"Secondary per-run save complete: runs_saved={runs_saved}, "
-            f"subjects={num_subjects}, output_dir={output_base_dir}, "
-            f"duration_s={duration_s:.2f}"
+            f"Secondary per-run parquet save complete: runs_saved={runs_saved}, windows={total_windows}, "
+            f"subjects={num_subjects}, output_dir={output_base_dir}, duration_s={duration_s:.2f}"
         )
 
     return {
@@ -187,7 +230,7 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
         "num_runs": num_runs,
         "sampling_rate": target_sfreq,
         "runs_saved": runs_saved,
+        "total_windows": total_windows,
         "duration_s": duration_s,
     }
-
 
