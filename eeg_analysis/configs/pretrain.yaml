@@ -1,0 +1,25 @@
+# Pretraining configuration for Mamba-2 EEG model
+#
+# This config also specifies the ASA electrode file to replace default channel mappings.
+#
+# Paths
+asa_path: "/home/abin/eeg-mlflow/eeg_analysis/secondarydata/raw/asa_electrodes.txt"
+dataset_path: "/home/abin/eeg-mlflow/eeg_analysis/secondarydata/raw"   # folder containing per-run parquet files
+save_dir: "/home/abin/eeg-mlflow/eeg_analysis/checkpoints"
+mlflow_tracking_uri: "mlruns"
+mlflow_experiment: "eeg_pretraining_mamba2"
+
+# Model
+d_model: 128
+num_layers: 6
+window_length: 2048
+
+# Training
+lr: 5.0e-5  # Lower LR for stability
+batch_size: 8
+epochs: 500
+mask_ratio: 0.2
+grad_clip_norm: 0.5  # More aggressive clipping
+amp: false  # Disable AMP initially for stability debugging
+
+
