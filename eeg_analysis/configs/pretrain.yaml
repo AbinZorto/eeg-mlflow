@@ -10,13 +10,13 @@ mlflow_tracking_uri: "mlruns"
 mlflow_experiment: "eeg_pretraining_mamba2"
 
 # Model
-d_model: 128
-num_layers: 6
+d_model: 256
+num_layers: 2
 window_length: 2048
 
 # Training
-lr: 5.0e-5  # Lower LR for stability
-batch_size: 8
+lr: 8.0e-4  # Lower LR for stability
+batch_size: 16
 epochs: 500
 mask_ratio: 0.2
 grad_clip_norm: 0.5  # More aggressive clipping
