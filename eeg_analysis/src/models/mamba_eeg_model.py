@@ -105,26 +105,99 @@ class TemporalEncoder(nn.Module):
 
 class TokenEncoder(nn.Module):
     """
-    Input projection for tokens: Linear(window_length → d_model) + LayerNorm for stability.
+    Deep MLP encoder for tokens: window_length → hidden1 → hidden2 → hidden3 → d_model
+    
+    Uses learnable mask token to prevent encoder collapse when input is zero.
+    When masked tokens are zero, they're replaced with a learnable mask token vector.
     """
-    def __init__(self, window_length: int, d_model: int) -> None:
+    def __init__(self, window_length: int, d_model: int, hidden_dim: Optional[int] = None) -> None:
         super().__init__()
-        self.proj = nn.Linear(window_length, d_model)
-        self.norm = nn.LayerNorm(d_model)
-        # Initialize projection with smaller weights to avoid explosion
-        nn.init.xavier_uniform_(self.proj.weight, gain=0.1)
-        nn.init.zeros_(self.proj.bias)
+        # Reduced capacity for parameter efficiency (500k tokens)
+        hidden_dim = hidden_dim or (d_model * 2)  # Reduced: 2x d_model (was 4x)
+        hidden_dim2 = d_model * 1.5  # Intermediate layer (was 3x)
+        
+        # More efficient encoder: 3 layers (was 4)
+        self.layers = nn.Sequential(
+            # Layer 1: window_length → hidden_dim
+            nn.Linear(window_length, hidden_dim),
+            nn.GELU(),
+            nn.LayerNorm(hidden_dim),
+            nn.Dropout(0.1),
+            
+            # Layer 2: hidden_dim → hidden_dim2
+            nn.Linear(hidden_dim, int(hidden_dim2)),
+            nn.GELU(),
+            nn.LayerNorm(int(hidden_dim2)),
+            nn.Dropout(0.1),
+            
+            # Layer 3: hidden_dim2 → d_model
+            nn.Linear(int(hidden_dim2), d_model),
+            nn.LayerNorm(d_model),
+        )
+        # Initialize with smaller weights
+        for module in self.layers:
+            if isinstance(module, nn.Linear):
+                nn.init.xavier_uniform_(module.weight, gain=0.1)
+                nn.init.zeros_(module.bias)
+        
+        # Learnable mask token: base vector for masked inputs
+        # Initialize with small random values (not zero!)
+        self.mask_token_base = nn.Parameter(torch.randn(window_length) * 0.02)
+        
+        # Position-dependent mask tokens: prevents encoder collapse
+        # Each position gets a slightly different mask token (base + small learnable offset)
+        # This ensures masked tokens at different positions produce different embeddings
+        # Max sequence length: 1000 (can be increased if needed)
+        max_seq_len = 1000
+        self.mask_token_offsets = nn.Parameter(torch.randn(max_seq_len, window_length) * 0.01)
 
     def forward(self, windows: torch.Tensor) -> torch.Tensor:
         """
         Args:
-            windows: (B, L, window_length)
+            windows: (B, L, window_length) - may contain zeros for masked tokens
         Returns:
             token_embeddings: (B, L, d_model)
         """
-        x = self.proj(windows)
-        x = self.norm(x)
-        return x
+        # Replace zero tokens with position-dependent learnable mask token
+        # Check if token is all zeros (masked) - use small threshold to avoid numerical issues
+        token_norms = windows.abs().sum(dim=-1)  # (B, L) - sum of absolute values per token
+        is_masked = token_norms < 1e-6  # True if token is all zeros (masked)
+        
+        windows_with_mask = windows.clone()
+        # Replace masked tokens with position-dependent mask tokens
+        if is_masked.any():
+            B, L, W = windows.shape
+            # Get position indices for masked tokens
+            batch_indices, seq_indices = torch.where(is_masked)  # (N_masked,), (N_masked,)
+            
+            # Create position-dependent mask tokens: base + position-specific offset
+            # Clamp seq_indices to valid range for mask_token_offsets
+            seq_indices_clamped = torch.clamp(seq_indices, 0, self.mask_token_offsets.shape[0] - 1)
+            position_offsets = self.mask_token_offsets[seq_indices_clamped]  # (N_masked, window_length)
+            mask_tokens = self.mask_token_base.unsqueeze(0) + position_offsets  # (N_masked, window_length)
+            
+            # Replace masked tokens
+            windows_with_mask[batch_indices, seq_indices] = mask_tokens
+        
+        return self.layers(windows_with_mask)
+    
+    def _load_from_state_dict(self, state_dict, prefix, local_metadata, strict, missing_keys, unexpected_keys, error_msgs):
+        """Handle loading old checkpoints that use 'mask_token' instead of 'mask_token_base' and 'mask_token_offsets'."""
+        old_key = prefix + 'mask_token'
+        new_base_key = prefix + 'mask_token_base'
+        new_offsets_key = prefix + 'mask_token_offsets'
+        
+        if old_key in state_dict:
+            # Old checkpoint format: convert mask_token to new format
+            old_mask_token = state_dict.pop(old_key)
+            state_dict[new_base_key] = old_mask_token
+            # Initialize offsets as zeros (will learn during training)
+            window_length = old_mask_token.shape[0]
+            max_seq_len = 1000
+            state_dict[new_offsets_key] = torch.zeros(max_seq_len, window_length)
+        
+        # Call parent to handle normal loading
+        super()._load_from_state_dict(state_dict, prefix, local_metadata, strict, missing_keys, unexpected_keys, error_msgs)
 
 
 class MambaBackbone(nn.Module):
@@ -188,6 +261,52 @@ class MambaEEGModel(nn.Module):
         super().__init__()
         self.d_model = d_model
         self.window_length = window_length
+        
+        # FLEXIBLE ARCHITECTURE: Use lightweight projection if window_length != d_model
+        # For 8-second windows (2048 samples) with d_model=512, use strided convolution
+        if window_length != d_model:
+            # Use strided 1D convolution for efficient downsampling
+            # This preserves spatial structure better than linear projection
+            # Example: 2048 → 512 using stride=4 convolution
+            if window_length % d_model == 0:
+                # Perfect division: use single strided conv
+                stride = window_length // d_model
+                kernel_size = stride  # Match stride for non-overlapping downsampling
+                self.input_proj = nn.Sequential(
+                    nn.Conv1d(1, 1, kernel_size=kernel_size, stride=stride, bias=False),
+                    nn.LayerNorm(d_model),
+                )
+                logger.info(f"Using strided convolution projection: {window_length} → {d_model} (stride={stride})")
+            else:
+                # Not perfect division: use adaptive pooling + linear
+                self.input_proj = nn.Sequential(
+                    nn.AdaptiveAvgPool1d(d_model),
+                    nn.LayerNorm(d_model),
+                )
+                logger.info(f"Using adaptive pooling projection: {window_length} → {d_model}")
+            
+            # Output projection: d_model → window_length (for reconstruction)
+            if window_length % d_model == 0:
+                # Use transposed convolution for upsampling
+                stride = window_length // d_model
+                kernel_size = stride
+                self.output_proj = nn.Sequential(
+                    nn.LayerNorm(d_model),
+                    nn.ConvTranspose1d(1, 1, kernel_size=kernel_size, stride=stride, bias=False),
+                )
+                logger.info(f"Using transposed convolution: {d_model} → {window_length} (stride={stride})")
+            else:
+                # Use linear interpolation
+                self.output_proj = nn.Sequential(
+                    nn.LayerNorm(d_model),
+                    nn.Linear(d_model, window_length),
+                )
+                logger.info(f"Using linear projection: {d_model} → {window_length}")
+        else:
+            # Direct feed: no projection needed
+            self.input_proj = None
+            self.output_proj = None
+            logger.info(f"Direct feed: d_model={d_model} == window_length={window_length} (no projection)")
         # Default partial 10–20 mapping (extend as needed)
         default_xyz = {
             "FP1": (-0.3, 0.9, 0.3), "FPZ": (0.0, 1.0, 0.0), "FP2": (0.3, 0.9, 0.3),
@@ -222,48 +341,150 @@ class MambaEEGModel(nn.Module):
         else:
             channel_to_xyz = channel_to_xyz or default_xyz
 
-        self.token_encoder = TokenEncoder(window_length=window_length, d_model=d_model)
+        # FLEXIBLE ARCHITECTURE: Lightweight projection if needed, otherwise direct feed
         self.spatial_encoder = SpatialEncoderFixed(d_model=d_model, channel_to_xyz=channel_to_xyz)
         self.temporal_encoder = TemporalEncoder(d_model=d_model)
         self.backbone = MambaBackbone(d_model=d_model, num_layers=num_layers, dropout=dropout)
+        
+        logger.info(f"Architecture: window_length={window_length}, d_model={d_model}")
+        if self.input_proj is None:
+            logger.info("Direct feed - complexity in Mamba backbone only")
+        else:
+            logger.info("Lightweight projection - complexity in Mamba backbone + minimal projection")
 
     @torch.no_grad()
     def encode_tokens_only(self, windows: torch.Tensor) -> torch.Tensor:
         """
-        Token projection only (for targets).
+        DEPRECATED: No encoder in simplified architecture.
+        Returns windows directly (since d_model == window_length).
         Args:
             windows: (B, L, window_length)
         Returns:
-            token_embeddings: (B, L, d_model)
+            windows: (B, L, window_length) - same as input
         """
-        return self.token_encoder(windows)
+        return windows  # No encoding needed - direct feed
 
     def forward(
         self,
         windows_masked: torch.Tensor,
         channel_names: List[str],
         seq_lengths: torch.Tensor,
+        disable_temporal: bool = False,  # For control experiments
+        disable_spatial: bool = False,   # For control experiments
+        decode_to_signal: bool = False,  # NEW: Return reconstructed signal instead of embeddings
+        mask_bool: Optional[torch.Tensor] = None,  # (B, L) or (B, L, W) mask - token-level or sample-level
     ) -> torch.Tensor:
         """
-        Predict embeddings for token positions from masked inputs.
+        Predict embeddings (or reconstructed signal) for token positions from masked inputs.
         Args:
             windows_masked: (B, L, window_length)
             channel_names: list length B
             seq_lengths: (B,) valid lengths
+            disable_temporal: If True, removes temporal encoding (for control)
+            disable_spatial: If True, removes spatial encoding (for control)
+            decode_to_signal: If True, decodes embeddings back to signal space (proper MAE)
+            mask_bool: (B, L) or (B, L, W) boolean mask. If (B, L, W), converted to token-level
+                      by checking if any samples in token are masked. Positional encoding is zeroed
+                      for tokens with masked samples to prevent position leakage.
         Returns:
-            predicted_embeddings: (B, L, d_model)
+            If decode_to_signal=False: predicted_embeddings (B, L, d_model)
+            If decode_to_signal=True: reconstructed_signal (B, L, window_length)
         """
         device = windows_masked.device
-        B, L, _ = windows_masked.shape
+        B, L, W = windows_masked.shape
 
-        token_emb = self.token_encoder(windows_masked)               # (B, L, D)
-        temporal = self.temporal_encoder(seq_lengths)                # (B, L, D)
-        spatial = self.spatial_encoder(channel_names)                # (B, D)
-        spatial = spatial.unsqueeze(1).expand(B, L, self.d_model)    # (B, L, D)
+        # Normalize windows per-token to prevent numerical issues
+        # Raw windows can be very large (e.g., -242221 to 254118), which causes NaN when combined with normalized encodings
+        token_emb_mean = windows_masked.mean(dim=-1, keepdim=True)  # (B, L, 1)
+        token_emb_std = windows_masked.std(dim=-1, keepdim=True)  # (B, L, 1)
+        # Handle zero-variance windows (all samples same value)
+        token_emb_std = torch.clamp(token_emb_std, min=1e-6)  # Prevent division by very small numbers
+        windows_normalized = (windows_masked - token_emb_mean) / token_emb_std  # (B, L, window_length)
+        
+        # Project to d_model if needed (using lightweight convolution/pooling)
+        if self.input_proj is not None:
+            # Reshape for Conv1d: (B, L, W) -> (B*L, 1, W) -> conv -> (B*L, 1, d_model) -> (B, L, d_model)
+            windows_reshaped = windows_normalized.view(B * L, 1, W)  # (B*L, 1, window_length)
+            token_emb = self.input_proj(windows_reshaped)  # (B*L, 1, d_model)
+            token_emb = token_emb.squeeze(1).view(B, L, self.d_model)  # (B, L, d_model)
+        else:
+            # Direct feed: already correct shape
+            token_emb = windows_normalized  # (B, L, window_length) = (B, L, d_model)
+        
+        # Convert sample-level mask (B, L, W) to token-level mask (B, L) if needed
+        token_mask = None
+        if mask_bool is not None:
+            if mask_bool.dim() == 3:  # Sample-level mask (B, L, W)
+                # Token is masked if ANY sample in it is masked
+                token_mask = mask_bool.any(dim=2)  # (B, L)
+            else:  # Token-level mask (B, L)
+                token_mask = mask_bool
+        
+        # Temporal encoding (can be disabled for control)
+        if disable_temporal:
+            temporal = torch.zeros(B, L, self.d_model, device=device)  # No position information
+        else:
+            temporal = self.temporal_encoder(seq_lengths)  # (B, L, d_model)
+            # CRITICAL FIX: Zero positional encoding for masked positions to prevent position leakage
+            if token_mask is not None:
+                temporal = temporal * (~token_mask).unsqueeze(-1)  # Zero encoding for masked tokens
+        
+        # Spatial encoding (can be disabled for control)
+        if disable_spatial:
+            spatial = torch.zeros(B, L, self.d_model, device=device)  # No channel information
+        else:
+            spatial = self.spatial_encoder(channel_names)  # (B, d_model)
+            spatial = spatial.unsqueeze(1).expand(B, L, self.d_model)  # (B, L, d_model)
+            # CRITICAL FIX: Zero spatial encoding for masked positions
+            if token_mask is not None:
+                spatial = spatial * (~token_mask).unsqueeze(-1)  # Zero encoding for masked tokens
 
-        x = token_emb + temporal + spatial
-        y = self.backbone(x)
-        return y
+        # Combine: normalized windows + temporal + spatial encodings
+        # All components are now on similar scale (normalized), preventing numerical instability
+        x = token_emb + temporal + spatial  # (B, L, d_model)
+        
+        # DEBUG: Log embedding statistics to detect position leakage
+        if not hasattr(self, '_debug_log_counter'):
+            self._debug_log_counter = 0
+        self._debug_log_counter += 1
+        
+        # Reduced debug logging (every 10000 forward passes)
+        if token_mask is not None and self._debug_log_counter % 10000 == 0:
+            import logging
+            debug_logger = logging.getLogger(__name__)
+            b = 0
+            seq_len = seq_lengths[b].item()
+            temporal_sliced = temporal[b, :seq_len] if not disable_temporal else torch.zeros(B, seq_len, self.d_model, device=device)
+            spatial_sliced = spatial[b, :seq_len] if not disable_spatial else torch.zeros(B, seq_len, self.d_model, device=device)
+            token_mask_sliced = token_mask[b, :seq_len]
+            if token_mask_sliced.any():
+                masked_temporal_norm = temporal_sliced[token_mask_sliced].norm().item() / token_mask_sliced.sum().item()
+                masked_spatial_norm = spatial_sliced[token_mask_sliced].norm().item() / token_mask_sliced.sum().item()
+                debug_logger.info(f"[DEBUG #{self._debug_log_counter}] Masked norms - Temporal: {masked_temporal_norm:.8f}, Spatial: {masked_spatial_norm:.8f}")
+        
+        # Mamba backbone processes the combined embeddings
+        embeddings = self.backbone(x)  # (B, L, d_model)
+        
+        # Project back to window_length if needed (for reconstruction)
+        if decode_to_signal and self.output_proj is not None:
+            # Handle both ConvTranspose1d (Sequential) and Linear (single layer)
+            if isinstance(self.output_proj, nn.Sequential):
+                # ConvTranspose1d: needs (B*L, 1, d_model) shape
+                embeddings_reshaped = embeddings.view(B * L, 1, self.d_model)  # (B*L, 1, d_model)
+                reconstructed = self.output_proj(embeddings_reshaped)  # (B*L, 1, window_length)
+                reconstructed = reconstructed.squeeze(1).view(B, L, self.window_length)  # (B, L, window_length)
+            else:
+                # Linear: needs (B*L, d_model) shape
+                embeddings_reshaped = embeddings.view(B * L, self.d_model)  # (B*L, d_model)
+                reconstructed = self.output_proj(embeddings_reshaped)  # (B*L, window_length)
+                reconstructed = reconstructed.view(B, L, self.window_length)  # (B, L, window_length)
+            return reconstructed
+        elif decode_to_signal and self.output_proj is None:
+            # Direct feed: d_model == window_length, output is already correct shape
+            return embeddings  # (B, L, d_model) = (B, L, window_length)
+        else:
+            # Return embeddings (not signal space)
+            return embeddings  # (B, L, d_model)
 
 
 

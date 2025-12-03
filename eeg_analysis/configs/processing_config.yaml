@@ -58,9 +58,9 @@ downsampler:
 
 # Window Slicer Parameters
 window_slicer:
-  window_seconds: 8
+  window_seconds: 10
   sampling_rate: 256  # After downsampling
-  overlap_seconds: 4
+  overlap_seconds: 0
   min_windows: 10  # Minimum windows per participant
   save_interim: true
 
@@ -76,7 +76,7 @@ feature_extractor:
   # Window Ordering Configuration - NEW FEATURE
   # Controls how windows are ordered in the final feature dataset
   preserve_window_order: true   # Set to false for legacy behavior
-  ordering_method: "completion"  # Options: "sequential" or "completion"
+  ordering_method: "sequential"  # Options: "sequential" or "completion"
   # 
   # SEQUENTIAL (recommended): Preserves temporal relationships
   # - Windows appear in the same order as input (participant -> parent_window -> sub_window)
