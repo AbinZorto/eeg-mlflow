@@ -244,10 +244,10 @@ deep_learning:
     
     # Simplified attention
     attention_config:
-      num_heads: 4  # Reduced from 8
-      key_dim: 32  # Reduced from 64
+      num_heads: 8  # Reduced from 8
+      key_dim: 64  # Reduced from 64
       dropout: 0.1
-      use_positional_encoding: False  # Disabled for speed
+      use_positional_encoding: True  # Disabled for speed
       attention_type: 'multi_head'
     
     # Simplified fusion
@@ -257,12 +257,12 @@ deep_learning:
     # Optimized dense architecture
     dense_architecture:
       - units: 256
-        activation: 'relu'  # Faster than swish
+        activation: 'gelu'  # Faster than swish
         dropout: 0.3
         batch_norm: True
         
       - units: 128
-        activation: 'relu'
+        activation: 'gelu'
         dropout: 0.4
         batch_norm: True
     
@@ -404,7 +404,8 @@ deep_learning:
     mixed_precision: true
     class_weight: 'balanced'
     random_state: 42
- 
+    
+    cnn_blocks:
       - filters: [64, 64]
         kernel_sizes: [5, 3]  # Optimized kernel sizes
         pool_size: 2

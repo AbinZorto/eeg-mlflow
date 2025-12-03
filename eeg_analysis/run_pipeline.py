@@ -290,6 +290,72 @@ def process(ctx):
 
 @cli.command()
 @click.pass_context
+def process_primary(ctx):
+    """Process EEG data to create primary dataset (windowed data without feature extraction)."""
+    from src.processing.primary_dataset import create_primary_dataset
+    
+    config = ctx.obj['config']
+
+    # Set up MLflow tracking
+    tracking_uri = config.get('mlflow', {}).get('tracking_uri', "file:./mlruns")
+    mlflow.set_tracking_uri(tracking_uri)
+    
+    try:
+        experiment_id = setup_mlflow_tracking(config)
+        logger.info(f"MLflow experiment ID: {experiment_id} selected for primary dataset processing.")
+    except Exception as e:
+        logger.error(f"Critical error setting up MLflow for processing: {e}")
+        raise
+    
+    with mlflow.start_run(run_name="primary_dataset_processing"):
+        mlflow.log_params(config.get('processing_params', {}))
+        try:
+            # Load data
+            logger.info("Loading raw EEG data...")
+            raw_data = load_eeg_data(config)
+            
+            # Process pipeline up to windowing (skip feature extraction)
+            logger.info("Starting EEG processing pipeline (up to windowing)...")
+            upsampled = upsample_eeg_data(config, raw_data)
+            logger.info("Upsampling complete.")
+            filtered = filter_eeg_data(config, upsampled)
+            logger.info("Filtering complete.")
+            downsampled = downsample_eeg_data(config, filtered)
+            logger.info("Downsampling complete.")
+            windowed = slice_eeg_windows(config, downsampled)
+            logger.info("Window slicing complete.")
+            dc_removed = remove_dc_offset_eeg_data(config, windowed)
+            logger.info("DC offset removal complete.")
+            
+            # Create primary dataset (concatenate remission and non-remission)
+            logger.info("Creating primary dataset...")
+            windowed_path = config['paths']['interim']['windowed']
+            primary_df, mlflow_dataset = create_primary_dataset(config, windowed_path)
+            logger.info("Primary dataset creation complete.")
+            
+            mlflow.log_metric("primary_dataset_processing_success", 1)
+            mlflow.log_param("primary_dataset_rows", len(primary_df))
+            mlflow.log_param("primary_dataset_participants", primary_df['Participant'].nunique())
+            
+            # Store dataset info for potential use in training
+            if mlflow_dataset:
+                mlflow.log_param("dataset_available_for_training", True)
+                mlflow.set_tag("mlflow.dataset.logged", "true")
+                mlflow.set_tag("mlflow.dataset.context", "training")
+                mlflow.set_tag("mlflow.dataset.type", "primary")
+            else:
+                mlflow.log_param("dataset_available_for_training", False)
+                
+            logger.info("Primary dataset processing completed successfully and logged to MLflow.")
+            
+        except Exception as e:
+            mlflow.log_metric("primary_dataset_processing_success", 0)
+            logger.error(f"Primary dataset processing failed: {str(e)}")
+            mlflow.log_param("error_message", str(e))
+            raise
+
+@cli.command()
+@click.pass_context
 def list_datasets(ctx):
     """List available MLflow datasets that match the current processing configuration."""
     config = ctx.obj['config']

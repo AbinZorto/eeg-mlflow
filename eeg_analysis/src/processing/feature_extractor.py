@@ -809,6 +809,107 @@ class EEGFeatureExtractor:
                             correlation = np.corrcoef(signal1, signal2)[0, 1]
                             features[f"{feature_name}_pearson"] = correlation if not np.isnan(correlation) else 0.0
             
+            # === TP10 DERIVED FEATURES ===
+            # Add three new derived features for tp10 after PSD-based features are computed
+            if 'tp10' in self.channels:
+                try:
+                    # Required inputs for tp10 derived features
+                    required_keys = [
+                        'tp10_psd_max',
+                        'tp10_psd_mean',
+                        'tp10_psd_std',
+                        'tp10_total_power'
+                    ]
+                    
+                    # Check if all required inputs exist and are valid
+                    all_present = all(key in features for key in required_keys)
+                    all_valid = all(
+                        key in features and 
+                        not np.isnan(features[key]) and 
+                        np.isfinite(features[key])
+                        for key in required_keys
+                    )
+                    
+                    if all_present and all_valid:
+                        tp10_psd_max = features['tp10_psd_max']
+                        tp10_psd_mean = features['tp10_psd_mean']
+                        tp10_psd_std = features['tp10_psd_std']
+                        tp10_total_power = features['tp10_total_power']
+                        
+                        # 1. tp10_peak_prominence
+                        try:
+                            tp10_peak_prominence = (tp10_psd_max - tp10_psd_mean) / (tp10_psd_std + 1e-8)
+                            if np.isfinite(tp10_peak_prominence):
+                                features['tp10_peak_prominence'] = tp10_peak_prominence
+                            else:
+                                features['tp10_peak_prominence'] = np.nan
+                        except Exception as e:
+                            self.logger.warning(f"Error computing tp10_peak_prominence: {str(e)}")
+                            features['tp10_peak_prominence'] = np.nan
+                        
+                        # 2. tp10_peak_concentration_ratio
+                        try:
+                            tp10_peak_concentration_ratio = tp10_psd_max / ((tp10_total_power - tp10_psd_max) + 1e-8)
+                            if np.isfinite(tp10_peak_concentration_ratio):
+                                features['tp10_peak_concentration_ratio'] = tp10_peak_concentration_ratio
+                            else:
+                                features['tp10_peak_concentration_ratio'] = np.nan
+                        except Exception as e:
+                            self.logger.warning(f"Error computing tp10_peak_concentration_ratio: {str(e)}")
+                            features['tp10_peak_concentration_ratio'] = np.nan
+                        
+                        # 3. tp10_asym_weighted_pp (requires left_frontal_temporal_diff_beta)
+                        try:
+                            # Check if left_frontal_temporal_diff_beta exists
+                            left_frontal_temporal_diff_beta_key = 'left_frontal_temporal_diff_beta'
+                            if left_frontal_temporal_diff_beta_key in features:
+                                left_frontal_temporal_diff_beta = features[left_frontal_temporal_diff_beta_key]
+                                
+                                # Check if the asymmetry feature is valid
+                                if not np.isnan(left_frontal_temporal_diff_beta) and np.isfinite(left_frontal_temporal_diff_beta):
+                                    # Use a fixed scale constant (1.0) as specified
+                                    scale = 1.0
+                                    
+                                    # Compute tp10_asym_weighted_pp
+                                    # First compute tp10_peak_prominence if not already computed above
+                                    if 'tp10_peak_prominence' not in features or np.isnan(features['tp10_peak_prominence']):
+                                        tp10_peak_prominence = (tp10_psd_max - tp10_psd_mean) / (tp10_psd_std + 1e-8)
+                                    
+                                    if 'tp10_peak_prominence' in features and not np.isnan(features['tp10_peak_prominence']):
+                                        tp10_peak_prominence_val = features['tp10_peak_prominence']
+                                        tp10_asym_weighted_pp = tp10_peak_prominence_val * (1 + 0.5 * np.tanh(left_frontal_temporal_diff_beta / scale))
+                                        
+                                        if np.isfinite(tp10_asym_weighted_pp):
+                                            features['tp10_asym_weighted_pp'] = tp10_asym_weighted_pp
+                                        else:
+                                            features['tp10_asym_weighted_pp'] = np.nan
+                                    else:
+                                        features['tp10_asym_weighted_pp'] = np.nan
+                                else:
+                                    # left_frontal_temporal_diff_beta is NaN or invalid
+                                    features['tp10_asym_weighted_pp'] = np.nan
+                            else:
+                                # left_frontal_temporal_diff_beta not computed (missing required channels)
+                                features['tp10_asym_weighted_pp'] = np.nan
+                        except Exception as e:
+                            self.logger.warning(f"Error computing tp10_asym_weighted_pp: {str(e)}")
+                            features['tp10_asym_weighted_pp'] = np.nan
+                    else:
+                        # Some required inputs are missing or invalid
+                        missing_keys = [key for key in required_keys if key not in features]
+                        if missing_keys:
+                            self.logger.debug(f"Skipping tp10 derived features: missing inputs {missing_keys}")
+                        features['tp10_peak_prominence'] = np.nan
+                        features['tp10_peak_concentration_ratio'] = np.nan
+                        features['tp10_asym_weighted_pp'] = np.nan
+                        
+                except Exception as e:
+                    self.logger.warning(f"Error computing tp10 derived features: {str(e)}")
+                    # Set all tp10 derived features to NaN on error
+                    features['tp10_peak_prominence'] = np.nan
+                    features['tp10_peak_concentration_ratio'] = np.nan
+                    features['tp10_asym_weighted_pp'] = np.nan
+            
             return features
             
         except Exception as e:

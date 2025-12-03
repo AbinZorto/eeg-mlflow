@@ -10,16 +10,82 @@ mlflow_tracking_uri: "mlruns"
 mlflow_experiment: "eeg_pretraining_mamba2"
 
 # Model
-d_model: 256
+# FLEXIBLE ARCHITECTURE: Lightweight projection if window_length != d_model
+# For 8-second windows at 256 Hz: 8 * 256 = 2048 samples
+# Uses strided convolution to project 2048 → 512 (4x downsampling)
+d_model: 64 
 num_layers: 2
-window_length: 2048
+window_length: 2048  # 8 seconds at 256 Hz sampling rate
 
 # Training
-lr: 8.0e-4  # Lower LR for stability
-batch_size: 16
-epochs: 500
-mask_ratio: 0.2
-grad_clip_norm: 0.5  # More aggressive clipping
-amp: false  # Disable AMP initially for stability debugging
+lr: 8.0e-5  # Learning rate
+batch_size: 64
+epochs: 200  # Max epochs with early stopping
+
+# Masking configuration
+mask_ratio: 0.6 # Fraction of tokens/samples to mask
+masking_style: "multi_channel"  # Options: "mae", "bert", "within_token", "multi_channel"
+                               # - "mae": Token-level masking, independent per channel
+                               # - "bert": Token-level masking with noise/unchanged variants
+                               # - "within_token": Sample-level masking within tokens, independent per channel
+                               # - "multi_channel": Synchronized masking across channels from same file
+                               #   (forces cross-channel spatial learning)
+mask_samples_within_token: false  # For "multi_channel": true = sample-level sync, false = token-level sync
+mask_replacement: "gaussian_noise"  # Options: "zeros", "gaussian_noise"
+                           # - "zeros": Replace masked tokens/samples with zeros (standard MAE)
+                           # - "gaussian_noise": Replace with Gaussian noise (mean=0, std=1)
+                           #   Prevents model from learning that zeros are special
+                           #   Encourages learning actual signal patterns
+
+# Positional encoding control
+disable_temporal_encoding: false  # Keep temporal encoding (needed for EEG)
+disable_spatial_encoding: false   # Keep spatial encoding (needed for EEG)
+
+# Anti-position-only learning strategies
+prevent_position_only_learning: false # Enable strategies to prevent position-only learning
+position_regularization_weight: 0  # Penalty for position-only predictions (0.0-1.0)
+shuffle_sequences_prob: 0  # Probability of shuffling sequence order during training (0.0-1.0)
+                                    # Shuffling breaks position=time mapping, forces context learning
+                                    # 0.0 = never shuffle (preserve temporal order)
+                                    # 0.3 = shuffle 30% of sequences (balanced)
+                                    # 1.0 = always shuffle (breaks temporal structure)
+
+# Reconstruction target space (NEW - fixes circular dependency bug)
+reconstruct_signal_space: true  # Proper MAE: Reconstruct actual signal (2048 samples)
+                                # true = targets are raw EEG samples (NEVER change!)
+                                # false = targets are embeddings (old approach, has circular dependency)
+
+# Loss function for reconstruction
+loss_function: "combined"  # Options: "mse", "mae", "cosine", "huber", "combined"
+                         # - "mse": Mean Squared Error (L2) - standard, smooth gradients
+                         # - "mae": Mean Absolute Error (L1) - robust to outliers
+                         # - "cosine": Cosine similarity loss - focuses on waveform shape
+                         # - "huber": Huber loss - combines MSE and MAE benefits
+                         # - "combined": Weighted combination of cosine + MAE (0.5 cosine + 0.5 MAE)
+variance_matching_weight: 0  # Weight for variance matching penalty (0.0 = disabled)
+                                # Encourages predictions to match target variance
+                                # Helps prevent low-variance predictions
+                                # Recommended: 0.1-0.3 for cosine loss, 0.0 for MSE/MAE
+
+# Expected behavior with mask_ratio=1.0 + disable_temporal=true + disable_spatial=true:
+#   Token embeddings: LayerNorm(bias) - same constant for all positions/channels
+#   Temporal encoding: Zero - no position information
+#   Spatial encoding: Zero - no channel information
+#   Result: Model has ONLY constant bias, no varying information
+#   Expected: Loss should STAY HIGH (random baseline, ~1.0+)
+#   If loss drops significantly: TRUE SIGNAL LEAKAGE DETECTED
+
+val_ratio: 0.2  # 20% validation split
+
+# Gradient Clipping
+grad_clip_norm: 1.0  # Maximum gradient norm (hard limit)
+auto_grad_clip: true  # Enable adaptive gradient clipping
+grad_clip_percentile: 95.0  # Clip at 95th percentile of gradient norm history
+                             # Automatically adjusts threshold based on recent gradient norms
+                             # Helps prevent gradient explosions while adapting to training dynamics
+
+amp: false  # Disable AMP for stability
+patience: 5  # Early stopping patience
+min_delta: 1.0e-4  # Minimum improvement to reset patience
 
 

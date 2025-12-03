@@ -1,0 +1,31 @@
+# Fine-tuning configuration for Mamba-2 EEG classification
+#
+# This config is used for supervised fine-tuning (SFT) of pretrained Mamba models
+
+# Training hyperparameters
+lr: 1.0e-4  # Learning rate for fine-tuning
+min_lr: 1.0e-6  # Minimum learning rate for cosine annealing
+batch_size: 8
+epochs: 50
+dropout: 0.1
+weight_decay: 0.01
+
+# Model configuration
+freeze_backbone: true  # Freeze pretrained backbone, only train classification head
+num_classes: 2  # Binary classification (remission vs non-remission)
+
+# Data splits
+val_ratio: 0.2  # 20% validation split
+test_ratio: 0.1  # 10% test split
+seed: 42
+
+# MLflow
+mlflow_tracking_uri: "mlruns"
+mlflow_experiment: "eeg_finetuning_mamba2"
+
+# Notes:
+# - The model architecture (d_model, num_layers, window_length, asa_path) 
+#   will be loaded from the pretraining config
+# - The pretrained checkpoint will be automatically found based on the 
+#   pretraining config parameters (d_model, num_layers, mask_ratio, masking_style)
+
