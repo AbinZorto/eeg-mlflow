@@ -204,7 +204,7 @@
 ### Table 5: Architecture Changes (Hybrid Model)
 - [ ] Activation: ReLU → GELU
 - [ ] Attention: 4→8 heads, 32→64 dim, positional encoding added
-- [ ] Training: Deterministic enabled, random_state changed
+- [ ] Training: Deterministic enabled 
 
 ### Table 6: Hyperparameters
 - [ ] Tabular MLP: All hyperparameters

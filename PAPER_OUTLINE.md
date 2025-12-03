@@ -182,7 +182,6 @@ for each window:
 - **Attention**: 4 heads → 8 heads, 32 dim → 64 dim
 - **Positional Encoding**: Disabled → Enabled
 - **Deterministic Training**: False → True
-- **Random State**: 42 → 30
 
 ### 4.4 Feature Selection
 - **Method**: SelectKBest with f_classif
@@ -282,7 +281,6 @@ for each window:
 - **Activation Function**: ReLU → GELU (dense layers)
 - **Attention Enhancement**: 4→8 heads, 32→64 dim, positional encoding added
 - **Deterministic Training**: Enabled for reproducibility
-- **Random State**: Changed (42 → 30) - acknowledge as limitation
 
 #### 5.2.3 Key Findings
 - **Similar ROC-AUC Gain**: ~0.13 improvement (comparable to tabular MLP)
