@@ -203,6 +203,8 @@ deep_learning:
 
   advanced_hybrid_1dcnn_lstm:
     # OPTIMIZED architecture for maximum speed and GPU utilization
+    # Set use_cnn: false to disable CNN blocks and use LSTM only
+    use_cnn: true  # Set to false to remove CNN blocks (may be redundant with feature extraction)
     cnn_blocks:
       - filters: [64, 64]
         kernel_sizes: [5, 3]  # Optimized kernel sizes
@@ -361,8 +363,8 @@ deep_learning:
       distribute_strategy: 'single_gpu'  # Single GPU for simplicity
       
     # Reproducibility
-    random_state: 42
-    deterministic_training: False  # Disabled for speed
+    random_state: 10
+    deterministic_training: True  # Disabled for speed
     
     # Disabled post-training for speed
     post_training:
