@@ -1051,6 +1051,7 @@ class AdvancedHybrid1DCNNLSTMClassifier(BaseEstimator, ClassifierMixin):
     
     def __init__(self,
                  cnn_blocks=None,
+                 use_cnn=True,  # Flag to enable/disable CNN blocks
                  normalization='layer_norm',
                  cnn_dropout=None,
                  spatial_dropout=True,
@@ -1082,7 +1083,8 @@ class AdvancedHybrid1DCNNLSTMClassifier(BaseEstimator, ClassifierMixin):
                  nearmiss_version=1):  # NearMiss version (1, 2, or 3)
         
         # Store all configurations
-        self.cnn_blocks = cnn_blocks
+        self.use_cnn = use_cnn
+        self.cnn_blocks = cnn_blocks if use_cnn else None
         self.normalization = normalization
         self.cnn_dropout = cnn_dropout
         self.spatial_dropout = spatial_dropout
@@ -1184,12 +1186,13 @@ class AdvancedHybrid1DCNNLSTMClassifier(BaseEstimator, ClassifierMixin):
             raise ImportError("PyTorch not available. Please install torch.")
         
         class OptimizedHybridModel(nn.Module):
-            def __init__(self, n_features, cnn_blocks, normalization, cnn_dropout, spatial_dropout,
+            def __init__(self, n_features, cnn_blocks, use_cnn, normalization, cnn_dropout, spatial_dropout,
                          gaussian_noise, lstm_architecture, attention_config, fusion_strategy,
                          feature_pyramid, dense_architecture, architecture_enhancements):
                 super(OptimizedHybridModel, self).__init__()
                 
                 self.n_features = n_features
+                self.use_cnn = use_cnn
                 self.cnn_blocks = cnn_blocks
                 self.normalization = normalization
                 self.cnn_dropout = cnn_dropout
@@ -1198,7 +1201,7 @@ class AdvancedHybrid1DCNNLSTMClassifier(BaseEstimator, ClassifierMixin):
                 self.lstm_architecture = lstm_architecture
                 self.attention_config = attention_config
                 self.fusion_strategy = fusion_strategy
-                self.feature_pyramid = feature_pyramid
+                self.feature_pyramid = feature_pyramid and use_cnn  # Disable feature pyramid if CNN disabled
                 self.dense_architecture = dense_architecture
                 self.architecture_enhancements = architecture_enhancements
                 
@@ -1210,31 +1213,39 @@ class AdvancedHybrid1DCNNLSTMClassifier(BaseEstimator, ClassifierMixin):
                     nn.Dropout(0.1)
                 )
                 
-                # OPTIMIZED: Direct reshape to CNN input size
-                self.reshape_layer = nn.Linear(128, 64)
-                
-                # OPTIMIZED: Simplified Gaussian noise
-                if gaussian_noise > 0:
-                    self.gaussian_noise_layer = lambda x: x + torch.randn_like(x) * gaussian_noise if self.training else x
-                else:
-                    self.gaussian_noise_layer = lambda x: x
-                
-                # OPTIMIZED: Simplified CNN blocks
-                self.cnn_blocks_layers = nn.ModuleList()
-                self.feature_pyramid_features = [] if feature_pyramid else None
-                
-                in_channels = 1
-                for i, block_config in enumerate(cnn_blocks):
-                    block = self._create_optimized_cnn_block(in_channels, block_config, i)
-                    self.cnn_blocks_layers.append(block)
-                    in_channels = block_config['filters'][-1]
+                if use_cnn and cnn_blocks:
+                    # OPTIMIZED: Direct reshape to CNN input size
+                    self.reshape_layer = nn.Linear(128, 64)
                     
-                    if feature_pyramid:
-                        self.feature_pyramid_features.append(in_channels)
+                    # OPTIMIZED: Simplified Gaussian noise
+                    if gaussian_noise > 0:
+                        self.gaussian_noise_layer = lambda x: x + torch.randn_like(x) * gaussian_noise if self.training else x
+                    else:
+                        self.gaussian_noise_layer = lambda x: x
+                    
+                    # OPTIMIZED: Simplified CNN blocks
+                    self.cnn_blocks_layers = nn.ModuleList()
+                    self.feature_pyramid_features = [] if feature_pyramid else None
+                    
+                    in_channels = 1
+                    for i, block_config in enumerate(cnn_blocks):
+                        block = self._create_optimized_cnn_block(in_channels, block_config, i)
+                        self.cnn_blocks_layers.append(block)
+                        in_channels = block_config['filters'][-1]
+                        
+                        if feature_pyramid:
+                            self.feature_pyramid_features.append(in_channels)
+                    
+                    # LSTM input size comes from CNN output
+                    lstm_input_size = in_channels
+                else:
+                    # When CNN is disabled, feed feature embedding directly to LSTM
+                    # Use a projection layer to match expected LSTM input size
+                    self.projection_layer = nn.Linear(128, lstm_architecture[0]['units'] if lstm_architecture else 128)
+                    lstm_input_size = lstm_architecture[0]['units'] if lstm_architecture else 128
                 
                 # OPTIMIZED: Simplified LSTM layers
                 self.lstm_layers = nn.ModuleList()
-                lstm_input_size = in_channels
                 
                 for i, lstm_config in enumerate(lstm_architecture):
                     lstm_layer = self._create_optimized_lstm_layer(lstm_input_size, lstm_config, i)
@@ -1256,8 +1267,8 @@ class AdvancedHybrid1DCNNLSTMClassifier(BaseEstimator, ClassifierMixin):
                 self.dense_layers = nn.ModuleList()
                 dense_input_size = lstm_input_size
                 
-                # Account for feature pyramid fusion
-                if feature_pyramid and len(cnn_blocks) > 1:
+                # Account for feature pyramid fusion (only if CNN is enabled)
+                if use_cnn and feature_pyramid and cnn_blocks and len(cnn_blocks) > 1:
                     pyramid_features_size = sum(block['filters'][-1] for block in cnn_blocks)
                     dense_input_size += pyramid_features_size
                 
@@ -1356,27 +1367,34 @@ class AdvancedHybrid1DCNNLSTMClassifier(BaseEstimator, ClassifierMixin):
                 # Feature embedding
                 x = self.feature_embedding(x)
                 
-                # Reshape tabular features to sequence format
-                x = self.reshape_layer(x)
+                cnn_outputs = []  # Initialize for feature pyramid fusion
                 
-                # Gaussian noise for robustness
-                x = self.gaussian_noise_layer(x)
-                
-                # Reshape for CNN - treat features as sequence
-                x = x.unsqueeze(1)  # Add channel dimension: (batch, 1, 64)
-                
-                # Multi-scale CNN blocks with feature pyramid
-                cnn_outputs = []
-                for i, cnn_block in enumerate(self.cnn_blocks_layers):
-                    x = cnn_block(x)
-                    if self.feature_pyramid:
-                        cnn_outputs.append(x)
-                
-                # Global average pooling over the sequence dimension
-                cnn_output = torch.mean(x, dim=2)  # (batch, channels)
-                
-                # Hierarchical LSTM layers
-                lstm_output = cnn_output.unsqueeze(1)  # Add sequence dimension
+                if self.use_cnn:
+                    # Reshape tabular features to sequence format
+                    x = self.reshape_layer(x)
+                    
+                    # Gaussian noise for robustness
+                    x = self.gaussian_noise_layer(x)
+                    
+                    # Reshape for CNN - treat features as sequence
+                    x = x.unsqueeze(1)  # Add channel dimension: (batch, 1, 64)
+                    
+                    # Multi-scale CNN blocks with feature pyramid
+                    for i, cnn_block in enumerate(self.cnn_blocks_layers):
+                        x = cnn_block(x)
+                        if self.feature_pyramid:
+                            cnn_outputs.append(x)
+                    
+                    # Global average pooling over the sequence dimension
+                    cnn_output = torch.mean(x, dim=2)  # (batch, channels)
+                    
+                    # Hierarchical LSTM layers
+                    lstm_output = cnn_output.unsqueeze(1)  # Add sequence dimension
+                else:
+                    # Skip CNN blocks - feed feature embedding directly to LSTM
+                    # Project to LSTM input size and add sequence dimension
+                    x = self.projection_layer(x)
+                    lstm_output = x.unsqueeze(1)  # Add sequence dimension: (batch, 1, features)
                 
                 for i, lstm_layer in enumerate(self.lstm_layers):
                     lstm_output, _ = lstm_layer(lstm_output)
@@ -1391,8 +1409,8 @@ class AdvancedHybrid1DCNNLSTMClassifier(BaseEstimator, ClassifierMixin):
                 # Global average pooling over sequence dimension
                 lstm_output = torch.mean(lstm_output, dim=1)  # (batch, features)
                 
-                # Feature fusion if using feature pyramid
-                if self.feature_pyramid and len(cnn_outputs) > 1:
+                # Feature fusion if using feature pyramid (only if CNN is enabled)
+                if self.use_cnn and self.feature_pyramid and len(cnn_outputs) > 1:
                     # Use features from multiple CNN levels
                     pyramid_features = []
                     for cnn_out in cnn_outputs:
@@ -1416,6 +1434,7 @@ class AdvancedHybrid1DCNNLSTMClassifier(BaseEstimator, ClassifierMixin):
         return OptimizedHybridModel(
             n_features=n_features,
             cnn_blocks=self.cnn_blocks,
+            use_cnn=self.use_cnn,
             normalization=self.normalization,
             cnn_dropout=self.cnn_dropout,
             spatial_dropout=self.spatial_dropout,
