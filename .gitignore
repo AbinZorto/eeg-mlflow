@@ -49,9 +49,7 @@ experiment_log_*.txt
 processing_log_*.txt
 
 # Project specific
-data/raw/*
 eeg_analysis/data/processed/*
-!data/raw/.gitkeep
 !eeg_analysis/data/processed/.gitkeep
 models/*
 !models/.gitkeep
