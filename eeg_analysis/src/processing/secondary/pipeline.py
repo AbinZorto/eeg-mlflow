@@ -11,7 +11,7 @@ import yaml
 import mne
 
 from src.utils.logger import setup_logger
-from .loader import load_eeglab_run
+from .loader import load_run
 from .resampler import resample_raw_to_target
 from .saver import (
     build_run_windows_records,
@@ -24,18 +24,25 @@ from .saver import (
 logger = setup_logger(__name__)
 
 
-def _discover_set_files(source_root: str) -> Dict[str, List[Path]]:
+def _discover_eeg_files(source_root: str) -> Dict[str, List[Path]]:
     """
-    Recursively discover .set files and group by subject (e.g., sub-001).
+    Recursively discover .set/.vhdr files under ds* folders and group by subject (e.g., sub-001).
     Sort runs per subject by file path name.
     """
     root = Path(source_root)
     if not root.exists():
         raise FileNotFoundError(f"Source root not found: {source_root}")
+    ds_dirs = sorted(p for p in root.glob("ds*") if p.is_dir())
+    if not ds_dirs:
+        logger.warning(f"No ds* folders found under: {source_root}")
     subject_to_files: Dict[str, List[Path]] = defaultdict(list)
-    for fp in root.rglob("*.set"):
-        subject_id = _infer_subject_from_path(fp)
-        subject_to_files[subject_id].append(fp)
+    for ds_dir in ds_dirs:
+        for fp in ds_dir.rglob("*.set"):
+            subject_id = _infer_subject_from_path(fp)
+            subject_to_files[subject_id].append(fp)
+        for fp in ds_dir.rglob("*.vhdr"):
+            subject_id = _infer_subject_from_path(fp)
+            subject_to_files[subject_id].append(fp)
     # Sort runs for each subject
     for subject_id, files in subject_to_files.items():
         files.sort(key=lambda p: str(p))
@@ -77,7 +84,7 @@ def _setup_mlflow_tracking(config: Dict[str, Any]) -> str:
 def run(config: Dict[str, Any]) -> Dict[str, Any]:
     """
     Orchestrate the secondary EEG dataset build:
-      - discover .set files
+      - discover .set/.vhdr files
       - load each run
       - convert units (Volts→microvolts if needed)
       - resample to target sfreq
@@ -90,13 +97,13 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
     paths_cfg = config.get("paths", {})
     proc_cfg = config.get("processing", {})
     source_root = paths_cfg.get("source_root")
-    output_npz = paths_cfg.get("output_npz")
+    output_dir = paths_cfg.get("output_dir")
     target_sfreq = float(proc_cfg.get("target_sampling_rate", 256))
     enable_uV = bool(proc_cfg.get("convert_to_microvolts", True))
     register_with_mlflow = bool(proc_cfg.get("register_with_mlflow", True))
 
-    if not source_root or not output_npz:
-        raise ValueError("Config must include paths.source_root and paths.output_npz")
+    if not source_root or not output_dir:
+        raise ValueError("Config must include paths.source_root and paths.output_dir")
 
     # Load windowing parameters from processing_config.yaml (shared with primary pipeline)
     try:
@@ -125,7 +132,7 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
         mlflow.log_params(
             {
                 "secondary.source_root": source_root,
-                "secondary.output_npz": output_npz,
+                "secondary.output_dir": output_dir,
                 "secondary.target_sampling_rate": target_sfreq,
                 "secondary.convert_to_microvolts": enable_uV,
                 "secondary.keep_all_channels": True,
@@ -137,8 +144,8 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
         mlflow.set_tag("dataset.version", "v1")
 
         # Discover files
-        logger.info(f"Discovering .set files under: {source_root}")
-        subject_to_files = _discover_set_files(source_root)
+        logger.info(f"Discovering .set/.vhdr files under ds* folders in: {source_root}")
+        subject_to_files = _discover_eeg_files(source_root)
         num_subjects = len(subject_to_files)
         num_runs = sum(len(v) for v in subject_to_files.values())
         logger.info(f"Discovered subjects={num_subjects}, total runs={num_runs}")
@@ -150,8 +157,7 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
         global_convert_to_uV = bool(enable_uV)
         mlflow.log_param("secondary.global_convert_to_microvolts", bool(global_convert_to_uV))
 
-        # Prepare output directory (use parent of configured output_npz)
-        output_base_dir = str(Path(output_npz).parent)
+        output_base_dir = str(Path(output_dir))
         mlflow.log_param("secondary.output_dir", output_base_dir)
 
         # Process each run into its own parquet (avoid giant single file)
@@ -160,7 +166,7 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
         runs_saved = 0
         for subject_id, files in subject_to_files.items():
             for fp in files:
-                meta = load_eeglab_run(str(fp))
+                meta = load_run(str(fp))
 
                 # Extract numpy data
                 raw = meta["raw"]
@@ -233,4 +239,3 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
         "total_windows": total_windows,
         "duration_s": duration_s,
     }
-

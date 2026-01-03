@@ -10,9 +10,9 @@ from src.utils.logger import setup_logger
 logger = setup_logger(__name__)
 
 
-def load_eeglab_run(file_path: str) -> Dict[str, Any]:
+def load_run(file_path: str) -> Dict[str, Any]:
     """
-    Load an EEGLAB .set file (with associated .fdt) using MNE with preload=True.
+    Load an EEGLAB .set (with .fdt) or BrainVision .vhdr (with .eeg/.vmrk).
     Keeps all channels without dropping or standardizing/scaling.
     
     Returns:
@@ -29,11 +29,16 @@ def load_eeglab_run(file_path: str) -> Dict[str, Any]:
     fp = Path(file_path)
     if not fp.exists():
         raise FileNotFoundError(f"SET file not found: {file_path}")
-    if fp.suffix.lower() != ".set":
-        raise ValueError(f"Expected a .set file, got: {file_path}")
+    suffix = fp.suffix.lower()
+    if suffix not in {".set", ".vhdr"}:
+        raise ValueError(f"Expected a .set or .vhdr file, got: {file_path}")
 
-    logger.info(f"Loading EEGLAB file: {file_path}")
-    raw = mne.io.read_raw_eeglab(file_path, preload=True, verbose=False)
+    if suffix == ".set":
+        logger.info(f"Loading EEGLAB file: {file_path}")
+        raw = mne.io.read_raw_eeglab(file_path, preload=True, verbose=False)
+    else:
+        logger.info(f"Loading BrainVision file: {file_path}")
+        raw = mne.io.read_raw_brainvision(file_path, preload=True, verbose=False)
 
     channel_names = list(raw.ch_names)
     sampling_rate = float(raw.info["sfreq"])
@@ -79,5 +84,4 @@ def _infer_subject_id(path: Path) -> str:
         if candidate:
             return candidate
     return "unknown"
-
 

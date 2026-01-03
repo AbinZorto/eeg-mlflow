@@ -1,6 +1,6 @@
 paths:
-  source_root: "/home/abin/ds003478-download/"
-  output_npz: "eeg_analysis/secondarydata/raw/combined_secondary_data.npz"
+  source_root: "/home/abin"
+  output_dir: "eeg_analysis/secondarydata/raw"
 
 processing:
   target_sampling_rate: 256
@@ -12,5 +12,4 @@ processing:
 mlflow:
   tracking_uri: "file:./mlruns"
   experiment_name: "eeg_processing"
-
 
