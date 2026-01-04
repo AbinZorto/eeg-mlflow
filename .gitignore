@@ -57,7 +57,7 @@ models/*
 !models/.gitkeep
 *.parquet
 *.csv
-
+*.pt
 # Logs
 logs/
 *.log
