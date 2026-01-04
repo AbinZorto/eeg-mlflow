@@ -58,7 +58,7 @@ downsampler:
 
 # Window Slicer Parameters
 window_slicer:
-  window_seconds: 10
+  window_seconds: 4
   sampling_rate: 256  # After downsampling
   overlap_seconds: 0
   min_windows: 10  # Minimum windows per participant

@@ -4,27 +4,25 @@
 #
 # Paths
 asa_path: "/home/abin/eeg-mlflow/eeg_analysis/secondarydata/raw/asa_electrodes.txt"
-dataset_path: "/home/abin/eeg-mlflow/eeg_analysis/secondarydata/raw"   # folder containing per-run parquet files
+dataset_path: "/home/abin/eeg-mlflow/eeg_analysis/secondarydata/raw"   # base folder; window subfolder is derived from processing_config.yaml
 save_dir: "/home/abin/eeg-mlflow/eeg_analysis/checkpoints"
 mlflow_tracking_uri: "mlruns"
 mlflow_experiment: "eeg_pretraining_mamba2"
 
 # Model
 # FLEXIBLE ARCHITECTURE: Lightweight projection if window_length != d_model
-# For 8-second windows at 256 Hz: 8 * 256 = 2048 samples
-# Uses strided convolution to project 2048 → 512 (4x downsampling)
-d_model: 64 
+# Window size/Hz are sourced from configs/processing_config.yaml
+d_model:  512
 num_layers: 2
-window_length: 2048  # 8 seconds at 256 Hz sampling rate
 
 # Training
 lr: 8.0e-5  # Learning rate
-batch_size: 64
+batch_size: 64 
 epochs: 200  # Max epochs with early stopping
 
 # Masking configuration
-mask_ratio: 0.6 # Fraction of tokens/samples to mask
-masking_style: "multi_channel"  # Options: "mae", "bert", "within_token", "multi_channel"
+mask_ratio: 0.4 # Fraction of tokens/samples to mask
+masking_style: "bert"  # Options: "mae", "bert", "within_token", "multi_channel"
                                # - "mae": Token-level masking, independent per channel
                                # - "bert": Token-level masking with noise/unchanged variants
                                # - "within_token": Sample-level masking within tokens, independent per channel
@@ -38,13 +36,13 @@ mask_replacement: "gaussian_noise"  # Options: "zeros", "gaussian_noise"
                            #   Encourages learning actual signal patterns
 
 # Positional encoding control
-disable_temporal_encoding: false  # Keep temporal encoding (needed for EEG)
-disable_spatial_encoding: false   # Keep spatial encoding (needed for EEG)
+disable_temporal_encoding: false # Keep temporal encoding (needed for EEG)
+disable_spatial_encoding: false # Keep spatial encoding (needed for EEG)
 
 # Anti-position-only learning strategies
-prevent_position_only_learning: false # Enable strategies to prevent position-only learning
-position_regularization_weight: 0  # Penalty for position-only predictions (0.0-1.0)
-shuffle_sequences_prob: 0  # Probability of shuffling sequence order during training (0.0-1.0)
+prevent_position_only_learning: true # Enable strategies to prevent position-only learning
+position_regularization_weight: 0.1  # Penalty for position-only predictions (0.0-1.0)
+shuffle_sequences_prob: 0.1  # Probability of shuffling sequence order during training (0.0-1.0)
                                     # Shuffling breaks position=time mapping, forces context learning
                                     # 0.0 = never shuffle (preserve temporal order)
                                     # 0.3 = shuffle 30% of sequences (balanced)
@@ -62,7 +60,7 @@ loss_function: "combined"  # Options: "mse", "mae", "cosine", "huber", "combined
                          # - "cosine": Cosine similarity loss - focuses on waveform shape
                          # - "huber": Huber loss - combines MSE and MAE benefits
                          # - "combined": Weighted combination of cosine + MAE (0.5 cosine + 0.5 MAE)
-variance_matching_weight: 0  # Weight for variance matching penalty (0.0 = disabled)
+variance_matching_weight: 0.3  # Weight for variance matching penalty (0.0 = disabled)
                                 # Encourages predictions to match target variance
                                 # Helps prevent low-variance predictions
                                 # Recommended: 0.1-0.3 for cosine loss, 0.0 for MSE/MAE
@@ -87,5 +85,3 @@ grad_clip_percentile: 95.0  # Clip at 95th percentile of gradient norm history
 amp: false  # Disable AMP for stability
 patience: 5  # Early stopping patience
 min_delta: 1.0e-4  # Minimum improvement to reset patience
-
-

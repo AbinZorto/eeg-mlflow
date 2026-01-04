@@ -9,6 +9,7 @@ This script helps determine whether a model trained with mask_ratio=1.0 is:
 
 Usage:
     python diagnose_100pct_masking.py --checkpoint path/to/model.pt
+    python diagnose_100pct_masking.py  # uses latest last-checkpoint if available
 """
 
 import argparse
@@ -16,6 +17,7 @@ import torch
 import numpy as np
 from pathlib import Path
 import sys
+import yaml
 
 # Add eeg_analysis to path
 EEG_ANALYSIS_ROOT = Path(__file__).parent / "eeg_analysis"
@@ -23,6 +25,58 @@ sys.path.insert(0, str(EEG_ANALYSIS_ROOT))
 
 from src.models.mamba_eeg_model import MambaEEGModel
 from src.data.eeg_pretraining_dataset import EEGPretrainingDataset, collate_eeg_sequences
+
+
+def load_config(path: str):
+    with open(path, "r") as f:
+        return yaml.safe_load(f)
+
+
+def _format_rate(rate: float) -> str:
+    if float(rate).is_integer():
+        return str(int(rate))
+    return str(rate).rstrip("0").rstrip(".")
+
+
+def _format_window(seconds: float) -> str:
+    if float(seconds).is_integer():
+        return str(int(seconds))
+    return str(seconds).rstrip("0").rstrip(".")
+
+
+def resolve_dataset_root(
+    data_path: str | None,
+    processing_cfg_path: str | None,
+    window_length: int,
+):
+    """
+    Mirror pretrain_mamba.py dataset_root resolution for window-tagged folders.
+    """
+    if not data_path:
+        return None, None, None
+
+    base_path = Path(data_path)
+    base_name = base_path.name
+    if base_name.startswith("sr") and "_ws" in base_name:
+        return str(base_path), None, None
+
+    processing_cfg = None
+    sampling_rate = None
+    window_seconds = None
+    if processing_cfg_path:
+        cfg_path = Path(processing_cfg_path)
+        if cfg_path.exists():
+            processing_cfg = load_config(str(cfg_path))
+            window_slicer = processing_cfg.get("window_slicer", {})
+            sampling_rate = float(window_slicer.get("sampling_rate", 0.0))
+            if sampling_rate > 0:
+                window_seconds = float(window_length) / sampling_rate
+
+    if sampling_rate and window_seconds:
+        window_tag = f"sr{_format_rate(sampling_rate)}_ws{_format_window(window_seconds)}s"
+        return str(base_path / window_tag), window_seconds, sampling_rate
+
+    return str(base_path), None, None
 
 
 def get_masked_token_indices(mask_bool, seq_len=None):
@@ -161,8 +215,24 @@ def analyze_model_predictions(model, dataloader, device, num_samples=100):
                 unmasked_indices = (~token_mask).nonzero(as_tuple=True)[0].cpu().tolist()
                 
                 print(f"\nSequence length: {seq_len}")
+                print(f"Channel: {channel_names[b]}")
+                if hasattr(model, "spatial_encoder") and hasattr(model.spatial_encoder, "channel_to_xyz"):
+                    mapped = channel_names[b].upper() in model.spatial_encoder.channel_to_xyz
+                    print(f"Spatial mapping found: {mapped}")
                 print(f"Masked positions: {len(masked_indices)} (e.g., {masked_indices[:5]})")
                 print(f"Unmasked positions: {len(unmasked_indices)} (e.g., {unmasked_indices[:5]})")
+
+                # Inspect masked input values before normalization
+                masked_input = windows_masked[b, :seq_len].detach().cpu()
+                if masked_indices:
+                    masked_rows = masked_input[masked_indices]
+                    zero_fraction = float((masked_rows == 0.0).float().mean().item())
+                    print(f"\nMasked input stats (pre-normalization):")
+                    print(f"  mean={masked_rows.mean().item():.6f} std={masked_rows.std().item():.6f}")
+                    print(f"  min={masked_rows.min().item():.6f} max={masked_rows.max().item():.6f}")
+                    print(f"  exact_zero_fraction={zero_fraction:.4f}")
+                    sample_vals = masked_rows[0, :10].tolist()
+                    print(f"  sample masked token values: {[f'{v:.4f}' for v in sample_vals]}")
                 
                 # INSPECT MODEL INTERNALS: Check what embeddings look like BEFORE backbone
                 print(f"\n" + "-" * 60)
@@ -1097,21 +1167,49 @@ def compare_masked_vs_unmasked_learning(model, dataloader, device, num_samples=5
     return mean_consistency
 
 
+def find_last_saved_checkpoint():
+    """
+    Find the most recently modified "last" checkpoint under eeg_analysis.
+    """
+    eeg_root = Path(__file__).parent / "eeg_analysis"
+    if not eeg_root.exists():
+        return None
+
+    candidates = list(eeg_root.rglob("mamba2_eeg_pretrained_last.pt"))
+    if not candidates:
+        for checkpoint_dir in eeg_root.glob("checkpoints*"):
+            if checkpoint_dir.is_dir():
+                candidates.extend(checkpoint_dir.rglob("*.pt"))
+
+    if not candidates:
+        return None
+
+    newest = max(candidates, key=lambda path: path.stat().st_mtime)
+    return str(newest)
+
+
 def main():
+    default_checkpoint = find_last_saved_checkpoint()
     parser = argparse.ArgumentParser(
         description="Diagnose what a model learns with 100% masking"
     )
     parser.add_argument(
         "--checkpoint",
         type=str,
-        required=True,
-        help="Path to model checkpoint (.pt file)"
+        default=default_checkpoint,
+        help="Path to model checkpoint (.pt file); defaults to latest last-checkpoint if available"
     )
     parser.add_argument(
         "--data-path",
         type=str,
-        default="/home/abin/eeg-mlflow/eeg_analysis/secondarydata/raw",
-        help="Path to pretraining data"
+        default=None,
+        help="Path to pretraining data root (defaults to checkpoint config if available)"
+    )
+    parser.add_argument(
+        "--processing-config",
+        type=str,
+        default=str(Path(__file__).parent / "eeg_analysis" / "configs" / "processing_config.yaml"),
+        help="Path to processing_config.yaml (used to derive windowed dataset subfolder)"
     )
     parser.add_argument(
         "--num-samples",
@@ -1120,12 +1218,26 @@ def main():
         help="Number of samples to analyze"
     )
     parser.add_argument(
+        "--diagnostic-mask-ratio",
+        type=float,
+        default=None,
+        help="Mask ratio to use for diagnostics (default: checkpoint config mask_ratio)"
+    )
+    parser.add_argument(
         "--decode-to-signal",
         action="store_true",
         help="Force decode to signal space for statistics comparison (auto-detected from checkpoint config if not specified)"
     )
+    parser.add_argument(
+        "--mask-replacement",
+        type=str,
+        default=None,
+        help="Override mask replacement strategy: zeros or gaussian_noise (default: from checkpoint config)"
+    )
     
     args = parser.parse_args()
+    if args.checkpoint is None:
+        parser.error("No checkpoint found. Pass --checkpoint or ensure a last checkpoint exists.")
     
     print("=" * 60)
     print("DIAGNOSING MODEL LEARNING WITH 100% MASKING")
@@ -1142,10 +1254,22 @@ def main():
     config = checkpoint.get("config", {})
     d_model = config.get("d_model", 128)
     num_layers = config.get("num_layers", 6)
-    window_length = config.get("window_length", 2048)
+    window_length = config.get("window_length")
+    if window_length is None:
+        processing_cfg_path = Path(args.processing_config)
+        if processing_cfg_path.exists():
+            processing_cfg = load_config(str(processing_cfg_path))
+            window_slicer = processing_cfg.get("window_slicer", {})
+            window_seconds = float(window_slicer.get("window_seconds", 0.0))
+            sampling_rate = float(window_slicer.get("sampling_rate", 0.0))
+            if window_seconds > 0 and sampling_rate > 0:
+                window_length = int(round(window_seconds * sampling_rate))
+    if window_length is None:
+        window_length = 2048
     mask_ratio = config.get("mask_ratio", 1.0)
     masking_style = config.get("masking_style", "mae")
     mask_samples_within_token = config.get("mask_samples_within_token", False)
+    mask_replacement = args.mask_replacement or config.get("mask_replacement", "zeros")
     # Use command-line arg if provided, otherwise use config
     reconstruct_signal_space = args.decode_to_signal if args.decode_to_signal else config.get("reconstruct_signal_space", True)
     
@@ -1157,17 +1281,38 @@ def main():
     print(f"  masking_style: {masking_style}")
     if masking_style == "multi_channel":
         print(f"  mask_samples_within_token: {mask_samples_within_token}")
+    print(f"  mask_replacement: {mask_replacement}")
     print(f"  reconstruct_signal_space: {reconstruct_signal_space}")
+
+    # Resolve dataset root to match training window settings
+    data_path = args.data_path or config.get("dataset_path")
+    dataset_root, window_seconds, sampling_rate = resolve_dataset_root(
+        data_path,
+        args.processing_config,
+        window_length,
+    )
+    if dataset_root is None:
+        raise ValueError(
+            "No dataset path found. Pass --data-path or ensure the checkpoint config has dataset_path."
+        )
+    if not Path(dataset_root).exists():
+        print(f"⚠️  Warning: dataset_root does not exist: {dataset_root}")
+    if window_seconds is not None and sampling_rate is not None:
+        print(f"  window_seconds: {window_seconds:.4f}")
+        print(f"  sampling_rate: {sampling_rate:.4f}")
+        print(f"  dataset_root: {dataset_root}")
     
-    if mask_ratio < 1.0:
-        print(f"\n⚠️  Warning: This model was trained with mask_ratio={mask_ratio}")
-        print(f"    This diagnostic is designed for mask_ratio=1.0")
+    diagnostic_mask_ratio = args.diagnostic_mask_ratio if args.diagnostic_mask_ratio is not None else mask_ratio
+    print(f"  diagnostic_mask_ratio: {diagnostic_mask_ratio}")
+    if diagnostic_mask_ratio < 0.99:
+        print(f"\n⚠️  Note: This diagnostic is most informative at mask_ratio=1.0")
     
     # Load model
     model = MambaEEGModel(
         d_model=d_model,
         num_layers=num_layers,
         window_length=window_length,
+        asa_path=config.get("asa_path"),
     ).to(device)
     
     model.load_state_dict(checkpoint["model"])
@@ -1177,7 +1322,7 @@ def main():
     
     # Load dataset
     dataset = EEGPretrainingDataset(
-        dataset_root=args.data_path,
+        dataset_root=dataset_root,
         window_length=window_length,
         split="val",
     )
@@ -1186,9 +1331,10 @@ def main():
         # Use same masking style as training (but with 100% masking for diagnostics)
         return collate_eeg_sequences(
             batch, 
-            mask_ratio=1.0,  # Always 100% for diagnostics
+            mask_ratio=diagnostic_mask_ratio,
             masking_style=masking_style,
-            mask_samples_within_token=mask_samples_within_token if masking_style == "multi_channel" else False
+            mask_samples_within_token=mask_samples_within_token if masking_style == "multi_channel" else False,
+            mask_replacement=mask_replacement,
         )
     
     dataloader = torch.utils.data.DataLoader(
@@ -1349,4 +1495,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

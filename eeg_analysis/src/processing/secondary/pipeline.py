@@ -117,9 +117,23 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
         window_seconds = 10.0
         overlap_seconds = 0.0
 
+    def _format_rate(rate: float) -> str:
+        if float(rate).is_integer():
+            return str(int(rate))
+        return str(rate).rstrip("0").rstrip(".")
+
+    def _format_window(seconds: float) -> str:
+        if float(seconds).is_integer():
+            return str(int(seconds))
+        return str(seconds).rstrip("0").rstrip(".")
+
     window_length = int(window_seconds * target_sfreq)
     overlap_length = int(overlap_seconds * target_sfreq)
     step_size = max(1, window_length - overlap_length)  # guard
+
+    output_base_dir = Path(output_dir)
+    window_tag = f"sr{_format_rate(target_sfreq)}_ws{_format_window(window_seconds)}s"
+    output_dir = str(output_base_dir / window_tag)
 
     # MLflow setup similar to existing pipeline
     tracking_uri = config.get("mlflow", {}).get("tracking_uri", "file:./mlruns")
@@ -132,6 +146,7 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
         mlflow.log_params(
             {
                 "secondary.source_root": source_root,
+                "secondary.output_base_dir": str(output_base_dir),
                 "secondary.output_dir": output_dir,
                 "secondary.target_sampling_rate": target_sfreq,
                 "secondary.convert_to_microvolts": enable_uV,
@@ -157,15 +172,24 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
         global_convert_to_uV = bool(enable_uV)
         mlflow.log_param("secondary.global_convert_to_microvolts", bool(global_convert_to_uV))
 
-        output_base_dir = str(Path(output_dir))
-        mlflow.log_param("secondary.output_dir", output_base_dir)
+        mlflow.log_param("secondary.output_base_dir", str(output_base_dir))
+        mlflow.log_param("secondary.output_dir", output_dir)
 
         # Process each run into its own parquet (avoid giant single file)
         run_process_start = time.time()
         total_windows = 0
         runs_saved = 0
+        runs_skipped = 0
         for subject_id, files in subject_to_files.items():
             for fp in files:
+                run_name = Path(fp).stem
+                expected_path = Path(output_dir) / subject_id / f"{run_name}.parquet"
+                if expected_path.exists():
+                    runs_skipped += 1
+                    logger.info(
+                        f"Skipping existing run parquet: subject={subject_id}, run={run_name}, path={expected_path}"
+                    )
+                    continue
                 meta = load_run(str(fp))
 
                 # Extract numpy data
@@ -198,9 +222,9 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
                         ["participant", "run", "parent_window_id", "sub_window_id"]
                     ).reset_index(drop=True)
 
-                # Save per-run parquet under output_base_dir/<subject>/<run>.parquet
+                # Save per-run parquet under output_dir/<subject>/<run>.parquet
                 abs_run_path = save_parquet_run(
-                    output_dir=output_base_dir,
+                    output_dir=output_dir,
                     subject_id=subject_id,
                     run_name=meta["run_name"],
                     df=run_df,
@@ -220,6 +244,7 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
         mlflow.log_metric("secondary.build_duration_s", build_duration_s)
         mlflow.log_metric("secondary.total_duration_s", duration_s)
         mlflow.log_metric("secondary.total_windows", total_windows)
+        mlflow.log_metric("secondary.runs_skipped", runs_skipped)
         mlflow.log_param("secondary.window_seconds", window_seconds)
         mlflow.log_param("secondary.overlap_seconds", overlap_seconds)
         mlflow.log_param("secondary.window_length_samples", window_length)
@@ -227,15 +252,17 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
         mlflow.set_tag("mlflow.dataset.context", "pretraining")
         logger.info(
             f"Secondary per-run parquet save complete: runs_saved={runs_saved}, windows={total_windows}, "
-            f"subjects={num_subjects}, output_dir={output_base_dir}, duration_s={duration_s:.2f}"
+            f"subjects={num_subjects}, output_dir={output_dir}, duration_s={duration_s:.2f}, "
+            f"runs_skipped={runs_skipped}"
         )
 
     return {
-        "output_dir": output_base_dir,
+        "output_dir": output_dir,
         "num_subjects": num_subjects,
         "num_runs": num_runs,
         "sampling_rate": target_sfreq,
         "runs_saved": runs_saved,
+        "runs_skipped": runs_skipped,
         "total_windows": total_windows,
         "duration_s": duration_s,
     }

@@ -3,6 +3,9 @@ from __future__ import annotations
 from typing import Dict, List, Tuple, Any, Optional
 
 from pathlib import Path
+import os
+import time
+import json
 import random
 import numpy as np
 import pandas as pd
@@ -11,6 +14,7 @@ import pyarrow.parquet as pq
 import torch
 from torch.utils.data import Dataset
 import math
+from src.utils.logger import get_logger
 
 META_COLS = {
     "participant",
@@ -22,6 +26,7 @@ META_COLS = {
 }
 
 EXCLUDED_CHANNELS = {"VEOG", "HEOG"}
+_LOGGER = get_logger(__name__)
 
 
 def _list_channel_columns_from_schema(pf: pq.ParquetFile) -> List[str]:
@@ -54,34 +59,111 @@ class EEGPretrainingDataset(Dataset):
         self.window_length = int(window_length)
         self.split = split
         self.val_ratio = val_ratio
+        rank = os.environ.get("RANK", "0")
+        local_rank = os.environ.get("LOCAL_RANK", "0")
+        _LOGGER.info(
+            "Dataset init: root=%s split=%s window_length=%d val_ratio=%.3f rank=%s local_rank=%s",
+            self.dataset_root,
+            self.split,
+            self.window_length,
+            self.val_ratio,
+            rank,
+            local_rank,
+        )
+        start_time = time.time()
         self.files: List[Path] = sorted(self.dataset_root.rglob(file_glob))
         if not self.files:
             raise FileNotFoundError(f"No parquet files found under: {self.dataset_root}")
+        _LOGGER.info("Found %d parquet files under %s", len(self.files), self.dataset_root)
         # Build index of (file, channel)
         self.items: List[Tuple[Path, str]] = []
-        for fp in self.files:
+        cache_path = self.dataset_root / ".cache" / "pretrain_index.json"
+        if rank != "0" and not cache_path.exists():
+            wait_seconds = 120
+            _LOGGER.info(
+                "Waiting up to %ds for cache from rank 0: %s",
+                wait_seconds,
+                cache_path,
+            )
+            for _ in range(wait_seconds):
+                if cache_path.exists():
+                    break
+                time.sleep(1)
+        cache_used = False
+        if cache_path.exists():
             try:
-                pf = pq.ParquetFile(str(fp))
-                channels = _list_channel_columns_from_schema(pf)
-                for ch in channels:
-                    if ch.upper() in EXCLUDED_CHANNELS:
-                        continue
-                    self.items.append((fp, ch))
-            except Exception:
-                # Fallback: try pandas read (first row) to infer channels
+                with open(cache_path, "r") as f:
+                    cache = json.load(f)
+                cache_ok = (
+                    cache.get("version") == 1
+                    and cache.get("file_glob") == file_glob
+                    and cache.get("excluded_channels") == sorted(EXCLUDED_CHANNELS)
+                )
+                cached_files = cache.get("files", [])
+                if cache_ok and len(cached_files) == len(self.files):
+                    for fmeta in cached_files:
+                        fp = Path(fmeta["path"])
+                        st = os.stat(fp)
+                        if st.st_size != fmeta["size"] or st.st_mtime != fmeta["mtime"]:
+                            cache_ok = False
+                            break
+                if cache_ok:
+                    self.items = [(Path(p), ch) for p, ch in cache.get("items", [])]
+                    cache_used = True
+                    _LOGGER.info("Loaded cached index: %d (file, channel) items", len(self.items))
+                else:
+                    _LOGGER.info("Cache invalid or stale: %s", cache_path)
+            except Exception as exc:
+                _LOGGER.info("Cache load failed (%s): %s", cache_path, exc)
+
+        if not cache_used:
+            for i, fp in enumerate(self.files, start=1):
+                if i == 1 or i % 50 == 0:
+                    _LOGGER.info("Scanning parquet schema %d/%d: %s", i, len(self.files), fp.name)
                 try:
-                    df = pd.read_parquet(str(fp), engine="pyarrow")
-                    for col in df.columns:
-                        if col in META_COLS:
+                    pf = pq.ParquetFile(str(fp))
+                    channels = _list_channel_columns_from_schema(pf)
+                    for ch in channels:
+                        if ch.upper() in EXCLUDED_CHANNELS:
                             continue
-                        if col.upper() in EXCLUDED_CHANNELS:
-                            continue
-                        if isinstance(df[col].iloc[0], (list, np.ndarray)):
-                            self.items.append((fp, col))
+                        self.items.append((fp, ch))
                 except Exception:
-                    continue
+                    # Fallback: try pandas read (first row) to infer channels
+                    try:
+                        df = pd.read_parquet(str(fp), engine="pyarrow")
+                        for col in df.columns:
+                            if col in META_COLS:
+                                continue
+                            if col.upper() in EXCLUDED_CHANNELS:
+                                continue
+                            if isinstance(df[col].iloc[0], (list, np.ndarray)):
+                                self.items.append((fp, col))
+                    except Exception:
+                        continue
+            if self.items and rank == "0":
+                try:
+                    cache_path.parent.mkdir(parents=True, exist_ok=True)
+                    file_meta = []
+                    for fp in self.files:
+                        st = os.stat(fp)
+                        file_meta.append({"path": str(fp), "size": st.st_size, "mtime": st.st_mtime})
+                    cache_payload = {
+                        "version": 1,
+                        "file_glob": file_glob,
+                        "excluded_channels": sorted(EXCLUDED_CHANNELS),
+                        "files": file_meta,
+                        "items": [(str(fp), ch) for fp, ch in self.items],
+                    }
+                    tmp_path = cache_path.with_suffix(".json.tmp")
+                    with open(tmp_path, "w") as f:
+                        json.dump(cache_payload, f)
+                    os.replace(tmp_path, cache_path)
+                    _LOGGER.info("Wrote cache index: %s", cache_path)
+                except Exception as exc:
+                    _LOGGER.info("Failed to write cache (%s): %s", cache_path, exc)
         if not self.items:
             raise RuntimeError(f"No channel sequences found in parquet files under {self.dataset_root}")
+        _LOGGER.info("Indexed %d (file, channel) items", len(self.items))
         
         # Split into train/val deterministically
         rng = random.Random(seed)
@@ -95,6 +177,13 @@ class EEGPretrainingDataset(Dataset):
         else:
             raise ValueError(f"Invalid split: {split}")
         self.items = [self.items[i] for i in indices]
+        elapsed = time.time() - start_time
+        _LOGGER.info(
+            "Dataset init complete: split=%s items=%d elapsed=%.2fs",
+            self.split,
+            len(self.items),
+            elapsed,
+        )
 
     def __len__(self) -> int:
         return len(self.items)
@@ -110,6 +199,14 @@ class EEGPretrainingDataset(Dataset):
         for i, v in enumerate(seq_list):
             arr = np.asarray(v, dtype=np.float32).ravel()
             if arr.shape[0] != self.window_length:
+                _LOGGER.error(
+                    "Window length mismatch: file=%s channel=%s row=%d got=%d expected=%d",
+                    fp.name,
+                    channel,
+                    i,
+                    arr.shape[0],
+                    self.window_length,
+                )
                 raise ValueError(
                     f"Window length mismatch in {fp.name} channel {channel} at row {i}: "
                     f"got {arr.shape[0]}, expected {self.window_length}"
@@ -332,5 +429,3 @@ def collate_eeg_sequences(
         "channel_names": channel_names, # list[str]
         "file_paths": file_paths,      # list[str] - file paths for multi-channel analysis
     }
-
-

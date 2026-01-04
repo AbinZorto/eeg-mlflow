@@ -36,12 +36,25 @@ def load_config(path: str) -> Dict[str, Any]:
         return yaml.safe_load(f)
 
 
+def _format_rate(rate: float) -> str:
+    if float(rate).is_integer():
+        return str(int(rate))
+    return str(rate).rstrip("0").rstrip(".")
+
+
+def _format_window(seconds: float) -> str:
+    if float(seconds).is_integer():
+        return str(int(seconds))
+    return str(seconds).rstrip("0").rstrip(".")
+
+
 def compute_reconstruction_loss(
     pred: torch.Tensor,
     target: torch.Tensor,
     mask_exp: torch.Tensor,
     loss_function: str = "mse",
     variance_matching_weight: float = 0.0,
+    spectral_loss_weight: float = 0.0,
 ) -> torch.Tensor:
     """
     Compute reconstruction loss based on the specified loss function.
@@ -55,6 +68,19 @@ def compute_reconstruction_loss(
     Returns:
         Scalar loss tensor
     """
+    def _spectral_loss(token_mask: torch.Tensor) -> torch.Tensor:
+        if spectral_loss_weight <= 0.0:
+            return torch.tensor(0.0, device=pred.device)
+        pred_masked_tokens = pred[token_mask]  # (N_masked, W)
+        if pred_masked_tokens.numel() == 0:
+            return torch.tensor(0.0, device=pred.device)
+        target_masked_tokens = target[token_mask]  # (N_masked, W)
+        pred_fft = torch.fft.rfft(pred_masked_tokens, dim=-1)
+        target_fft = torch.fft.rfft(target_masked_tokens, dim=-1)
+        pred_mag = pred_fft.abs()
+        target_mag = target_fft.abs()
+        return (pred_mag - target_mag).pow(2).mean()
+
     # For cosine similarity, we want to compute per-token (per window)
     # So we need to handle the mask differently: extract masked tokens, not flattened samples
     if loss_function in ["cosine", "combined"]:
@@ -169,6 +195,7 @@ def compute_reconstruction_loss(
             else:
                 loss = base_loss
         
+        loss = loss + _spectral_loss(token_mask)
         return loss
     
     # For MSE, MAE, Huber: compute per-sample (standard approach)
@@ -196,6 +223,11 @@ def compute_reconstruction_loss(
     else:
         raise ValueError(f"Unknown loss function: {loss_function}. Options: 'mse', 'mae', 'cosine', 'huber', 'combined'")
     
+    if mask_exp.dim() == 3:
+        token_mask = mask_exp.any(dim=-1)
+    else:
+        token_mask = mask_exp
+    loss = loss + _spectral_loss(token_mask)
     return loss
 
 
@@ -208,6 +240,26 @@ def main() -> None:
     args = parser.parse_args()
 
     cfg = load_config(args.config)
+    processing_cfg_path = EEG_ANALYSIS_ROOT / "configs" / "processing_config.yaml"
+    processing_cfg = load_config(str(processing_cfg_path))
+    window_seconds = float(processing_cfg["window_slicer"]["window_seconds"])
+    sampling_rate = float(processing_cfg["window_slicer"]["sampling_rate"])
+    expected_window_length = int(round(window_seconds * sampling_rate))
+    if "window_length" in cfg:
+        cfg_window_length = int(cfg["window_length"])
+        if cfg_window_length != expected_window_length:
+            raise ValueError(
+                "window_length mismatch: pretrain config has "
+                f"{cfg_window_length}, but processing_config.yaml implies "
+                f"{expected_window_length} ({sampling_rate} Hz * {window_seconds}s)"
+            )
+    cfg["window_length"] = expected_window_length
+    logger.info(
+        "Window settings from processing_config.yaml: sampling_rate=%.3f window_seconds=%.3f window_length=%d",
+        sampling_rate,
+        window_seconds,
+        expected_window_length,
+    )
     # DDP setup
     distributed = bool(args.distributed) and torch.cuda.is_available()
     if distributed:
@@ -242,8 +294,15 @@ def main() -> None:
     if not dataset_path:
         raise ValueError("dataset_path must be set in config")
 
-    ds = EEGPretrainingDataset(dataset_root=dataset_path, window_length=int(cfg.get("window_length", 2048)), split="train", val_ratio=float(cfg.get("val_ratio", 0.2)))
-    val_ds = EEGPretrainingDataset(dataset_root=dataset_path, window_length=int(cfg.get("window_length", 2048)), split="val", val_ratio=float(cfg.get("val_ratio", 0.2)))
+    dataset_root = dataset_path
+    base_path = Path(dataset_path)
+    base_name = base_path.name
+    if not (base_name.startswith("sr") and "_ws" in base_name):
+        window_tag = f"sr{_format_rate(sampling_rate)}_ws{_format_window(window_seconds)}s"
+        dataset_root = str(base_path / window_tag)
+
+    ds = EEGPretrainingDataset(dataset_root=dataset_root, window_length=int(cfg.get("window_length", 2048)), split="train", val_ratio=float(cfg.get("val_ratio", 0.2)))
+    val_ds = EEGPretrainingDataset(dataset_root=dataset_root, window_length=int(cfg.get("window_length", 2048)), split="val", val_ratio=float(cfg.get("val_ratio", 0.2)))
     
     # Collate function with masking style
     mask_ratio = float(cfg.get("mask_ratio", 0.2))
@@ -350,11 +409,14 @@ def main() -> None:
     # Loss function configuration
     loss_function = cfg.get("loss_function", "mse").lower()  # Default: MSE
     variance_matching_weight = float(cfg.get("variance_matching_weight", 0.0))  # Default: disabled
+    spectral_loss_weight = float(cfg.get("spectral_loss_weight", 0.0))  # Default: disabled
     mask_replacement = cfg.get("mask_replacement", "zeros").lower()  # Default: zeros
     if is_main:
         logger.info(f"Using loss function: {loss_function}")
         if variance_matching_weight > 0.0:
             logger.info(f"Variance matching weight: {variance_matching_weight}")
+        if spectral_loss_weight > 0.0:
+            logger.info(f"Spectral loss weight: {spectral_loss_weight}")
         logger.info(f"Mask replacement: {mask_replacement}")
     
     # Anti-position-only learning strategies
@@ -394,7 +456,7 @@ def main() -> None:
                 "epochs": epochs,
                 "mask_ratio": cfg.get("mask_ratio", 0.2),
                 "masking_style": masking_style,
-                "dataset_path": dataset_path,
+                "dataset_path": dataset_root,
                 "world_size": world_size,
                 "patience": patience,
                 "min_delta": min_delta,
@@ -437,6 +499,10 @@ def main() -> None:
             model.train()
             total_loss = 0.0
             total_masked = 0
+            steps_per_epoch = max(1, len(loader))
+            key_metrics_interval = max(1, steps_per_epoch // 2)
+            decoder_stats_interval = max(1, steps_per_epoch // 5)
+            control_stats_interval = max(1, steps_per_epoch // 5)
             for step, batch in enumerate(loader):
                 windows = batch["windows"].to(device, non_blocking=True)               # (B, L, W)
                 windows_masked = batch["windows_masked"].to(device, non_blocking=True) # (B, L, W)
@@ -598,14 +664,16 @@ def main() -> None:
                         
                         loss = (pred_centered - target_centered).pow(2).mean()
                         
-                        # Log diagnostics (every 50 steps)
-                        if is_main and step % 50 == 0:
+                        # Log diagnostics (periodic)
+                        if is_main and step % control_stats_interval == 0:
                             pred_var = pred_masked.var().item()
                             target_var = target_masked.var().item()
                             pred_mean_norm = pred_masked.mean().item()
                             target_mean_norm = target_masked.mean().item()
-                            #logger.info(f"[Control] pred_var={pred_var:.6f}, target_var={target_var:.6f}, "
-                            #          f"pred_mean={pred_mean_norm:.6f}, target_mean={target_mean_norm:.6f}")
+                            logger.info(
+                                f"[Control] pred_var={pred_var:.6f}, target_var={target_var:.6f}, "
+                                f"pred_mean={pred_mean_norm:.6f}, target_mean={target_mean_norm:.6f}"
+                            )
                     else:
                         # Normal training (configurable loss function)
                         if skip_batch:
@@ -619,6 +687,7 @@ def main() -> None:
                                 mask_exp=mask_exp,
                                 loss_function=loss_function,
                                 variance_matching_weight=variance_matching_weight,
+                                spectral_loss_weight=spectral_loss_weight,
                             )
                             
                             # Check for NaN in loss
@@ -629,8 +698,8 @@ def main() -> None:
                                     logger.error(f"Target stats: {_tensor_stats('target', target)}")
                                 skip_batch = True
                         
-                        # KEY METRICS DEBUGGING (every 20000 steps - reduced frequency, only most important)
-                        if is_main and step % 20000 == 0:
+                        # KEY METRICS DEBUGGING (periodic)
+                        if is_main and step % key_metrics_interval == 0:
                             with torch.no_grad():
                                 model_eval = model.module if isinstance(model, DDP) else model
                                 seq_len = seq_lengths[0].item()
@@ -665,8 +734,8 @@ def main() -> None:
                                 logger.info(f"KEY METRICS [Step {step}] | Input window sim: {avg_window_sim:.3f} | Pred sim: {avg_pred_sim:.3f}")
                                 logger.info(f"{'='*80}\n")
                         
-                        # Decoder output statistics (debug logging every 5000 steps - reduced frequency)
-                        if is_main and step % 5000 == 0 and use_signal_reconstruction:
+                        # Decoder output statistics (periodic)
+                        if is_main and step % decoder_stats_interval == 0 and use_signal_reconstruction:
                             pred_masked = pred[mask_exp]  # All masked predictions
                             if pred_masked.numel() > 0:
                                 pred_var = pred_masked.var().item()
@@ -943,7 +1012,8 @@ def main() -> None:
                         target = windows  # Raw signal
                         # Normalize per-sample
                         target_mean = target.mean(dim=-1, keepdim=True)
-                        target_std = target.std(dim=-1, keepdim=True) + 1e-8
+                        target_std = target.std(dim=-1, keepdim=True)
+                        target_std = torch.clamp(target_std, min=1e-6)
                         target = (target - target_mean) / target_std
                     else:
                         # SIMPLIFIED: No encoder - targets are always raw signal
@@ -971,6 +1041,7 @@ def main() -> None:
                             mask_exp=mask_exp,
                             loss_function=loss_function,
                             variance_matching_weight=variance_matching_weight,
+                            spectral_loss_weight=spectral_loss_weight,
                         )
                     
                     if torch.isfinite(val_loss):
@@ -1085,6 +1156,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-
-
