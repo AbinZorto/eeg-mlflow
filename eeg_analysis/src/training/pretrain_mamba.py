@@ -25,6 +25,7 @@ if str(EEG_ANALYSIS_ROOT) not in sys.path:
     sys.path.insert(0, str(EEG_ANALYSIS_ROOT))
 
 from src.models.mamba_eeg_model import MambaEEGModel
+os.environ.setdefault("LOG_PLAIN", "1")
 from src.utils.logger import setup_logger
 from src.data.eeg_pretraining_dataset import EEGPretrainingDataset, collate_eeg_sequences
 
@@ -613,6 +614,7 @@ def main() -> None:
                         # Proper MAE: Target is actual signal (never changes!)
                         # Use permuted windows if we permuted inputs (to match prediction order)
                         target = windows_for_target  # (B, L, W) - raw signal (possibly permuted)
+                        target_raw = target
                         
                         # Per-sample normalization (mean=0, std=1)
                         # This preserves signal structure while removing scale differences
@@ -632,9 +634,11 @@ def main() -> None:
                                 logger.warning(f"Windows with NaN: {nan_windows.sum().item()} out of {target.shape[0] * target.shape[1]}")
                             # Replace NaN with zeros
                             target = torch.where(torch.isnan(target), torch.zeros_like(target), target)
+                            target_raw = torch.where(torch.isnan(target_raw), torch.zeros_like(target_raw), target_raw)
                     else:
                         # SIMPLIFIED: Always use raw signal (no encoder)
                         target = windows  # Raw signal
+                        target_raw = target
                     # Compute MSE over masked positions only (avoid NaN propagation by indexing)
                     # Use permuted mask if we permuted inputs
                     mask_bool_for_loss = mask_bool_permuted if (prevent_position_only and shuffle_prob > 0.0) else mask_bool
@@ -754,21 +758,66 @@ def main() -> None:
                                 
                                 B, L = token_mask.shape
                                 pred_by_position = []
+                                pred_rms_list = []
+                                target_rms_list = []
+                                pred_rms_raw_list = []
+                                target_rms_raw_list = []
+                                pos_list = []
                                 for b in range(B):
                                     seq_len = seq_lengths[b].item()
                                     masked_indices = token_mask[b, :seq_len].nonzero(as_tuple=True)[0]
                                     for idx in masked_indices:
                                         if idx < seq_len:
                                             pred_by_position.append(pred[b, idx].mean().item())
+                                            pred_window = pred[b, idx]
+                                            target_window = target[b, idx]
+                                            pred_window_raw = pred_window * target_std[b, idx] + target_mean[b, idx]
+                                            target_window_raw = target_raw[b, idx]
+                                            pred_rms_list.append(pred_window.pow(2).mean().sqrt().item())
+                                            target_rms_list.append(target_window.pow(2).mean().sqrt().item())
+                                            pred_rms_raw_list.append(pred_window_raw.pow(2).mean().sqrt().item())
+                                            target_rms_raw_list.append(target_window_raw.pow(2).mean().sqrt().item())
+                                            pos_list.append(int(idx))
                                 
                                 if len(pred_by_position) > 1:
                                     pos_variance = np.var(pred_by_position)
+                                    pred_rms_mean = float(np.mean(pred_rms_list))
+                                    target_rms_mean = float(np.mean(target_rms_list))
+                                    pred_rms_var = float(np.var(pred_rms_list))
+                                    target_rms_var = float(np.var(target_rms_list))
+                                    pred_rms_raw_mean = float(np.mean(pred_rms_raw_list))
+                                    target_rms_raw_mean = float(np.mean(target_rms_raw_list))
+                                    pred_rms_raw_var = float(np.var(pred_rms_raw_list))
+                                    target_rms_raw_var = float(np.var(target_rms_raw_list))
+                                    rms_corr = float("nan")
+                                    rms_raw_corr = float("nan")
+                                    pos_rms_corr = float("nan")
+                                    if np.std(pred_rms_list) > 0 and np.std(target_rms_list) > 0:
+                                        rms_corr = float(np.corrcoef(pred_rms_list, target_rms_list)[0, 1])
+                                    if np.std(pred_rms_raw_list) > 0 and np.std(target_rms_raw_list) > 0:
+                                        rms_raw_corr = float(np.corrcoef(pred_rms_raw_list, target_rms_raw_list)[0, 1])
+                                    if np.std(pred_rms_list) > 0 and np.std(pos_list) > 0:
+                                        pos_rms_corr = float(np.corrcoef(pred_rms_list, pos_list)[0, 1])
                                     mlflow.log_metric("decoder_pred_var", pred_var, step=epoch * len(loader) + step)
                                     mlflow.log_metric("decoder_pred_mean", pred_mean, step=epoch * len(loader) + step)
                                     mlflow.log_metric("decoder_pred_std", pred_std, step=epoch * len(loader) + step)
                                     mlflow.log_metric("decoder_pred_min", pred_min, step=epoch * len(loader) + step)
                                     mlflow.log_metric("decoder_pred_max", pred_max, step=epoch * len(loader) + step)
                                     mlflow.log_metric("decoder_pred_pos_variance", pos_variance, step=epoch * len(loader) + step)
+                                    mlflow.log_metric("decoder_pred_rms_mean", pred_rms_mean, step=epoch * len(loader) + step)
+                                    mlflow.log_metric("decoder_target_rms_mean", target_rms_mean, step=epoch * len(loader) + step)
+                                    mlflow.log_metric("decoder_pred_rms_var", pred_rms_var, step=epoch * len(loader) + step)
+                                    mlflow.log_metric("decoder_target_rms_var", target_rms_var, step=epoch * len(loader) + step)
+                                    mlflow.log_metric("decoder_pred_rms_raw_mean", pred_rms_raw_mean, step=epoch * len(loader) + step)
+                                    mlflow.log_metric("decoder_target_rms_raw_mean", target_rms_raw_mean, step=epoch * len(loader) + step)
+                                    mlflow.log_metric("decoder_pred_rms_raw_var", pred_rms_raw_var, step=epoch * len(loader) + step)
+                                    mlflow.log_metric("decoder_target_rms_raw_var", target_rms_raw_var, step=epoch * len(loader) + step)
+                                    if np.isfinite(rms_corr):
+                                        mlflow.log_metric("decoder_pred_target_rms_corr", rms_corr, step=epoch * len(loader) + step)
+                                    if np.isfinite(rms_raw_corr):
+                                        mlflow.log_metric("decoder_pred_target_rms_raw_corr", rms_raw_corr, step=epoch * len(loader) + step)
+                                    if np.isfinite(pos_rms_corr):
+                                        mlflow.log_metric("decoder_pred_rms_pos_corr", pos_rms_corr, step=epoch * len(loader) + step)
                                     
                                     # Target statistics for comparison
                                     target_masked = target[mask_exp]
@@ -783,8 +832,39 @@ def main() -> None:
                                     logger.info(f"\n{'='*80}")
                                     logger.info(f"📊 LOSS METRICS [Step {step}]")
                                     logger.info(f"  Current Loss: {loss.item():.6f}")
-                                    logger.info(f"  Predicted: var={pred_var:.6f}, mean={pred_mean:.6f}, std={pred_std:.6f}, pos_var={pos_variance:.6f}")
-                                    logger.info(f"  Target:     var={target_var:.6f}, mean={target_mean:.6f}, std={target_std:.6f}")
+                                    logger.info(
+                                        "  Predicted: var=%.6f, mean=%.6f, std=%.6f, pos_var=%.6f",
+                                        pred_var,
+                                        pred_mean,
+                                        pred_std,
+                                        pos_variance,
+                                    )
+                                    logger.info(
+                                        "  Target:     var=%.6f, mean=%.6f, std=%.6f",
+                                        target_var,
+                                        target_mean,
+                                        target_std,
+                                    )
+                                    logger.info(
+                                        "  RMS: pred_mean=%.6f, pred_var=%.6f, target_mean=%.6f, target_var=%.6f",
+                                        pred_rms_mean,
+                                        pred_rms_var,
+                                        target_rms_mean,
+                                        target_rms_var,
+                                    )
+                                    logger.info(
+                                        "  RMS RAW: pred_mean=%.6f, pred_var=%.6f, target_mean=%.6f, target_var=%.6f",
+                                        pred_rms_raw_mean,
+                                        pred_rms_raw_var,
+                                        target_rms_raw_mean,
+                                        target_rms_raw_var,
+                                    )
+                                    logger.info(
+                                        "  RMS Corr: norm(pred-target)=%.4f, raw(pred-target)=%.4f, pred-pos=%.4f",
+                                        rms_corr,
+                                        rms_raw_corr,
+                                        pos_rms_corr,
+                                    )
                                     logger.info(f"{'='*80}\n")
                         
                         # Anti-position-only learning: Position regularization

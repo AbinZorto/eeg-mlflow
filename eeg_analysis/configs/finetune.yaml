@@ -3,29 +3,62 @@
 # This config is used for supervised fine-tuning (SFT) of pretrained Mamba models
 
 # Training hyperparameters
-lr: 1.0e-4  # Learning rate for fine-tuning
-min_lr: 1.0e-6  # Minimum learning rate for cosine annealing
-batch_size: 8
-epochs: 50
+batch_size: 256
+epochs: 50 
 dropout: 0.1
 weight_decay: 0.01
+class_weighting: none  # none | balanced | custom
+# class_weights: [1.0, 1.0]  # Used only when class_weighting=custom
+loss_type: cross_entropy # cross_entropy | focal
+focal_gamma: 1.0
+label_smoothing: 0.05  # Only used for cross_entropy
 
 # Model configuration
-freeze_backbone: true  # Freeze pretrained backbone, only train classification head
 num_classes: 2  # Binary classification (remission vs non-remission)
 
+# Training mode
+training_mode: window # participant | window
+
+# Participant-mode switches (ignored when training_mode=window)
+lr: 3.0e-4  # Head learning rate for fine-tuning
+backbone_lr: 3.0e-5  # Backbone learning rate when unfrozen (set null to use lr*0.1)
+min_lr: 1.0e-6  # Minimum learning rate for cosine annealing
+freeze_backbone: true  # Used only when training_mode=participant
+unfreeze_epoch: null  # Used only when training_mode=participant
+
+# Window-mode switches (ignored when training_mode=participant)
+# - window_strategy: joint (option 2) trains backbone + window head
+# - window_strategy: frozen (option 3) freezes backbone, trains window head only
+window_strategy: joint
+patient_vote: majority  # majority | prob (window mode only)
+
 # Data splits
-val_ratio: 0.2  # 20% validation split
-test_ratio: 0.1  # 10% test split
+split_strategy: leave_one_out  # random | leave_one_out
 seed: 42
+
+# Random split switches (ignored when split_strategy=leave_one_out)
+val_ratio: 0.0  # In LOPO, set >0 only if you want an internal val split
+test_ratio: 0.1
+
+# Data balancing
+use_weighted_sampler: false # Balance classes per batch at participant level (works in any mode)
 
 # MLflow
 mlflow_tracking_uri: "mlruns"
 mlflow_experiment: "eeg_finetuning_mamba2"
+
+# Thresholding (for robustness with class imbalance; requires val_ratio > 0)
+tune_threshold: false
+threshold_min: 0.05
+threshold_max: 0.95
+threshold_steps: 19
+
+# Logging
+log_fold_summary_only: true  # If true, only emit fold summaries + final metrics
+dataset_verbose: false # Controls dataset printouts during loading
 
 # Notes:
 # - The model architecture (d_model, num_layers, window_length, asa_path) 
 #   will be loaded from the pretraining config
 # - The pretrained checkpoint will be automatically found based on the 
 #   pretraining config parameters (d_model, num_layers, mask_ratio, masking_style)
-

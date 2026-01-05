@@ -49,6 +49,7 @@ def setup_logger(
     """
     logger = logging.getLogger(name)
     logger.setLevel(min(console_level, file_level))
+    logger.propagate = False
     
     # Remove existing handlers
     logger.handlers = []
@@ -62,11 +63,13 @@ def setup_logger(
         formatter = logging.Formatter(
             '%(asctime)s - %(name)s - %(levelname)s - %(module)s - %(funcName)s - %(message)s'
         )
+    plain_console = os.environ.get("LOG_PLAIN", "1").lower() in ("1", "true", "yes")
+    console_formatter = logging.Formatter('%(message)s') if plain_console else formatter
     
     # Console handler
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setLevel(console_level)
-    console_handler.setFormatter(formatter)
+    console_handler.setFormatter(console_formatter)
     logger.addHandler(console_handler)
     
     # File handler (if log_dir provided)

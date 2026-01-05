@@ -36,7 +36,10 @@ class EEGSFTDataset(Dataset):
         val_ratio: float = 0.2,
         test_ratio: float = 0.1,
         seed: int = 42,
-        channels: Optional[List[str]] = None
+        channels: Optional[List[str]] = None,
+        participants: Optional[List[str]] = None,
+        labels: Optional[Dict[str, int]] = None,
+        verbose: bool = True
     ) -> None:
         super().__init__()
         self.data_path = Path(data_path)
@@ -55,38 +58,43 @@ class EEGSFTDataset(Dataset):
         df = pd.read_parquet(self.data_path)
         
         # Group by participant
-        participants = df['Participant'].unique()
-        labels = df.groupby('Participant')['Remission'].first().to_dict()
-        
-        # Split participants into train/val/test
-        train_participants, test_participants = train_test_split(
-            participants,
-            test_size=test_ratio,
-            random_state=seed,
-            stratify=[labels[p] for p in participants]
-        )
-        
-        train_participants, val_participants = train_test_split(
-            train_participants,
-            test_size=val_ratio / (1 - test_ratio),
-            random_state=seed,
-            stratify=[labels[p] for p in train_participants]
-        )
-        
-        # Select participants based on split
-        if split == "train":
-            selected_participants = train_participants
-        elif split == "val":
-            selected_participants = val_participants
-        elif split == "test":
-            selected_participants = test_participants
+        all_participants = df['Participant'].unique()
+        all_labels = df.groupby('Participant')['Remission'].first().to_dict()
+
+        if participants is not None:
+            selected_participants = list(participants)
+            labels = labels or all_labels
         else:
-            raise ValueError(f"Invalid split: {split}. Use 'train', 'val', or 'test'.")
+            # Split participants into train/val/test
+            train_participants, test_participants = train_test_split(
+                all_participants,
+                test_size=test_ratio,
+                random_state=seed,
+                stratify=[all_labels[p] for p in all_participants]
+            )
+            
+            train_participants, val_participants = train_test_split(
+                train_participants,
+                test_size=val_ratio / (1 - test_ratio),
+                random_state=seed,
+                stratify=[all_labels[p] for p in train_participants]
+            )
+            
+            # Select participants based on split
+            if split == "train":
+                selected_participants = train_participants
+            elif split == "val":
+                selected_participants = val_participants
+            elif split == "test":
+                selected_participants = test_participants
+            else:
+                raise ValueError(f"Invalid split: {split}. Use 'train', 'val', or 'test'.")
+            labels = all_labels
         
         # Filter data for selected participants
         self.df = df[df['Participant'].isin(selected_participants)].copy()
-        self.participants = sorted(selected_participants)
-        self.labels = {p: labels[p] for p in self.participants}
+        self.participants = list(selected_participants)
+        self.labels = {p: int(labels[p]) for p in self.participants}
         
         # CRITICAL: Verify temporal ordering is preserved in the dataframe
         # Windows should be sorted by Participant -> parent_window_id -> sub_window_id
@@ -99,18 +107,23 @@ class EEGSFTDataset(Dataset):
             is_sorted = self.df[sort_cols].equals(self.df[sort_cols].sort_values(sort_cols))
             
             if not is_sorted:
-                print(f"[{split.upper()}] Warning: Data not sorted by window IDs, sorting now...")
+                if verbose:
+                    print(f"[{split.upper()}] Warning: Data not sorted by window IDs, sorting now...")
                 self.df = self.df.sort_values(sort_cols).reset_index(drop=True)
-                print(f"[{split.upper()}] ✓ Data sorted to preserve temporal window order")
+                if verbose:
+                    print(f"[{split.upper()}] ✓ Data sorted to preserve temporal window order")
             else:
-                print(f"[{split.upper()}] ✓ Data already sorted in temporal order")
+                if verbose:
+                    print(f"[{split.upper()}] ✓ Data already sorted in temporal order")
         else:
-            print(f"[{split.upper()}] Warning: No window IDs found, assuming data is pre-sorted")
+            if verbose:
+                print(f"[{split.upper()}] Warning: No window IDs found, assuming data is pre-sorted")
         
-        print(f"[{split.upper()}] Loaded {len(self.participants)} participants, "
-              f"{len(self.df)} windows")
-        print(f"  Remission: {sum(self.labels.values())} participants")
-        print(f"  Non-remission: {len(self.participants) - sum(self.labels.values())} participants")
+        if verbose:
+            print(f"[{split.upper()}] Loaded {len(self.participants)} participants, "
+                  f"{len(self.df)} windows")
+            print(f"  Remission: {sum(self.labels.values())} participants")
+            print(f"  Non-remission: {len(self.participants) - sum(self.labels.values())} participants")
     
     def __len__(self) -> int:
         return len(self.participants)
@@ -140,10 +153,12 @@ class EEGSFTDataset(Dataset):
                     # Check if mostly monotonic (allowing for some resets between runs)
                     is_ordered = sum(window_ids[i] <= window_ids[i+1] for i in range(len(window_ids)-1)) / (len(window_ids)-1) > 0.9
                     if not is_ordered:
-                        print(f"Warning: Window ordering may be incorrect for participant {participant}")
+                        if verbose:
+                            print(f"Warning: Window ordering may be incorrect for participant {participant}")
         else:
             # If no window IDs, use dataframe index order (assumes data was pre-sorted)
-            print(f"Warning: No window IDs found for participant {participant}, using dataframe order")
+            if verbose:
+                print(f"Warning: No window IDs found for participant {participant}, using dataframe order")
         
         # Extract channel data
         channel_windows = []
@@ -233,4 +248,3 @@ def collate_sft_batch(batch: List[Dict[str, Any]]) -> Dict[str, Any]:
         "participants": participants,  # List[str]
         "channel_names": channel_names  # List[str] - channel names for all samples
     }
-

@@ -189,3 +189,129 @@ class MambaEEGClassifier(nn.Module):
             "total": total
         }
 
+
+class MambaEEGWindowClassifier(nn.Module):
+    """
+    Mamba EEG model with per-window classification head.
+
+    Outputs logits per window for majority-vote participant classification.
+    """
+
+    def __init__(
+        self,
+        d_model: int = 128,
+        num_layers: int = 6,
+        window_length: int = 2048,
+        asa_path: Optional[str] = None,
+        num_classes: int = 2,
+        dropout: float = 0.1,
+        pretrained_path: Optional[str] = None,
+        freeze_backbone: bool = True
+    ):
+        super().__init__()
+        self.d_model = d_model
+        self.num_classes = num_classes
+        self.freeze_backbone = freeze_backbone
+
+        self.backbone = MambaEEGModel(
+            d_model=d_model,
+            num_layers=num_layers,
+            window_length=window_length,
+            asa_path=asa_path,
+            dropout=dropout
+        )
+
+        if pretrained_path:
+            self._load_pretrained_weights(pretrained_path)
+
+        if freeze_backbone:
+            self.freeze_backbone_layers()
+
+        self.classifier = nn.Sequential(
+            nn.LayerNorm(d_model),
+            nn.Dropout(dropout),
+            nn.Linear(d_model, d_model // 2),
+            nn.GELU(),
+            nn.Dropout(dropout),
+            nn.Linear(d_model // 2, num_classes)
+        )
+        self._init_classifier()
+
+    def _load_pretrained_weights(self, checkpoint_path: str):
+        checkpoint_path = Path(checkpoint_path)
+        if not checkpoint_path.exists():
+            raise FileNotFoundError(f"Checkpoint not found: {checkpoint_path}")
+
+        checkpoint = torch.load(checkpoint_path, map_location='cpu')
+        state_dict = checkpoint['model'] if 'model' in checkpoint else checkpoint
+        missing_keys, unexpected_keys = self.backbone.load_state_dict(state_dict, strict=False)
+        print(f"Loaded pretrained weights from {checkpoint_path}")
+        if missing_keys:
+            print(f"  Missing keys: {missing_keys[:5]}{'...' if len(missing_keys) > 5 else ''}")
+        if unexpected_keys:
+            print(f"  Unexpected keys: {unexpected_keys[:5]}{'...' if len(unexpected_keys) > 5 else ''}")
+
+    def freeze_backbone_layers(self):
+        for param in self.backbone.parameters():
+            param.requires_grad = False
+        print("Froze all backbone parameters")
+
+    def unfreeze_backbone_layers(self):
+        for param in self.backbone.parameters():
+            param.requires_grad = True
+        print("Unfroze all backbone parameters")
+
+    def _init_classifier(self):
+        for module in self.classifier.modules():
+            if isinstance(module, nn.Linear):
+                nn.init.xavier_uniform_(module.weight, gain=0.1)
+                if module.bias is not None:
+                    nn.init.zeros_(module.bias)
+
+    def forward(
+        self,
+        windows: torch.Tensor,
+        channel_names: list[str],
+        seq_lengths: Optional[torch.Tensor] = None
+    ) -> torch.Tensor:
+        """
+        Forward pass for per-window classification.
+
+        Args:
+            windows: [B, C, W, L]
+            channel_names: List[str] length C
+            seq_lengths: [B]
+
+        Returns:
+            logits: [B, W, num_classes]
+        """
+        B, C, W, _ = windows.shape
+        channel_embeddings = []
+        for c_idx in range(C):
+            channel_name = channel_names[c_idx] if c_idx < len(channel_names) else f"CH{c_idx}"
+            channel_windows = windows[:, c_idx, :, :]  # [B, W, L]
+            batch_channel_names = [channel_name] * B
+            if seq_lengths is None:
+                seq_lengths_tensor = torch.full((B,), W, dtype=torch.long, device=windows.device)
+            else:
+                seq_lengths_tensor = seq_lengths
+            channel_emb = self.backbone(
+                windows_masked=channel_windows,
+                channel_names=batch_channel_names,
+                seq_lengths=seq_lengths_tensor
+            )  # [B, W, d_model]
+            channel_embeddings.append(channel_emb)
+
+        channel_embeddings = torch.stack(channel_embeddings, dim=1)  # [B, C, W, d_model]
+        pooled = channel_embeddings.mean(dim=1)  # [B, W, d_model]
+        logits = self.classifier(pooled)  # [B, W, num_classes]
+        return logits
+
+    def get_trainable_parameters(self) -> Dict[str, int]:
+        trainable = sum(p.numel() for p in self.parameters() if p.requires_grad)
+        total = sum(p.numel() for p in self.parameters())
+        return {
+            "trainable": trainable,
+            "frozen": total - trainable,
+            "total": total
+        }

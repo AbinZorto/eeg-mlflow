@@ -22,7 +22,7 @@ epochs: 200  # Max epochs with early stopping
 
 # Masking configuration
 mask_ratio: 0.4 # Fraction of tokens/samples to mask
-masking_style: "bert"  # Options: "mae", "bert", "within_token", "multi_channel"
+masking_style: "mae"  # Options: "mae", "bert", "within_token", "multi_channel"
                                # - "mae": Token-level masking, independent per channel
                                # - "bert": Token-level masking with noise/unchanged variants
                                # - "within_token": Sample-level masking within tokens, independent per channel
@@ -42,7 +42,7 @@ disable_spatial_encoding: false # Keep spatial encoding (needed for EEG)
 # Anti-position-only learning strategies
 prevent_position_only_learning: true # Enable strategies to prevent position-only learning
 position_regularization_weight: 0.1  # Penalty for position-only predictions (0.0-1.0)
-shuffle_sequences_prob: 0.1  # Probability of shuffling sequence order during training (0.0-1.0)
+shuffle_sequences_prob: 0.0  # Probability of shuffling sequence order during training (0.0-1.0)
                                     # Shuffling breaks position=time mapping, forces context learning
                                     # 0.0 = never shuffle (preserve temporal order)
                                     # 0.3 = shuffle 30% of sequences (balanced)

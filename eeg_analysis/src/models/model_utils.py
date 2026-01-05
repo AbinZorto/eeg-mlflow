@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import pandas as pd
 from typing import Dict, Any, List
@@ -8,30 +9,41 @@ from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 
+SUPPRESS_MODEL_WARNINGS = os.environ.get("SUPPRESS_MODEL_WARNINGS")
+if SUPPRESS_MODEL_WARNINGS is None:
+    SUPPRESS_MODEL_WARNINGS = os.environ.get("LOG_PLAIN", "0")
+SUPPRESS_MODEL_WARNINGS = SUPPRESS_MODEL_WARNINGS.lower() in ("1", "true", "yes")
+
 # GPU-accelerated imports
 try:
     import xgboost as xgb
     XGBOOST_AVAILABLE = True
-    print("🚀 XGBoost GPU support available!")
+    if not SUPPRESS_MODEL_WARNINGS:
+        print("🚀 XGBoost GPU support available!")
 except ImportError:
     XGBOOST_AVAILABLE = False
-    print("⚠️ XGBoost not available. Install with: pip install xgboost")
+    if not SUPPRESS_MODEL_WARNINGS:
+        print("⚠️ XGBoost not available. Install with: pip install xgboost")
 
 try:
     import catboost as cb
     CATBOOST_AVAILABLE = True
-    print("🚀 CatBoost GPU support available!")
+    if not SUPPRESS_MODEL_WARNINGS:
+        print("🚀 CatBoost GPU support available!")
 except ImportError:
     CATBOOST_AVAILABLE = False
-    print("⚠️ CatBoost not available. Install with: pip install catboost")
+    if not SUPPRESS_MODEL_WARNINGS:
+        print("⚠️ CatBoost not available. Install with: pip install catboost")
 
 try:
     import lightgbm as lgb
     LIGHTGBM_AVAILABLE = True
-    print("🚀 LightGBM GPU support available!")
+    if not SUPPRESS_MODEL_WARNINGS:
+        print("🚀 LightGBM GPU support available!")
 except ImportError:
     LIGHTGBM_AVAILABLE = False
-    print("⚠️ LightGBM not available. Install with: pip install lightgbm")
+    if not SUPPRESS_MODEL_WARNINGS:
+        print("⚠️ LightGBM not available. Install with: pip install lightgbm")
 from sklearn.pipeline import Pipeline
 import mlflow
 import logging
