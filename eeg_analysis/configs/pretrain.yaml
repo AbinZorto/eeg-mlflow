@@ -16,12 +16,12 @@ d_model:  512
 num_layers: 2
 
 # Training
-lr: 8.0e-5  # Learning rate
+lr: 1.0e-4  # Learning rate
 batch_size: 64 
 epochs: 200  # Max epochs with early stopping
 
 # Masking configuration
-mask_ratio: 0.4 # Fraction of tokens/samples to mask
+mask_ratio: 0.3 # Fraction of tokens/samples to mask
 masking_style: "mae"  # Options: "mae", "bert", "within_token", "multi_channel"
                                # - "mae": Token-level masking, independent per channel
                                # - "bert": Token-level masking with noise/unchanged variants
@@ -60,7 +60,7 @@ loss_function: "combined"  # Options: "mse", "mae", "cosine", "huber", "combined
                          # - "cosine": Cosine similarity loss - focuses on waveform shape
                          # - "huber": Huber loss - combines MSE and MAE benefits
                          # - "combined": Weighted combination of cosine + MAE (0.5 cosine + 0.5 MAE)
-variance_matching_weight: 0.3  # Weight for variance matching penalty (0.0 = disabled)
+variance_matching_weight: 0.2  # Weight for variance matching penalty (0.0 = disabled)
                                 # Encourages predictions to match target variance
                                 # Helps prevent low-variance predictions
                                 # Recommended: 0.1-0.3 for cosine loss, 0.0 for MSE/MAE

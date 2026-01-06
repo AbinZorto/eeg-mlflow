@@ -298,6 +298,7 @@ def evaluate_window(
     threshold: float | None = None,
     return_details: bool = False,
     patient_vote: str = "majority",
+    patient_threshold: float | None = None,
 ) -> Dict[str, float] | Tuple[Dict[str, float], List[int], List[float], List[int], List[int], List[int]]:
     """Evaluate window-level model; returns window metrics and patient summaries."""
     model.eval()
@@ -335,8 +336,12 @@ def evaluate_window(
 
                 # Patient-level aggregation
                 p_prob = float(probs[i, :valid_w, 1].mean().item())
+                p_prob0 = float(probs[i, :valid_w, 0].mean().item())
                 if patient_vote == "prob":
-                    p_pred = int(p_prob >= (threshold if threshold is not None else 0.5))
+                    if patient_threshold is not None:
+                        p_pred = int(p_prob >= patient_threshold)
+                    else:
+                        p_pred = int(p_prob >= (threshold if threshold is not None else 0.5))
                 else:
                     p_pred = int(preds[i, :valid_w].float().mean().item() >= 0.5)
                 patient_labels.append(int(labels[i].item()))
@@ -863,13 +868,27 @@ def main():
                 # Test evaluation (patient-level in LOPO)
                 if training_mode == "window":
                     patient_vote = cfg.get("patient_vote", "majority")
+                    patient_threshold = cfg.get("patient_threshold")
                     if best_threshold is not None:
                         test_metrics, patient_labels, patient_probs, patient_preds, window_labels, window_preds = evaluate_window(
-                            model, test_loader, criterion, device, threshold=best_threshold, return_details=True, patient_vote=patient_vote
+                            model,
+                            test_loader,
+                            criterion,
+                            device,
+                            threshold=best_threshold,
+                            return_details=True,
+                            patient_vote=patient_vote,
+                            patient_threshold=patient_threshold,
                         )
                     else:
                         test_metrics, patient_labels, patient_probs, patient_preds, window_labels, window_preds = evaluate_window(
-                            model, test_loader, criterion, device, return_details=True, patient_vote=patient_vote
+                            model,
+                            test_loader,
+                            criterion,
+                            device,
+                            return_details=True,
+                            patient_vote=patient_vote,
+                            patient_threshold=patient_threshold,
                         )
                     for key, value in test_metrics.items():
                         mlflow.log_metric(f"test_{key}", value)
@@ -943,6 +962,8 @@ def main():
                 if split_strategy == "leave_one_out":
                     logger.info(f"Fold patient accuracy: {patient_accuracy}")
                     logger.info(f"Fold patient prob: {patient_prob:.4f}")
+                    if training_mode == "window":
+                        logger.info(f"Fold patient prob0: {1.0 - patient_prob:.4f}")
                     logger.info(f"Fold patient true: {patient_true}")
                     logger.info(f"Fold patient pred: {patient_pred}")
                     if training_mode == "window":

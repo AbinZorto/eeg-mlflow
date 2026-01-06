@@ -4,11 +4,11 @@
 
 # Training hyperparameters
 batch_size: 256
-epochs: 50 
-dropout: 0.1
-weight_decay: 0.01
-class_weighting: none  # none | balanced | custom
-# class_weights: [1.0, 1.0]  # Used only when class_weighting=custom
+epochs: 10 
+dropout: 0.2
+weight_decay: 0.001
+class_weighting: custom # none | balanced | custom
+class_weights: [1.0, 1.5]  # Used only when class_weighting=custom
 loss_type: cross_entropy # cross_entropy | focal
 focal_gamma: 1.0
 label_smoothing: 0.05  # Only used for cross_entropy
@@ -22,7 +22,7 @@ training_mode: window # participant | window
 # Participant-mode switches (ignored when training_mode=window)
 lr: 3.0e-4  # Head learning rate for fine-tuning
 backbone_lr: 3.0e-5  # Backbone learning rate when unfrozen (set null to use lr*0.1)
-min_lr: 1.0e-6  # Minimum learning rate for cosine annealing
+min_lr: 1.0e-5  # Minimum learning rate for cosine annealing
 freeze_backbone: true  # Used only when training_mode=participant
 unfreeze_epoch: null  # Used only when training_mode=participant
 
@@ -30,7 +30,8 @@ unfreeze_epoch: null  # Used only when training_mode=participant
 # - window_strategy: joint (option 2) trains backbone + window head
 # - window_strategy: frozen (option 3) freezes backbone, trains window head only
 window_strategy: joint
-patient_vote: majority  # majority | prob (window mode only)
+patient_vote: prob  # majority | prob (window mode only)
+patient_threshold: 0.32  # Used when patient_vote=prob
 
 # Data splits
 split_strategy: leave_one_out  # random | leave_one_out
