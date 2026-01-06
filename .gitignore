@@ -31,7 +31,7 @@ rapids-dask/
 *env.local
 .env
 .env.local
-
+export_venv_requirements.py
 
 # IDEs and editors
 .idea/
