@@ -195,7 +195,7 @@ def collate_sft_batch(batch: List[Dict[str, Any]]) -> Dict[str, Any]:
     
     IMPORTANT: Window order is preserved from the dataset.
     Each participant's windows are in temporal order (sorted by parent_window_id, sub_window_id).
-    This is critical for temporal modeling in the Mamba backbone.
+    This is critical for temporal modeling in the backbone.
     
     Args:
         batch: List of samples from EEGSFTDataset (windows already in temporal order)
@@ -233,4 +233,3 @@ def collate_sft_batch(batch: List[Dict[str, Any]]) -> Dict[str, Any]:
         "participants": participants,  # List[str]
         "channel_names": channel_names  # List[str] - channel names for all samples
     }
-
