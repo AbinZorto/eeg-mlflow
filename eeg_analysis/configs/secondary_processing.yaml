@@ -1,5 +1,5 @@
 paths:
-  source_root: "/home/abin"
+  source_root: "/home/abin/eeg-secondary-data"
   output_dir: "eeg_analysis/secondarydata/raw"
 
 processing:
@@ -12,4 +12,3 @@ processing:
 mlflow:
   tracking_uri: "file:./mlruns"
   experiment_name: "eeg_processing"
-
