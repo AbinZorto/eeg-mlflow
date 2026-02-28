@@ -58,15 +58,17 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Activate conda environment with GPU support
-echo "Activating conda eeg-env environment (with GPU support)..."
-source /home/abin/anaconda3/etc/profile.d/conda.sh
-conda activate eeg-env
+# Ensure uv is available (this script assumes uv-managed Python environments)
+if ! command -v uv >/dev/null 2>&1; then
+    echo "Error: 'uv' is not installed or not on PATH."
+    echo "Install uv from https://docs.astral.sh/uv/ and retry."
+    exit 1
+fi
 
 # Configuration
 CONFIG_FILE="eeg_analysis/configs/window_model_config_ultra_extreme.yaml"  # ULTRA-EXTREME configuration for all models
 LEVEL="window"
-PYTHON_CMD="python"
+PYTHON_CMD="uv run python3"
 
 # Available models - Mix of GPU-accelerated and traditional models
 GPU_ML_MODELS=("xgboost_gpu" "catboost_gpu" "lightgbm_gpu")
@@ -108,9 +110,9 @@ find_4channel_dataset_by_window_size() {
     # Use the standalone Python script to search for datasets
     local dataset_info
     if [[ -n "$ordering_method" ]]; then
-        dataset_info=$(python3 scripts/find_dataset.py "$window_seconds" "$ordering_method" 2>/dev/null)
+        dataset_info=$($PYTHON_CMD scripts/find_dataset.py "$window_seconds" "$ordering_method" 2>/dev/null)
     else
-        dataset_info=$(python3 scripts/find_dataset.py "$window_seconds" 2>/dev/null)
+        dataset_info=$($PYTHON_CMD scripts/find_dataset.py "$window_seconds" 2>/dev/null)
     fi
     
     local status=$(echo "$dataset_info" | cut -d: -f1)
@@ -145,7 +147,7 @@ get_selected_channels() {
     local config_file="$1"
     
     # Extract channels from processing config
-    local channels=$(python3 -c "
+    local channels=$($PYTHON_CMD -c "
 import yaml
 import sys
 
@@ -213,7 +215,7 @@ filter_dataset_columns() {
     log_message "Output path: $new_dataset_path" >&2
     
     # Create filtered dataset using the standalone Python script
-    local filter_result=$(python3 scripts/filter_dataset.py "$run_id" "$selected_channels" "$window_seconds" 2>/tmp/filter_debug.log)
+    local filter_result=$($PYTHON_CMD scripts/filter_dataset.py "$run_id" "$selected_channels" "$window_seconds" 2>/tmp/filter_debug.log)
     
     local status=$(echo "$filter_result" | cut -d: -f1)
     
@@ -402,7 +404,7 @@ if [[ "$DRY_RUN" == "true" ]]; then
     
     # Extract window sizes and channels for dry run
     processing_config="eeg_analysis/configs/processing_config.yaml"
-    window_sizes_str=$(python3 -c "
+    window_sizes_str=$($PYTHON_CMD -c "
 import yaml
 try:
     with open('$processing_config', 'r') as f:
@@ -416,7 +418,7 @@ except Exception:
     print('UNKNOWN')
 " 2>/dev/null)
     
-    selected_channels=$(python3 -c "
+    selected_channels=$($PYTHON_CMD -c "
 import yaml
 try:
     with open('$processing_config', 'r') as f:
@@ -558,7 +560,7 @@ main() {
         exit 1
     fi
     
-    window_sizes_str=$(python3 -c "
+    window_sizes_str=$($PYTHON_CMD -c "
 import yaml
 try:
     with open('$processing_config', 'r') as f:

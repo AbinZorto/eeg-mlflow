@@ -1,6 +1,13 @@
 import click
 import mlflow
 from pathlib import Path
+import sys
+
+# Ensure `src.*` imports work when executing this file directly.
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+EEG_ANALYSIS_DIR = PROJECT_ROOT / "eeg_analysis"
+if str(EEG_ANALYSIS_DIR) not in sys.path:
+    sys.path.insert(0, str(EEG_ANALYSIS_DIR))
 
 from src.utils.logger import setup_logger
 from src.utils.config import load_config
@@ -26,7 +33,9 @@ def build_secondary(ctx):
     config = ctx.obj['config']
 
     # Set up MLflow tracking (pipeline will set experiment and start run)
-    tracking_uri = config.get('mlflow', {}).get('tracking_uri', "file:./mlruns")
+    tracking_uri = config.get('mlflow', {}).get('tracking_uri', f"file:{PROJECT_ROOT / 'mlruns'}")
+    if tracking_uri in {"mlruns", "./mlruns", "file:./mlruns"}:
+        tracking_uri = f"file:{PROJECT_ROOT / 'mlruns'}"
     mlflow.set_tracking_uri(tracking_uri)
 
     result = secondary_pipeline.run(config)
@@ -41,5 +50,3 @@ def build_secondary(ctx):
 
 if __name__ == '__main__':
     cli(obj={})
-
-

@@ -1,13 +1,12 @@
 import sys
-import os
-sys.path.append('.')
 import mlflow
-import pandas as pd
 from pathlib import Path
 
-# Set up MLflow - use root mlruns from current directory 
-mlflow.set_tracking_uri('file:./mlruns')
-print(f'MLflow tracking URI set to: ./mlruns', file=sys.stderr)
+# Resolve project root and use a stable MLflow tracking URI.
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+TRACKING_URI = f"file:{PROJECT_ROOT / 'mlruns'}"
+mlflow.set_tracking_uri(TRACKING_URI)
+print(f"MLflow tracking URI set to: {TRACKING_URI}", file=sys.stderr)
 
 if len(sys.argv) < 2 or len(sys.argv) > 3:
     print('ERROR:Usage: scripts/find_dataset.py <window_seconds> [ordering_method]')

@@ -4,7 +4,7 @@ Convert secondary EEG per-run parquet windows to a larger window size by concate
 fixed-size, non-overlapping windows. This assumes overlap_seconds = 0 in the source data.
 
 Example:
-  uv run python3 eeg_analysis/convert_secondary_window_size.py \
+  uv run python3 scripts/convert_secondary_window_size.py \
     --input-root eeg_analysis/secondarydata/raw/sr256_ws4s \
     --output-base eeg_analysis/secondarydata/raw \
     --factor 2
@@ -20,6 +20,9 @@ from typing import Dict, Iterable, List, Tuple
 import numpy as np
 import pyarrow as pa
 import pyarrow.parquet as pq
+
+# Resolve project root for consistency with other scripts.
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 
 META_COLS = {

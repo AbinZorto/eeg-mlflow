@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 
 import sys
-import os
 import pandas as pd
 import mlflow
-import numpy as np
 from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+TRACKING_URI = f"file:{PROJECT_ROOT / 'mlruns'}"
 
 def filter_dataset_columns(run_id, selected_channels, window_seconds):
     """Filter dataset columns based on selected channels."""
     try:
         # Set up MLflow
-        mlflow.set_tracking_uri('file:./mlruns')
+        mlflow.set_tracking_uri(TRACKING_URI)
         
         # Load original 4-channel dataset
         run = mlflow.get_run(run_id)
@@ -108,7 +109,7 @@ def filter_dataset_columns(run_id, selected_channels, window_seconds):
         # Create new dataset name
         channels_str = "-".join(selected_channels_list)
         new_dataset_name = f"EEG_{window_seconds}s_{channels_str}_filtered"
-        new_dataset_path = f"eeg_analysis/data/processed/features/{new_dataset_name}.parquet"
+        new_dataset_path = PROJECT_ROOT / "eeg_analysis" / "data" / "processed" / "features" / f"{new_dataset_name}.parquet"
         
         # Save filtered dataset
         output_path = Path(new_dataset_path)

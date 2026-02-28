@@ -6,9 +6,11 @@ Keeps only the latest version of each model.
 
 import mlflow
 from mlflow.tracking import MlflowClient
+from pathlib import Path
 
 # Initialize client
-mlflow.set_tracking_uri("file:./mlruns")
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+mlflow.set_tracking_uri(f"file:{PROJECT_ROOT / 'mlruns'}")
 client = MlflowClient()
 
 def cleanup_model_versions(model_name: str, keep_latest_n: int = 1):
@@ -94,4 +96,3 @@ if __name__ == "__main__":
         print("  python scripts/cleanup_old_model_versions.py --model mamba2_eeg_d256_l2_m20 --keep 1")
         print("\n  # Clean up all models, keep latest 2 versions of each")
         print("  python scripts/cleanup_old_model_versions.py --all --keep 2")
-

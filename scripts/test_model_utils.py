@@ -11,7 +11,8 @@ import pandas as pd
 from sklearn.datasets import make_classification
 
 # Add the src directory to the path
-sys.path.append(str(Path(__file__).parent / "src"))
+project_root = Path(__file__).resolve().parent.parent
+sys.path.append(str(project_root / "eeg_analysis" / "src"))
 
 from models.model_utils import ModelBuilder, create_classifier
 

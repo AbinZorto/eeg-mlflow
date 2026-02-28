@@ -14,6 +14,8 @@ import tempfile
 import os
 from pathlib import Path
 
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
 def create_sample_dataset(n_samples=1000, n_features=50):
     """Create a sample EEG feature dataset for testing."""
     np.random.seed(42)
@@ -68,7 +70,7 @@ def test_dataset_logging():
     print("=== Testing MLflow Dataset Logging Workflow ===")
     
     # Set up MLflow
-    mlflow.set_tracking_uri("file:./test_mlruns")
+    mlflow.set_tracking_uri(f"file:{PROJECT_ROOT / 'test_mlruns'}")
     mlflow.set_experiment("dataset_logging_test")
     
     print("1. Creating sample dataset...")

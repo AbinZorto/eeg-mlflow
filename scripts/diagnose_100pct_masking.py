@@ -19,8 +19,9 @@ from pathlib import Path
 import sys
 import yaml
 
-# Add eeg_analysis to path
-EEG_ANALYSIS_ROOT = Path(__file__).parent / "eeg_analysis"
+# Resolve project paths from this script location
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+EEG_ANALYSIS_ROOT = PROJECT_ROOT / "eeg_analysis"
 sys.path.insert(0, str(EEG_ANALYSIS_ROOT))
 
 from src.models.mamba_eeg_model import MambaEEGModel
@@ -1171,7 +1172,7 @@ def find_last_saved_checkpoint():
     """
     Find the most recently modified "last" checkpoint under eeg_analysis.
     """
-    eeg_root = Path(__file__).parent / "eeg_analysis"
+    eeg_root = EEG_ANALYSIS_ROOT
     if not eeg_root.exists():
         return None
 
@@ -1208,7 +1209,7 @@ def main():
     parser.add_argument(
         "--processing-config",
         type=str,
-        default=str(Path(__file__).parent / "eeg_analysis" / "configs" / "processing_config.yaml"),
+        default=str(PROJECT_ROOT / "eeg_analysis" / "configs" / "processing_config.yaml"),
         help="Path to processing_config.yaml (used to derive windowed dataset subfolder)"
     )
     parser.add_argument(

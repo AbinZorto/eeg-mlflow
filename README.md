@@ -16,8 +16,8 @@ All commands below assume you run from the repository root: `/home/abin/eeg-mlfl
 - `eeg_analysis/src/processing/`: EEG preprocessing + feature extraction.
 - `eeg_analysis/src/models/`: trainers and model code.
 - `eeg_analysis/src/training/`: Mamba pretraining/fine-tuning scripts.
-- `eeg_analysis/build_secondary_dataset.py`: secondary EEG dataset build CLI.
-- `eeg_analysis/convert_secondary_window_size.py`: utility to up-convert secondary window sizes.
+- `scripts/build_secondary_dataset.py`: secondary EEG dataset build CLI.
+- `scripts/convert_secondary_window_size.py`: utility to up-convert secondary window sizes.
 - `mlruns/`: MLflow tracking data.
 - `models/`: serialized trained models and metadata.
 
@@ -30,12 +30,6 @@ All commands below assume you run from the repository root: `/home/abin/eeg-mlfl
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-```
-
-Optional package install for local imports:
-
-```bash
-pip install -e eeg_analysis
 ```
 
 ## Traditional EEG Feature Pipeline
@@ -171,7 +165,7 @@ Implemented categories are defined in `eeg_analysis/src/utils/feature_filter.py`
 ### 1) Build secondary EEG dataset (per-run parquet windows)
 
 ```bash
-python3 eeg_analysis/build_secondary_dataset.py \
+python3 scripts/build_secondary_dataset.py \
   --config eeg_analysis/configs/secondary_processing.yaml \
   build-secondary
 ```
@@ -187,7 +181,7 @@ Key config: `eeg_analysis/configs/secondary_processing.yaml`
 ### 2) (Optional) Convert secondary window size
 
 ```bash
-python3 eeg_analysis/convert_secondary_window_size.py \
+python3 scripts/convert_secondary_window_size.py \
   --input-root eeg_analysis/secondarydata/raw/sr256_ws4s \
   --output-base eeg_analysis/secondarydata/raw \
   --factor 2
@@ -329,26 +323,25 @@ bash scripts/rerun_experiments.sh --channels 'af7 af8 tp9 tp10' --window-size 10
 Traditional-only experiment script:
 
 ```bash
-bash eeg_analysis/run_traditional_experiments.sh
-bash eeg_analysis/run_traditional_experiments.sh --dry-run
+bash scripts/run_traditional_experiments.sh
+bash scripts/run_traditional_experiments.sh --dry-run
 ```
 
 Notes:
-- `scripts/run_all_experiments.sh` currently expects `/home/abin/anaconda3/.../conda.sh`.
-- `eeg_analysis/run_traditional_experiments.sh` currently expects `/opt/anaconda3/.../conda.sh` and references `eeg_analysis/configs/window_model_config.yaml`.
+- `scripts/run_all_experiments.sh` and `scripts/run_traditional_experiments.sh` now assume `uv` is installed and available on `PATH`.
 
 ### Secondary Dataset + Mamba Commands
 
 Secondary dataset builder:
 
 ```bash
-python3 eeg_analysis/build_secondary_dataset.py --config eeg_analysis/configs/secondary_processing.yaml build-secondary
+python3 scripts/build_secondary_dataset.py --config eeg_analysis/configs/secondary_processing.yaml build-secondary
 ```
 
 Secondary window-size conversion:
 
 ```bash
-python3 eeg_analysis/convert_secondary_window_size.py \
+python3 scripts/convert_secondary_window_size.py \
   --input-root eeg_analysis/secondarydata/raw/sr256_ws4s \
   --output-base eeg_analysis/secondarydata/raw \
   --factor 2
@@ -454,10 +447,10 @@ mlflow ui --port 5000
 
 ```bash
 pytest eeg_analysis/tests
-python3 eeg_analysis/test_dataset_logging.py
+python3 scripts/test_dataset_logging.py
 python3 scripts/test_feature_filtering.py
 python3 scripts/test_feature_filtering.py list
-python3 eeg_analysis/test_model_utils.py
+python3 scripts/test_model_utils.py
 ```
 
 ## Important Path Note

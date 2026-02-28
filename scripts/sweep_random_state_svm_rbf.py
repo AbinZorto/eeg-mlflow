@@ -14,16 +14,17 @@ import sys
 from pathlib import Path
 import argparse
 
-# Set MLflow tracking URI
-mlflow.set_tracking_uri('file:./mlruns')
+# Resolve project root and use stable absolute paths.
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+mlflow.set_tracking_uri(f"file:{PROJECT_ROOT / 'mlruns'}")
 
 # Configuration
-CONFIG_FILE = 'eeg_analysis/configs/window_model_config_ultra_extreme.yaml'
+CONFIG_FILE = str(PROJECT_ROOT / 'eeg_analysis' / 'configs' / 'window_model_config_ultra_extreme.yaml')
 START_RANDOM_STATE = 10
 MIN_RANDOM_STATE = 60  # Minimum to check up to
 TARGET_ACCURACY = 0.91  # 91% accuracy target
 MAX_RANDOM_STATE = 200  # Maximum to check (safety limit)
-OUTPUT_CSV = 'random_state_sweep_results_svm_rbf.csv'
+OUTPUT_CSV = str(PROJECT_ROOT / 'random_state_sweep_results_svm_rbf.csv')
 MODEL_TYPE = 'svm_rbf'
 EXPERIMENT_NAME = 'random_state_sweep_svm_rbf'
 
@@ -90,7 +91,7 @@ def run_training(config_path, enable_feature_selection=True, n_features_select=5
             '--fs-method', fs_method
         ])
     
-    result = subprocess.run(cmd, capture_output=True, text=True)
+    result = subprocess.run(cmd, capture_output=True, text=True, cwd=str(PROJECT_ROOT))
     return result.returncode == 0, result.stdout, result.stderr
 
 def get_patient_accuracy_from_mlflow(experiment_name=None):
@@ -268,7 +269,7 @@ def main():
         config = update_random_state(config, random_state, EXPERIMENT_NAME)
         
         # Save config temporarily (or use a copy)
-        temp_config = f'temp_config_rs{random_state}_svm_rbf.yaml'
+        temp_config = str(PROJECT_ROOT / f'temp_config_rs{random_state}_svm_rbf.yaml')
         save_config(config, temp_config)
         
         try:
@@ -384,4 +385,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

@@ -5,18 +5,25 @@
 
 set -e  # Exit on any error
 
-# Activate conda environment
-echo "Activating conda base environment..."
-source /opt/anaconda3/etc/profile.d/conda.sh
-conda activate base
+# Resolve and use repository root so relative paths work from any cwd
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$REPO_ROOT"
+
+# Ensure uv is available (this script assumes uv-managed Python environments)
+if ! command -v uv >/dev/null 2>&1; then
+    echo "Error: 'uv' is not installed or not on PATH."
+    echo "Install uv from https://docs.astral.sh/uv/ and retry."
+    exit 1
+fi
 
 # Configuration
-CONFIG_FILE="eeg_analysis/configs/window_model_config.yaml"
+CONFIG_FILE="eeg_analysis/configs/window_model_config_ultra_extreme.yaml"
 LEVEL="window"
-PYTHON_CMD="python"
+PYTHON_CMD="uv run python3"
 
 # Available traditional ML models (excluding deep learning)
-MODELS=("random_forest" "gradient_boosting" "logistic_regression" "svm")
+MODELS=("random_forest" "gradient_boosting" "logistic_regression" "svm_rbf")
 
 # Feature selection configurations
 FEATURE_SELECTION_METHODS=("select_k_best_f_classif" "select_k_best_mutual_info")
@@ -75,7 +82,7 @@ run_experiment() {
     local mlflow_experiment=""
     if [[ "$model_type" == "random_forest" || "$model_type" == "gradient_boosting" || "$model_type" == "extra_trees" ]]; then
         mlflow_experiment="eeg_tree_models${experiment_suffix}"
-    elif [[ "$model_type" == "logistic_regression" || "$model_type" == "svm" || "$model_type" == "sgd" ]]; then
+    elif [[ "$model_type" == "logistic_regression" || "$model_type" == "svm_rbf" || "$model_type" == "sgd" ]]; then
         mlflow_experiment="eeg_linear_models${experiment_suffix}"
     else
         mlflow_experiment="eeg_other_models${experiment_suffix}"
@@ -231,7 +238,7 @@ if [[ "$1" == "-h" || "$1" == "--help" ]]; then
     echo "2. All models with select_k_best_f_classif (10, 15, 20 features)"
     echo "3. All models with select_k_best_mutual_info (10, 15, 20 features)"
     echo ""
-    echo "Models: random_forest, gradient_boosting, logistic_regression, svm"
+    echo "Models: random_forest, gradient_boosting, logistic_regression, svm_rbf"
     echo "Total experiments: 28"
     echo ""
     echo "MLflow Experiment Organization:"
@@ -258,7 +265,7 @@ if [[ "$1" == "--dry-run" ]]; then
         # Determine experiment name for this model
         if [[ "$model" == "random_forest" || "$model" == "gradient_boosting" || "$model" == "extra_trees" ]]; then
             exp_name="eeg_tree_models_baseline"
-        elif [[ "$model" == "logistic_regression" || "$model" == "svm" || "$model" == "sgd" ]]; then
+        elif [[ "$model" == "logistic_regression" || "$model" == "svm_rbf" || "$model" == "sgd" ]]; then
             exp_name="eeg_linear_models_baseline"
         else
             exp_name="eeg_other_models_baseline"
@@ -274,7 +281,7 @@ if [[ "$1" == "--dry-run" ]]; then
                 # Determine experiment name for this model
                 if [[ "$model" == "random_forest" || "$model" == "gradient_boosting" || "$model" == "extra_trees" ]]; then
                     exp_name="eeg_tree_models_feature_selection"
-                elif [[ "$model" == "logistic_regression" || "$model" == "svm" || "$model" == "sgd" ]]; then
+                elif [[ "$model" == "logistic_regression" || "$model" == "svm_rbf" || "$model" == "sgd" ]]; then
                     exp_name="eeg_linear_models_feature_selection"
                 else
                     exp_name="eeg_other_models_feature_selection"
@@ -290,7 +297,7 @@ if [[ "$1" == "--dry-run" ]]; then
     echo "Experiments will be organized into 4 MLflow experiments:"
     echo "- eeg_tree_models_baseline (2 runs: random_forest, gradient_boosting)"
     echo "- eeg_tree_models_feature_selection (12 runs: 2 models × 2 methods × 3 features)"
-    echo "- eeg_linear_models_baseline (2 runs: logistic_regression, svm)"
+    echo "- eeg_linear_models_baseline (2 runs: logistic_regression, svm_rbf)"
     echo "- eeg_linear_models_feature_selection (12 runs: 2 models × 2 methods × 3 features)"
     exit 0
 fi
