@@ -247,12 +247,217 @@ Model types are validated from the selected config file:
   - `run_all_experiments.sh`
   - `rerun_experiments.sh`
 
+## Complete Run Command Reference
+
+This section is the single command index for the current codebase.
+
+### Core CLI (`eeg_analysis/run_pipeline.py`)
+
+Show top-level help:
+
+```bash
+python3 eeg_analysis/run_pipeline.py --help
+```
+
+Show command-specific help (requires a config):
+
+```bash
+python3 eeg_analysis/run_pipeline.py \
+  --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml \
+  train --help
+```
+
+Run pipeline stages:
+
+```bash
+python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/processing_config.yaml process
+python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/processing_config.yaml process-primary
+python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml list-datasets
+```
+
+Training template:
+
+```bash
+python3 eeg_analysis/run_pipeline.py \
+  --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml \
+  train \
+  --level window \
+  --model-type random_forest \
+  --enable-feature-selection \
+  --n-features-select 10 \
+  --fs-method select_k_best_f_classif \
+  --feature-categories "spectral_features,psd_statistics" \
+  --use-dataset-from-run <mlflow_run_id>
+```
+
+Evaluation template:
+
+```bash
+python3 eeg_analysis/run_pipeline.py \
+  --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml \
+  evaluate \
+  --model-id <model_uuid> \
+  --data-path <features.parquet> \
+  --window-size 10
+```
+
+### Dataset Processing + Experiment Orchestration
+
+Process all configured window sizes:
+
+```bash
+bash run_all_processing.sh
+bash run_all_processing.sh --dry-run
+```
+
+Run full experiment sweep across window sizes / models:
+
+```bash
+bash run_all_experiments.sh
+bash run_all_experiments.sh --ordering sequential
+bash run_all_experiments.sh --model xgboost_gpu
+bash run_all_experiments.sh --dataset-run-id <run_id>
+bash run_all_experiments.sh --dry-run --ordering completion
+```
+
+Rerun selected models with feature-selection controls:
+
+```bash
+bash rerun_experiments.sh --channels 'af7 af8 tp9 tp10' --window-size 10 --n-features 5 --fs-method select_k_best_f_classif
+```
+
+Traditional-only experiment script:
+
+```bash
+bash eeg_analysis/run_traditional_experiments.sh
+bash eeg_analysis/run_traditional_experiments.sh --dry-run
+```
+
+Notes:
+- `run_all_experiments.sh` currently expects `/home/abin/anaconda3/.../conda.sh`.
+- `eeg_analysis/run_traditional_experiments.sh` currently expects `/opt/anaconda3/.../conda.sh` and references `eeg_analysis/configs/window_model_config.yaml`.
+
+### Secondary Dataset + Mamba Commands
+
+Secondary dataset builder:
+
+```bash
+python3 eeg_analysis/build_secondary_dataset.py --config eeg_analysis/configs/secondary_processing.yaml build-secondary
+```
+
+Secondary window-size conversion:
+
+```bash
+python3 eeg_analysis/convert_secondary_window_size.py \
+  --input-root eeg_analysis/secondarydata/raw/sr256_ws4s \
+  --output-base eeg_analysis/secondarydata/raw \
+  --factor 2
+```
+
+Pretraining:
+
+```bash
+python3 eeg_analysis/src/training/pretrain_mamba.py --config eeg_analysis/configs/pretrain.yaml
+```
+
+Distributed pretraining:
+
+```bash
+torchrun --standalone --nproc_per_node=2 \
+  eeg_analysis/src/training/pretrain_mamba.py \
+  --config eeg_analysis/configs/pretrain.yaml \
+  --distributed
+```
+
+Mask-ratio sweep:
+
+```bash
+python3 eeg_analysis/src/training/sweep_mask_ratio.py --config eeg_analysis/configs/pretrain.yaml
+python3 eeg_analysis/src/training/sweep_mask_ratio.py --config eeg_analysis/configs/pretrain.yaml --mask-ratios 0.2,0.4,0.6 --torchrun
+```
+
+SFT / fine-tuning:
+
+```bash
+python3 eeg_analysis/src/training/finetune_mamba.py \
+  --config eeg_analysis/configs/finetune.yaml \
+  --pretrain-config eeg_analysis/configs/pretrain.yaml \
+  --data-path eeg_analysis/data/processed/features/primary/10s_af7-af8-tp9-tp10_primary_dataset.parquet \
+  --output-dir eeg_analysis/finetuned_models
+```
+
+### Position Leakage / Masking Diagnostics
+
+```bash
+python3 diagnose_100pct_masking.py
+python3 diagnose_100pct_masking.py --checkpoint <checkpoint.pt> --num-samples 100 --diagnostic-mask-ratio 1.0
+python3 diagnose_100pct_masking.py --checkpoint <checkpoint.pt> --decode-to-signal --mask-replacement gaussian_noise
+```
+
+### Dataset Helper Scripts
+
+Find matching dataset run:
+
+```bash
+python3 find_dataset.py <window_seconds>
+python3 find_dataset.py <window_seconds> sequential
+python3 find_dataset.py <window_seconds> completion
+```
+
+Create filtered-channel dataset:
+
+```bash
+python3 filter_dataset.py <run_id> "af7 af8" <window_seconds>
+```
+
+### Random-State Sweep Scripts
+
+```bash
+python3 sweep_random_state.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml
+python3 sweep_random_state_efficient_tabular_mlp.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml
+python3 sweep_random_state_gradient_boosting.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml
+python3 sweep_random_state_svm_rbf.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml
+```
+
+Common optional flags for all sweep scripts:
+- `--start`
+- `--min`
+- `--target`
+- `--max`
+- `--output`
+- `--config`
+
+### Utility Commands
+
+Clean up old model versions:
+
+```bash
+python3 cleanup_old_model_versions.py --model <registered_model_name> --keep 1
+python3 cleanup_old_model_versions.py --all --keep 2
+```
+
+Count Mamba model parameters:
+
+```bash
+python3 count_model_parameters.py
+```
+
+MLflow UI helpers:
+
+```bash
+bash mlflow-server.sh start
+bash mlflow-server.sh stop
+mlflow ui --port 5000
+```
+
 ## Tests
 
 ```bash
 pytest eeg_analysis/tests
 python3 eeg_analysis/test_dataset_logging.py
 python3 test_feature_filtering.py
+python3 test_feature_filtering.py list
+python3 eeg_analysis/test_model_utils.py
 ```
 
 ## Important Path Note
