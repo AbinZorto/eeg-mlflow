@@ -62,6 +62,12 @@ models/*
 logs/
 *.log
 
+# EEG project-specific
+eeg_analysis/data/raw/
+eeg_analysis/checkpoints/
+eeg_analysis/checkpoints0_2__noValidation/
+eeg_analysis/finetuned_model/
+
 # OS generated files
 .DS_Store
 .DS_Store?
