@@ -10,7 +10,7 @@ mlflow.set_tracking_uri('file:./mlruns')
 print(f'MLflow tracking URI set to: ./mlruns', file=sys.stderr)
 
 if len(sys.argv) < 2 or len(sys.argv) > 3:
-    print('ERROR:Usage: find_dataset.py <window_seconds> [ordering_method]')
+    print('ERROR:Usage: scripts/find_dataset.py <window_seconds> [ordering_method]')
     print('ERROR:ordering_method can be "sequential" or "completion"')
     sys.exit(1)
 

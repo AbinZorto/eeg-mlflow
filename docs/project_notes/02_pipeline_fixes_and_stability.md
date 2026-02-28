@@ -2194,12 +2194,12 @@ For each masked window:
 
 ```bash
 # Standard usage (auto-detects signal reconstruction from checkpoint)
-python diagnose_100pct_masking.py \
+python scripts/diagnose_100pct_masking.py \
     --checkpoint eeg_analysis/checkpoints/mamba2_eeg_pretrained.pt \
     --num-samples 100
 
 # Force signal space decoding
-python diagnose_100pct_masking.py \
+python scripts/diagnose_100pct_masking.py \
     --checkpoint eeg_analysis/checkpoints/mamba2_eeg_pretrained.pt \
     --decode-to-signal \
     --num-samples 100
@@ -2402,11 +2402,11 @@ With `mask_ratio=0.75`:
 Compare two models:
 ```bash
 # Model A (mask_ratio=1.0)
-python diagnose_100pct_masking.py --checkpoint model_A.pt
+python scripts/diagnose_100pct_masking.py --checkpoint model_A.pt
 # Mean corr: 0.15, Std corr: 0.12
 
 # Model B (mask_ratio=0.75)
-python diagnose_100pct_masking.py --checkpoint model_B.pt
+python scripts/diagnose_100pct_masking.py --checkpoint model_B.pt
 # Mean corr: 0.82, Std corr: 0.89
 
 # Conclusion: Model B learns signal structure, Model A does not

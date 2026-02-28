@@ -237,7 +237,7 @@ The diagnostic script will also respect these flags:
 
 ```bash
 # After control training completes
-python diagnose_100pct_masking.py \
+python scripts/diagnose_100pct_masking.py \
     --checkpoint eeg_analysis/checkpoints/mamba2_eeg_pretrained.pt \
     --num-samples 100
 

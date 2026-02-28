@@ -5,6 +5,11 @@
 
 set -e  # Exit on any error
 
+# Resolve and use repository root so relative paths work from any cwd
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$REPO_ROOT"
+
 # Parse command line arguments
 DATASET_RUN_ID=""
 ORDERING_METHOD=""
@@ -103,9 +108,9 @@ find_4channel_dataset_by_window_size() {
     # Use the standalone Python script to search for datasets
     local dataset_info
     if [[ -n "$ordering_method" ]]; then
-        dataset_info=$(python3 find_dataset.py "$window_seconds" "$ordering_method" 2>/dev/null)
+        dataset_info=$(python3 scripts/find_dataset.py "$window_seconds" "$ordering_method" 2>/dev/null)
     else
-        dataset_info=$(python3 find_dataset.py "$window_seconds" 2>/dev/null)
+        dataset_info=$(python3 scripts/find_dataset.py "$window_seconds" 2>/dev/null)
     fi
     
     local status=$(echo "$dataset_info" | cut -d: -f1)
@@ -208,7 +213,7 @@ filter_dataset_columns() {
     log_message "Output path: $new_dataset_path" >&2
     
     # Create filtered dataset using the standalone Python script
-    local filter_result=$(python3 filter_dataset.py "$run_id" "$selected_channels" "$window_seconds" 2>/tmp/filter_debug.log)
+    local filter_result=$(python3 scripts/filter_dataset.py "$run_id" "$selected_channels" "$window_seconds" 2>/tmp/filter_debug.log)
     
     local status=$(echo "$filter_result" | cut -d: -f1)
     
@@ -385,8 +390,8 @@ if [[ "$SHOW_HELP" == "true" ]]; then
     echo ""
     echo "Prerequisites:"
     echo "  • Create datasets for all window sizes and ordering types by running:"
-    echo "    ./run_all_processing.sh with ordering_method: 'sequential' in processing_config.yaml"
-    echo "    ./run_all_processing.sh with ordering_method: 'completion' in processing_config.yaml"
+    echo "    ./scripts/run_all_processing.sh with ordering_method: 'sequential' in processing_config.yaml"
+    echo "    ./scripts/run_all_processing.sh with ordering_method: 'completion' in processing_config.yaml"
     exit 0
 fi
 
@@ -622,7 +627,7 @@ except Exception as e:
             if [[ $find_result -ne 0 || -z "$base_dataset_run_id" || "$base_dataset_run_id" == "" ]]; then
                 log_error "❌ No 4-channel dataset found for window size ${window_seconds}s"
                 log_error "  Skipping experiments for this window size..."
-                log_error "  To create dataset: ./run_all_processing.sh (or process with ${window_seconds}s config)"
+                log_error "  To create dataset: ./scripts/run_all_processing.sh (or process with ${window_seconds}s config)"
                 continue  # Skip to next window size
             fi
             

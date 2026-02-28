@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Sweep through random_state values for svm_rbf model.
+Sweep through random_state values for gradient_boosting model.
 Collects patient-level accuracy for each random_state and saves to CSV.
 Continues until 90% accuracy is reached or reasonable limit is hit.
 """
@@ -23,11 +23,11 @@ START_RANDOM_STATE = 10
 MIN_RANDOM_STATE = 60  # Minimum to check up to
 TARGET_ACCURACY = 0.91  # 91% accuracy target
 MAX_RANDOM_STATE = 200  # Maximum to check (safety limit)
-OUTPUT_CSV = 'random_state_sweep_results_svm_rbf.csv'
-MODEL_TYPE = 'svm_rbf'
-EXPERIMENT_NAME = 'random_state_sweep_svm_rbf'
+OUTPUT_CSV = 'random_state_sweep_results_gradient_boosting.csv'
+MODEL_TYPE = 'gradient_boosting'
+EXPERIMENT_NAME = 'random_state_sweep_gradient_boosting'
 
-# Feature selection settings (matching rerun_experiments.sh)
+# Feature selection settings (matching scripts/rerun_experiments.sh)
 ENABLE_FEATURE_SELECTION = True
 N_FEATURES_SELECT = 5
 FS_METHOD = 'select_k_best_f_classif'
@@ -73,7 +73,7 @@ def update_random_state(config, random_state, experiment_name):
     return config
 
 def run_training(config_path, enable_feature_selection=True, n_features_select=5, fs_method='select_k_best_f_classif'):
-    """Run training pipeline with feature selection (matching rerun_experiments.sh)."""
+    """Run training pipeline with feature selection (matching scripts/rerun_experiments.sh)."""
     cmd = [
         'uv', 'run', 'python3', 'eeg_analysis/run_pipeline.py',
         '--config', config_path,
@@ -82,7 +82,7 @@ def run_training(config_path, enable_feature_selection=True, n_features_select=5
         '--model-type', MODEL_TYPE
     ]
     
-    # Add feature selection flags (matching rerun_experiments.sh)
+    # Add feature selection flags (matching scripts/rerun_experiments.sh)
     if enable_feature_selection:
         cmd.extend([
             '--enable-feature-selection',
@@ -210,7 +210,7 @@ def get_patient_accuracy_from_mlflow(experiment_name=None):
         return None, None
 
 def main():
-    parser = argparse.ArgumentParser(description='Sweep random_state values for svm_rbf')
+    parser = argparse.ArgumentParser(description='Sweep random_state values for gradient_boosting')
     parser.add_argument('--start', type=int, default=START_RANDOM_STATE, help='Starting random_state value')
     parser.add_argument('--min', type=int, default=MIN_RANDOM_STATE, help='Minimum random_state to check up to')
     parser.add_argument('--target', type=float, default=TARGET_ACCURACY, help='Target accuracy (default: 0.90)')
@@ -268,14 +268,14 @@ def main():
         config = update_random_state(config, random_state, EXPERIMENT_NAME)
         
         # Save config temporarily (or use a copy)
-        temp_config = f'temp_config_rs{random_state}_svm_rbf.yaml'
+        temp_config = f'temp_config_rs{random_state}_gradient_boosting.yaml'
         save_config(config, temp_config)
         
         try:
             # Set MLflow experiment for this run
             mlflow.set_experiment(EXPERIMENT_NAME)
             
-            # Run training with feature selection (matching rerun_experiments.sh)
+            # Run training with feature selection (matching scripts/rerun_experiments.sh)
             print(f"🚀 Starting training with random_state={random_state}...")
             print(f"   Configuration:")
             print(f"     - Feature selection: {ENABLE_FEATURE_SELECTION}")

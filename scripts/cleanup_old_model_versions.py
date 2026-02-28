@@ -89,9 +89,9 @@ if __name__ == "__main__":
         list_all_models()
         print("\nUsage:")
         print("  # List all models")
-        print("  python cleanup_old_model_versions.py")
+        print("  python scripts/cleanup_old_model_versions.py")
         print("\n  # Clean up specific model, keep latest 1 version")
-        print("  python cleanup_old_model_versions.py --model mamba2_eeg_d256_l2_m20 --keep 1")
+        print("  python scripts/cleanup_old_model_versions.py --model mamba2_eeg_d256_l2_m20 --keep 1")
         print("\n  # Clean up all models, keep latest 2 versions of each")
-        print("  python cleanup_old_model_versions.py --all --keep 2")
+        print("  python scripts/cleanup_old_model_versions.py --all --keep 2")
 

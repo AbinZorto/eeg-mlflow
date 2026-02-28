@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Sweep through random_state values for gradient_boosting model.
+Sweep through random_state values for advanced_hybrid_1dcnn_lstm model.
 Collects patient-level accuracy for each random_state and saves to CSV.
 Continues until 90% accuracy is reached or reasonable limit is hit.
 """
@@ -23,11 +23,11 @@ START_RANDOM_STATE = 10
 MIN_RANDOM_STATE = 60  # Minimum to check up to
 TARGET_ACCURACY = 0.91  # 91% accuracy target
 MAX_RANDOM_STATE = 200  # Maximum to check (safety limit)
-OUTPUT_CSV = 'random_state_sweep_results_gradient_boosting.csv'
-MODEL_TYPE = 'gradient_boosting'
-EXPERIMENT_NAME = 'random_state_sweep_gradient_boosting'
+OUTPUT_CSV = 'random_state_sweep_results.csv'
+MODEL_TYPE = 'advanced_hybrid_1dcnn_lstm'
+EXPERIMENT_NAME = 'random_state_sweep'
 
-# Feature selection settings (matching rerun_experiments.sh)
+# Feature selection settings (matching scripts/rerun_experiments.sh)
 ENABLE_FEATURE_SELECTION = True
 N_FEATURES_SELECT = 5
 FS_METHOD = 'select_k_best_f_classif'
@@ -43,27 +43,9 @@ def save_config(config, config_path):
         yaml.dump(config, f, default_flow_style=False, sort_keys=False)
 
 def update_random_state(config, random_state, experiment_name):
-    """Update random_state in config and set experiment name.
-    
-    Updates multiple random_state values to ensure different results:
-    1. Model random_state (for model initialization)
-    2. Data split random_state (for train/test split - CRITICAL for traditional models)
-    3. Root-level random_seed (for feature selection methods that use it)
-    """
-    # Update model random_state (location depends on model type)
+    """Update random_state in config for advanced_hybrid_1dcnn_lstm and set experiment name."""
     if 'deep_learning' in config and MODEL_TYPE in config['deep_learning']:
-        # Deep learning models
         config['deep_learning'][MODEL_TYPE]['random_state'] = random_state
-    elif 'model' in config and 'params' in config['model'] and MODEL_TYPE in config['model']['params']:
-        # Traditional models
-        config['model']['params'][MODEL_TYPE]['random_state'] = random_state
-    
-    # Update data split random_state (CRITICAL - affects train/test split)
-    if 'data' in config and 'split' in config['data']:
-        config['data']['split']['random_state'] = random_state
-    
-    # Update root-level random_seed (used by feature selection methods)
-    config['random_seed'] = random_state
     
     # Set MLflow experiment name
     if 'mlflow' not in config:
@@ -73,7 +55,7 @@ def update_random_state(config, random_state, experiment_name):
     return config
 
 def run_training(config_path, enable_feature_selection=True, n_features_select=5, fs_method='select_k_best_f_classif'):
-    """Run training pipeline with feature selection (matching rerun_experiments.sh)."""
+    """Run training pipeline with feature selection (matching scripts/rerun_experiments.sh)."""
     cmd = [
         'uv', 'run', 'python3', 'eeg_analysis/run_pipeline.py',
         '--config', config_path,
@@ -82,7 +64,7 @@ def run_training(config_path, enable_feature_selection=True, n_features_select=5
         '--model-type', MODEL_TYPE
     ]
     
-    # Add feature selection flags (matching rerun_experiments.sh)
+    # Add feature selection flags (matching scripts/rerun_experiments.sh)
     if enable_feature_selection:
         cmd.extend([
             '--enable-feature-selection',
@@ -200,6 +182,9 @@ def get_patient_accuracy_from_mlflow(experiment_name=None):
             print(f"   ⚠️  patient_accuracy metric not found in parent run")
             print(f"   Available metrics: {', '.join(sorted(metrics.keys())[:20])}...")
             return None, None
+            print(f"   ⚠️  patient_accuracy metric not found in parent run")
+            print(f"   Available metrics: {list(metrics.keys())[:10]}...")  # Show first 10
+            return None, None
         
         return patient_accuracy, run_id
         
@@ -210,7 +195,7 @@ def get_patient_accuracy_from_mlflow(experiment_name=None):
         return None, None
 
 def main():
-    parser = argparse.ArgumentParser(description='Sweep random_state values for gradient_boosting')
+    parser = argparse.ArgumentParser(description='Sweep random_state values for advanced_hybrid_1dcnn_lstm')
     parser.add_argument('--start', type=int, default=START_RANDOM_STATE, help='Starting random_state value')
     parser.add_argument('--min', type=int, default=MIN_RANDOM_STATE, help='Minimum random_state to check up to')
     parser.add_argument('--target', type=float, default=TARGET_ACCURACY, help='Target accuracy (default: 0.90)')
@@ -268,14 +253,14 @@ def main():
         config = update_random_state(config, random_state, EXPERIMENT_NAME)
         
         # Save config temporarily (or use a copy)
-        temp_config = f'temp_config_rs{random_state}_gradient_boosting.yaml'
+        temp_config = f'temp_config_rs{random_state}.yaml'
         save_config(config, temp_config)
         
         try:
             # Set MLflow experiment for this run
             mlflow.set_experiment(EXPERIMENT_NAME)
             
-            # Run training with feature selection (matching rerun_experiments.sh)
+            # Run training with feature selection (matching scripts/rerun_experiments.sh)
             print(f"🚀 Starting training with random_state={random_state}...")
             print(f"   Configuration:")
             print(f"     - Feature selection: {ENABLE_FEATURE_SELECTION}")

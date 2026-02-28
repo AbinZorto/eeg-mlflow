@@ -441,7 +441,7 @@ python eeg_analysis/src/training/pretrain_mamba.py \
     --config eeg_analysis/configs/pretrain.yaml
 
 # 3. Re-diagnose
-python diagnose_100pct_masking.py \
+python scripts/diagnose_100pct_masking.py \
     --checkpoint eeg_analysis/checkpoints/mamba2_eeg_pretrained.pt \
     --num-samples 100
 
@@ -605,7 +605,7 @@ The training script logs:
 
 Run after training:
 ```bash
-python diagnose_100pct_masking.py \
+python scripts/diagnose_100pct_masking.py \
     --checkpoint eeg_analysis/checkpoints/mamba2_eeg_pretrained.pt \
     --num-samples 100
 ```
@@ -1605,7 +1605,7 @@ The diagnostic script will also respect these flags:
 
 ```bash
 # After control training completes
-python diagnose_100pct_masking.py \
+python scripts/diagnose_100pct_masking.py \
     --checkpoint eeg_analysis/checkpoints/mamba2_eeg_pretrained.pt \
     --num-samples 100
 
@@ -1821,7 +1821,7 @@ When you retrain with `mask_ratio=0.75`:
 **How to verify:**
 ```bash
 # After retraining with mask_ratio=0.75
-python diagnose_100pct_masking.py \
+python scripts/diagnose_100pct_masking.py \
     --checkpoint eeg_analysis/checkpoints/mamba2_eeg_pretrained_0.75.pt \
     --num-samples 100
 
@@ -3041,7 +3041,7 @@ If the model is predicting dataset mean:
 
 ```bash
 # After a few more epochs, run:
-python diagnose_100pct_masking.py \
+python scripts/diagnose_100pct_masking.py \
     --checkpoint eeg_analysis/checkpoints/mamba2_eeg_pretrained.pt \
     --num-samples 100
 
@@ -3136,7 +3136,7 @@ if disable_temporal and disable_spatial and mask_ratio == 1.0:
 ```bash
 # Let it train for ~10 epochs
 # Then run diagnostic:
-python diagnose_100pct_masking.py \
+python scripts/diagnose_100pct_masking.py \
     --checkpoint eeg_analysis/checkpoints/mamba2_eeg_pretrained.pt
 ```
 
@@ -3788,7 +3788,7 @@ Channels are grouped by `file_path`:
 Run diagnostics to verify multi-channel learning:
 
 ```bash
-python diagnose_100pct_masking.py \
+python scripts/diagnose_100pct_masking.py \
     --checkpoint eeg_analysis/checkpoints/mamba2_eeg_pretrained.pt \
     --num-samples 100
 ```
@@ -5878,7 +5878,7 @@ This configuration change alone could dramatically improve training, assuming yo
 A diagnostic script has been provided to analyze what your model is learning:
 
 ```bash
-python diagnose_100pct_masking.py \
+python scripts/diagnose_100pct_masking.py \
     --checkpoint eeg_analysis/checkpoints/mamba2_eeg_pretrained.pt \
     --data-path eeg_analysis/secondarydata/raw \
     --num-samples 100
@@ -5910,7 +5910,7 @@ This script will:
 **Option A: Empirical Validation (Recommended)**
 ```bash
 # Run the diagnostic
-python diagnose_100pct_masking.py --checkpoint your_model.pt
+python scripts/diagnose_100pct_masking.py --checkpoint your_model.pt
 
 # Check downstream task performance
 # Compare embeddings from mask_ratio=1.0 vs 0.75 vs random
@@ -7640,12 +7640,12 @@ For each masked window:
 
 ```bash
 # Standard usage (auto-detects signal reconstruction from checkpoint)
-python diagnose_100pct_masking.py \
+python scripts/diagnose_100pct_masking.py \
     --checkpoint eeg_analysis/checkpoints/mamba2_eeg_pretrained.pt \
     --num-samples 100
 
 # Force signal space decoding
-python diagnose_100pct_masking.py \
+python scripts/diagnose_100pct_masking.py \
     --checkpoint eeg_analysis/checkpoints/mamba2_eeg_pretrained.pt \
     --decode-to-signal \
     --num-samples 100
@@ -7848,11 +7848,11 @@ With `mask_ratio=0.75`:
 Compare two models:
 ```bash
 # Model A (mask_ratio=1.0)
-python diagnose_100pct_masking.py --checkpoint model_A.pt
+python scripts/diagnose_100pct_masking.py --checkpoint model_A.pt
 # Mean corr: 0.15, Std corr: 0.12
 
 # Model B (mask_ratio=0.75)
-python diagnose_100pct_masking.py --checkpoint model_B.pt
+python scripts/diagnose_100pct_masking.py --checkpoint model_B.pt
 # Mean corr: 0.82, Std corr: 0.89
 
 # Conclusion: Model B learns signal structure, Model A does not
@@ -7920,7 +7920,7 @@ python eeg_analysis/src/training/pretrain_mamba.py \
 After training completes, run diagnostic again:
 
 ```bash
-python diagnose_100pct_masking.py \
+python scripts/diagnose_100pct_masking.py \
     --checkpoint eeg_analysis/checkpoints/mamba2_eeg_pretrained.pt \
     --num-samples 100
 ```

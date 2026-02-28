@@ -6,13 +6,13 @@ This script shows how to use the feature filtering system with different channel
 """
 
 import sys
-import os
 import pandas as pd
 import numpy as np
 from pathlib import Path
 
 # Add the eeg_analysis directory to the path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'eeg_analysis'))
+project_root = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(project_root / "eeg_analysis"))
 
 from src.utils.feature_filter import FeatureFilter
 

@@ -143,7 +143,7 @@ def filter_dataset_columns(run_id, selected_channels, window_seconds):
 
 if __name__ == '__main__':
     if len(sys.argv) != 4:
-        print('ERROR:Usage: filter_dataset.py <run_id> <selected_channels> <window_seconds>')
+        print('ERROR:Usage: scripts/filter_dataset.py <run_id> <selected_channels> <window_seconds>')
         sys.exit(1)
     
     run_id = sys.argv[1]

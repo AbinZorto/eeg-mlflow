@@ -5,6 +5,11 @@
 
 set -e
 
+# Resolve and use repository root so relative paths work from any cwd
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$REPO_ROOT"
+
 # Parse command line arguments
 CHANNELS=""
 WINDOW_SIZE=10
@@ -86,7 +91,7 @@ find_4channel_dataset() {
   echo "🔍 Searching for 4-channel dataset with window size: ${window_seconds}s" >&2
   
   # Use the standalone Python script to search for datasets
-  local dataset_info=$(python3 find_dataset.py "$window_seconds" 2>/dev/null)
+  local dataset_info=$(python3 scripts/find_dataset.py "$window_seconds" 2>/dev/null)
   
   local status=$(echo "$dataset_info" | cut -d: -f1)
   
@@ -148,7 +153,7 @@ filter_dataset_columns() {
   echo "Creating filtered dataset for channels: $selected_channels" >&2
   
   # Create filtered dataset using the standalone Python script
-  local filter_result=$(python3 filter_dataset.py "$run_id" "$selected_channels" "$window_seconds" 2>/tmp/filter_debug.log)
+  local filter_result=$(python3 scripts/filter_dataset.py "$run_id" "$selected_channels" "$window_seconds" 2>/tmp/filter_debug.log)
   
   local status=$(echo "$filter_result" | cut -d: -f1)
   
@@ -179,7 +184,7 @@ if [[ -n "$CHANNELS" ]]; then
   base_dataset_run_id=$(find_4channel_dataset "$WINDOW_SIZE")
   if [[ $? -ne 0 || -z "$base_dataset_run_id" ]]; then
     echo "❌ Failed to find base 4-channel dataset for ${WINDOW_SIZE}s windows"
-    echo "   Please run preprocessing first: ./run_all_processing.sh"
+    echo "   Please run preprocessing first: ./scripts/run_all_processing.sh"
     exit 1
   fi
   
@@ -231,5 +236,4 @@ for model in "${MODELS[@]}"; do
 done
 
 echo "🎉 All experiments completed!"
-
 

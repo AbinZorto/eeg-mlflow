@@ -8,8 +8,8 @@ This script helps determine whether a model trained with mask_ratio=1.0 is:
 3. Just learning the dataset mean (trivial learning)
 
 Usage:
-    python diagnose_100pct_masking.py --checkpoint path/to/model.pt
-    python diagnose_100pct_masking.py  # uses latest last-checkpoint if available
+    python scripts/diagnose_100pct_masking.py --checkpoint path/to/model.pt
+    python scripts/diagnose_100pct_masking.py  # uses latest last-checkpoint if available
 """
 
 import argparse

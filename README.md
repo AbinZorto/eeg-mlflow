@@ -243,9 +243,9 @@ Model types are validated from the selected config file:
 - Tracking data lives in `mlruns/` (default local file backend in current configs).
 - Processing and training runs log dataset lineage via MLflow dataset inputs.
 - Helper scripts at repo root:
-  - `run_all_processing.sh`
-  - `run_all_experiments.sh`
-  - `rerun_experiments.sh`
+  - `scripts/run_all_processing.sh`
+  - `scripts/run_all_experiments.sh`
+  - `scripts/rerun_experiments.sh`
 
 ## Complete Run Command Reference
 
@@ -306,24 +306,24 @@ python3 eeg_analysis/run_pipeline.py \
 Process all configured window sizes:
 
 ```bash
-bash run_all_processing.sh
-bash run_all_processing.sh --dry-run
+bash scripts/run_all_processing.sh
+bash scripts/run_all_processing.sh --dry-run
 ```
 
 Run full experiment sweep across window sizes / models:
 
 ```bash
-bash run_all_experiments.sh
-bash run_all_experiments.sh --ordering sequential
-bash run_all_experiments.sh --model xgboost_gpu
-bash run_all_experiments.sh --dataset-run-id <run_id>
-bash run_all_experiments.sh --dry-run --ordering completion
+bash scripts/run_all_experiments.sh
+bash scripts/run_all_experiments.sh --ordering sequential
+bash scripts/run_all_experiments.sh --model xgboost_gpu
+bash scripts/run_all_experiments.sh --dataset-run-id <run_id>
+bash scripts/run_all_experiments.sh --dry-run --ordering completion
 ```
 
 Rerun selected models with feature-selection controls:
 
 ```bash
-bash rerun_experiments.sh --channels 'af7 af8 tp9 tp10' --window-size 10 --n-features 5 --fs-method select_k_best_f_classif
+bash scripts/rerun_experiments.sh --channels 'af7 af8 tp9 tp10' --window-size 10 --n-features 5 --fs-method select_k_best_f_classif
 ```
 
 Traditional-only experiment script:
@@ -334,7 +334,7 @@ bash eeg_analysis/run_traditional_experiments.sh --dry-run
 ```
 
 Notes:
-- `run_all_experiments.sh` currently expects `/home/abin/anaconda3/.../conda.sh`.
+- `scripts/run_all_experiments.sh` currently expects `/home/abin/anaconda3/.../conda.sh`.
 - `eeg_analysis/run_traditional_experiments.sh` currently expects `/opt/anaconda3/.../conda.sh` and references `eeg_analysis/configs/window_model_config.yaml`.
 
 ### Secondary Dataset + Mamba Commands
@@ -373,7 +373,7 @@ Mask-ratio sweep:
 
 ```bash
 python3 eeg_analysis/src/training/sweep_mask_ratio.py --config eeg_analysis/configs/pretrain.yaml
-python3 eeg_analysis/src/training/sweep_mask_ratio.py --config eeg_analysis/configs/pretrain.yaml --mask-ratios 0.2,0.4,0.6 --torchrun
+python3 eeg_analysis/src/training/sweep_mask_ratio.py --config eeg_analysis/configs/pretrain.yaml --mask-ratios 0.2,0.4,0.6 --torchrun --num-gpus 2
 ```
 
 SFT / fine-tuning:
@@ -389,9 +389,9 @@ python3 eeg_analysis/src/training/finetune_mamba.py \
 ### Position Leakage / Masking Diagnostics
 
 ```bash
-python3 diagnose_100pct_masking.py
-python3 diagnose_100pct_masking.py --checkpoint <checkpoint.pt> --num-samples 100 --diagnostic-mask-ratio 1.0
-python3 diagnose_100pct_masking.py --checkpoint <checkpoint.pt> --decode-to-signal --mask-replacement gaussian_noise
+python3 scripts/diagnose_100pct_masking.py
+python3 scripts/diagnose_100pct_masking.py --checkpoint <checkpoint.pt> --num-samples 100 --diagnostic-mask-ratio 1.0
+python3 scripts/diagnose_100pct_masking.py --checkpoint <checkpoint.pt> --decode-to-signal --mask-replacement gaussian_noise
 ```
 
 ### Dataset Helper Scripts
@@ -399,24 +399,24 @@ python3 diagnose_100pct_masking.py --checkpoint <checkpoint.pt> --decode-to-sign
 Find matching dataset run:
 
 ```bash
-python3 find_dataset.py <window_seconds>
-python3 find_dataset.py <window_seconds> sequential
-python3 find_dataset.py <window_seconds> completion
+python3 scripts/find_dataset.py <window_seconds>
+python3 scripts/find_dataset.py <window_seconds> sequential
+python3 scripts/find_dataset.py <window_seconds> completion
 ```
 
 Create filtered-channel dataset:
 
 ```bash
-python3 filter_dataset.py <run_id> "af7 af8" <window_seconds>
+python3 scripts/filter_dataset.py <run_id> "af7 af8" <window_seconds>
 ```
 
 ### Random-State Sweep Scripts
 
 ```bash
-python3 sweep_random_state.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml
-python3 sweep_random_state_efficient_tabular_mlp.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml
-python3 sweep_random_state_gradient_boosting.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml
-python3 sweep_random_state_svm_rbf.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml
+python3 scripts/sweep_random_state.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml
+python3 scripts/sweep_random_state_efficient_tabular_mlp.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml
+python3 scripts/sweep_random_state_gradient_boosting.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml
+python3 scripts/sweep_random_state_svm_rbf.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml
 ```
 
 Common optional flags for all sweep scripts:
@@ -432,21 +432,21 @@ Common optional flags for all sweep scripts:
 Clean up old model versions:
 
 ```bash
-python3 cleanup_old_model_versions.py --model <registered_model_name> --keep 1
-python3 cleanup_old_model_versions.py --all --keep 2
+python3 scripts/cleanup_old_model_versions.py --model <registered_model_name> --keep 1
+python3 scripts/cleanup_old_model_versions.py --all --keep 2
 ```
 
 Count Mamba model parameters:
 
 ```bash
-python3 count_model_parameters.py
+python3 scripts/count_model_parameters.py
 ```
 
 MLflow UI helpers:
 
 ```bash
-bash mlflow-server.sh start
-bash mlflow-server.sh stop
+bash scripts/mlflow-server.sh start
+bash scripts/mlflow-server.sh stop
 mlflow ui --port 5000
 ```
 
@@ -455,8 +455,8 @@ mlflow ui --port 5000
 ```bash
 pytest eeg_analysis/tests
 python3 eeg_analysis/test_dataset_logging.py
-python3 test_feature_filtering.py
-python3 test_feature_filtering.py list
+python3 scripts/test_feature_filtering.py
+python3 scripts/test_feature_filtering.py list
 python3 eeg_analysis/test_model_utils.py
 ```
 
