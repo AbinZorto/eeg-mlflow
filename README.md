@@ -406,10 +406,8 @@ python3 scripts/filter_dataset.py <run_id> "af7 af8" <window_seconds>
 ### Random-State Sweep Scripts
 
 ```bash
-python3 scripts/sweep_random_state.py --config eeg_analysis/configs/window_model_config.yaml
-python3 scripts/sweep_random_state_efficient_tabular_mlp.py --config eeg_analysis/configs/window_model_config.yaml
-python3 scripts/sweep_random_state_gradient_boosting.py --config eeg_analysis/configs/window_model_config.yaml
-python3 scripts/sweep_random_state_svm_rbf.py --config eeg_analysis/configs/window_model_config.yaml
+python3 scripts/sweep_random_state.py --config eeg_analysis/configs/window_model_config
+# Optional: override model from config by editing top-level model_type first
 ```
 
 Common optional flags for all sweep scripts:

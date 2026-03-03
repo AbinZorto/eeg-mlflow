@@ -1,86 +1,137 @@
 #!/usr/bin/env python3
 """
-Sweep through random_state values for advanced_hybrid_1dcnn_lstm model.
+Sweep random_state values for whichever model is selected in config.
 Collects patient-level accuracy for each random_state and saves to CSV.
-Continues until 90% accuracy is reached or reasonable limit is hit.
+Continues until target accuracy is reached or max random_state is hit.
 """
 
-import yaml
+import argparse
 import subprocess
+import time
+from pathlib import Path
+
 import mlflow
 import pandas as pd
-import time
-import sys
-from pathlib import Path
-import argparse
+import yaml
 
 # Resolve project root and use stable absolute paths.
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 mlflow.set_tracking_uri(f"file:{PROJECT_ROOT / 'mlruns'}")
 
 # Configuration
-CONFIG_FILE = str(PROJECT_ROOT / 'eeg_analysis' / 'configs' / 'window_model_config.yaml')
+CONFIG_FILE = str(PROJECT_ROOT / "eeg_analysis" / "configs" / "window_model_config")
 START_RANDOM_STATE = 10
 MIN_RANDOM_STATE = 60  # Minimum to check up to
 TARGET_ACCURACY = 0.91  # 91% accuracy target
 MAX_RANDOM_STATE = 200  # Maximum to check (safety limit)
-OUTPUT_CSV = str(PROJECT_ROOT / 'random_state_sweep_results.csv')
-MODEL_TYPE = 'advanced_hybrid_1dcnn_lstm'
-EXPERIMENT_NAME = 'random_state_sweep'
+EXPERIMENT_NAME_PREFIX = "random_state_sweep"
 
 # Feature selection settings (matching scripts/rerun_experiments.sh)
 ENABLE_FEATURE_SELECTION = True
 N_FEATURES_SELECT = 5
-FS_METHOD = 'select_k_best_f_classif'
+FS_METHOD = "select_k_best_f_classif"
+
+
+def resolve_config_path(config_path):
+    """
+    Resolve config path with extension fallback.
+
+    Supports:
+    - eeg_analysis/configs/window_model_config
+    - eeg_analysis/configs/window_model_config.yaml
+    - eeg_analysis/configs/window_model_config.yml
+    """
+    path = Path(config_path)
+    if not path.is_absolute():
+        path = PROJECT_ROOT / path
+
+    candidates = [path]
+    if path.suffix == "":
+        candidates.extend([path.with_suffix(".yaml"), path.with_suffix(".yml")])
+
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate.resolve()
+
+    candidate_str = ", ".join(str(p) for p in candidates)
+    raise FileNotFoundError(f"Could not find config file. Tried: {candidate_str}")
 
 def load_config(config_path):
     """Load YAML config file."""
-    with open(config_path, 'r') as f:
+    with open(config_path, "r") as f:
         return yaml.safe_load(f)
 
 def save_config(config, config_path):
     """Save YAML config file."""
-    with open(config_path, 'w') as f:
+    with open(config_path, "w") as f:
         yaml.dump(config, f, default_flow_style=False, sort_keys=False)
 
-def update_random_state(config, random_state, experiment_name):
-    """Update random_state in config for advanced_hybrid_1dcnn_lstm and set experiment name."""
-    if 'deep_learning' in config and MODEL_TYPE in config['deep_learning']:
-        config['deep_learning'][MODEL_TYPE]['random_state'] = random_state
-    
-    # Set MLflow experiment name
-    if 'mlflow' not in config:
-        config['mlflow'] = {}
-    config['mlflow']['experiment_name'] = experiment_name
-    
-    return config
+def detect_model_type(config):
+    """Detect model type from config."""
+    model_type = config.get("model_type")
+    if isinstance(model_type, str) and model_type.strip():
+        return model_type.strip()
 
-def run_training(config_path, enable_feature_selection=True, n_features_select=5, fs_method='select_k_best_f_classif'):
-    """Run training pipeline with feature selection (matching scripts/rerun_experiments.sh)."""
+    raise ValueError(
+        "Config is missing top-level 'model_type'. "
+        "Set model_type in config to choose which model to sweep."
+    )
+
+def update_random_state(config, model_type, random_state, experiment_name):
+    """
+    Update random_state in config for the selected model and set experiment name.
+
+    Updates:
+    1. model-specific random_state in deep_learning or model.params
+    2. data split random_state
+    3. root-level random_seed
+    4. model_type (kept explicit for run_pipeline)
+    """
+    model_updated = False
+
+    if "deep_learning" in config and model_type in config["deep_learning"]:
+        config["deep_learning"][model_type]["random_state"] = random_state
+        model_updated = True
+    elif "model" in config and "params" in config["model"] and model_type in config["model"]["params"]:
+        config["model"]["params"][model_type]["random_state"] = random_state
+        model_updated = True
+
+    if "data" in config and "split" in config["data"]:
+        config["data"]["split"]["random_state"] = random_state
+
+    config["random_seed"] = random_state
+    config["model_type"] = model_type
+
+    # Set MLflow experiment name
+    if "mlflow" not in config:
+        config["mlflow"] = {}
+    config["mlflow"]["experiment_name"] = experiment_name
+
+    return config, model_updated
+
+def run_training(model_type, config_path, enable_feature_selection=False, n_features_select=5, fs_method="select_k_best_f_classif"):
+    """Run training pipeline with optional feature selection."""
     cmd = [
-        'uv', 'run', 'python3', 'eeg_analysis/run_pipeline.py',
-        '--config', config_path,
-        'train',
-        '--level', 'window',
-        '--model-type', MODEL_TYPE
+        "uv", "run", "python3", "eeg_analysis/run_pipeline.py",
+        "--config", str(config_path),
+        "train",
+        "--level", "window",
+        "--model-type", model_type
     ]
-    
-    # Add feature selection flags (matching scripts/rerun_experiments.sh)
+
+    # Add feature selection flags
     if enable_feature_selection:
         cmd.extend([
-            '--enable-feature-selection',
-            '--n-features-select', str(n_features_select),
-            '--fs-method', fs_method
+            "--enable-feature-selection",
+            "--n-features-select", str(n_features_select),
+            "--fs-method", fs_method
         ])
-    
+
     result = subprocess.run(cmd, capture_output=True, text=True, cwd=str(PROJECT_ROOT))
     return result.returncode == 0, result.stdout, result.stderr
 
-def get_patient_accuracy_from_mlflow(experiment_name=None):
+def get_patient_accuracy_from_mlflow(experiment_name):
     """Get patient-level accuracy from the most recent MLflow parent run (not nested runs)."""
-    if experiment_name is None:
-        experiment_name = EXPERIMENT_NAME
-    
     try:
         # Get the experiment
         experiment = mlflow.get_experiment_by_name(experiment_name)
@@ -124,7 +175,7 @@ def get_patient_accuracy_from_mlflow(experiment_name=None):
         for idx, run_row in all_runs.iterrows():
             run_obj = mlflow.get_run(run_row['run_id'])
             # Check if this run has a parent (is nested)
-            if 'mlflow.parentRunId' not in run_obj.data.tags:
+            if "mlflow.parentRunId" not in run_obj.data.tags:
                 parent_runs.append(run_row)
         
         if not parent_runs:
@@ -140,11 +191,11 @@ def get_patient_accuracy_from_mlflow(experiment_name=None):
         run = mlflow.get_run(run_id)
         
         # Verify this is a parent run (not nested)
-        if 'mlflow.parentRunId' in run.data.tags:
+        if "mlflow.parentRunId" in run.data.tags:
             print(f"   ⚠️  Warning: Run {run_id} is a nested run, not parent run")
             print(f"   Looking for parent run...")
             # Try to find the parent run
-            parent_run_id = run.data.tags.get('mlflow.parentRunId')
+            parent_run_id = run.data.tags.get("mlflow.parentRunId")
             try:
                 parent_run = mlflow.get_run(parent_run_id)
                 run = parent_run
@@ -162,15 +213,15 @@ def get_patient_accuracy_from_mlflow(experiment_name=None):
         patient_accuracy = None
         
         # Try the exact metric name first (this is what the trainer logs)
-        if 'patient_accuracy' in metrics:
-            patient_accuracy = metrics['patient_accuracy']
+        if "patient_accuracy" in metrics:
+            patient_accuracy = metrics["patient_accuracy"]
             print(f"   ✅ Found patient_accuracy in parent run: {patient_accuracy:.4f}")
         else:
             # Try alternative names
             possible_names = [
-                'patient_level_accuracy',
-                'overall_patient_accuracy',
-                'patient_metrics_accuracy',
+                "patient_level_accuracy",
+                "overall_patient_accuracy",
+                "patient_metrics_accuracy",
             ]
             
             for name in possible_names:
@@ -183,129 +234,185 @@ def get_patient_accuracy_from_mlflow(experiment_name=None):
             print(f"   ⚠️  patient_accuracy metric not found in parent run")
             print(f"   Available metrics: {', '.join(sorted(metrics.keys())[:20])}...")
             return None, None
-            print(f"   ⚠️  patient_accuracy metric not found in parent run")
-            print(f"   Available metrics: {list(metrics.keys())[:10]}...")  # Show first 10
-            return None, None
-        
+
         return patient_accuracy, run_id
-        
+
     except Exception as e:
         print(f"   ❌ Error getting patient accuracy from MLflow: {e}")
         import traceback
         traceback.print_exc()
         return None, None
 
+def default_output_path(model_type):
+    """Return a model-specific output CSV path."""
+    return PROJECT_ROOT / "sweeps" / f"random_state_sweep_results_{model_type}.csv"
+
 def main():
-    parser = argparse.ArgumentParser(description='Sweep random_state values for advanced_hybrid_1dcnn_lstm')
-    parser.add_argument('--start', type=int, default=START_RANDOM_STATE, help='Starting random_state value')
-    parser.add_argument('--min', type=int, default=MIN_RANDOM_STATE, help='Minimum random_state to check up to')
-    parser.add_argument('--target', type=float, default=TARGET_ACCURACY, help='Target accuracy (default: 0.90)')
-    parser.add_argument('--max', type=int, default=MAX_RANDOM_STATE, help='Maximum random_state (safety limit)')
-    parser.add_argument('--output', type=str, default=OUTPUT_CSV, help='Output CSV file')
-    parser.add_argument('--config', type=str, default=CONFIG_FILE, help='Config file path')
-    
+    parser = argparse.ArgumentParser(description="Sweep random_state values for model selected in config")
+    parser.add_argument("--start", type=int, default=START_RANDOM_STATE, help="Starting random_state value")
+    parser.add_argument("--min", type=int, default=MIN_RANDOM_STATE, help="Minimum random_state to check up to")
+    parser.add_argument("--target", type=float, default=TARGET_ACCURACY, help="Target accuracy (default: 0.91)")
+    parser.add_argument("--max", type=int, default=MAX_RANDOM_STATE, help="Maximum random_state (safety limit)")
+    parser.add_argument("--output", type=str, default=None, help="Output CSV file (default: model-specific)")
+    parser.add_argument("--config", type=str, default=CONFIG_FILE, help="Config file path")
+    parser.add_argument(
+        "--experiment",
+        type=str,
+        default=None,
+        help="MLflow experiment name (default: random_state_sweep_<model_type>)",
+    )
+    parser.add_argument(
+        "--enable-feature-selection",
+        dest="enable_feature_selection",
+        action="store_true",
+        default=ENABLE_FEATURE_SELECTION,
+        help="Enable feature selection during training",
+    )
+    parser.add_argument(
+        "--disable-feature-selection",
+        dest="enable_feature_selection",
+        action="store_false",
+        help="Disable feature selection during training",
+    )
+    parser.add_argument(
+        "--n-features-select",
+        type=int,
+        default=N_FEATURES_SELECT,
+        help="Number of features to select when feature selection is enabled",
+    )
+    parser.add_argument(
+        "--fs-method",
+        type=str,
+        default=FS_METHOD,
+        help="Feature selection method",
+    )
+
     args = parser.parse_args()
-    
+
+    # Resolve and load config
+    resolved_config_path = resolve_config_path(args.config)
+    config = load_config(resolved_config_path)
+    model_type = detect_model_type(config)
+    experiment_name = args.experiment or f"{EXPERIMENT_NAME_PREFIX}_{model_type}"
+    output_path = Path(args.output) if args.output else default_output_path(model_type)
+    if not output_path.is_absolute():
+        output_path = PROJECT_ROOT / output_path
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    print(f"Using config: {resolved_config_path}")
+    print(f"Sweeping model_type: {model_type}")
+    print(f"MLflow experiment: {experiment_name}")
+    print(f"Output CSV: {output_path}")
+
     # Create or load results DataFrame
-    results_file = Path(args.output)
+    results_file = output_path
     if results_file.exists():
-        results_df = pd.read_csv(results_file)
-        print(f"Loaded existing results: {len(results_df)} entries")
+        all_results_df = pd.read_csv(results_file)
+        if "model_type" not in all_results_df.columns:
+            all_results_df["model_type"] = model_type
+        print(f"Loaded existing results: {len(all_results_df)} entries")
     else:
-        results_df = pd.DataFrame(columns=['random_state', 'patient_accuracy', 'run_id', 'timestamp'])
+        all_results_df = pd.DataFrame(columns=["model_type", "random_state", "patient_accuracy", "run_id", "timestamp"])
         print("Starting new sweep")
-    
+    results_df = all_results_df[all_results_df["model_type"] == model_type].copy()
+
     # Ensure MLflow experiment exists
     try:
-        experiment = mlflow.get_experiment_by_name(EXPERIMENT_NAME)
+        experiment = mlflow.get_experiment_by_name(experiment_name)
         if experiment is None:
-            mlflow.create_experiment(EXPERIMENT_NAME)
-            print(f"Created MLflow experiment: {EXPERIMENT_NAME}")
+            mlflow.create_experiment(experiment_name)
+            print(f"Created MLflow experiment: {experiment_name}")
     except Exception as e:
         print(f"Note: MLflow experiment setup: {e}")
-    
-    # Load config
-    config = load_config(args.config)
-    
+
     # Determine starting point
     if not results_df.empty:
-        completed_states = set(results_df['random_state'].astype(int))
+        completed_states = set(results_df["random_state"].astype(int))
         start_state = max(args.start, max(completed_states) + 1) if completed_states else args.start
         print(f"Resuming from random_state={start_state}")
     else:
         start_state = args.start
-    
+
     # Sweep through random_state values
     found_target = False
     random_state = start_state
-    
+
     while random_state <= args.max:
         # Skip if already completed
-        if not results_df.empty and random_state in results_df['random_state'].astype(int).values:
+        if not results_df.empty and random_state in results_df["random_state"].astype(int).values:
             print(f"⏭️  Skipping random_state={random_state} (already completed)")
             random_state += 1
             continue
-        
+
         print(f"\n{'='*80}")
         print(f"🔍 Testing random_state={random_state}")
         print(f"{'='*80}")
-        
+
         # Update config
-        config = update_random_state(config, random_state, EXPERIMENT_NAME)
-        
+        config, model_updated = update_random_state(config, model_type, random_state, experiment_name)
+        if not model_updated:
+            print(
+                f"   ⚠️  random_state field for '{model_type}' not found in config "
+                "(deep_learning/model.params). Continuing with root random_seed + split random_state."
+            )
+
         # Save config temporarily (or use a copy)
-        temp_config = str(PROJECT_ROOT / f'temp_config_rs{random_state}.yaml')
+        temp_config = PROJECT_ROOT / f"temp_config_rs{random_state}_{model_type}.yaml"
         save_config(config, temp_config)
-        
+
         try:
             # Set MLflow experiment for this run
-            mlflow.set_experiment(EXPERIMENT_NAME)
-            
-            # Run training with feature selection (matching scripts/rerun_experiments.sh)
+            mlflow.set_experiment(experiment_name)
+
+            # Run training with optional feature selection
             print(f"🚀 Starting training with random_state={random_state}...")
             print(f"   Configuration:")
-            print(f"     - Feature selection: {ENABLE_FEATURE_SELECTION}")
-            if ENABLE_FEATURE_SELECTION:
-                print(f"     - N features: {N_FEATURES_SELECT}")
-                print(f"     - FS method: {FS_METHOD}")
+            print(f"     - model_type: {model_type}")
+            print(f"     - Feature selection: {args.enable_feature_selection}")
+            if args.enable_feature_selection:
+                print(f"     - N features: {args.n_features_select}")
+                print(f"     - FS method: {args.fs_method}")
             success, stdout, stderr = run_training(
+                model_type,
                 temp_config,
-                enable_feature_selection=ENABLE_FEATURE_SELECTION,
-                n_features_select=N_FEATURES_SELECT,
-                fs_method=FS_METHOD
+                enable_feature_selection=args.enable_feature_selection,
+                n_features_select=args.n_features_select,
+                fs_method=args.fs_method,
             )
-            
+
             if not success:
                 print(f"❌ Training failed for random_state={random_state}")
                 print(f"STDOUT (last 500 chars):\n{stdout[-500:]}")
                 print(f"STDERR (last 500 chars):\n{stderr[-500:]}")
                 # Still try to get results if available
                 time.sleep(3)  # Wait for MLflow to sync
-                patient_accuracy, run_id = get_patient_accuracy_from_mlflow()
+                patient_accuracy, run_id = get_patient_accuracy_from_mlflow(experiment_name)
             else:
                 print(f"✅ Training completed for random_state={random_state}")
                 # Wait a bit for MLflow to sync
                 time.sleep(3)
-                
+
                 # Get patient accuracy from MLflow
-                patient_accuracy, run_id = get_patient_accuracy_from_mlflow(EXPERIMENT_NAME)
-            
+                patient_accuracy, run_id = get_patient_accuracy_from_mlflow(experiment_name)
+
             if patient_accuracy is not None:
                 print(f"📊 Patient accuracy: {patient_accuracy:.4f}")
-                
+
                 # Add to results
                 new_row = pd.DataFrame({
-                    'random_state': [random_state],
-                    'patient_accuracy': [patient_accuracy],
-                    'run_id': [run_id if run_id else ''],
-                    'timestamp': [pd.Timestamp.now()]
+                    "model_type": [model_type],
+                    "random_state": [random_state],
+                    "patient_accuracy": [patient_accuracy],
+                    "run_id": [run_id if run_id else ""],
+                    "timestamp": [pd.Timestamp.now()],
                 })
                 results_df = pd.concat([results_df, new_row], ignore_index=True)
-                
+                all_results_df = pd.concat([all_results_df, new_row], ignore_index=True)
+
                 # Save results incrementally
-                results_df.to_csv(args.output, index=False)
-                print(f"💾 Saved results to {args.output}")
-                
+                all_results_df.to_csv(results_file, index=False)
+                print(f"💾 Saved results to {results_file}")
+
                 # Check if we hit target
                 if patient_accuracy >= args.target:
                     print(f"\n🎉 TARGET REACHED! random_state={random_state} achieved {patient_accuracy:.4f} accuracy")
@@ -315,58 +422,60 @@ def main():
                 print(f"⚠️  Could not retrieve patient accuracy for random_state={random_state}")
                 # Still save a row with NaN
                 new_row = pd.DataFrame({
-                    'random_state': [random_state],
-                    'patient_accuracy': [None],
-                    'run_id': [run_id if run_id else ''],
-                    'timestamp': [pd.Timestamp.now()]
+                    "model_type": [model_type],
+                    "random_state": [random_state],
+                    "patient_accuracy": [None],
+                    "run_id": [run_id if run_id else ""],
+                    "timestamp": [pd.Timestamp.now()],
                 })
                 results_df = pd.concat([results_df, new_row], ignore_index=True)
-                results_df.to_csv(args.output, index=False)
-        
+                all_results_df = pd.concat([all_results_df, new_row], ignore_index=True)
+                all_results_df.to_csv(results_file, index=False)
+
         except Exception as e:
             print(f"❌ Error processing random_state={random_state}: {e}")
             import traceback
             traceback.print_exc()
-        
+
         finally:
             # Clean up temp config
-            if Path(temp_config).exists():
-                Path(temp_config).unlink()
-        
+            if temp_config.exists():
+                temp_config.unlink()
+
         # Check if we've reached minimum and should stop if no target found
         if random_state >= args.min and not found_target:
             print(f"\n⚠️  Reached minimum random_state={args.min} without hitting target accuracy")
             print(f"   Continuing to search for target accuracy...")
-        
+
         random_state += 1
-    
+
     # Final summary
     print(f"\n{'='*80}")
     print(f"📊 SWEEP SUMMARY")
     print(f"{'='*80}")
     print(f"Total random_states tested: {len(results_df)}")
-    
+
     if not results_df.empty:
-        valid_results = results_df.dropna(subset=['patient_accuracy'])
+        valid_results = results_df.dropna(subset=["patient_accuracy"])
         if not valid_results.empty:
-            best_idx = valid_results['patient_accuracy'].idxmax()
+            best_idx = valid_results["patient_accuracy"].idxmax()
             best_row = valid_results.loc[best_idx]
             print(f"\n🏆 Best result:")
             print(f"   random_state: {best_row['random_state']}")
             print(f"   patient_accuracy: {best_row['patient_accuracy']:.4f}")
-            
+
             # Show top 5
-            top5 = valid_results.nlargest(5, 'patient_accuracy')
+            top5 = valid_results.nlargest(5, "patient_accuracy")
             print(f"\n📈 Top 5 random_states:")
             for idx, row in top5.iterrows():
                 print(f"   random_state={int(row['random_state']):3d}: {row['patient_accuracy']:.4f}")
-        
-        print(f"\n💾 Results saved to: {args.output}")
-    
+
+        print(f"\n💾 Results saved to: {results_file}")
+
     if found_target:
         print(f"\n✅ Target accuracy ({args.target}) was reached!")
     else:
         print(f"\n⚠️  Target accuracy ({args.target}) was not reached within random_state range [{start_state}, {random_state-1}]")
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

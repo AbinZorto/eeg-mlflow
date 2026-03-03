@@ -1,0 +1,20 @@
+{
+  "include": [
+    "eeg_analysis",
+    "scripts"
+  ],
+  "exclude": [
+    "**/__pycache__",
+    ".git",
+    ".venv",
+    "docs",
+    "logs",
+    "eeg_analysis/notebooks",
+    "mlruns",
+    "models",
+    "sweep_configs",
+    "sweeps"
+  ],
+  "venvPath": ".",
+  "venv": ".venv"
+}
