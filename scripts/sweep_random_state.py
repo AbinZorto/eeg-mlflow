@@ -19,7 +19,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 mlflow.set_tracking_uri(f"file:{PROJECT_ROOT / 'mlruns'}")
 
 # Configuration
-CONFIG_FILE = str(PROJECT_ROOT / 'eeg_analysis' / 'configs' / 'window_model_config_ultra_extreme.yaml')
+CONFIG_FILE = str(PROJECT_ROOT / 'eeg_analysis' / 'configs' / 'window_model_config.yaml')
 START_RANDOM_STATE = 10
 MIN_RANDOM_STATE = 60  # Minimum to check up to
 TARGET_ACCURACY = 0.91  # 91% accuracy target

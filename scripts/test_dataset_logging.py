@@ -243,9 +243,9 @@ if __name__ == "__main__":
     if success:
         print("\n🎉 Dataset logging workflow is working correctly!")
         print("\nNext steps:")
-        print("1. Run the processing pipeline: python run_pipeline.py --config configs/window_model_config_ultra_extreme.yaml process")
-        print("2. Run training with dataset auto-discovery: python run_pipeline.py --config configs/window_model_config_ultra_extreme.yaml train --level window --model-type random_forest")
-        print("3. Or specify a specific run: python run_pipeline.py --config configs/window_model_config_ultra_extreme.yaml train --level window --model-type random_forest --use-dataset-from-run <run_id>")
+        print("1. Run the processing pipeline: python run_pipeline.py --config configs/window_model_config.yaml process")
+        print("2. Run training with dataset auto-discovery: python run_pipeline.py --config configs/window_model_config.yaml train --level window --model-type random_forest")
+        print("3. Or specify a specific run: python run_pipeline.py --config configs/window_model_config.yaml train --level window --model-type random_forest --use-dataset-from-run <run_id>")
     else:
         print("\n❌ Dataset logging workflow has issues that need to be fixed")
         exit(1) 

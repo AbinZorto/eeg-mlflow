@@ -69,7 +69,7 @@ This creates a primary parquet dataset from windowed channel data (without featu
 
 ```bash
 python3 eeg_analysis/run_pipeline.py \
-  --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml \
+  --config eeg_analysis/configs/window_model_config.yaml \
   list-datasets
 ```
 
@@ -79,7 +79,7 @@ Window-level example:
 
 ```bash
 python3 eeg_analysis/run_pipeline.py \
-  --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml \
+  --config eeg_analysis/configs/window_model_config.yaml \
   train \
   --level window \
   --model-type random_forest
@@ -105,7 +105,7 @@ Notes:
 
 ```bash
 python3 eeg_analysis/run_pipeline.py \
-  --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml \
+  --config eeg_analysis/configs/window_model_config.yaml \
   evaluate \
   --model-id <model_uuid> \
   --data-path eeg_analysis/data/processed/features/10s_af7_af8_tp9_tp10_window_features_seq.parquet
@@ -135,7 +135,7 @@ List available categories:
 
 ```bash
 python3 eeg_analysis/run_pipeline.py \
-  --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml \
+  --config eeg_analysis/configs/window_model_config.yaml \
   train \
   --level window \
   --model-type random_forest \
@@ -146,7 +146,7 @@ Train with selected categories:
 
 ```bash
 python3 eeg_analysis/run_pipeline.py \
-  --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml \
+  --config eeg_analysis/configs/window_model_config.yaml \
   train \
   --level window \
   --model-type random_forest \
@@ -224,7 +224,7 @@ If `--data-path` is omitted, the script will try to build/find the primary datas
 
 ## Training Configs and Model Types
 
-- Window-level config: `eeg_analysis/configs/window_model_config_ultra_extreme.yaml`
+- Window-level config: `eeg_analysis/configs/window_model_config.yaml`
 - Patient-level config: `eeg_analysis/configs/patient_model_config.yaml`
 
 Model types are validated from the selected config file:
@@ -257,7 +257,7 @@ Show command-specific help (requires a config):
 
 ```bash
 python3 eeg_analysis/run_pipeline.py \
-  --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml \
+  --config eeg_analysis/configs/window_model_config.yaml \
   train --help
 ```
 
@@ -266,14 +266,14 @@ Run pipeline stages:
 ```bash
 python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/processing_config.yaml process
 python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/processing_config.yaml process-primary
-python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml list-datasets
+python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml list-datasets
 ```
 
 Training template:
 
 ```bash
 python3 eeg_analysis/run_pipeline.py \
-  --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml \
+  --config eeg_analysis/configs/window_model_config.yaml \
   train \
   --level window \
   --model-type random_forest \
@@ -288,7 +288,7 @@ Evaluation template:
 
 ```bash
 python3 eeg_analysis/run_pipeline.py \
-  --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml \
+  --config eeg_analysis/configs/window_model_config.yaml \
   evaluate \
   --model-id <model_uuid> \
   --data-path <features.parquet> \
@@ -406,10 +406,10 @@ python3 scripts/filter_dataset.py <run_id> "af7 af8" <window_seconds>
 ### Random-State Sweep Scripts
 
 ```bash
-python3 scripts/sweep_random_state.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml
-python3 scripts/sweep_random_state_efficient_tabular_mlp.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml
-python3 scripts/sweep_random_state_gradient_boosting.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml
-python3 scripts/sweep_random_state_svm_rbf.py --config eeg_analysis/configs/window_model_config_ultra_extreme.yaml
+python3 scripts/sweep_random_state.py --config eeg_analysis/configs/window_model_config.yaml
+python3 scripts/sweep_random_state_efficient_tabular_mlp.py --config eeg_analysis/configs/window_model_config.yaml
+python3 scripts/sweep_random_state_gradient_boosting.py --config eeg_analysis/configs/window_model_config.yaml
+python3 scripts/sweep_random_state_svm_rbf.py --config eeg_analysis/configs/window_model_config.yaml
 ```
 
 Common optional flags for all sweep scripts:

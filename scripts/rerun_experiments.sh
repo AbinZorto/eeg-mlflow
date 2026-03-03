@@ -71,7 +71,7 @@ if [[ "$SHOW_HELP" == "true" ]]; then
   exit 0
 fi
 
-CONFIG="eeg_analysis/configs/window_model_config_ultra_extreme.yaml"
+CONFIG="eeg_analysis/configs/window_model_config.yaml"
 LEVEL="window"
 
 # Array of model types to run

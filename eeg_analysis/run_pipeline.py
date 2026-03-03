@@ -567,7 +567,7 @@ def train(ctx, level, window_size, model_type, enable_feature_selection, n_featu
     logger.info(f"CLI train inputs: level='{level}', window_size={window_size}, model_type='{model_type}', enable_feature_selection={enable_feature_selection}, n_features_select={n_features_select}, fs_method='{fs_method}', use_dataset_from_run='{use_dataset_from_run}'")
 
     # Validate model type against available models from config
-    config_path = ctx.obj.get('config_path', 'configs/window_model_config_ultra_extreme.yaml')
+    config_path = ctx.obj.get('config_path', 'configs/window_model_config.yaml')
     available_models = get_available_models_from_config(config_path)
     
     if model_type not in available_models:

@@ -18,7 +18,7 @@ if ! command -v uv >/dev/null 2>&1; then
 fi
 
 # Configuration
-CONFIG_FILE="eeg_analysis/configs/window_model_config_ultra_extreme.yaml"
+CONFIG_FILE="eeg_analysis/configs/window_model_config.yaml"
 LEVEL="window"
 PYTHON_CMD="uv run python3"
 
