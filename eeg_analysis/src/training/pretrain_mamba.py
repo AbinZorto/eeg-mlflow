@@ -49,6 +49,90 @@ def _format_window(seconds: float) -> str:
     return str(seconds).rstrip("0").rstrip(".")
 
 
+def _resolve_model_profile(cfg: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Merge the selected model profile from cfg.models into top-level cfg.
+    This removes the need to duplicate model hyperparameters at top level.
+    """
+    resolved = dict(cfg)
+    models_cfg = resolved.get("models") or {}
+    if not models_cfg:
+        return resolved
+    if not isinstance(models_cfg, dict):
+        raise ValueError("'models' in pretrain config must be a mapping")
+
+    selected_model = resolved.get("model_name") or resolved.get("active_model")
+    if selected_model is None:
+        selected_model = next(iter(models_cfg.keys()))
+    if selected_model not in models_cfg:
+        known = ", ".join(models_cfg.keys())
+        raise ValueError(f"Unknown model '{selected_model}'. Available models: {known}")
+
+    model_cfg = models_cfg[selected_model]
+    if not isinstance(model_cfg, dict):
+        raise ValueError(f"Config for model '{selected_model}' must be a mapping")
+    if model_cfg.get("enabled", True) is False:
+        raise ValueError(
+            f"Selected model '{selected_model}' is disabled in pretrain config "
+            "(models.<name>.enabled=false)"
+        )
+
+    resolved.update(model_cfg)
+    resolved["model_name"] = selected_model
+    resolved["active_model"] = selected_model
+    return resolved
+
+
+def _resolve_dataset_profile(cfg: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Resolve dataset settings from cfg.datasets[active_dataset] when provided.
+    Keeps backward compatibility with top-level dataset_path/dataset suffix keys.
+    """
+    resolved = dict(cfg)
+    datasets_cfg = resolved.get("datasets") or {}
+    if datasets_cfg and not isinstance(datasets_cfg, dict):
+        raise ValueError("'datasets' in pretrain config must be a mapping")
+
+    selected_dataset = (
+        resolved.get("dataset_profile")
+        or resolved.get("active_dataset")
+    )
+
+    dataset_path = resolved.get("dataset_path")
+    dataset_suffix = (
+        resolved.get("pretrain_dataset_suffix")
+        or resolved.get("open_pretrain_dataset_suffix")
+        or "open_pretrain"
+    )
+    dataset_experiment = None
+
+    if datasets_cfg:
+        if selected_dataset is None:
+            selected_dataset = next(iter(datasets_cfg.keys()))
+        if selected_dataset not in datasets_cfg:
+            known = ", ".join(datasets_cfg.keys())
+            raise ValueError(
+                f"Unknown dataset profile '{selected_dataset}'. Available dataset profiles: {known}"
+            )
+        profile_cfg = datasets_cfg[selected_dataset]
+        if not isinstance(profile_cfg, dict):
+            raise ValueError(f"Config for dataset profile '{selected_dataset}' must be a mapping")
+
+        dataset_path = profile_cfg.get("dataset_path", dataset_path)
+        dataset_suffix = profile_cfg.get("dataset_suffix", dataset_suffix)
+        dataset_experiment = profile_cfg.get("mlflow_experiment")
+
+    if not dataset_path:
+        raise ValueError("dataset_path must be set in config (or in datasets.<profile>.dataset_path)")
+
+    resolved["dataset_path"] = dataset_path
+    resolved["pretrain_dataset_suffix"] = str(dataset_suffix).strip() or "open_pretrain"
+    resolved["active_dataset"] = selected_dataset
+    if dataset_experiment:
+        resolved["mlflow_experiment"] = dataset_experiment
+    return resolved
+
+
 def compute_reconstruction_loss(
     pred: torch.Tensor,
     target: torch.Tensor,
@@ -241,6 +325,17 @@ def main() -> None:
     args = parser.parse_args()
 
     cfg = load_config(args.config)
+    cfg = _resolve_model_profile(cfg)
+    cfg = _resolve_dataset_profile(cfg)
+
+    selected_model = cfg.get("model_name", "model")
+    selected_dataset = cfg.get("active_dataset") or "default"
+    logger.info(
+        "Resolved pretraining config: model=%s dataset_profile=%s",
+        selected_model,
+        selected_dataset,
+    )
+
     processing_cfg_path = EEG_ANALYSIS_ROOT / "configs" / "processing_config.yaml"
     processing_cfg = load_config(str(processing_cfg_path))
     window_seconds = float(processing_cfg["window_slicer"]["window_seconds"])
@@ -291,15 +386,13 @@ def main() -> None:
     if distributed:
         model = DDP(model, device_ids=[local_rank], output_device=local_rank)
 
-    dataset_path = cfg.get("dataset_path")
-    if not dataset_path:
-        raise ValueError("dataset_path must be set in config")
+    dataset_path = cfg["dataset_path"]
+    dataset_suffix = str(cfg.get("pretrain_dataset_suffix", "open_pretrain")).strip() or "open_pretrain"
 
     dataset_root = dataset_path
     base_path = Path(dataset_path)
     base_name = base_path.name
     if not (base_name.startswith("sr") and "_ws" in base_name):
-        dataset_suffix = str(cfg.get("open_pretrain_dataset_suffix", "open_pretrain")).strip() or "open_pretrain"
         preferred_window_tag = f"sr{_format_rate(sampling_rate)}_ws{_format_window(window_seconds)}s_{dataset_suffix}"
         preferred_root = base_path / preferred_window_tag
         if preferred_root.exists():
@@ -444,11 +537,12 @@ def main() -> None:
     
     # MLflow
     tracking_uri = cfg.get("mlflow_tracking_uri", "mlruns")
-    experiment_name = cfg.get("mlflow_experiment", "eeg_pretraining_mamba2")
+    experiment_name = cfg.get("mlflow_experiment", "eeg_pretraining_representation")
+    run_name = cfg.get("mlflow_run_name", f"{selected_model}_pretrain_{selected_dataset}")
     if is_main:
         mlflow.set_tracking_uri(tracking_uri)
         mlflow.set_experiment(experiment_name)
-        run_ctx = mlflow.start_run(run_name="mamba2_pretrain")
+        run_ctx = mlflow.start_run(run_name=run_name)
     else:
         run_ctx = nullcontext()
     
@@ -464,6 +558,9 @@ def main() -> None:
                 "mask_ratio": cfg.get("mask_ratio", 0.2),
                 "masking_style": masking_style,
                 "dataset_path": dataset_root,
+                "dataset_profile": selected_dataset,
+                "dataset_suffix": dataset_suffix,
+                "model_profile": selected_model,
                 "world_size": world_size,
                 "patience": patience,
                 "min_delta": min_delta,
@@ -1215,7 +1312,8 @@ def main() -> None:
             num_layers = cfg.get("num_layers", 6)
             mask_ratio = cfg.get("mask_ratio", 0.2)
             mask_style_short = "mae" if masking_style == "mae" else "bert"
-            model_name = f"mamba2_eeg_d{d_model}_l{num_layers}_m{int(mask_ratio*100)}_{mask_style_short}"
+            model_registry_prefix = str(cfg.get("model_registry_prefix", "mamba2_eeg")).strip() or "mamba2_eeg"
+            model_name = f"{model_registry_prefix}_d{d_model}_l{num_layers}_m{int(mask_ratio*100)}_{mask_style_short}"
             
             try:
                 import mlflow.pytorch as mlf_pytorch

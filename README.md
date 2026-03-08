@@ -15,8 +15,8 @@ All commands below assume you run from the repository root: `/home/abin/eeg-mlfl
 - `eeg_analysis/configs/`: processing, training, pretraining, and fine-tuning configs.
 - `eeg_analysis/src/processing/`: EEG preprocessing + feature extraction.
 - `eeg_analysis/src/models/`: trainers and model code.
-- `eeg_analysis/src/training/`: Mamba pretraining/fine-tuning scripts.
-- `eeg_analysis/run_representation_pipeline.py`: CLI for representation dataset prep + pretraining orchestration.
+- `eeg_analysis/src/training/`: trainer scripts used by representation model profiles (Mamba by default).
+- `eeg_analysis/run_representation_pipeline.py`: CLI for representation dataset prep + pretraining/fine-tuning orchestration.
 - `scripts/build_open_pretrain_dataset.py`: wrapper for open_pretrain dataset build.
 - `scripts/convert_open_pretrain_window_size.py`: conversion utility used by the representation CLI.
 - `mlruns/`: MLflow tracking data.
@@ -234,14 +234,19 @@ uv run eeg_analysis/src/training/sweep_mask_ratio.py \
 ### 4) Supervised fine-tuning
 
 ```bash
-uv run eeg_analysis/src/training/finetune_mamba.py \
-  --config eeg_analysis/configs/finetune.yaml \
-  --pretrain-config eeg_analysis/configs/pretrain.yaml \
+uv run eeg_analysis/run_representation_pipeline.py \
+  --config eeg_analysis/configs/pretrain.yaml \
+  finetune \
+  --finetune-config eeg_analysis/configs/finetune.yaml \
   --data-path eeg_analysis/data/processed/features/closed_finetune/10s_af7-af8-tp9-tp10_closed_finetune.parquet \
   --output-dir eeg_analysis/finetuned_models
 ```
 
 If `--data-path` is omitted, the script will try to build/find the representation dataset.
+Use `--model <profile>` or `--all-models` to fine-tune specific/all enabled model profiles from `pretrain.yaml`.
+
+Closed pretraining profile default path:
+- `datasets.closed_pretrain.dataset_path: /home/abin/eeg-closed-pretrain-data`
 
 ## Training Configs and Model Types
 
@@ -400,9 +405,10 @@ uv run eeg_analysis/src/training/sweep_mask_ratio.py --config eeg_analysis/confi
 SFT / fine-tuning:
 
 ```bash
-uv run eeg_analysis/src/training/finetune_mamba.py \
-  --config eeg_analysis/configs/finetune.yaml \
-  --pretrain-config eeg_analysis/configs/pretrain.yaml \
+uv run eeg_analysis/run_representation_pipeline.py \
+  --config eeg_analysis/configs/pretrain.yaml \
+  finetune \
+  --finetune-config eeg_analysis/configs/finetune.yaml \
   --data-path eeg_analysis/data/processed/features/closed_finetune/10s_af7-af8-tp9-tp10_closed_finetune.parquet \
   --output-dir eeg_analysis/finetuned_models
 ```

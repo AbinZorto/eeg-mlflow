@@ -247,19 +247,48 @@ def _resolve_pretrain_models(cfg, explicit_models, all_models):
     if configured_models and not isinstance(configured_models, dict):
         raise click.ClickException("'models' in pretrain config must be a mapping")
 
+    def _enabled(model_key):
+        model_cfg = configured_models.get(model_key, {})
+        if not isinstance(model_cfg, dict):
+            return True
+        return bool(model_cfg.get("enabled", True))
+
+    enabled_models = [name for name in configured_models.keys() if _enabled(name)]
+
     if all_models:
         if not configured_models:
             return [cfg.get("model_name", "mamba")]
-        return list(configured_models.keys())
+        if not enabled_models:
+            raise click.ClickException("No enabled models found in pretrain config")
+        return enabled_models
 
     if explicit_models:
+        if not configured_models:
+            return list(explicit_models)
+        unknown = [name for name in explicit_models if name not in configured_models]
+        if unknown:
+            known = ", ".join(configured_models.keys())
+            raise click.ClickException(f"Unknown model(s): {', '.join(unknown)}. Available models: {known}")
+        disabled = [name for name in explicit_models if configured_models.get(name, {}).get("enabled", True) is False]
+        if disabled:
+            raise click.ClickException(
+                f"Selected model(s) are disabled: {', '.join(disabled)}. "
+                "Set models.<name>.enabled=true or pick a different model."
+            )
         return list(explicit_models)
 
     if configured_models:
-        active = cfg.get("active_model")
-        if active:
+        active = cfg.get("active_model") or cfg.get("model_name")
+        if active and active in configured_models:
+            if not _enabled(active):
+                raise click.ClickException(
+                    f"Configured active model '{active}' is disabled. "
+                    "Set models.<active_model>.enabled=true or choose another active model."
+                )
             return [active]
-        return [next(iter(configured_models.keys()))]
+        if enabled_models:
+            return [enabled_models[0]]
+        raise click.ClickException("No enabled models found in pretrain config")
 
     return [cfg.get("model_name", "mamba")]
 
@@ -278,6 +307,7 @@ def _build_model_specific_config(base_cfg, model_name, models_count):
         run_cfg.update(model_overrides)
 
     run_cfg["model_name"] = model_name
+    run_cfg["active_model"] = model_name
 
     # Avoid checkpoint collisions when running more than one model in one invocation.
     if models_count > 1:
@@ -341,6 +371,87 @@ def pretrain(ctx, models, all_models, distributed, backend, resume):
                 os.remove(temp_cfg_path)
             except OSError:
                 logger.warning(f"Could not remove temporary config: {temp_cfg_path}")
+
+
+@cli.command(name="finetune")
+@click.option("--model", "models", multiple=True, help="Model profile(s) defined in pretrain config")
+@click.option("--all-models", is_flag=True, help="Run every model profile in pretrain config")
+@click.option(
+    "--pretrain-config",
+    type=click.Path(exists=True),
+    default=None,
+    help="Path to pretraining config (defaults to global --config)",
+)
+@click.option(
+    "--finetune-config",
+    type=click.Path(exists=True),
+    default=str(REPO_ROOT / "eeg_analysis" / "configs" / "finetune.yaml"),
+    show_default=True,
+    help="Path to fine-tuning YAML config",
+)
+@click.option("--data-path", type=click.Path(exists=True), default=None, help="Path to closed_finetune dataset")
+@click.option("--output-dir", type=click.Path(), default=None, help="Output directory for finetuned models")
+@click.pass_context
+def finetune(ctx, models, all_models, pretrain_config, finetune_config, data_path, output_dir):
+    """Run representation fine-tuning for one or more configured models."""
+    pretrain_cfg_path = pretrain_config or ctx.obj["config_path"]
+    pretrain_cfg = load_config(pretrain_cfg_path)
+
+    selected_models = _resolve_pretrain_models(pretrain_cfg, models, all_models)
+    logger.info(f"Selected models for fine-tuning: {selected_models}")
+
+    default_trainer = REPO_ROOT / "eeg_analysis" / "src" / "training" / "finetune_mamba.py"
+    if not default_trainer.exists():
+        raise click.ClickException(f"Default fine-tuning trainer script not found: {default_trainer}")
+
+    for model_name in selected_models:
+        run_pretrain_cfg = _build_model_specific_config(pretrain_cfg, model_name, len(selected_models))
+        trainer_script = run_pretrain_cfg.get("finetune_trainer_script", str(default_trainer))
+        trainer_path = Path(trainer_script)
+        if not trainer_path.is_absolute():
+            trainer_path = (REPO_ROOT / trainer_path).resolve()
+        if not trainer_path.exists():
+            raise click.ClickException(
+                f"Fine-tuning trainer script not found for model '{model_name}': {trainer_path}"
+            )
+
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            suffix=f".{model_name}.yaml",
+            prefix="pretrain_cfg_",
+            delete=False,
+        ) as tmp:
+            yaml.safe_dump(run_pretrain_cfg, tmp, sort_keys=False)
+            temp_pretrain_cfg_path = tmp.name
+
+        cmd = [
+            sys.executable,
+            str(trainer_path),
+            "--config",
+            str(finetune_config),
+            "--pretrain-config",
+            temp_pretrain_cfg_path,
+        ]
+        if data_path:
+            cmd.extend(["--data-path", str(data_path)])
+        if output_dir:
+            model_output_dir = Path(output_dir)
+            if len(selected_models) > 1:
+                model_output_dir = model_output_dir / model_name
+            cmd.extend(["--output-dir", str(model_output_dir)])
+
+        logger.info("Running fine-tuning command for '%s': %s", model_name, " ".join(cmd))
+        try:
+            subprocess.run(cmd, check=True)
+        except subprocess.CalledProcessError as e:
+            raise click.ClickException(
+                f"Fine-tuning failed for model '{model_name}' with exit code {e.returncode}"
+            )
+        finally:
+            try:
+                os.remove(temp_pretrain_cfg_path)
+            except OSError:
+                logger.warning(f"Could not remove temporary config: {temp_pretrain_cfg_path}")
 
 
 if __name__ == "__main__":

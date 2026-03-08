@@ -1,6 +1,6 @@
-# Fine-tuning configuration for Mamba-2 EEG classification
+# Representation fine-tuning configuration for EEG classification
 #
-# This config is used for supervised fine-tuning (SFT) of pretrained Mamba models
+# This config is used for supervised fine-tuning (SFT) of pretrained representation models
 
 # Training hyperparameters
 batch_size: 256
@@ -46,7 +46,7 @@ use_weighted_sampler: false # Balance classes per batch at participant level (wo
 
 # MLflow
 mlflow_tracking_uri: "mlruns"
-mlflow_experiment: "eeg_finetuning_mamba2"
+mlflow_experiment: "eeg_representation_finetuning"
 
 # Thresholding (for robustness with class imbalance; requires val_ratio > 0)
 tune_threshold: false

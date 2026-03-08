@@ -120,18 +120,40 @@ def find_pretrained_checkpoint(pretrain_config_path: str, checkpoints_dir: str) 
         Path to best pretrained checkpoint
     """
     pretrain_cfg = load_config(pretrain_config_path)
-    
+    models_cfg = pretrain_cfg.get("models") or {}
+    selected_model = pretrain_cfg.get("model_name") or pretrain_cfg.get("active_model")
+    if models_cfg:
+        if not isinstance(models_cfg, dict):
+            raise ValueError("'models' in pretrain config must be a mapping")
+        if selected_model is None:
+            selected_model = next(iter(models_cfg.keys()))
+        if selected_model not in models_cfg:
+            known = ", ".join(models_cfg.keys())
+            raise ValueError(f"Unknown active model '{selected_model}'. Available models: {known}")
+        model_overrides = models_cfg[selected_model]
+        if not isinstance(model_overrides, dict):
+            raise ValueError(f"Config for model '{selected_model}' must be a mapping")
+        merged_cfg = dict(pretrain_cfg)
+        merged_cfg.update(model_overrides)
+        pretrain_cfg = merged_cfg
+    else:
+        selected_model = selected_model or "mamba"
+
     d_model = pretrain_cfg.get("d_model", 128)
     num_layers = pretrain_cfg.get("num_layers", 6)
     mask_ratio = pretrain_cfg.get("mask_ratio", 0.2)
     masking_style = pretrain_cfg.get("masking_style", "mae")
+    model_registry_prefix = str(pretrain_cfg.get("model_registry_prefix", "mamba2_eeg")).strip() or "mamba2_eeg"
     
     # Construct expected checkpoint name
     mask_style_short = "mae" if masking_style == "mae" else "bert"
-    checkpoint_name = f"mamba2_eeg_d{d_model}_l{num_layers}_m{int(mask_ratio*100)}_{mask_style_short}"
+    checkpoint_name = f"{model_registry_prefix}_d{d_model}_l{num_layers}_m{int(mask_ratio*100)}_{mask_style_short}"
     
     # Look for checkpoint in checkpoints directory
     checkpoints_path = Path(checkpoints_dir)
+    # If the run was launched with multiple model profiles, checkpoints may be nested under save_dir/<model_name>.
+    if selected_model and (checkpoints_path / selected_model).exists():
+        checkpoints_path = checkpoints_path / selected_model
     best_checkpoint = checkpoints_path / "mamba2_eeg_pretrained.pt"
     
     if not best_checkpoint.exists():
@@ -142,6 +164,7 @@ def find_pretrained_checkpoint(pretrain_config_path: str, checkpoints_dir: str) 
         )
     
     logger.info(f"Found pretrained checkpoint: {best_checkpoint}")
+    logger.info(f"Model profile: {selected_model}")
     logger.info(f"Model config: d_model={d_model}, num_layers={num_layers}, "
                 f"mask_ratio={mask_ratio}, masking_style={masking_style}")
     
