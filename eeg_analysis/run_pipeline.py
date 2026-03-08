@@ -8,7 +8,6 @@ import time
 from pathlib import Path
 from src.utils.logger import setup_logger
 from src.utils.config import load_config
-from src.utils.data_versioning import create_data_versioner, DataVersioner
 
 from src.processing.data_loader import load_eeg_data
 from src.processing.filter import filter_eeg_data
@@ -241,18 +240,12 @@ def process(ctx):
         logger.error(f"Critical error setting up MLflow for processing: {e}")
         raise
     
-    # Create base interim directory path for data versioning
-    interim_base_path = Path(config['paths']['interim']['upsampled']).parent.parent
-    data_versioner = create_data_versioner(str(interim_base_path))
-    
     with mlflow.start_run(run_name="processing"):
         mlflow.log_params(config.get('processing_params', {})) # Log processing parameters if available
         try:
             # Load data
             logger.info("Loading raw EEG data...")
             raw_data = load_eeg_data(config)
-            #version_id = data_versioner.save_version(raw_data, {'stage': 'raw'})
-            #logger.info(f"Raw data loaded and versioned. Version ID: {version_id}")
             
             # Process pipeline
             logger.info("Starting EEG processing pipeline...")
@@ -269,19 +262,7 @@ def process(ctx):
             features, mlflow_dataset = run_feature_extraction(config, dc_removed)
             logger.info("Feature extraction complete.")
             
-            # Save final features with enhanced metadata
-            final_version_metadata = {
-                'stage': 'features',
-                #'parent_version': version_id,
-                'processing_config': config, # Log the config used for this feature set
-                'mlflow_dataset_name': mlflow_dataset.name if mlflow_dataset else None,
-                'mlflow_dataset_digest': mlflow_dataset.digest if mlflow_dataset else None
-            }
-            #final_version = data_versioner.save_version(features, final_version_metadata)
-            #logger.info(f"Final features saved and versioned. Version ID: {final_version}")
-            
             mlflow.log_metric("processing_success", 1)
-            #mlflow.log_param("final_feature_version_id", final_version)
             
             # Store dataset info for potential use in training
             if mlflow_dataset:
