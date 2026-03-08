@@ -282,7 +282,7 @@ Every 50 steps, logs to MLflow:
 
 ## Configuration
 
-### In `pretrain.yaml`
+### In `eeg_analysis/configs/pretrain.yaml`
 
 ```yaml
 # Gradient Clipping
@@ -710,7 +710,7 @@ If loss goes below 0.35 → ❌ **Investigate further**
 To eliminate dropout as a confounder:
 
 ```python
-# Temporarily modify mamba_eeg_model.py
+# Temporarily modify eeg_analysis/src/models/mamba_eeg_model.py
 self.dropout = nn.Dropout(0.0)  # Disable dropout
 ```
 
@@ -1263,7 +1263,7 @@ With `reconstruct_signal_space: true`, the pipeline is **correct**.
 ### 1. Remove Dangerous Fallback Paths ✅ CRITICAL
 
 ```python
-# In pretrain_mamba.py, lines 266-275 (training) and 378-383 (validation)
+# In eeg_analysis/src/training/pretrain_mamba.py, lines 266-275 (training) and 378-383 (validation)
 # BEFORE (dangerous):
 if use_signal_reconstruction:
     target = windows
@@ -1285,7 +1285,7 @@ else:
 ### 2. Remove Centering Logic ✅ HIGH PRIORITY
 
 ```python
-# In pretrain_mamba.py, lines 277-308
+# In eeg_analysis/src/training/pretrain_mamba.py, lines 277-308
 # BEFORE (complex):
 if disable_temporal and disable_spatial:
     # ... 25 lines of centering logic ...
@@ -1307,7 +1307,7 @@ loss = masked_diff.pow(2).mean()
 ### 3. Deprecate Embedding Space Code ✅ MEDIUM PRIORITY
 
 ```python
-# In mamba_eeg_model.py
+# In eeg_analysis/src/models/mamba_eeg_model.py
 @torch.no_grad()
 @deprecated("Use decode_to_signal=True for proper MAE reconstruction")
 def encode_tokens_only(self, windows: torch.Tensor) -> torch.Tensor:
@@ -1318,7 +1318,7 @@ def encode_tokens_only(self, windows: torch.Tensor) -> torch.Tensor:
 ### 4. Add Configuration Validation ✅ HIGH PRIORITY
 
 ```python
-# At start of pretrain_mamba.py main()
+# At start of eeg_analysis/src/training/pretrain_mamba.py main()
 use_signal_reconstruction = bool(cfg.get("reconstruct_signal_space", True))
 
 if not use_signal_reconstruction:
@@ -1896,7 +1896,7 @@ loss = MSE(mean(targets), targets) < MSE(random, targets)
 
 ## Solution Implemented: Target Centering
 
-Modified `pretrain_mamba.py` to **subtract the target mean** before computing loss when in control mode.
+Modified `eeg_analysis/src/training/pretrain_mamba.py` to **subtract the target mean** before computing loss when in control mode.
 
 ### Changes Made
 
@@ -1968,7 +1968,7 @@ Epoch 13: loss=0.400  ← Still decreasing!
 cd /home/abin/eeg-mlflow
 source .venv/bin/activate
 
-# The fix is already in pretrain_mamba.py
+# The fix is already in eeg_analysis/src/training/pretrain_mamba.py
 python eeg_analysis/src/training/pretrain_mamba.py \
     --config eeg_analysis/configs/pretrain.yaml
 ```
@@ -2137,7 +2137,7 @@ Once loss stops decreasing with centered targets:
 
 **✅ No leakage confirmed** → Safe to train with real configuration
 
-Update `pretrain.yaml`:
+Update `eeg_analysis/configs/pretrain.yaml`:
 
 ```yaml
 mask_ratio: 0.75                   # Provide context

@@ -304,7 +304,7 @@ class WindowLevelTrainer(BaseTrainer):
             
         else: # perform_selection is False
             X = X_orig
-            selected_feature_names = X_orig.columns.tolist() # Ensure selected_feature_names is defined for consistency if needed later, though X is primary.
+            selected_feature_names = X_orig.columns.tolist() # Keep selected_feature_names defined for consistency if needed later, though X is canonical.
             mlflow.log_param("feature_selection_enabled", False)
             # No target_n_features_to_select, num_selected_features, selected_features_list, 
             # feature_selection_method, or feature_selection_effective if selection is off.

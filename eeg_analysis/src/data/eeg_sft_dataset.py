@@ -1,6 +1,6 @@
 """
 EEG Supervised Fine-Tuning Dataset
-Loads primary windowed EEG data for classification fine-tuning.
+Loads closed_finetune windowed EEG data for classification fine-tuning.
 """
 
 from __future__ import annotations

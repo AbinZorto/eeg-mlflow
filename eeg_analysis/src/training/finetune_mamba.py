@@ -36,7 +36,7 @@ from src.processing.filter import filter_eeg_data
 from src.processing.downsampler import downsample_eeg_data
 from src.processing.window_slicer import slice_eeg_windows
 from src.processing.dc_offset import remove_dc_offset_eeg_data
-from src.processing.primary_dataset import create_primary_dataset
+from src.processing.closed_finetune_dataset import create_closed_finetune_dataset
 from src.utils.logger import setup_logger
 import numpy as np
 import pandas as pd
@@ -73,29 +73,29 @@ def compute_window_length(processing_cfg: Dict[str, Any]) -> int:
     return int(round(window_seconds * sampling_rate))
 
 
-def build_primary_dataset_path(processing_cfg: Dict[str, Any]) -> str:
+def build_closed_finetune_dataset_path(processing_cfg: Dict[str, Any]) -> str:
     window_seconds = processing_cfg["window_slicer"]["window_seconds"]
     channels = processing_cfg["data_loader"]["channels"]
     channels_str = "-".join(channels)
-    primary_dir = Path(processing_cfg["paths"]["features"]["window"]).parent / "primary"
-    output_filename = f"{window_seconds}s_{channels_str}_primary_dataset.parquet"
-    return str(primary_dir / output_filename)
+    closed_finetune_dir = Path(processing_cfg["paths"]["features"]["window"]).parent / "closed_finetune"
+    output_filename = f"{window_seconds}s_{channels_str}_closed_finetune.parquet"
+    return str(closed_finetune_dir / output_filename)
 
 
-def ensure_primary_dataset(processing_cfg: Dict[str, Any]) -> str:
-    dataset_path = build_primary_dataset_path(processing_cfg)
+def ensure_closed_finetune_dataset(processing_cfg: Dict[str, Any]) -> str:
+    dataset_path = build_closed_finetune_dataset_path(processing_cfg)
     if Path(dataset_path).exists():
-        logger.info(f"Using existing primary dataset: {dataset_path}")
+        logger.info(f"Using existing representation dataset: {dataset_path}")
         return dataset_path
 
     response = input(
-        f"Primary dataset not found at {dataset_path}. Build it now? [y/N]: "
+        f"Closed_finetune dataset not found at {dataset_path}. Build it now? [y/N]: "
     ).strip().lower()
     if response not in {"y", "yes"}:
         raise FileNotFoundError(
-            f"Primary dataset missing and build declined: {dataset_path}"
+            f"Closed_finetune dataset missing and build declined: {dataset_path}"
         )
-    logger.info(f"Building primary dataset at: {dataset_path}")
+    logger.info(f"Building closed_finetune dataset at: {dataset_path}")
     raw_data = load_eeg_data(processing_cfg)
     upsampled = upsample_eeg_data(processing_cfg, raw_data)
     filtered = filter_eeg_data(processing_cfg, upsampled)
@@ -103,8 +103,8 @@ def ensure_primary_dataset(processing_cfg: Dict[str, Any]) -> str:
     windowed = slice_eeg_windows(processing_cfg, downsampled)
     _ = remove_dc_offset_eeg_data(processing_cfg, windowed)
     windowed_path = processing_cfg["paths"]["interim"]["windowed"]
-    primary_df, _ = create_primary_dataset(processing_cfg, windowed_path)
-    logger.info(f"Primary dataset created: rows={len(primary_df)} path={dataset_path}")
+    dataset_df, _ = create_closed_finetune_dataset(processing_cfg, windowed_path)
+    logger.info(f"Closed_finetune dataset created: rows={len(dataset_df)} path={dataset_path}")
     return dataset_path
 
 
@@ -483,7 +483,7 @@ def main():
     parser = argparse.ArgumentParser(description="Fine-tune Mamba EEG model for classification")
     parser.add_argument("--config", type=str, required=True, help="Path to fine-tuning config")
     parser.add_argument("--pretrain-config", type=str, required=True, help="Path to pretraining config")
-    parser.add_argument("--data-path", type=str, default=None, help="Path to primary dataset")
+    parser.add_argument("--data-path", type=str, default=None, help="Path to closed_finetune dataset")
     parser.add_argument("--output-dir", type=str, default="./finetuned_models", help="Output directory")
     
     args = parser.parse_args()
@@ -528,9 +528,9 @@ def main():
     checkpoints_dir = pretrain_cfg.get("save_dir", "./checkpoints")
     pretrained_path, model_name = find_pretrained_checkpoint(args.pretrain_config, checkpoints_dir)
     
-    # Resolve primary dataset path from processing config if not provided
+    # Resolve closed_finetune dataset path from processing config if not provided
     if args.data_path is None:
-        data_path = ensure_primary_dataset(processing_cfg)
+        data_path = ensure_closed_finetune_dataset(processing_cfg)
     else:
         data_path = args.data_path
 

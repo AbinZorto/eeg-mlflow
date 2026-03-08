@@ -83,7 +83,7 @@ def _setup_mlflow_tracking(config: Dict[str, Any]) -> str:
 
 def run(config: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Orchestrate the secondary EEG dataset build:
+    Orchestrate the open_pretrain EEG dataset build:
       - discover .set/.vhdr files
       - load each run
       - convert units (Volts→microvolts if needed)
@@ -105,15 +105,28 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
     if not source_root or not output_dir:
         raise ValueError("Config must include paths.source_root and paths.output_dir")
 
-    # Load windowing parameters from processing_config.yaml (shared with primary pipeline)
+    # Load windowing parameters from processing_config.yaml (shared with closed_finetune pipeline).
+    # Config can override this via processing.processing_config_path.
     try:
-        processing_cfg_path = Path("/home/abin/eeg-mlflow/eeg_analysis/configs/processing_config.yaml")
+        default_processing_cfg_path = Path(__file__).resolve().parents[3] / "configs" / "processing_config.yaml"
+        processing_cfg_path = (
+            proc_cfg.get("processing_config_path")
+            or config.get("processing_config_path")
+            or default_processing_cfg_path
+        )
+        processing_cfg_path = Path(processing_cfg_path).expanduser()
+        if not processing_cfg_path.is_absolute():
+            repo_root = Path(__file__).resolve().parents[4]
+            processing_cfg_path = (repo_root / processing_cfg_path).resolve()
         with open(processing_cfg_path, "r") as f:
             processing_cfg = yaml.safe_load(f)
         window_seconds = float(processing_cfg["window_slicer"]["window_seconds"])
         overlap_seconds = float(processing_cfg["window_slicer"].get("overlap_seconds", 0))
     except Exception as e:
-        logger.warning(f"Failed to load window settings from processing_config.yaml: {e}. Falling back to 10s, 0 overlap.")
+        logger.warning(
+            f"Failed to load window settings from processing config ({processing_cfg_path}): {e}. "
+            "Falling back to 10s, 0 overlap."
+        )
         window_seconds = 10.0
         overlap_seconds = 0.0
 
@@ -132,7 +145,8 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
     step_size = max(1, window_length - overlap_length)  # guard
 
     output_base_dir = Path(output_dir)
-    window_tag = f"sr{_format_rate(target_sfreq)}_ws{_format_window(window_seconds)}s"
+    dataset_suffix = str(proc_cfg.get("dataset_suffix", "open_pretrain")).strip() or "open_pretrain"
+    window_tag = f"sr{_format_rate(target_sfreq)}_ws{_format_window(window_seconds)}s_{dataset_suffix}"
     output_dir = str(output_base_dir / window_tag)
 
     # MLflow setup similar to existing pipeline
@@ -141,21 +155,22 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
     experiment_id = _setup_mlflow_tracking(config)
 
     # Start MLflow run at the beginning so it shows up immediately
-    with mlflow.start_run(run_name="secondary_dataset_build"):
+    with mlflow.start_run(run_name="open_pretrain_dataset_build"):
         # Log initial configuration parameters early
         mlflow.log_params(
             {
-                "secondary.source_root": source_root,
-                "secondary.output_base_dir": str(output_base_dir),
-                "secondary.output_dir": output_dir,
-                "secondary.target_sampling_rate": target_sfreq,
-                "secondary.convert_to_microvolts": enable_uV,
-                "secondary.keep_all_channels": True,
-                "secondary.register_with_mlflow": register_with_mlflow,
+                "open_pretrain.source_root": source_root,
+                "open_pretrain.output_base_dir": str(output_base_dir),
+                "open_pretrain.output_dir": output_dir,
+                "open_pretrain.target_sampling_rate": target_sfreq,
+                "open_pretrain.convert_to_microvolts": enable_uV,
+                "open_pretrain.keep_all_channels": True,
+                "open_pretrain.register_with_mlflow": register_with_mlflow,
+                "open_pretrain.dataset_suffix": dataset_suffix,
             }
         )
         mlflow.set_tag("dataset.context", "pretraining")
-        mlflow.set_tag("dataset.type", "secondary_eeg_parquet_runs")
+        mlflow.set_tag("dataset.type", "open_pretrain_eeg_parquet_runs")
         mlflow.set_tag("dataset.version", "v1")
 
         # Discover files
@@ -164,16 +179,16 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
         num_subjects = len(subject_to_files)
         num_runs = sum(len(v) for v in subject_to_files.values())
         logger.info(f"Discovered subjects={num_subjects}, total runs={num_runs}")
-        mlflow.log_param("secondary.num_subjects", num_subjects)
-        mlflow.log_param("secondary.num_runs", num_runs)
+        mlflow.log_param("open_pretrain.num_subjects", num_subjects)
+        mlflow.log_param("open_pretrain.num_runs", num_runs)
 
         # Decide unit conversion for the entire dataset:
         # If enabled in config, force conversion of ALL runs to microvolts.
         global_convert_to_uV = bool(enable_uV)
-        mlflow.log_param("secondary.global_convert_to_microvolts", bool(global_convert_to_uV))
+        mlflow.log_param("open_pretrain.global_convert_to_microvolts", bool(global_convert_to_uV))
 
-        mlflow.log_param("secondary.output_base_dir", str(output_base_dir))
-        mlflow.log_param("secondary.output_dir", output_dir)
+        mlflow.log_param("open_pretrain.output_base_dir", str(output_base_dir))
+        mlflow.log_param("open_pretrain.output_dir", output_dir)
 
         # Process each run into its own parquet (avoid giant single file)
         run_process_start = time.time()
@@ -234,24 +249,24 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
                 runs_saved += 1
                 # Log artifact for this run
                 try:
-                    mlflow.log_artifact(abs_run_path, artifact_path=f"secondary_runs/{subject_id}")
+                    mlflow.log_artifact(abs_run_path, artifact_path=f"open_pretrain_runs/{subject_id}")
                 except Exception as e:
                     logger.warning(f"Failed to log artifact for {abs_run_path}: {e}")
 
         # Final metrics
         duration_s = time.time() - t0
         build_duration_s = time.time() - run_process_start
-        mlflow.log_metric("secondary.build_duration_s", build_duration_s)
-        mlflow.log_metric("secondary.total_duration_s", duration_s)
-        mlflow.log_metric("secondary.total_windows", total_windows)
-        mlflow.log_metric("secondary.runs_skipped", runs_skipped)
-        mlflow.log_param("secondary.window_seconds", window_seconds)
-        mlflow.log_param("secondary.overlap_seconds", overlap_seconds)
-        mlflow.log_param("secondary.window_length_samples", window_length)
+        mlflow.log_metric("open_pretrain.build_duration_s", build_duration_s)
+        mlflow.log_metric("open_pretrain.total_duration_s", duration_s)
+        mlflow.log_metric("open_pretrain.total_windows", total_windows)
+        mlflow.log_metric("open_pretrain.runs_skipped", runs_skipped)
+        mlflow.log_param("open_pretrain.window_seconds", window_seconds)
+        mlflow.log_param("open_pretrain.overlap_seconds", overlap_seconds)
+        mlflow.log_param("open_pretrain.window_length_samples", window_length)
         mlflow.set_tag("mlflow.dataset.logged", "true")
-        mlflow.set_tag("mlflow.dataset.context", "pretraining")
+        mlflow.set_tag("mlflow.dataset.context", "open_pretrain")
         logger.info(
-            f"Secondary per-run parquet save complete: runs_saved={runs_saved}, windows={total_windows}, "
+            f"Open-pretrain per-run parquet save complete: runs_saved={runs_saved}, windows={total_windows}, "
             f"subjects={num_subjects}, output_dir={output_dir}, duration_s={duration_s:.2f}, "
             f"runs_skipped={runs_skipped}"
         )

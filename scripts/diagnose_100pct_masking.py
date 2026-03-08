@@ -801,7 +801,7 @@ def compare_predicted_vs_gt_statistics(model, dataloader, device, num_samples=10
         print(f"  Mean Pattern Correlation: {overall_pattern_corr:.4f}")
         print(f"  (Compares normalized waveform similarity)")
     
-    # Primary interpretation based on pattern correlation
+    # Main interpretation based on pattern correlation
     # Account for baseline similarity: GT windows have inherent similarity structure
     if len(all_pattern_corrs) > 0:
         print(f"\nPattern Correlation Analysis:")
@@ -835,7 +835,7 @@ def compare_predicted_vs_gt_statistics(model, dataloader, device, num_samples=10
             print("   Model predictions are anti-correlated with ground truth")
             print("   This suggests fundamental learning problem")
     
-    # Secondary interpretation based on raw statistics correlation
+    # Alternate interpretation based on raw statistics correlation
     # (Note: Model outputs normalized values, so raw stats correlation may be low)
     if overall_mean_corr > 0.5 or overall_std_corr > 0.5:
         print("\n📊 Note: Raw statistics show some correlation")

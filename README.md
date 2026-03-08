@@ -5,7 +5,7 @@ Unified documentation for this repository.
 This project provides two connected workflows:
 
 1. Traditional EEG feature pipeline (processing + feature extraction + classical/deep-learning classifiers).
-2. Mamba-based sequence workflow (secondary dataset build + self-supervised pretraining + supervised fine-tuning).
+2. Representation-learning workflow (dataset build/conversion + self-supervised pretraining + supervised fine-tuning).
 
 All commands below assume you run from the repository root: `/home/abin/eeg-mlflow`.
 
@@ -16,8 +16,9 @@ All commands below assume you run from the repository root: `/home/abin/eeg-mlfl
 - `eeg_analysis/src/processing/`: EEG preprocessing + feature extraction.
 - `eeg_analysis/src/models/`: trainers and model code.
 - `eeg_analysis/src/training/`: Mamba pretraining/fine-tuning scripts.
-- `scripts/build_secondary_dataset.py`: secondary EEG dataset build CLI.
-- `scripts/convert_secondary_window_size.py`: utility to up-convert secondary window sizes.
+- `eeg_analysis/run_representation_pipeline.py`: CLI for representation dataset prep + pretraining orchestration.
+- `scripts/build_open_pretrain_dataset.py`: wrapper for open_pretrain dataset build.
+- `scripts/convert_open_pretrain_window_size.py`: conversion utility used by the representation CLI.
 - `mlruns/`: MLflow tracking data.
 - `models/`: local outputs (predictions/metadata, plus legacy artifacts).
 
@@ -44,7 +45,7 @@ uv run eeg_analysis/run_pipeline.py \
 
 What it does:
 
-- Loads raw EEG from `processing_config.yaml`.
+- Loads raw EEG from `eeg_analysis/configs/processing_config.yaml`.
 - Runs upsampling, filtering, downsampling, window slicing, DC offset removal, and feature extraction.
 - Writes feature parquet under `eeg_analysis/data/processed/features/`.
 - Logs dataset metadata to MLflow (tags include `mlflow.dataset.logged=true`, `mlflow.dataset.context=training`).
@@ -55,15 +56,15 @@ Current default processing config (`eeg_analysis/configs/processing_config.yaml`
 - Window size: `10s`
 - Window ordering: `sequential` (preserve order enabled)
 
-### 2) (Optional) Build primary dataset for sequence models
+### 2) (Optional) Build representation dataset for sequence models
 
 ```bash
-uv run eeg_analysis/run_pipeline.py \
+uv run eeg_analysis/run_representation_pipeline.py \
   --config eeg_analysis/configs/processing_config.yaml \
-  process-primary
+  process-closed-finetune
 ```
 
-This creates a primary parquet dataset from windowed channel data (without feature vectors), used by fine-tuning code.
+This creates a parquet representation dataset from windowed channel data (without feature vectors), used by fine-tuning code.
 
 ### 3) List available MLflow datasets
 
@@ -170,29 +171,31 @@ Implemented categories are defined in `eeg_analysis/src/utils/feature_filter.py`
 - `connectivity_features`, `asymmetry_features`
 - `cross_hemispheric_features`, `diagonal_features`, `coherence_features`
 
-## Secondary Dataset + Mamba Workflow
+## Representation Workflow
 
-### 1) Build secondary EEG dataset (per-run parquet windows)
+### 1) Build pretraining EEG dataset (per-run parquet windows)
 
 ```bash
-uv run scripts/build_secondary_dataset.py \
-  --config eeg_analysis/configs/secondary_processing.yaml \
-  build-secondary
+uv run eeg_analysis/run_representation_pipeline.py \
+  --config eeg_analysis/configs/open_pretrain_processing.yaml \
+  build-open-pretrain
 ```
 
-Key config: `eeg_analysis/configs/secondary_processing.yaml`
+Key config: `eeg_analysis/configs/open_pretrain_processing.yaml`
 
-- `paths.source_root`: raw secondary EEG source
+- `paths.source_root`: raw source EEG root for representation pretraining
 - `paths.output_dir`: output base dir
 - `processing.target_sampling_rate`
 - `processing.convert_to_microvolts`
 - `processing.register_with_mlflow`
 
-### 2) (Optional) Convert secondary window size
+### 2) (Optional) Convert pretraining window size
 
 ```bash
-uv run scripts/convert_secondary_window_size.py \
-  --input-root eeg_analysis/secondarydata/raw/sr256_ws4s \
+uv run eeg_analysis/run_representation_pipeline.py \
+  --config eeg_analysis/configs/open_pretrain_processing.yaml \
+  convert-open-pretrain \
+  --input-root eeg_analysis/secondarydata/raw/sr256_ws10s_open_pretrain \
   --output-base eeg_analysis/secondarydata/raw \
   --factor 2
 ```
@@ -200,17 +203,25 @@ uv run scripts/convert_secondary_window_size.py \
 ### 3) Self-supervised pretraining
 
 ```bash
-uv run eeg_analysis/src/training/pretrain_mamba.py \
-  --config eeg_analysis/configs/pretrain.yaml
+uv run eeg_analysis/run_representation_pipeline.py \
+  --config eeg_analysis/configs/pretrain.yaml \
+  pretrain
+```
+
+Run every configured pretraining model profile from `eeg_analysis/configs/pretrain.yaml`:
+
+```bash
+uv run eeg_analysis/run_representation_pipeline.py \
+  --config eeg_analysis/configs/pretrain.yaml \
+  pretrain --all-models
 ```
 
 Multi-GPU:
 
 ```bash
-torchrun --standalone --nproc_per_node=2 \
-  eeg_analysis/src/training/pretrain_mamba.py \
+uv run eeg_analysis/run_representation_pipeline.py \
   --config eeg_analysis/configs/pretrain.yaml \
-  --distributed
+  pretrain --distributed
 ```
 
 Mask-ratio sweep:
@@ -226,11 +237,11 @@ uv run eeg_analysis/src/training/sweep_mask_ratio.py \
 uv run eeg_analysis/src/training/finetune_mamba.py \
   --config eeg_analysis/configs/finetune.yaml \
   --pretrain-config eeg_analysis/configs/pretrain.yaml \
-  --data-path eeg_analysis/data/processed/features/primary/10s_af7-af8-tp9-tp10_primary_dataset.parquet \
+  --data-path eeg_analysis/data/processed/features/closed_finetune/10s_af7-af8-tp9-tp10_closed_finetune.parquet \
   --output-dir eeg_analysis/finetuned_models
 ```
 
-If `--data-path` is omitted, the script will try to build/find the primary dataset.
+If `--data-path` is omitted, the script will try to build/find the representation dataset.
 
 ## Training Configs and Model Types
 
@@ -275,7 +286,7 @@ Run pipeline stages:
 
 ```bash
 uv run eeg_analysis/run_pipeline.py --config eeg_analysis/configs/processing_config.yaml process
-uv run eeg_analysis/run_pipeline.py --config eeg_analysis/configs/processing_config.yaml process-primary
+uv run eeg_analysis/run_representation_pipeline.py --config eeg_analysis/configs/processing_config.yaml process-closed-finetune
 uv run eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml list-datasets
 ```
 
@@ -340,19 +351,27 @@ bash scripts/run_traditional_experiments.sh --dry-run
 Notes:
 - `scripts/run_all_experiments.sh` and `scripts/run_traditional_experiments.sh` now assume `uv` is installed and available on `PATH`.
 
-### Secondary Dataset + Mamba Commands
+### Representation Commands
 
-Secondary dataset builder:
+Representation dataset build from core pipeline:
 
 ```bash
-uv run scripts/build_secondary_dataset.py --config eeg_analysis/configs/secondary_processing.yaml build-secondary
+uv run eeg_analysis/run_representation_pipeline.py --config eeg_analysis/configs/processing_config.yaml process-closed-finetune
 ```
 
-Secondary window-size conversion:
+Pretraining dataset builder:
 
 ```bash
-uv run scripts/convert_secondary_window_size.py \
-  --input-root eeg_analysis/secondarydata/raw/sr256_ws4s \
+uv run eeg_analysis/run_representation_pipeline.py --config eeg_analysis/configs/open_pretrain_processing.yaml build-open-pretrain
+```
+
+Pretraining window-size conversion:
+
+```bash
+uv run eeg_analysis/run_representation_pipeline.py \
+  --config eeg_analysis/configs/open_pretrain_processing.yaml \
+  convert-open-pretrain \
+  --input-root eeg_analysis/secondarydata/raw/sr256_ws10s_open_pretrain \
   --output-base eeg_analysis/secondarydata/raw \
   --factor 2
 ```
@@ -360,16 +379,15 @@ uv run scripts/convert_secondary_window_size.py \
 Pretraining:
 
 ```bash
-uv run eeg_analysis/src/training/pretrain_mamba.py --config eeg_analysis/configs/pretrain.yaml
+uv run eeg_analysis/run_representation_pipeline.py --config eeg_analysis/configs/pretrain.yaml pretrain
 ```
 
 Distributed pretraining:
 
 ```bash
-torchrun --standalone --nproc_per_node=2 \
-  eeg_analysis/src/training/pretrain_mamba.py \
+uv run eeg_analysis/run_representation_pipeline.py \
   --config eeg_analysis/configs/pretrain.yaml \
-  --distributed
+  pretrain --distributed
 ```
 
 Mask-ratio sweep:
@@ -385,7 +403,7 @@ SFT / fine-tuning:
 uv run eeg_analysis/src/training/finetune_mamba.py \
   --config eeg_analysis/configs/finetune.yaml \
   --pretrain-config eeg_analysis/configs/pretrain.yaml \
-  --data-path eeg_analysis/data/processed/features/primary/10s_af7-af8-tp9-tp10_primary_dataset.parquet \
+  --data-path eeg_analysis/data/processed/features/closed_finetune/10s_af7-af8-tp9-tp10_closed_finetune.parquet \
   --output-dir eeg_analysis/finetuned_models
 ```
 
@@ -463,4 +481,4 @@ uv run scripts/test_model_utils.py
 
 ## Important Path Note
 
-Some config files contain absolute local paths (for example in `processing_config.yaml`, `pretrain.yaml`, and `secondary_processing.yaml`). Update those paths to match your machine before running.
+Some config files contain absolute local paths (for example in `eeg_analysis/configs/processing_config.yaml`, `eeg_analysis/configs/pretrain.yaml`, and `eeg_analysis/configs/open_pretrain_processing.yaml`). Update those paths to match your machine before running.

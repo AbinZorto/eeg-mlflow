@@ -299,7 +299,7 @@ class TemporalEncoder(nn.Module):
 
 ### Implementation
 
-Add to training loop in `pretrain_mamba.py`:
+Add to training loop in `eeg_analysis/src/training/pretrain_mamba.py`:
 
 ```python
 # After line 235
@@ -374,7 +374,7 @@ def collate_eeg_sequences(batch, mask_ratio, shuffle_temporal=True):
 ### Phase 1: Fix the fundamentals (NOW)
 
 ```yaml
-# pretrain.yaml
+# eeg_analysis/configs/pretrain.yaml
 mask_ratio: 0.75  # Provide context
 ```
 
@@ -923,7 +923,7 @@ Every 50 steps, logs to MLflow:
 
 ## Configuration
 
-### In `pretrain.yaml`
+### In `eeg_analysis/configs/pretrain.yaml`
 
 ```yaml
 # Gradient Clipping
@@ -1510,7 +1510,7 @@ This would mean there's a bug in the masking or forward pass that allows unmaske
 cd /home/abin/eeg-mlflow
 source .venv/bin/activate
 
-# Train with control configuration (already set in pretrain.yaml)
+# Train with control configuration (already set in eeg_analysis/configs/pretrain.yaml)
 python eeg_analysis/src/training/pretrain_mamba.py \
     --config eeg_analysis/configs/pretrain.yaml
 ```
@@ -1591,7 +1591,7 @@ Expected: Loss decreases (learning from context)
 Once you confirm **no leakage** (loss stays high), update config for real training:
 
 ```yaml
-# Update pretrain.yaml
+# Update eeg_analysis/configs/pretrain.yaml
 mask_ratio: 0.75                   # Provide unmasked context
 disable_temporal_encoding: false   # Enable position information
 disable_spatial_encoding: false    # Enable channel information
@@ -1891,7 +1891,7 @@ token_emb = token_encoder(actual_signal)  # DIFFERENT for each token
 
 **Solution:**
 ```yaml
-# Change in pretrain.yaml
+# Change in eeg_analysis/configs/pretrain.yaml
 mask_ratio: 0.75  # Force context-based learning
 ```
 
@@ -1976,7 +1976,7 @@ This will force the model to:
 
 Please provide:
 
-1. **Model config** (from pretrain.yaml):
+1. **Model config** (from eeg_analysis/configs/pretrain.yaml):
    - `d_model`
    - `num_layers`
    - Decoder architecture (if specified)
@@ -2164,7 +2164,7 @@ If loss goes below 0.35 → ❌ **Investigate further**
 To eliminate dropout as a confounder:
 
 ```python
-# Temporarily modify mamba_eeg_model.py
+# Temporarily modify eeg_analysis/src/models/mamba_eeg_model.py
 self.dropout = nn.Dropout(0.0)  # Disable dropout
 ```
 
@@ -2746,7 +2746,7 @@ Recall:  [0.714] [1.000*↑+40%]  [0.571] [0.714↑+25%]
 ## DESIGN GUIDELINES
 
 ### Color Scheme
-- **Primary Colors**: Blue (Tabular MLP), Red (Hybrid Model)
+- **Main Colors**: Blue (Tabular MLP), Red (Hybrid Model)
 - **Shades**: Light (before), Dark (after)
 - **Highlights**: Green (improvements), Yellow (perfect scores)
 
@@ -3527,7 +3527,7 @@ With `reconstruct_signal_space: true`, the pipeline is **correct**.
 ### 1. Remove Dangerous Fallback Paths ✅ CRITICAL
 
 ```python
-# In pretrain_mamba.py, lines 266-275 (training) and 378-383 (validation)
+# In eeg_analysis/src/training/pretrain_mamba.py, lines 266-275 (training) and 378-383 (validation)
 # BEFORE (dangerous):
 if use_signal_reconstruction:
     target = windows
@@ -3549,7 +3549,7 @@ else:
 ### 2. Remove Centering Logic ✅ HIGH PRIORITY
 
 ```python
-# In pretrain_mamba.py, lines 277-308
+# In eeg_analysis/src/training/pretrain_mamba.py, lines 277-308
 # BEFORE (complex):
 if disable_temporal and disable_spatial:
     # ... 25 lines of centering logic ...
@@ -3571,7 +3571,7 @@ loss = masked_diff.pow(2).mean()
 ### 3. Deprecate Embedding Space Code ✅ MEDIUM PRIORITY
 
 ```python
-# In mamba_eeg_model.py
+# In eeg_analysis/src/models/mamba_eeg_model.py
 @torch.no_grad()
 @deprecated("Use decode_to_signal=True for proper MAE reconstruction")
 def encode_tokens_only(self, windows: torch.Tensor) -> torch.Tensor:
@@ -3582,7 +3582,7 @@ def encode_tokens_only(self, windows: torch.Tensor) -> torch.Tensor:
 ### 4. Add Configuration Validation ✅ HIGH PRIORITY
 
 ```python
-# At start of pretrain_mamba.py main()
+# At start of eeg_analysis/src/training/pretrain_mamba.py main()
 use_signal_reconstruction = bool(cfg.get("reconstruct_signal_space", True))
 
 if not use_signal_reconstruction:
@@ -4069,13 +4069,13 @@ for each window:
 - **Rationale**: Accounts for patient-level variability, standard clinical practice
 
 #### 4.5.3 Evaluation Metrics
-- **Primary Metrics**:
+- **Main Metrics**:
   - ROC-AUC (patient-level)
   - F1-Score (patient-level)
   - Recall (patient-level) - critical for clinical applications
   - Precision (patient-level)
   - Accuracy (patient-level)
-- **Secondary Metrics**:
+- **Additional Metrics**:
   - Window-level accuracy
   - Confusion matrix (TP, TN, FP, FN)
 - **Rationale**: Patient-level metrics align with clinical decision-making
@@ -4165,8 +4165,8 @@ for each window:
 4. **No Complexity Advantage**: Complex model didn't outperform simple model after preprocessing
 
 #### 5.3.3 Relative Contributions
-- **DC Offset Removal**: Primary driver of improvement (~0.12-0.13 ROC-AUC gain)
-- **Architecture Enhancements**: Secondary contribution (difficult to isolate due to confounded design)
+- **DC Offset Removal**: Main driver of improvement (~0.12-0.13 ROC-AUC gain)
+- **Architecture Enhancements**: Additional contribution (difficult to isolate due to confounded design)
 - **Interaction Effect**: Possible synergy, but DC removal dominates
 
 ### 5.4 Clinical Interpretation
@@ -4682,7 +4682,7 @@ for each window:
 
 ## KEY MESSAGES TO EMPHASIZE
 
-### Primary Message
+### Main Message
 **"DC offset removal provides larger performance gains than architectural complexity improvements. Simple models achieve excellent performance with proper preprocessing."**
 
 ### Supporting Points
@@ -5019,7 +5019,7 @@ All potential leakage pathways have been checked and verified clean:
 
 The masking pipeline follows this sequence:
 
-1. **Data Loading** (`eeg_pretraining_dataset.py:102-124`):
+1. **Data Loading** (`eeg_analysis/src/data/eeg_pretraining_dataset.py:102-124`):
    ```python
    windows_t = torch.from_numpy(windows_np).to(torch.float32)  # (L, W=2048)
    return {"windows": windows_t, "channel_name": str(channel).upper(), "seq_len": int(windows_t.shape[0])}
@@ -5027,7 +5027,7 @@ The masking pipeline follows this sequence:
    - Raw 2048-sample windows loaded from parquet files
    - No masking at this stage
 
-2. **Collation with Masking** (`eeg_pretraining_dataset.py:164-177`):
+2. **Collation with Masking** (`eeg_analysis/src/data/eeg_pretraining_dataset.py:164-177`):
    ```python
    orig[i, :L, :] = b["windows"]
    masked[i, :L, :] = b["windows"]  # Start with original
@@ -5043,7 +5043,7 @@ The masking pipeline follows this sequence:
    - Masking happens at the **token level** (entire 2048-sample windows)
    - Masked tokens are **zeroed completely** before any projection
 
-3. **Model Forward Pass** (`mamba_eeg_model.py:259`):
+3. **Model Forward Pass** (`eeg_analysis/src/models/mamba_eeg_model.py:259`):
    ```python
    token_emb = self.token_encoder(windows_masked)  # (B, L, D)
    ```
@@ -5066,7 +5066,7 @@ The masking pipeline follows this sequence:
 The codebase contains **two different windowing implementations**:
 
 ### Implementation A: `slice_signal` (WITH overlap)
-**Location**: `window_slicer.py:48-71`
+**Location**: `eeg_analysis/src/processing/window_slicer.py:48-71`
 
 ```python
 self.window_length = int(self.window_seconds * self.sampling_rate)  # 8s * 256 = 2048
@@ -5082,7 +5082,7 @@ while start + self.window_length <= len(signal):
 **Result**: Windows overlap by 50% (1024 samples shared between adjacent windows)
 
 ### Implementation B: `process_window` (NO overlap)
-**Location**: `window_slicer.py:114-116`
+**Location**: `eeg_analysis/src/processing/window_slicer.py:114-116`
 
 ```python
 for i in range(num_complete_windows):
@@ -5093,7 +5093,7 @@ for i in range(num_complete_windows):
 **Result**: Non-overlapping sequential windows
 
 ### Configuration
-**Location**: `processing_config.yaml:60-65`
+**Location**: `eeg_analysis/configs/processing_config.yaml:60-65`
 
 ```yaml
 window_slicer:
@@ -5136,7 +5136,7 @@ Window[n+1]:                     [2048 ........................ 4096]
 
 **Confirmed by user**: The data processing does NOT create overlapping windows.
 
-The windowing implementation used for pretraining data creation follows the non-overlapping sequential approach from `process_window()` (lines 114-116 in `window_slicer.py`):
+The windowing implementation used for pretraining data creation follows the non-overlapping sequential approach from `process_window()` (lines 114-116 in `eeg_analysis/src/processing/window_slicer.py`):
 - Windows are created at positions: 0, 2048, 4096, 8192, ...
 - No sample sharing between adjacent windows
 - **No reconstruction shortcut available to the model**
@@ -5155,7 +5155,7 @@ The windowing implementation used for pretraining data creation follows the non-
 **Evidence:**
 
 ### Dataset Design
-**Location**: `eeg_pretraining_dataset.py:41-49`
+**Location**: `eeg_analysis/src/data/eeg_pretraining_dataset.py:41-49`
 
 ```python
 class EEGPretrainingDataset(Dataset):
@@ -5173,7 +5173,7 @@ class EEGPretrainingDataset(Dataset):
 **Key Point**: Each dataset sample is a **single-channel sequence**.
 
 ### Data Loading
-**Location**: `eeg_pretraining_dataset.py:105`
+**Location**: `eeg_analysis/src/data/eeg_pretraining_dataset.py:105`
 
 ```python
 df = pd.read_parquet(str(fp), engine="pyarrow", columns=[channel])
@@ -5182,7 +5182,7 @@ df = pd.read_parquet(str(fp), engine="pyarrow", columns=[channel])
 Only **one channel** is loaded per sample.
 
 ### Model Input
-**Location**: `pretrain_mamba.py:224`
+**Location**: `eeg_analysis/src/training/pretrain_mamba.py:224`
 
 ```python
 channel_names = batch["channel_names"]  # List of B channel names
@@ -5209,7 +5209,7 @@ Each batch item corresponds to a **single channel**. Multiple channels are never
 **Evidence:**
 
 ### Loss Computation
-**Location**: `pretrain_mamba.py:236-241`
+**Location**: `eeg_analysis/src/training/pretrain_mamba.py:236-241`
 
 ```python
 mask_exp = mask_bool.unsqueeze(-1).expand_as(pred)  # (B, L, D)
@@ -5225,13 +5225,13 @@ loss = masked_diff.pow(2).mean()
 4. Loss computed as `MSE(pred[masked], target[masked])`
 
 ### Target Generation
-**Location**: `pretrain_mamba.py:235`
+**Location**: `eeg_analysis/src/training/pretrain_mamba.py:235`
 
 ```python
 target = (model.module if isinstance(model, DDP) else model).encode_tokens_only(windows)
 ```
 
-**Location**: `mamba_eeg_model.py:230-239`
+**Location**: `eeg_analysis/src/models/mamba_eeg_model.py:230-239`
 
 ```python
 @torch.no_grad()
@@ -5262,7 +5262,7 @@ def encode_tokens_only(self, windows: torch.Tensor) -> torch.Tensor:
 **Evidence:**
 
 ### Collate Function
-**Location**: `eeg_pretraining_dataset.py:157-167`
+**Location**: `eeg_analysis/src/data/eeg_pretraining_dataset.py:157-167`
 
 ```python
 # Allocate tensors
@@ -5282,7 +5282,7 @@ for i, b in enumerate(batch):
 - `masked`: Masked windows (used as model input)
 
 ### Training Loop
-**Location**: `pretrain_mamba.py:220-222`
+**Location**: `eeg_analysis/src/training/pretrain_mamba.py:220-222`
 
 ```python
 windows = batch["windows"].to(device, non_blocking=True)               # (B, L, W)
@@ -5293,7 +5293,7 @@ mask_bool = batch["mask_bool"].to(device, non_blocking=True)           # (B, L)
 Both `windows` (original) and `windows_masked` transferred to GPU.
 
 ### Model Forward
-**Location**: `pretrain_mamba.py:229-235`
+**Location**: `eeg_analysis/src/training/pretrain_mamba.py:229-235`
 
 ```python
 pred = (model.module if isinstance(model, DDP) else model)(
@@ -5341,7 +5341,7 @@ Gradients **cannot** flow from loss → target → windows (original).
 **Evidence:**
 
 ### Forward Pass Pipeline
-**Location**: `mamba_eeg_model.py:241-266`
+**Location**: `eeg_analysis/src/models/mamba_eeg_model.py:241-266`
 
 ```python
 def forward(self, windows_masked: torch.Tensor, channel_names: List[str], seq_lengths: torch.Tensor) -> torch.Tensor:
@@ -5369,7 +5369,7 @@ def forward(self, windows_masked: torch.Tensor, channel_names: List[str], seq_le
 **Critical**: `token_emb` is the **only** component derived from signal content, and it processes `windows_masked` (zeroed tokens).
 
 ### Token Encoder
-**Location**: `mamba_eeg_model.py:106-127`
+**Location**: `eeg_analysis/src/models/mamba_eeg_model.py:106-127`
 
 ```python
 class TokenEncoder(nn.Module):
@@ -5396,7 +5396,7 @@ token_emb[masked] = LayerNorm(Linear([0, 0, ..., 0]) + bias)
 **No information from original signal.**
 
 ### Backbone Architecture
-**Location**: `mamba_eeg_model.py:154-167`
+**Location**: `eeg_analysis/src/models/mamba_eeg_model.py:154-167`
 
 ```python
 def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -5420,7 +5420,7 @@ def forward(self, x: torch.Tensor) -> torch.Tensor:
 
 ### Spatial/Temporal Encodings
 
-**Spatial Encoding** (`mamba_eeg_model.py:63-72`):
+**Spatial Encoding** (`eeg_analysis/src/models/mamba_eeg_model.py:63-72`):
 ```python
 def forward(self, channel_names: List[str]) -> torch.Tensor:
     coords = torch.stack([self._coords_for(nm) for nm in channel_names], dim=0)  # (B, 3)
@@ -5430,7 +5430,7 @@ def forward(self, channel_names: List[str]) -> torch.Tensor:
 - **Same for all tokens in a sequence** (single channel per sequence)
 - Cannot leak signal content
 
-**Temporal Encoding** (`mamba_eeg_model.py:83-103`):
+**Temporal Encoding** (`eeg_analysis/src/models/mamba_eeg_model.py:83-103`):
 ```python
 def forward(self, seq_lengths: torch.Tensor) -> torch.Tensor:
     # Build per-batch normalized positions t/T
@@ -5451,7 +5451,7 @@ def forward(self, seq_lengths: torch.Tensor) -> torch.Tensor:
 
 ### 7.1 BERT-Style Masking Option
 
-**Location**: `eeg_pretraining_dataset.py:179-190`
+**Location**: `eeg_analysis/src/data/eeg_pretraining_dataset.py:179-190`
 
 ```python
 elif masking_style == "bert":
@@ -5488,7 +5488,7 @@ elif masking_style == "bert":
 
 ### 7.3 DDP Synchronization
 
-**Location**: `pretrain_mamba.py:73-74`
+**Location**: `eeg_analysis/src/training/pretrain_mamba.py:73-74`
 
 ```python
 if distributed:
@@ -5557,15 +5557,15 @@ Test different mask ratios to see if more context helps:
 ```bash
 # Experiment 1: Current (position-only learning)
 # mask_ratio: 1.0
-python eeg_analysis/src/training/pretrain_mamba.py --config configs/pretrain.yaml
+python eeg_analysis/src/training/pretrain_mamba.py --config eeg_analysis/configs/pretrain.yaml
 
 # Experiment 2: Standard MAE (context-based learning)  
-# Edit pretrain.yaml: mask_ratio: 0.75
-python eeg_analysis/src/training/pretrain_mamba.py --config configs/pretrain.yaml
+# Edit eeg_analysis/configs/pretrain.yaml: mask_ratio: 0.75
+python eeg_analysis/src/training/pretrain_mamba.py --config eeg_analysis/configs/pretrain.yaml
 
 # Experiment 3: Easy mode (strong context)
-# Edit pretrain.yaml: mask_ratio: 0.5
-python eeg_analysis/src/training/pretrain_mamba.py --config configs/pretrain.yaml
+# Edit eeg_analysis/configs/pretrain.yaml: mask_ratio: 0.5
+python eeg_analysis/src/training/pretrain_mamba.py --config eeg_analysis/configs/pretrain.yaml
 
 # Compare final losses and downstream task performance
 ```
@@ -5842,7 +5842,7 @@ With 100% masking, **every token in every sequence is masked**. This means:
 
 ### Recommendation
 
-Update `configs/pretrain.yaml`:
+Update `eeg_analysis/configs/pretrain.yaml`:
 
 ```yaml
 mask_ratio: 0.75  # or 0.5-0.6 for more context
@@ -5861,15 +5861,15 @@ This configuration change alone could dramatically improve training, assuming yo
 
 | Component | File | Lines |
 |-----------|------|-------|
-| Dataset Loading | `src/data/eeg_pretraining_dataset.py` | 41-124 |
-| Collate + Masking | `src/data/eeg_pretraining_dataset.py` | 127-200 |
-| Training Loop | `src/training/pretrain_mamba.py` | 213-373 |
-| Loss Computation | `src/training/pretrain_mamba.py` | 236-241 |
-| Model Forward | `src/models/mamba_eeg_model.py` | 241-266 |
-| Token Encoder | `src/models/mamba_eeg_model.py` | 106-127 |
-| Windowing (overlap) | `src/processing/window_slicer.py` | 48-71 |
-| Windowing (no overlap) | `src/processing/window_slicer.py` | 114-116 |
-| Config | `configs/pretrain.yaml` | 1-30 |
+| Dataset Loading | `eeg_analysis/src/data/eeg_pretraining_dataset.py` | 41-124 |
+| Collate + Masking | `eeg_analysis/src/data/eeg_pretraining_dataset.py` | 127-200 |
+| Training Loop | `eeg_analysis/src/training/pretrain_mamba.py` | 213-373 |
+| Loss Computation | `eeg_analysis/src/training/pretrain_mamba.py` | 236-241 |
+| Model Forward | `eeg_analysis/src/models/mamba_eeg_model.py` | 241-266 |
+| Token Encoder | `eeg_analysis/src/models/mamba_eeg_model.py` | 106-127 |
+| Windowing (overlap) | `eeg_analysis/src/processing/window_slicer.py` | 48-71 |
+| Windowing (no overlap) | `eeg_analysis/src/processing/window_slicer.py` | 114-116 |
+| Config | `eeg_analysis/configs/pretrain.yaml` | 1-30 |
 
 ---
 
@@ -5918,7 +5918,7 @@ python scripts/diagnose_100pct_masking.py --checkpoint your_model.pt
 
 **Option B: Safe Default**
 ```yaml
-# Update pretrain.yaml
+# Update eeg_analysis/configs/pretrain.yaml
 mask_ratio: 0.75  # Standard MAE configuration
 ```
 
@@ -6194,21 +6194,21 @@ This is the **correct MAE formulation** - you identified the fundamental issue!
 
 1. ✅ Pretrained Mamba model exists: `eeg_analysis/checkpoints/mamba2_eeg_pretrained.pt`
 2. ✅ Raw EEG data available
-3. ✅ Configs set up: `pretrain.yaml`, `finetune.yaml`, `processing_config.yaml`
+3. ✅ Configs set up: `eeg_analysis/configs/pretrain.yaml`, `eeg_analysis/configs/finetune.yaml`, `eeg_analysis/configs/processing_config.yaml`
 
 ---
 
 ## Three-Step Workflow
 
-### 1️⃣ Create Primary Dataset (5-10 minutes)
+### 1️⃣ Create Closed_finetune Dataset (5-10 minutes)
 
 ```bash
-uv run python3 eeg_analysis/run_pipeline.py \
+uv run python3 eeg_analysis/run_representation_pipeline.py \
   --config eeg_analysis/configs/processing_config.yaml \
-  process-primary
+  process-closed-finetune
 ```
 
-**Output**: `eeg_analysis/data/processed/features/primary/8s_af7-af8-tp9-tp10_primary_dataset.parquet`
+**Output**: `eeg_analysis/data/processed/features/closed_finetune/8s_af7-af8-tp9-tp10_closed_finetune.parquet`
 
 **Note**: Windows are automatically sorted by `Participant → parent_window_id → sub_window_id` to preserve temporal order (critical for sequence modeling).
 
@@ -6220,7 +6220,7 @@ uv run python3 eeg_analysis/run_pipeline.py \
 uv run python3 eeg_analysis/src/training/finetune_mamba.py \
   --config eeg_analysis/configs/finetune.yaml \
   --pretrain-config eeg_analysis/configs/pretrain.yaml \
-  --data-path eeg_analysis/data/processed/features/primary/8s_af7-af8-tp9-tp10_primary_dataset.parquet \
+  --data-path eeg_analysis/data/processed/features/closed_finetune/8s_af7-af8-tp9-tp10_closed_finetune.parquet \
   --output-dir eeg_analysis/finetuned_models
 ```
 
@@ -6241,7 +6241,7 @@ Navigate to experiment: `eeg_finetuning_mamba2`
 
 ## Key Configuration Options
 
-### `configs/finetune.yaml`
+### `eeg_analysis/configs/finetune.yaml`
 
 ```yaml
 lr: 1.0e-4              # ↓ Lower if training unstable
@@ -6250,7 +6250,7 @@ epochs: 50              # ↑ Increase for better performance
 freeze_backbone: true   # false = train all layers (slower, may improve)
 ```
 
-### `configs/pretrain.yaml`
+### `eeg_analysis/configs/pretrain.yaml`
 
 Used to find the pretrained checkpoint:
 ```yaml
@@ -6300,10 +6300,10 @@ Fine-tuned models append `_finetuned`.
 **Fix**: Run pretraining first or check config parameters match
 
 ### ❌ "Data file not found"
-**Fix**: Run `process-primary` command first
+**Fix**: Run `process-closed-finetune` command first
 
 ### ❌ Out of memory
-**Fix**: Reduce `batch_size` in `finetune.yaml`
+**Fix**: Reduce `batch_size` in `eeg_analysis/configs/finetune.yaml`
 
 ### ❌ Poor performance
 **Fix**: Try `freeze_backbone: false` or increase epochs
@@ -6317,16 +6317,16 @@ Fine-tuned models append `_finetuned`.
 uv run python3 eeg_analysis/src/training/pretrain_mamba.py \
   --config eeg_analysis/configs/pretrain.yaml
 
-# 2. Create primary dataset
-uv run python3 eeg_analysis/run_pipeline.py \
+# 2. Create closed_finetune dataset
+uv run python3 eeg_analysis/run_representation_pipeline.py \
   --config eeg_analysis/configs/processing_config.yaml \
-  process-primary
+  process-closed-finetune
 
 # 3. Fine-tune
 uv run python3 eeg_analysis/src/training/finetune_mamba.py \
   --config eeg_analysis/configs/finetune.yaml \
   --pretrain-config eeg_analysis/configs/pretrain.yaml \
-  --data-path eeg_analysis/data/processed/features/primary/8s_af7-af8-tp9-tp10_primary_dataset.parquet \
+  --data-path eeg_analysis/data/processed/features/closed_finetune/8s_af7-af8-tp9-tp10_closed_finetune.parquet \
   --output-dir eeg_analysis/finetuned_models
 
 # 4. View results
@@ -6401,7 +6401,7 @@ Epoch 2:
 
 ## ✅ The Fix: Frozen Target Encoder
 
-Modified `pretrain_mamba.py` to use a **separate, frozen encoder** for targets in control mode:
+Modified `eeg_analysis/src/training/pretrain_mamba.py` to use a **separate, frozen encoder** for targets in control mode:
 
 ```python
 # Create frozen copy of TokenEncoder at start of training
@@ -6532,7 +6532,7 @@ target = model.encode_tokens_only(windows)  # Varies, but depends on current wei
 cd /home/abin/eeg-mlflow
 source .venv/bin/activate
 
-# Fix is already applied in pretrain_mamba.py
+# Fix is already applied in eeg_analysis/src/training/pretrain_mamba.py
 python eeg_analysis/src/training/pretrain_mamba.py \
     --config eeg_analysis/configs/pretrain.yaml
 ```
@@ -6656,7 +6656,7 @@ Forcing identical predictions:
 
 3. **Use position as a feature, not the only feature**
    - Position should help temporal understanding
-   - But signal content should be primary
+   - But signal content should be main
    - Context should matter more than position
 
 ## The Real Solution
@@ -6935,17 +6935,17 @@ loss < 0.1 in epoch 1          ← Suspicious (too good)
 ## Overview
 
 This document describes the complete pipeline for:
-1. Creating primary datasets (windowed EEG data without feature extraction)
+1. Creating closed_finetune datasets (windowed EEG data without feature extraction)
 2. Fine-tuning pretrained Mamba models for remission classification
 3. Automatic model discovery based on pretraining configuration
 
 ---
 
-## 1. Primary Dataset Creation
+## 1. Closed_finetune Dataset Creation
 
-### What is the Primary Dataset?
+### What is the Closed_finetune Dataset?
 
-The **primary dataset** is raw windowed EEG data concatenated across all participants, ready for direct model input. Unlike the feature-extracted dataset, it preserves the raw signal data for each channel.
+The **closed_finetune dataset** is raw windowed EEG data concatenated across all participants, ready for direct model input. Unlike the feature-extracted dataset, it preserves the raw signal data for each channel.
 
 **Structure:**
 - `Participant`: Participant ID
@@ -6961,14 +6961,14 @@ Windows are sorted by `Participant → parent_window_id → sub_window_id` to pr
 2. Windows represent consecutive time segments from EEG recordings
 3. Scrambling window order would destroy temporal patterns the model needs to learn
 
-The primary dataset creation automatically sorts and verifies window ordering.
+The closed_finetune dataset creation automatically sorts and verifies window ordering.
 
-### Creating the Primary Dataset
+### Creating the Closed_finetune Dataset
 
 ```bash
-uv run python3 eeg_analysis/run_pipeline.py \
+uv run python3 eeg_analysis/run_representation_pipeline.py \
   --config eeg_analysis/configs/processing_config.yaml \
-  process-primary
+  process-closed-finetune
 ```
 
 **What it does:**
@@ -6976,13 +6976,13 @@ uv run python3 eeg_analysis/run_pipeline.py \
 2. Applies upsampling, filtering, downsampling, windowing, DC offset removal
 3. **Skips feature extraction** (unlike the regular `process` command)
 4. Concatenates remission and non-remission windowed data
-5. Saves to `eeg_analysis/data/processed/features/primary/`
+5. Saves to `eeg_analysis/data/processed/features/closed_finetune/`
 6. Logs dataset to MLflow with tags for discovery
 
 **Output:**
-- File: `{window_size}s_{channels}_primary_dataset.parquet`
-- Example: `8s_af7-af8-tp9-tp10_primary_dataset.parquet`
-- MLflow dataset name: `EEG_8s_af7-af8-tp9-tp10_{N}windows_primary`
+- File: `{window_size}s_{channels}_closed_finetune.parquet`
+- Example: `8s_af7-af8-tp9-tp10_closed_finetune.parquet`
+- MLflow dataset name: `EEG_8s_af7-af8-tp9-tp10_{N}windows_closed_finetune`
 
 ---
 
@@ -7005,10 +7005,10 @@ uv run python3 eeg_analysis/run_pipeline.py \
 
 ### Automatic Checkpoint Discovery
 
-The fine-tuning script **automatically finds the pretrained checkpoint** based on parameters in `pretrain.yaml`:
+The fine-tuning script **automatically finds the pretrained checkpoint** based on parameters in `eeg_analysis/configs/pretrain.yaml`:
 
 ```yaml
-# pretrain.yaml
+# eeg_analysis/configs/pretrain.yaml
 d_model: 256
 num_layers: 2
 mask_ratio: 0.2
@@ -7024,17 +7024,17 @@ masking_style: "mae"
 uv run python3 eeg_analysis/src/training/finetune_mamba.py \
   --config eeg_analysis/configs/finetune.yaml \
   --pretrain-config eeg_analysis/configs/pretrain.yaml \
-  --data-path eeg_analysis/data/processed/features/primary/8s_af7-af8-tp9-tp10_primary_dataset.parquet \
+  --data-path eeg_analysis/data/processed/features/closed_finetune/8s_af7-af8-tp9-tp10_closed_finetune.parquet \
   --output-dir eeg_analysis/finetuned_models
 ```
 
 **Arguments:**
 - `--config`: Fine-tuning hyperparameters (lr, epochs, batch_size, etc.)
 - `--pretrain-config`: Pretraining config (used to find checkpoint and load model architecture)
-- `--data-path`: Path to primary dataset parquet file
+- `--data-path`: Path to closed_finetune dataset parquet file
 - `--output-dir`: Where to save fine-tuned models
 
-### Configuration (`configs/finetune.yaml`)
+### Configuration (`eeg_analysis/configs/finetune.yaml`)
 
 ```yaml
 # Training hyperparameters
@@ -7061,7 +7061,7 @@ mlflow_experiment: "eeg_finetuning_mamba2"
 ### Training Process
 
 1. **Data Loading**:
-   - Loads primary dataset
+   - Loads closed_finetune dataset
    - **Verifies temporal ordering** (windows sorted by participant → parent_window_id → sub_window_id)
    - Splits by participant into train/val/test (stratified)
    - Each participant's windows remain in temporal order within their split
@@ -7125,15 +7125,15 @@ uv run torchrun --standalone --nproc_per_node=2 \
 
 **Output**: `eeg_analysis/checkpoints/mamba2_eeg_pretrained.pt`
 
-### Step 2: Create Primary Dataset
+### Step 2: Create Closed_finetune Dataset
 
 ```bash
-uv run python3 eeg_analysis/run_pipeline.py \
+uv run python3 eeg_analysis/run_representation_pipeline.py \
   --config eeg_analysis/configs/processing_config.yaml \
-  process-primary
+  process-closed-finetune
 ```
 
-**Output**: `eeg_analysis/data/processed/features/primary/8s_af7-af8-tp9-tp10_primary_dataset.parquet`
+**Output**: `eeg_analysis/data/processed/features/closed_finetune/8s_af7-af8-tp9-tp10_closed_finetune.parquet`
 
 ### Step 3: Fine-Tune for Classification
 
@@ -7141,7 +7141,7 @@ uv run python3 eeg_analysis/run_pipeline.py \
 uv run python3 eeg_analysis/src/training/finetune_mamba.py \
   --config eeg_analysis/configs/finetune.yaml \
   --pretrain-config eeg_analysis/configs/pretrain.yaml \
-  --data-path eeg_analysis/data/processed/features/primary/8s_af7-af8-tp9-tp10_primary_dataset.parquet \
+  --data-path eeg_analysis/data/processed/features/closed_finetune/8s_af7-af8-tp9-tp10_closed_finetune.parquet \
   --output-dir eeg_analysis/finetuned_models
 ```
 
@@ -7155,43 +7155,43 @@ uv run python3 eeg_analysis/src/training/finetune_mamba.py \
 
 ### New Files
 
-1. **`src/processing/primary_dataset.py`**
-   - Creates primary dataset from windowed data
+1. **`eeg_analysis/src/processing/closed_finetune_dataset.py`**
+   - Creates closed_finetune dataset from windowed data
    - Concatenates remission and non-remission groups
    - Logs to MLflow
 
-2. **`src/data/eeg_sft_dataset.py`**
+2. **`eeg_analysis/src/data/eeg_sft_dataset.py`**
    - PyTorch Dataset for supervised fine-tuning
-   - Loads primary dataset
+   - Loads closed_finetune dataset
    - Groups windows by participant
    - Handles train/val/test splits
 
-3. **`src/models/mamba_sft_model.py`**
+3. **`eeg_analysis/src/models/mamba_sft_model.py`**
    - `MambaEEGClassifier`: Mamba model with classification head
    - Loads pretrained weights
    - Supports backbone freezing
    - Aggregates across channels and windows
 
-4. **`src/training/finetune_mamba.py`**
+4. **`eeg_analysis/src/training/finetune_mamba.py`**
    - Fine-tuning training script
    - Automatic checkpoint discovery
    - MLflow integration
    - Evaluation and model registration
 
-5. **`configs/finetune.yaml`**
+5. **`eeg_analysis/configs/finetune.yaml`**
    - Fine-tuning hyperparameters
    - Data split configuration
    - MLflow settings
 
 ### Modified Files
 
-1. **`run_pipeline.py`**
-   - Added `process-primary` command
-   - Creates primary dataset without feature extraction
+1. **`eeg_analysis/run_representation_pipeline.py`**
+   - Added `process-closed-finetune` command
+   - Creates closed_finetune dataset without feature extraction
 
 2. **`README.md`**
    - Consolidated project documentation now includes the SFT workflow
-   - Usage examples for primary dataset creation and fine-tuning
+   - Usage examples for closed_finetune dataset creation and fine-tuning
 
 ---
 
@@ -7235,19 +7235,19 @@ uv run python3 eeg_analysis/src/training/finetune_mamba.py \
 2. Verify config parameters match: `d_model`, `num_layers`, `mask_ratio`, `masking_style`
 3. Run pretraining if checkpoint missing
 
-### Primary Dataset Not Found
+### Closed_finetune Dataset Not Found
 
 **Error**: `Data file not found`
 
 **Solution**:
-1. Run `process-primary` command first
-2. Check path matches config: `{window_size}s_{channels}_primary_dataset.parquet`
+1. Run `process-closed-finetune` command first
+2. Check path matches config: `{window_size}s_{channels}_closed_finetune.parquet`
 3. Verify windowed data exists: `ls eeg_analysis/data/interim/windowed/`
 
 ### Out of Memory
 
 **Solution**:
-1. Reduce `batch_size` in `finetune.yaml`
+1. Reduce `batch_size` in `eeg_analysis/configs/finetune.yaml`
 2. Use gradient accumulation (modify training script)
 3. Use smaller model (reduce `d_model` or `num_layers` in pretraining)
 
@@ -7274,12 +7274,12 @@ uv run python3 eeg_analysis/src/training/sweep_mask_ratio.py \
 
 # Fine-tune each pretrained model
 for mask_ratio in 20 30 40 50 60 70 80; do
-  # Update pretrain.yaml with mask_ratio
+  # Update eeg_analysis/configs/pretrain.yaml with mask_ratio
   # Run fine-tuning
   uv run python3 eeg_analysis/src/training/finetune_mamba.py \
     --config eeg_analysis/configs/finetune.yaml \
     --pretrain-config eeg_analysis/configs/pretrain.yaml \
-    --data-path eeg_analysis/data/processed/features/primary/8s_af7-af8-tp9-tp10_primary_dataset.parquet \
+    --data-path eeg_analysis/data/processed/features/closed_finetune/8s_af7-af8-tp9-tp10_closed_finetune.parquet \
     --output-dir eeg_analysis/finetuned_models
 done
 ```
@@ -7300,7 +7300,7 @@ Navigate to `eeg_finetuning_mamba2` experiment to compare:
 ## Summary
 
 The SFT pipeline provides:
-1. **Primary dataset creation** - Raw windowed data for direct model input
+1. **Closed_finetune dataset creation** - Raw windowed data for direct model input
 2. **Automatic checkpoint discovery** - No manual path management
 3. **Flexible fine-tuning** - Freeze or unfreeze backbone layers
 4. **Comprehensive evaluation** - Multiple metrics, MLflow tracking
@@ -7341,7 +7341,7 @@ loss = MSE(mean(targets), targets) < MSE(random, targets)
 
 ## Solution Implemented: Target Centering
 
-Modified `pretrain_mamba.py` to **subtract the target mean** before computing loss when in control mode.
+Modified `eeg_analysis/src/training/pretrain_mamba.py` to **subtract the target mean** before computing loss when in control mode.
 
 ### Changes Made
 
@@ -7413,7 +7413,7 @@ Epoch 13: loss=0.400  ← Still decreasing!
 cd /home/abin/eeg-mlflow
 source .venv/bin/activate
 
-# The fix is already in pretrain_mamba.py
+# The fix is already in eeg_analysis/src/training/pretrain_mamba.py
 python eeg_analysis/src/training/pretrain_mamba.py \
     --config eeg_analysis/configs/pretrain.yaml
 ```
@@ -7582,7 +7582,7 @@ Once loss stops decreasing with centered targets:
 
 **✅ No leakage confirmed** → Safe to train with real configuration
 
-Update `pretrain.yaml`:
+Update `eeg_analysis/configs/pretrain.yaml`:
 
 ```yaml
 mask_ratio: 0.75                   # Provide context
@@ -8070,7 +8070,7 @@ EEG data is inherently **temporal** - the order of windows represents the sequen
 
 ## How We Preserve Temporal Order
 
-### 1. Window Slicing (`src/processing/window_slicer.py`)
+### 1. Window Slicing (`eeg_analysis/src/processing/window_slicer.py`)
 
 Windows are created with IDs that track their temporal position:
 - `parent_window_id`: Original window from which sub-windows are derived
@@ -8084,12 +8084,12 @@ Windows are created with IDs that track their temporal position:
 # ...
 ```
 
-### 2. Primary Dataset Creation (`src/processing/primary_dataset.py`)
+### 2. Closed_finetune Dataset Creation (`eeg_analysis/src/processing/closed_finetune_dataset.py`)
 
 **Sorting Strategy:**
 ```python
 # Sort by: Participant → parent_window_id → sub_window_id
-primary_df = primary_df.sort_values([
+main_df = main_df.sort_values([
     'Participant', 
     'parent_window_id', 
     'sub_window_id'
@@ -8101,7 +8101,7 @@ primary_df = primary_df.sort_values([
 - Logs warnings if ordering appears incorrect
 - Confirms temporal order is preserved
 
-### 3. SFT Dataset (`src/data/eeg_sft_dataset.py`)
+### 3. SFT Dataset (`eeg_analysis/src/data/eeg_sft_dataset.py`)
 
 **Dataset Initialization:**
 ```python
@@ -8137,7 +8137,7 @@ if not is_ordered:
 
 When working with EEG data, always verify:
 
-### ✅ Primary Dataset
+### ✅ Closed_finetune Dataset
 ```python
 # Check first participant's windows
 participant_data = df[df['Participant'] == 'sub-001']
@@ -8233,8 +8233,8 @@ df = df[['Participant', 'parent_window_id', 'sub_window_id', ...]]
 ```python
 import pandas as pd
 
-# Load primary dataset
-df = pd.read_parquet("path/to/primary_dataset.parquet")
+# Load closed_finetune dataset
+df = pd.read_parquet("path/to/closed_finetune_dataset.parquet")
 
 # Test ordering for each participant
 for participant in df['Participant'].unique()[:5]:
@@ -8263,7 +8263,7 @@ print("\nIf all participants show ✓, temporal order is preserved!")
 5. Keep window IDs for verification and debugging
 
 **Our Implementation:**
-- ✅ Primary dataset creation: Sorts and verifies
+- ✅ Closed_finetune dataset creation: Sorts and verifies
 - ✅ SFT dataset: Checks and re-sorts if needed
 - ✅ Per-sample loading: Sorts participant windows
 - ✅ Collate function: Preserves order during batching
@@ -8467,4 +8467,3 @@ mask_ratio: 0.75  # Mask 75% of samples within each token
 
 
 ---
-

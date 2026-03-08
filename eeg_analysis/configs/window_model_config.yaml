@@ -330,7 +330,7 @@ deep_learning:
     # Simplified loss function
     loss_config:
       primary_loss: 'cross_entropy'  # Faster than focal_loss
-      auxiliary_losses: []  # No auxiliary losses
+      extra_losses: []  # No extra losses
       class_weights: 'balanced'
     
     # Disabled architecture enhancements for speed
@@ -503,7 +503,7 @@ deep_learning:
     # Simplified loss function
     loss_config:
       primary_loss: 'cross_entropy'  # Faster than focal_loss
-      auxiliary_losses: []  # No auxiliary losses
+      extra_losses: []  # No extra losses
       class_weights: 'balanced'
     
     # Disabled architecture enhancements for speed
@@ -661,7 +661,7 @@ deep_learning:
     # Simplified loss function
     loss_config:
       primary_loss: 'cross_entropy'  # Faster than focal_loss
-      auxiliary_losses: []  # No auxiliary losses
+      extra_losses: []  # No extra losses
       class_weights: 'balanced'
     
     # Disabled architecture enhancements for speed

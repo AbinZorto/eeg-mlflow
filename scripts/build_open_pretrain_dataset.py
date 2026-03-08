@@ -11,25 +11,25 @@ if str(EEG_ANALYSIS_DIR) not in sys.path:
 
 from src.utils.logger import setup_logger
 from src.utils.config import load_config
-from src.processing.secondary import pipeline as secondary_pipeline
+from src.processing.open_pretrain import pipeline as open_pretrain_pipeline
 
 logger = setup_logger(__name__)
 
 
 @click.group()
-@click.option('--config', type=click.Path(exists=True), required=True, help='Path to secondary processing config file')
+@click.option('--config', type=click.Path(exists=True), required=True, help='Path to representation data config file')
 @click.pass_context
 def cli(ctx, config):
-    """Secondary EEG dataset builder CLI"""
+    """Legacy wrapper for representation dataset build CLI."""
     ctx.ensure_object(dict)
     ctx.obj['config_path'] = config
     ctx.obj['config'] = load_config(config)
 
 
-@cli.command(name="build-secondary")
+@cli.command(name="build-open-pretrain")
 @click.pass_context
-def build_secondary(ctx):
-    """Build and register the secondary EEG dataset for Mamba2 pretraining."""
+def build_open_pretrain(ctx):
+    """Build and register the open_pretrain dataset."""
     config = ctx.obj['config']
 
     # Set up MLflow tracking (pipeline will set experiment and start run)
@@ -38,10 +38,10 @@ def build_secondary(ctx):
         tracking_uri = f"file:{PROJECT_ROOT / 'mlruns'}"
     mlflow.set_tracking_uri(tracking_uri)
 
-    result = secondary_pipeline.run(config)
+    result = open_pretrain_pipeline.run(config)
 
     # Print summary
-    print(f"\n✅ Secondary dataset built successfully")
+    print(f"\n✅ Representation pretraining dataset built successfully")
     print(f"   Output dir: {result.get('output_dir')}")
     print(f"   Subjects: {result.get('num_subjects')}, Runs discovered: {result.get('num_runs')}, Runs saved: {result.get('runs_saved')}")
     print(f"   Sampling rate: {result.get('sampling_rate')} Hz")

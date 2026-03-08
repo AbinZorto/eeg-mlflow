@@ -319,7 +319,7 @@ class TemporalEncoder(nn.Module):
 
 ### Implementation
 
-Add to training loop in `pretrain_mamba.py`:
+Add to training loop in `eeg_analysis/src/training/pretrain_mamba.py`:
 
 ```python
 # After line 235
@@ -394,7 +394,7 @@ def collate_eeg_sequences(batch, mask_ratio, shuffle_temporal=True):
 ### Phase 1: Fix the fundamentals (NOW)
 
 ```yaml
-# pretrain.yaml
+# eeg_analysis/configs/pretrain.yaml
 mask_ratio: 0.75  # Provide context
 ```
 
@@ -1154,7 +1154,7 @@ token_emb = token_encoder(actual_signal)  # DIFFERENT for each token
 
 **Solution:**
 ```yaml
-# Change in pretrain.yaml
+# Change in eeg_analysis/configs/pretrain.yaml
 mask_ratio: 0.75  # Force context-based learning
 ```
 
@@ -1238,7 +1238,7 @@ This will force the model to:
 
 Please provide:
 
-1. **Model config** (from pretrain.yaml):
+1. **Model config** (from eeg_analysis/configs/pretrain.yaml):
    - `d_model`
    - `num_layers`
    - Decoder architecture (if specified)
@@ -1946,7 +1946,7 @@ All potential leakage pathways have been checked and verified clean:
 
 The masking pipeline follows this sequence:
 
-1. **Data Loading** (`eeg_pretraining_dataset.py:102-124`):
+1. **Data Loading** (`eeg_analysis/src/data/eeg_pretraining_dataset.py:102-124`):
    ```python
    windows_t = torch.from_numpy(windows_np).to(torch.float32)  # (L, W=2048)
    return {"windows": windows_t, "channel_name": str(channel).upper(), "seq_len": int(windows_t.shape[0])}
@@ -1954,7 +1954,7 @@ The masking pipeline follows this sequence:
    - Raw 2048-sample windows loaded from parquet files
    - No masking at this stage
 
-2. **Collation with Masking** (`eeg_pretraining_dataset.py:164-177`):
+2. **Collation with Masking** (`eeg_analysis/src/data/eeg_pretraining_dataset.py:164-177`):
    ```python
    orig[i, :L, :] = b["windows"]
    masked[i, :L, :] = b["windows"]  # Start with original
@@ -1970,7 +1970,7 @@ The masking pipeline follows this sequence:
    - Masking happens at the **token level** (entire 2048-sample windows)
    - Masked tokens are **zeroed completely** before any projection
 
-3. **Model Forward Pass** (`mamba_eeg_model.py:259`):
+3. **Model Forward Pass** (`eeg_analysis/src/models/mamba_eeg_model.py:259`):
    ```python
    token_emb = self.token_encoder(windows_masked)  # (B, L, D)
    ```
@@ -1993,7 +1993,7 @@ The masking pipeline follows this sequence:
 The codebase contains **two different windowing implementations**:
 
 ### Implementation A: `slice_signal` (WITH overlap)
-**Location**: `window_slicer.py:48-71`
+**Location**: `eeg_analysis/src/processing/window_slicer.py:48-71`
 
 ```python
 self.window_length = int(self.window_seconds * self.sampling_rate)  # 8s * 256 = 2048
@@ -2009,7 +2009,7 @@ while start + self.window_length <= len(signal):
 **Result**: Windows overlap by 50% (1024 samples shared between adjacent windows)
 
 ### Implementation B: `process_window` (NO overlap)
-**Location**: `window_slicer.py:114-116`
+**Location**: `eeg_analysis/src/processing/window_slicer.py:114-116`
 
 ```python
 for i in range(num_complete_windows):
@@ -2020,7 +2020,7 @@ for i in range(num_complete_windows):
 **Result**: Non-overlapping sequential windows
 
 ### Configuration
-**Location**: `processing_config.yaml:60-65`
+**Location**: `eeg_analysis/configs/processing_config.yaml:60-65`
 
 ```yaml
 window_slicer:
@@ -2063,7 +2063,7 @@ Window[n+1]:                     [2048 ........................ 4096]
 
 **Confirmed by user**: The data processing does NOT create overlapping windows.
 
-The windowing implementation used for pretraining data creation follows the non-overlapping sequential approach from `process_window()` (lines 114-116 in `window_slicer.py`):
+The windowing implementation used for pretraining data creation follows the non-overlapping sequential approach from `process_window()` (lines 114-116 in `eeg_analysis/src/processing/window_slicer.py`):
 - Windows are created at positions: 0, 2048, 4096, 8192, ...
 - No sample sharing between adjacent windows
 - **No reconstruction shortcut available to the model**
@@ -2082,7 +2082,7 @@ The windowing implementation used for pretraining data creation follows the non-
 **Evidence:**
 
 ### Dataset Design
-**Location**: `eeg_pretraining_dataset.py:41-49`
+**Location**: `eeg_analysis/src/data/eeg_pretraining_dataset.py:41-49`
 
 ```python
 class EEGPretrainingDataset(Dataset):
@@ -2100,7 +2100,7 @@ class EEGPretrainingDataset(Dataset):
 **Key Point**: Each dataset sample is a **single-channel sequence**.
 
 ### Data Loading
-**Location**: `eeg_pretraining_dataset.py:105`
+**Location**: `eeg_analysis/src/data/eeg_pretraining_dataset.py:105`
 
 ```python
 df = pd.read_parquet(str(fp), engine="pyarrow", columns=[channel])
@@ -2109,7 +2109,7 @@ df = pd.read_parquet(str(fp), engine="pyarrow", columns=[channel])
 Only **one channel** is loaded per sample.
 
 ### Model Input
-**Location**: `pretrain_mamba.py:224`
+**Location**: `eeg_analysis/src/training/pretrain_mamba.py:224`
 
 ```python
 channel_names = batch["channel_names"]  # List of B channel names
@@ -2136,7 +2136,7 @@ Each batch item corresponds to a **single channel**. Multiple channels are never
 **Evidence:**
 
 ### Loss Computation
-**Location**: `pretrain_mamba.py:236-241`
+**Location**: `eeg_analysis/src/training/pretrain_mamba.py:236-241`
 
 ```python
 mask_exp = mask_bool.unsqueeze(-1).expand_as(pred)  # (B, L, D)
@@ -2152,13 +2152,13 @@ loss = masked_diff.pow(2).mean()
 4. Loss computed as `MSE(pred[masked], target[masked])`
 
 ### Target Generation
-**Location**: `pretrain_mamba.py:235`
+**Location**: `eeg_analysis/src/training/pretrain_mamba.py:235`
 
 ```python
 target = (model.module if isinstance(model, DDP) else model).encode_tokens_only(windows)
 ```
 
-**Location**: `mamba_eeg_model.py:230-239`
+**Location**: `eeg_analysis/src/models/mamba_eeg_model.py:230-239`
 
 ```python
 @torch.no_grad()
@@ -2189,7 +2189,7 @@ def encode_tokens_only(self, windows: torch.Tensor) -> torch.Tensor:
 **Evidence:**
 
 ### Collate Function
-**Location**: `eeg_pretraining_dataset.py:157-167`
+**Location**: `eeg_analysis/src/data/eeg_pretraining_dataset.py:157-167`
 
 ```python
 # Allocate tensors
@@ -2209,7 +2209,7 @@ for i, b in enumerate(batch):
 - `masked`: Masked windows (used as model input)
 
 ### Training Loop
-**Location**: `pretrain_mamba.py:220-222`
+**Location**: `eeg_analysis/src/training/pretrain_mamba.py:220-222`
 
 ```python
 windows = batch["windows"].to(device, non_blocking=True)               # (B, L, W)
@@ -2220,7 +2220,7 @@ mask_bool = batch["mask_bool"].to(device, non_blocking=True)           # (B, L)
 Both `windows` (original) and `windows_masked` transferred to GPU.
 
 ### Model Forward
-**Location**: `pretrain_mamba.py:229-235`
+**Location**: `eeg_analysis/src/training/pretrain_mamba.py:229-235`
 
 ```python
 pred = (model.module if isinstance(model, DDP) else model)(
@@ -2268,7 +2268,7 @@ Gradients **cannot** flow from loss → target → windows (original).
 **Evidence:**
 
 ### Forward Pass Pipeline
-**Location**: `mamba_eeg_model.py:241-266`
+**Location**: `eeg_analysis/src/models/mamba_eeg_model.py:241-266`
 
 ```python
 def forward(self, windows_masked: torch.Tensor, channel_names: List[str], seq_lengths: torch.Tensor) -> torch.Tensor:
@@ -2296,7 +2296,7 @@ def forward(self, windows_masked: torch.Tensor, channel_names: List[str], seq_le
 **Critical**: `token_emb` is the **only** component derived from signal content, and it processes `windows_masked` (zeroed tokens).
 
 ### Token Encoder
-**Location**: `mamba_eeg_model.py:106-127`
+**Location**: `eeg_analysis/src/models/mamba_eeg_model.py:106-127`
 
 ```python
 class TokenEncoder(nn.Module):
@@ -2323,7 +2323,7 @@ token_emb[masked] = LayerNorm(Linear([0, 0, ..., 0]) + bias)
 **No information from original signal.**
 
 ### Backbone Architecture
-**Location**: `mamba_eeg_model.py:154-167`
+**Location**: `eeg_analysis/src/models/mamba_eeg_model.py:154-167`
 
 ```python
 def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -2347,7 +2347,7 @@ def forward(self, x: torch.Tensor) -> torch.Tensor:
 
 ### Spatial/Temporal Encodings
 
-**Spatial Encoding** (`mamba_eeg_model.py:63-72`):
+**Spatial Encoding** (`eeg_analysis/src/models/mamba_eeg_model.py:63-72`):
 ```python
 def forward(self, channel_names: List[str]) -> torch.Tensor:
     coords = torch.stack([self._coords_for(nm) for nm in channel_names], dim=0)  # (B, 3)
@@ -2357,7 +2357,7 @@ def forward(self, channel_names: List[str]) -> torch.Tensor:
 - **Same for all tokens in a sequence** (single channel per sequence)
 - Cannot leak signal content
 
-**Temporal Encoding** (`mamba_eeg_model.py:83-103`):
+**Temporal Encoding** (`eeg_analysis/src/models/mamba_eeg_model.py:83-103`):
 ```python
 def forward(self, seq_lengths: torch.Tensor) -> torch.Tensor:
     # Build per-batch normalized positions t/T
@@ -2378,7 +2378,7 @@ def forward(self, seq_lengths: torch.Tensor) -> torch.Tensor:
 
 ### 7.1 BERT-Style Masking Option
 
-**Location**: `eeg_pretraining_dataset.py:179-190`
+**Location**: `eeg_analysis/src/data/eeg_pretraining_dataset.py:179-190`
 
 ```python
 elif masking_style == "bert":
@@ -2415,7 +2415,7 @@ elif masking_style == "bert":
 
 ### 7.3 DDP Synchronization
 
-**Location**: `pretrain_mamba.py:73-74`
+**Location**: `eeg_analysis/src/training/pretrain_mamba.py:73-74`
 
 ```python
 if distributed:
@@ -2484,15 +2484,15 @@ Test different mask ratios to see if more context helps:
 ```bash
 # Experiment 1: Current (position-only learning)
 # mask_ratio: 1.0
-python eeg_analysis/src/training/pretrain_mamba.py --config configs/pretrain.yaml
+python eeg_analysis/src/training/pretrain_mamba.py --config eeg_analysis/configs/pretrain.yaml
 
 # Experiment 2: Standard MAE (context-based learning)  
-# Edit pretrain.yaml: mask_ratio: 0.75
-python eeg_analysis/src/training/pretrain_mamba.py --config configs/pretrain.yaml
+# Edit eeg_analysis/configs/pretrain.yaml: mask_ratio: 0.75
+python eeg_analysis/src/training/pretrain_mamba.py --config eeg_analysis/configs/pretrain.yaml
 
 # Experiment 3: Easy mode (strong context)
-# Edit pretrain.yaml: mask_ratio: 0.5
-python eeg_analysis/src/training/pretrain_mamba.py --config configs/pretrain.yaml
+# Edit eeg_analysis/configs/pretrain.yaml: mask_ratio: 0.5
+python eeg_analysis/src/training/pretrain_mamba.py --config eeg_analysis/configs/pretrain.yaml
 
 # Compare final losses and downstream task performance
 ```
@@ -2769,7 +2769,7 @@ With 100% masking, **every token in every sequence is masked**. This means:
 
 ### Recommendation
 
-Update `configs/pretrain.yaml`:
+Update `eeg_analysis/configs/pretrain.yaml`:
 
 ```yaml
 mask_ratio: 0.75  # or 0.5-0.6 for more context
@@ -2788,15 +2788,15 @@ This configuration change alone could dramatically improve training, assuming yo
 
 | Component | File | Lines |
 |-----------|------|-------|
-| Dataset Loading | `src/data/eeg_pretraining_dataset.py` | 41-124 |
-| Collate + Masking | `src/data/eeg_pretraining_dataset.py` | 127-200 |
-| Training Loop | `src/training/pretrain_mamba.py` | 213-373 |
-| Loss Computation | `src/training/pretrain_mamba.py` | 236-241 |
-| Model Forward | `src/models/mamba_eeg_model.py` | 241-266 |
-| Token Encoder | `src/models/mamba_eeg_model.py` | 106-127 |
-| Windowing (overlap) | `src/processing/window_slicer.py` | 48-71 |
-| Windowing (no overlap) | `src/processing/window_slicer.py` | 114-116 |
-| Config | `configs/pretrain.yaml` | 1-30 |
+| Dataset Loading | `eeg_analysis/src/data/eeg_pretraining_dataset.py` | 41-124 |
+| Collate + Masking | `eeg_analysis/src/data/eeg_pretraining_dataset.py` | 127-200 |
+| Training Loop | `eeg_analysis/src/training/pretrain_mamba.py` | 213-373 |
+| Loss Computation | `eeg_analysis/src/training/pretrain_mamba.py` | 236-241 |
+| Model Forward | `eeg_analysis/src/models/mamba_eeg_model.py` | 241-266 |
+| Token Encoder | `eeg_analysis/src/models/mamba_eeg_model.py` | 106-127 |
+| Windowing (overlap) | `eeg_analysis/src/processing/window_slicer.py` | 48-71 |
+| Windowing (no overlap) | `eeg_analysis/src/processing/window_slicer.py` | 114-116 |
+| Config | `eeg_analysis/configs/pretrain.yaml` | 1-30 |
 
 ---
 
@@ -2845,7 +2845,7 @@ python scripts/diagnose_100pct_masking.py --checkpoint your_model.pt
 
 **Option B: Safe Default**
 ```yaml
-# Update pretrain.yaml
+# Update eeg_analysis/configs/pretrain.yaml
 mask_ratio: 0.75  # Standard MAE configuration
 ```
 
@@ -2928,7 +2928,7 @@ Epoch 2:
 
 ## ✅ The Fix: Frozen Target Encoder
 
-Modified `pretrain_mamba.py` to use a **separate, frozen encoder** for targets in control mode:
+Modified `eeg_analysis/src/training/pretrain_mamba.py` to use a **separate, frozen encoder** for targets in control mode:
 
 ```python
 # Create frozen copy of TokenEncoder at start of training
@@ -3059,7 +3059,7 @@ target = model.encode_tokens_only(windows)  # Varies, but depends on current wei
 cd /home/abin/eeg-mlflow
 source .venv/bin/activate
 
-# Fix is already applied in pretrain_mamba.py
+# Fix is already applied in eeg_analysis/src/training/pretrain_mamba.py
 python eeg_analysis/src/training/pretrain_mamba.py \
     --config eeg_analysis/configs/pretrain.yaml
 ```
@@ -3416,7 +3416,7 @@ EEG data is inherently **temporal** - the order of windows represents the sequen
 
 ## How We Preserve Temporal Order
 
-### 1. Window Slicing (`src/processing/window_slicer.py`)
+### 1. Window Slicing (`eeg_analysis/src/processing/window_slicer.py`)
 
 Windows are created with IDs that track their temporal position:
 - `parent_window_id`: Original window from which sub-windows are derived
@@ -3430,12 +3430,12 @@ Windows are created with IDs that track their temporal position:
 # ...
 ```
 
-### 2. Primary Dataset Creation (`src/processing/primary_dataset.py`)
+### 2. Closed_finetune Dataset Creation (`eeg_analysis/src/processing/closed_finetune_dataset.py`)
 
 **Sorting Strategy:**
 ```python
 # Sort by: Participant → parent_window_id → sub_window_id
-primary_df = primary_df.sort_values([
+main_df = main_df.sort_values([
     'Participant', 
     'parent_window_id', 
     'sub_window_id'
@@ -3447,7 +3447,7 @@ primary_df = primary_df.sort_values([
 - Logs warnings if ordering appears incorrect
 - Confirms temporal order is preserved
 
-### 3. SFT Dataset (`src/data/eeg_sft_dataset.py`)
+### 3. SFT Dataset (`eeg_analysis/src/data/eeg_sft_dataset.py`)
 
 **Dataset Initialization:**
 ```python
@@ -3483,7 +3483,7 @@ if not is_ordered:
 
 When working with EEG data, always verify:
 
-### ✅ Primary Dataset
+### ✅ Closed_finetune Dataset
 ```python
 # Check first participant's windows
 participant_data = df[df['Participant'] == 'sub-001']
@@ -3579,8 +3579,8 @@ df = df[['Participant', 'parent_window_id', 'sub_window_id', ...]]
 ```python
 import pandas as pd
 
-# Load primary dataset
-df = pd.read_parquet("path/to/primary_dataset.parquet")
+# Load closed_finetune dataset
+df = pd.read_parquet("path/to/closed_finetune_dataset.parquet")
 
 # Test ordering for each participant
 for participant in df['Participant'].unique()[:5]:
@@ -3609,7 +3609,7 @@ print("\nIf all participants show ✓, temporal order is preserved!")
 5. Keep window IDs for verification and debugging
 
 **Our Implementation:**
-- ✅ Primary dataset creation: Sorts and verifies
+- ✅ Closed_finetune dataset creation: Sorts and verifies
 - ✅ SFT dataset: Checks and re-sorts if needed
 - ✅ Per-sample loading: Sorts participant windows
 - ✅ Collate function: Preserves order during batching

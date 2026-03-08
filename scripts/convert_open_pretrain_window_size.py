@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-Convert secondary EEG per-run parquet windows to a larger window size by concatenating
+Convert open_pretrain EEG per-run parquet windows to a larger window size by concatenating
 fixed-size, non-overlapping windows. This assumes overlap_seconds = 0 in the source data.
 
 Example:
-  uv run python3 scripts/convert_secondary_window_size.py \
-    --input-root eeg_analysis/secondarydata/raw/sr256_ws4s \
+  uv run python3 scripts/convert_open_pretrain_window_size.py \
+    --input-root eeg_analysis/secondarydata/raw/sr256_ws4s_open_pretrain \
     --output-base eeg_analysis/secondarydata/raw \
     --factor 2
 """
@@ -47,13 +47,14 @@ def _format_window(seconds: float) -> str:
     return str(seconds).rstrip("0").rstrip(".")
 
 
-def _parse_window_tag(path: Path) -> Tuple[float, float]:
-    match = re.search(r"sr(?P<sr>[0-9.]+)_ws(?P<ws>[0-9.]+)s", str(path))
+def _parse_window_tag(path: Path) -> Tuple[float, float, str]:
+    match = re.search(r"sr(?P<sr>[0-9.]+)_ws(?P<ws>[0-9.]+)s(?P<suffix>.*)$", path.name)
     if not match:
         raise ValueError(f"Could not infer sampling rate/window seconds from path: {path}")
     sr = float(match.group("sr"))
     ws = float(match.group("ws"))
-    return sr, ws
+    suffix = match.group("suffix") or ""
+    return sr, ws, suffix
 
 
 def _infer_schema_columns(schema: pa.Schema) -> Tuple[List[str], List[str]]:
@@ -134,6 +135,8 @@ def convert_run(
     if output_path.exists() and not overwrite:
         print(f"Skip existing: {output_path}")
         return 0, 0
+    if output_path.exists() and overwrite:
+        output_path.unlink()
 
     pf = pq.ParquetFile(str(input_path))
     meta_cols, channel_cols = _infer_schema_columns(pf.schema_arrow)
@@ -142,45 +145,54 @@ def convert_run(
     rows_buffer: List[Dict[str, object]] = []
     out_rows: List[Dict[str, object]] = []
     new_sub_id = 0
+    writer = None
 
-    # Infer window length from first row
-    first_batch = next(pf.iter_batches(columns=[channel_cols[0]]), None)
-    if first_batch is None or first_batch.num_rows == 0:
-        return 0, 0
-    first_vals = first_batch.column(0).to_pylist()
-    old_len = len(first_vals[0])
-    new_len = old_len * factor
+    try:
+        # Infer window length from first row
+        first_batch = next(pf.iter_batches(columns=[channel_cols[0]]), None)
+        if first_batch is None or first_batch.num_rows == 0:
+            return 0, 0
+        first_vals = first_batch.column(0).to_pylist()
+        old_len = len(first_vals[0])
+        new_len = old_len * factor
 
-    for row in _iter_rows(pf, columns):
-        rows_buffer.append(row)
-        if len(rows_buffer) == factor:
-            out_rows.append(_concat_windows(rows_buffer, channel_cols, new_sub_id, new_len, pad_value))
-            new_sub_id += 1
-            rows_buffer = []
-        if len(out_rows) >= 1024:
-            df = pa.Table.from_pylist(out_rows)
+        for row in _iter_rows(pf, columns):
+            rows_buffer.append(row)
+            if len(rows_buffer) == factor:
+                out_rows.append(_concat_windows(rows_buffer, channel_cols, new_sub_id, new_len, pad_value))
+                new_sub_id += 1
+                rows_buffer = []
+            if len(out_rows) >= 1024:
+                table = pa.Table.from_pylist(out_rows)
+                output_path.parent.mkdir(parents=True, exist_ok=True)
+                if writer is None:
+                    writer = pq.ParquetWriter(str(output_path), table.schema, compression="snappy")
+                writer.write_table(table)
+                out_rows = []
+
+        dropped = 0
+        if rows_buffer:
+            if pad_value is None:
+                dropped = len(rows_buffer)
+            else:
+                out_rows.append(_concat_windows(rows_buffer, channel_cols, new_sub_id, new_len, pad_value))
+                new_sub_id += 1
+
+        if out_rows:
+            table = pa.Table.from_pylist(out_rows)
             output_path.parent.mkdir(parents=True, exist_ok=True)
-            pq.write_table(df, str(output_path), compression="snappy", append=True)
-            out_rows = []
-
-    dropped = 0
-    if rows_buffer:
-        if pad_value is None:
-            dropped = len(rows_buffer)
-        else:
-            out_rows.append(_concat_windows(rows_buffer, channel_cols, new_sub_id, new_len, pad_value))
-            new_sub_id += 1
-
-    if out_rows:
-        df = pa.Table.from_pylist(out_rows)
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        pq.write_table(df, str(output_path), compression="snappy", append=True)
+            if writer is None:
+                writer = pq.ParquetWriter(str(output_path), table.schema, compression="snappy")
+            writer.write_table(table)
+    finally:
+        if writer is not None:
+            writer.close()
 
     return new_sub_id, dropped
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Convert secondary EEG windows to a larger window size.")
+    parser = argparse.ArgumentParser(description="Convert open_pretrain EEG windows to a larger window size.")
     parser.add_argument("--input-root", type=str, required=True, help="Input windowed dataset root (sr*_ws*s)")
     parser.add_argument("--output-base", type=str, required=True, help="Base output directory (window tag appended)")
     parser.add_argument("--factor", type=int, required=True, help="Multiplicative factor for window size (e.g., 2)")
@@ -190,6 +202,12 @@ def main() -> None:
         type=str,
         default=None,
         help="Pad leftover windows instead of dropping them. Use 'nan' or a numeric value.",
+    )
+    parser.add_argument(
+        "--suffix",
+        type=str,
+        default=None,
+        help="Output dataset suffix. Defaults to inferred suffix from input (or '_open_pretrain').",
     )
     args = parser.parse_args()
 
@@ -205,9 +223,14 @@ def main() -> None:
 
     input_root = Path(args.input_root)
     output_base = Path(args.output_base)
-    sr, ws = _parse_window_tag(input_root)
+    sr, ws, inferred_suffix = _parse_window_tag(input_root)
     new_ws = ws * args.factor
-    output_root = output_base / f"sr{_format_rate(sr)}_ws{_format_window(new_ws)}s"
+    suffix = args.suffix if args.suffix is not None else inferred_suffix
+    if not suffix:
+        suffix = "_open_pretrain"
+    if suffix and not suffix.startswith("_"):
+        suffix = f"_{suffix}"
+    output_root = output_base / f"sr{_format_rate(sr)}_ws{_format_window(new_ws)}s{suffix}"
 
     if not input_root.exists():
         raise FileNotFoundError(f"Input root not found: {input_root}")

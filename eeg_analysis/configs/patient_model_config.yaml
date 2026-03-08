@@ -145,7 +145,7 @@ feature_selection:
 
 # Model Selection (for auto mode)
 model_selection:
-  metric: "f1" # Primary metric for model selection
+  metric: "f1" # Main metric for model selection
   refit: true # Refit on full dataset after selection
 
 # Logging Configuration

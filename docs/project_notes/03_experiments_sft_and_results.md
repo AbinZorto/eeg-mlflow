@@ -7,7 +7,7 @@ This document captures control-experiment protocol, SFT workflow, run configurat
 
 ### Key Findings
 - Control experiments are essential to separate true signal learning from positional or implementation leakage.
-- The SFT pipeline is operationally straightforward once prerequisite artifacts are in place (pretrained checkpoint + primary dataset).
+- The SFT pipeline is operationally straightforward once prerequisite artifacts are in place (pretrained checkpoint + closed_finetune dataset).
 - Automated checkpoint discovery and MLflow integration reduce manual error in fine-tuning cycles.
 - Reported results highlight both what improved and where failure modes remained, supporting iterative tuning rather than one-shot optimization.
 
@@ -142,7 +142,7 @@ This would mean there's a bug in the masking or forward pass that allows unmaske
 cd /home/abin/eeg-mlflow
 source .venv/bin/activate
 
-# Train with control configuration (already set in pretrain.yaml)
+# Train with control configuration (already set in eeg_analysis/configs/pretrain.yaml)
 python eeg_analysis/src/training/pretrain_mamba.py \
     --config eeg_analysis/configs/pretrain.yaml
 ```
@@ -223,7 +223,7 @@ Expected: Loss decreases (learning from context)
 Once you confirm **no leakage** (loss stays high), update config for real training:
 
 ```yaml
-# Update pretrain.yaml
+# Update eeg_analysis/configs/pretrain.yaml
 mask_ratio: 0.75                   # Provide unmasked context
 disable_temporal_encoding: false   # Enable position information
 disable_spatial_encoding: false    # Enable channel information
@@ -288,21 +288,21 @@ python eeg_analysis/src/training/pretrain_mamba.py --config eeg_analysis/configs
 
 1. ✅ Pretrained Mamba model exists: `eeg_analysis/checkpoints/mamba2_eeg_pretrained.pt`
 2. ✅ Raw EEG data available
-3. ✅ Configs set up: `pretrain.yaml`, `finetune.yaml`, `processing_config.yaml`
+3. ✅ Configs set up: `eeg_analysis/configs/pretrain.yaml`, `eeg_analysis/configs/finetune.yaml`, `eeg_analysis/configs/processing_config.yaml`
 
 ---
 
 ## Three-Step Workflow
 
-### 1️⃣ Create Primary Dataset (5-10 minutes)
+### 1️⃣ Create Closed_finetune Dataset (5-10 minutes)
 
 ```bash
-uv run python3 eeg_analysis/run_pipeline.py \
+uv run python3 eeg_analysis/run_representation_pipeline.py \
   --config eeg_analysis/configs/processing_config.yaml \
-  process-primary
+  process-closed-finetune
 ```
 
-**Output**: `eeg_analysis/data/processed/features/primary/8s_af7-af8-tp9-tp10_primary_dataset.parquet`
+**Output**: `eeg_analysis/data/processed/features/closed_finetune/8s_af7-af8-tp9-tp10_closed_finetune.parquet`
 
 **Note**: Windows are automatically sorted by `Participant → parent_window_id → sub_window_id` to preserve temporal order (critical for sequence modeling).
 
@@ -314,7 +314,7 @@ uv run python3 eeg_analysis/run_pipeline.py \
 uv run python3 eeg_analysis/src/training/finetune_mamba.py \
   --config eeg_analysis/configs/finetune.yaml \
   --pretrain-config eeg_analysis/configs/pretrain.yaml \
-  --data-path eeg_analysis/data/processed/features/primary/8s_af7-af8-tp9-tp10_primary_dataset.parquet \
+  --data-path eeg_analysis/data/processed/features/closed_finetune/8s_af7-af8-tp9-tp10_closed_finetune.parquet \
   --output-dir eeg_analysis/finetuned_models
 ```
 
@@ -335,7 +335,7 @@ Navigate to experiment: `eeg_finetuning_mamba2`
 
 ## Key Configuration Options
 
-### `configs/finetune.yaml`
+### `eeg_analysis/configs/finetune.yaml`
 
 ```yaml
 lr: 1.0e-4              # ↓ Lower if training unstable
@@ -344,7 +344,7 @@ epochs: 50              # ↑ Increase for better performance
 freeze_backbone: true   # false = train all layers (slower, may improve)
 ```
 
-### `configs/pretrain.yaml`
+### `eeg_analysis/configs/pretrain.yaml`
 
 Used to find the pretrained checkpoint:
 ```yaml
@@ -394,10 +394,10 @@ Fine-tuned models append `_finetuned`.
 **Fix**: Run pretraining first or check config parameters match
 
 ### ❌ "Data file not found"
-**Fix**: Run `process-primary` command first
+**Fix**: Run `process-closed-finetune` command first
 
 ### ❌ Out of memory
-**Fix**: Reduce `batch_size` in `finetune.yaml`
+**Fix**: Reduce `batch_size` in `eeg_analysis/configs/finetune.yaml`
 
 ### ❌ Poor performance
 **Fix**: Try `freeze_backbone: false` or increase epochs
@@ -411,16 +411,16 @@ Fine-tuned models append `_finetuned`.
 uv run python3 eeg_analysis/src/training/pretrain_mamba.py \
   --config eeg_analysis/configs/pretrain.yaml
 
-# 2. Create primary dataset
-uv run python3 eeg_analysis/run_pipeline.py \
+# 2. Create closed_finetune dataset
+uv run python3 eeg_analysis/run_representation_pipeline.py \
   --config eeg_analysis/configs/processing_config.yaml \
-  process-primary
+  process-closed-finetune
 
 # 3. Fine-tune
 uv run python3 eeg_analysis/src/training/finetune_mamba.py \
   --config eeg_analysis/configs/finetune.yaml \
   --pretrain-config eeg_analysis/configs/pretrain.yaml \
-  --data-path eeg_analysis/data/processed/features/primary/8s_af7-af8-tp9-tp10_primary_dataset.parquet \
+  --data-path eeg_analysis/data/processed/features/closed_finetune/8s_af7-af8-tp9-tp10_closed_finetune.parquet \
   --output-dir eeg_analysis/finetuned_models
 
 # 4. View results
@@ -448,17 +448,17 @@ For detailed documentation, see `SFT_PIPELINE_SUMMARY.md`.
 ## Overview
 
 This document describes the complete pipeline for:
-1. Creating primary datasets (windowed EEG data without feature extraction)
+1. Creating closed_finetune datasets (windowed EEG data without feature extraction)
 2. Fine-tuning pretrained Mamba models for remission classification
 3. Automatic model discovery based on pretraining configuration
 
 ---
 
-## 1. Primary Dataset Creation
+## 1. Closed_finetune Dataset Creation
 
-### What is the Primary Dataset?
+### What is the Closed_finetune Dataset?
 
-The **primary dataset** is raw windowed EEG data concatenated across all participants, ready for direct model input. Unlike the feature-extracted dataset, it preserves the raw signal data for each channel.
+The **closed_finetune dataset** is raw windowed EEG data concatenated across all participants, ready for direct model input. Unlike the feature-extracted dataset, it preserves the raw signal data for each channel.
 
 **Structure:**
 - `Participant`: Participant ID
@@ -474,14 +474,14 @@ Windows are sorted by `Participant → parent_window_id → sub_window_id` to pr
 2. Windows represent consecutive time segments from EEG recordings
 3. Scrambling window order would destroy temporal patterns the model needs to learn
 
-The primary dataset creation automatically sorts and verifies window ordering.
+The closed_finetune dataset creation automatically sorts and verifies window ordering.
 
-### Creating the Primary Dataset
+### Creating the Closed_finetune Dataset
 
 ```bash
-uv run python3 eeg_analysis/run_pipeline.py \
+uv run python3 eeg_analysis/run_representation_pipeline.py \
   --config eeg_analysis/configs/processing_config.yaml \
-  process-primary
+  process-closed-finetune
 ```
 
 **What it does:**
@@ -489,13 +489,13 @@ uv run python3 eeg_analysis/run_pipeline.py \
 2. Applies upsampling, filtering, downsampling, windowing, DC offset removal
 3. **Skips feature extraction** (unlike the regular `process` command)
 4. Concatenates remission and non-remission windowed data
-5. Saves to `eeg_analysis/data/processed/features/primary/`
+5. Saves to `eeg_analysis/data/processed/features/closed_finetune/`
 6. Logs dataset to MLflow with tags for discovery
 
 **Output:**
-- File: `{window_size}s_{channels}_primary_dataset.parquet`
-- Example: `8s_af7-af8-tp9-tp10_primary_dataset.parquet`
-- MLflow dataset name: `EEG_8s_af7-af8-tp9-tp10_{N}windows_primary`
+- File: `{window_size}s_{channels}_closed_finetune.parquet`
+- Example: `8s_af7-af8-tp9-tp10_closed_finetune.parquet`
+- MLflow dataset name: `EEG_8s_af7-af8-tp9-tp10_{N}windows_closed_finetune`
 
 ---
 
@@ -518,10 +518,10 @@ uv run python3 eeg_analysis/run_pipeline.py \
 
 ### Automatic Checkpoint Discovery
 
-The fine-tuning script **automatically finds the pretrained checkpoint** based on parameters in `pretrain.yaml`:
+The fine-tuning script **automatically finds the pretrained checkpoint** based on parameters in `eeg_analysis/configs/pretrain.yaml`:
 
 ```yaml
-# pretrain.yaml
+# eeg_analysis/configs/pretrain.yaml
 d_model: 256
 num_layers: 2
 mask_ratio: 0.2
@@ -537,17 +537,17 @@ masking_style: "mae"
 uv run python3 eeg_analysis/src/training/finetune_mamba.py \
   --config eeg_analysis/configs/finetune.yaml \
   --pretrain-config eeg_analysis/configs/pretrain.yaml \
-  --data-path eeg_analysis/data/processed/features/primary/8s_af7-af8-tp9-tp10_primary_dataset.parquet \
+  --data-path eeg_analysis/data/processed/features/closed_finetune/8s_af7-af8-tp9-tp10_closed_finetune.parquet \
   --output-dir eeg_analysis/finetuned_models
 ```
 
 **Arguments:**
 - `--config`: Fine-tuning hyperparameters (lr, epochs, batch_size, etc.)
 - `--pretrain-config`: Pretraining config (used to find checkpoint and load model architecture)
-- `--data-path`: Path to primary dataset parquet file
+- `--data-path`: Path to closed_finetune dataset parquet file
 - `--output-dir`: Where to save fine-tuned models
 
-### Configuration (`configs/finetune.yaml`)
+### Configuration (`eeg_analysis/configs/finetune.yaml`)
 
 ```yaml
 # Training hyperparameters
@@ -574,7 +574,7 @@ mlflow_experiment: "eeg_finetuning_mamba2"
 ### Training Process
 
 1. **Data Loading**:
-   - Loads primary dataset
+   - Loads closed_finetune dataset
    - **Verifies temporal ordering** (windows sorted by participant → parent_window_id → sub_window_id)
    - Splits by participant into train/val/test (stratified)
    - Each participant's windows remain in temporal order within their split
@@ -638,15 +638,15 @@ uv run torchrun --standalone --nproc_per_node=2 \
 
 **Output**: `eeg_analysis/checkpoints/mamba2_eeg_pretrained.pt`
 
-### Step 2: Create Primary Dataset
+### Step 2: Create Closed_finetune Dataset
 
 ```bash
-uv run python3 eeg_analysis/run_pipeline.py \
+uv run python3 eeg_analysis/run_representation_pipeline.py \
   --config eeg_analysis/configs/processing_config.yaml \
-  process-primary
+  process-closed-finetune
 ```
 
-**Output**: `eeg_analysis/data/processed/features/primary/8s_af7-af8-tp9-tp10_primary_dataset.parquet`
+**Output**: `eeg_analysis/data/processed/features/closed_finetune/8s_af7-af8-tp9-tp10_closed_finetune.parquet`
 
 ### Step 3: Fine-Tune for Classification
 
@@ -654,7 +654,7 @@ uv run python3 eeg_analysis/run_pipeline.py \
 uv run python3 eeg_analysis/src/training/finetune_mamba.py \
   --config eeg_analysis/configs/finetune.yaml \
   --pretrain-config eeg_analysis/configs/pretrain.yaml \
-  --data-path eeg_analysis/data/processed/features/primary/8s_af7-af8-tp9-tp10_primary_dataset.parquet \
+  --data-path eeg_analysis/data/processed/features/closed_finetune/8s_af7-af8-tp9-tp10_closed_finetune.parquet \
   --output-dir eeg_analysis/finetuned_models
 ```
 
@@ -668,43 +668,43 @@ uv run python3 eeg_analysis/src/training/finetune_mamba.py \
 
 ### New Files
 
-1. **`src/processing/primary_dataset.py`**
-   - Creates primary dataset from windowed data
+1. **`eeg_analysis/src/processing/closed_finetune_dataset.py`**
+   - Creates closed_finetune dataset from windowed data
    - Concatenates remission and non-remission groups
    - Logs to MLflow
 
-2. **`src/data/eeg_sft_dataset.py`**
+2. **`eeg_analysis/src/data/eeg_sft_dataset.py`**
    - PyTorch Dataset for supervised fine-tuning
-   - Loads primary dataset
+   - Loads closed_finetune dataset
    - Groups windows by participant
    - Handles train/val/test splits
 
-3. **`src/models/mamba_sft_model.py`**
+3. **`eeg_analysis/src/models/mamba_sft_model.py`**
    - `MambaEEGClassifier`: Mamba model with classification head
    - Loads pretrained weights
    - Supports backbone freezing
    - Aggregates across channels and windows
 
-4. **`src/training/finetune_mamba.py`**
+4. **`eeg_analysis/src/training/finetune_mamba.py`**
    - Fine-tuning training script
    - Automatic checkpoint discovery
    - MLflow integration
    - Evaluation and model registration
 
-5. **`configs/finetune.yaml`**
+5. **`eeg_analysis/configs/finetune.yaml`**
    - Fine-tuning hyperparameters
    - Data split configuration
    - MLflow settings
 
 ### Modified Files
 
-1. **`run_pipeline.py`**
-   - Added `process-primary` command
-   - Creates primary dataset without feature extraction
+1. **`eeg_analysis/run_representation_pipeline.py`**
+   - Added `process-closed-finetune` command
+   - Creates closed_finetune dataset without feature extraction
 
 2. **`README.md`**
    - Consolidated project documentation now includes the SFT workflow
-   - Usage examples for primary dataset creation and fine-tuning
+   - Usage examples for closed_finetune dataset creation and fine-tuning
 
 ---
 
@@ -748,19 +748,19 @@ uv run python3 eeg_analysis/src/training/finetune_mamba.py \
 2. Verify config parameters match: `d_model`, `num_layers`, `mask_ratio`, `masking_style`
 3. Run pretraining if checkpoint missing
 
-### Primary Dataset Not Found
+### Closed_finetune Dataset Not Found
 
 **Error**: `Data file not found`
 
 **Solution**:
-1. Run `process-primary` command first
-2. Check path matches config: `{window_size}s_{channels}_primary_dataset.parquet`
+1. Run `process-closed-finetune` command first
+2. Check path matches config: `{window_size}s_{channels}_closed_finetune.parquet`
 3. Verify windowed data exists: `ls eeg_analysis/data/interim/windowed/`
 
 ### Out of Memory
 
 **Solution**:
-1. Reduce `batch_size` in `finetune.yaml`
+1. Reduce `batch_size` in `eeg_analysis/configs/finetune.yaml`
 2. Use gradient accumulation (modify training script)
 3. Use smaller model (reduce `d_model` or `num_layers` in pretraining)
 
@@ -787,12 +787,12 @@ uv run python3 eeg_analysis/src/training/sweep_mask_ratio.py \
 
 # Fine-tune each pretrained model
 for mask_ratio in 20 30 40 50 60 70 80; do
-  # Update pretrain.yaml with mask_ratio
+  # Update eeg_analysis/configs/pretrain.yaml with mask_ratio
   # Run fine-tuning
   uv run python3 eeg_analysis/src/training/finetune_mamba.py \
     --config eeg_analysis/configs/finetune.yaml \
     --pretrain-config eeg_analysis/configs/pretrain.yaml \
-    --data-path eeg_analysis/data/processed/features/primary/8s_af7-af8-tp9-tp10_primary_dataset.parquet \
+    --data-path eeg_analysis/data/processed/features/closed_finetune/8s_af7-af8-tp9-tp10_closed_finetune.parquet \
     --output-dir eeg_analysis/finetuned_models
 done
 ```
@@ -813,7 +813,7 @@ Navigate to `eeg_finetuning_mamba2` experiment to compare:
 ## Summary
 
 The SFT pipeline provides:
-1. **Primary dataset creation** - Raw windowed data for direct model input
+1. **Closed_finetune dataset creation** - Raw windowed data for direct model input
 2. **Automatic checkpoint discovery** - No manual path management
 3. **Flexible fine-tuning** - Freeze or unfreeze backbone layers
 4. **Comprehensive evaluation** - Multiple metrics, MLflow tracking

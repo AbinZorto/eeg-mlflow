@@ -299,8 +299,14 @@ def main() -> None:
     base_path = Path(dataset_path)
     base_name = base_path.name
     if not (base_name.startswith("sr") and "_ws" in base_name):
-        window_tag = f"sr{_format_rate(sampling_rate)}_ws{_format_window(window_seconds)}s"
-        dataset_root = str(base_path / window_tag)
+        dataset_suffix = str(cfg.get("open_pretrain_dataset_suffix", "open_pretrain")).strip() or "open_pretrain"
+        preferred_window_tag = f"sr{_format_rate(sampling_rate)}_ws{_format_window(window_seconds)}s_{dataset_suffix}"
+        preferred_root = base_path / preferred_window_tag
+        if preferred_root.exists():
+            dataset_root = str(preferred_root)
+        else:
+            fallback_window_tag = f"sr{_format_rate(sampling_rate)}_ws{_format_window(window_seconds)}s"
+            dataset_root = str(base_path / fallback_window_tag)
 
     ds = EEGPretrainingDataset(dataset_root=dataset_root, window_length=int(cfg.get("window_length", 2048)), split="train", val_ratio=float(cfg.get("val_ratio", 0.2)))
     val_ds = EEGPretrainingDataset(dataset_root=dataset_root, window_length=int(cfg.get("window_length", 2048)), split="val", val_ratio=float(cfg.get("val_ratio", 0.2)))

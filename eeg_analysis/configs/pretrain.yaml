@@ -5,6 +5,7 @@
 # Paths
 asa_path: "/home/abin/eeg-mlflow/eeg_analysis/secondarydata/raw/asa_electrodes.txt"
 dataset_path: "/home/abin/eeg-mlflow/eeg_analysis/secondarydata/raw"   # base folder; window subfolder is derived from processing_config.yaml
+open_pretrain_dataset_suffix: "open_pretrain"
 save_dir: "/home/abin/eeg-mlflow/eeg_analysis/checkpoints"
 mlflow_tracking_uri: "mlruns"
 mlflow_experiment: "eeg_pretraining_mamba2"
@@ -12,6 +13,20 @@ mlflow_experiment: "eeg_pretraining_mamba2"
 # Model
 # FLEXIBLE ARCHITECTURE: Lightweight projection if window_length != d_model
 # Window size/Hz are sourced from configs/processing_config.yaml
+# NOTE:
+# - Top-level model keys below remain for direct pretrain_mamba.py compatibility.
+# - run_representation_pipeline.py can run multiple model profiles from `models`.
+active_model: "mamba"
+models:
+  mamba:
+    trainer_script: "eeg_analysis/src/training/pretrain_mamba.py"
+    d_model: 64
+    num_layers: 4
+  mamba_deep:
+    trainer_script: "eeg_analysis/src/training/pretrain_mamba.py"
+    d_model: 128
+    num_layers: 6
+
 d_model:  64 
 num_layers: 4
 
