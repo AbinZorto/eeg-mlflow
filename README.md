@@ -19,7 +19,7 @@ All commands below assume you run from the repository root: `/home/abin/eeg-mlfl
 - `scripts/build_secondary_dataset.py`: secondary EEG dataset build CLI.
 - `scripts/convert_secondary_window_size.py`: utility to up-convert secondary window sizes.
 - `mlruns/`: MLflow tracking data.
-- `models/`: serialized trained models and metadata.
+- `models/`: local outputs (predictions/metadata, plus legacy artifacts).
 
 ## Setup
 
@@ -27,7 +27,7 @@ All commands below assume you run from the repository root: `/home/abin/eeg-mlfl
 2. Install dependencies.
 
 ```bash
-python3 -m venv .venv
+uv run -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
@@ -37,7 +37,7 @@ pip install -r requirements.txt
 ### 1) Process raw EEG into feature dataset
 
 ```bash
-python3 eeg_analysis/run_pipeline.py \
+uv run eeg_analysis/run_pipeline.py \
   --config eeg_analysis/configs/processing_config.yaml \
   process
 ```
@@ -58,7 +58,7 @@ Current default processing config (`eeg_analysis/configs/processing_config.yaml`
 ### 2) (Optional) Build primary dataset for sequence models
 
 ```bash
-python3 eeg_analysis/run_pipeline.py \
+uv run eeg_analysis/run_pipeline.py \
   --config eeg_analysis/configs/processing_config.yaml \
   process-primary
 ```
@@ -68,7 +68,7 @@ This creates a primary parquet dataset from windowed channel data (without featu
 ### 3) List available MLflow datasets
 
 ```bash
-python3 eeg_analysis/run_pipeline.py \
+uv run eeg_analysis/run_pipeline.py \
   --config eeg_analysis/configs/window_model_config.yaml \
   list-datasets
 ```
@@ -78,7 +78,7 @@ python3 eeg_analysis/run_pipeline.py \
 Window-level example:
 
 ```bash
-python3 eeg_analysis/run_pipeline.py \
+uv run eeg_analysis/run_pipeline.py \
   --config eeg_analysis/configs/window_model_config.yaml \
   train \
   --level window \
@@ -88,7 +88,7 @@ python3 eeg_analysis/run_pipeline.py \
 Patient-level example:
 
 ```bash
-python3 eeg_analysis/run_pipeline.py \
+uv run eeg_analysis/run_pipeline.py \
   --config eeg_analysis/configs/patient_model_config.yaml \
   train \
   --level patient \
@@ -99,16 +99,26 @@ Notes:
 
 - Training first tries MLflow dataset discovery; if not found, it falls back to `data.feature_path` from the training config.
 - You can force a specific dataset with `--use-dataset-from-run <mlflow_run_id>`.
-- Model IDs are saved in metadata files under `models/window_level/metadata.json` or `models/patient_level/metadata.json`.
+- Models are saved only in MLflow artifacts (use run IDs / model URIs for loading).
 
 ### 5) Evaluate a saved model
 
 ```bash
-python3 eeg_analysis/run_pipeline.py \
+uv run eeg_analysis/run_pipeline.py \
   --config eeg_analysis/configs/window_model_config.yaml \
   evaluate \
-  --model-id <model_uuid> \
+  --run-id <mlflow_run_id> \
   --data-path eeg_analysis/data/processed/features/10s_af7_af8_tp9_tp10_window_features_seq.parquet
+```
+
+Alternative:
+
+```bash
+uv run eeg_analysis/run_pipeline.py \
+  --config eeg_analysis/configs/window_model_config.yaml \
+  evaluate \
+  --model-uri runs:/<mlflow_run_id>/model \
+  --level window
 ```
 
 Passing `--data-path` explicitly is the safest option.
@@ -134,7 +144,7 @@ Supported methods:
 List available categories:
 
 ```bash
-python3 eeg_analysis/run_pipeline.py \
+uv run eeg_analysis/run_pipeline.py \
   --config eeg_analysis/configs/window_model_config.yaml \
   train \
   --level window \
@@ -145,7 +155,7 @@ python3 eeg_analysis/run_pipeline.py \
 Train with selected categories:
 
 ```bash
-python3 eeg_analysis/run_pipeline.py \
+uv run eeg_analysis/run_pipeline.py \
   --config eeg_analysis/configs/window_model_config.yaml \
   train \
   --level window \
@@ -165,7 +175,7 @@ Implemented categories are defined in `eeg_analysis/src/utils/feature_filter.py`
 ### 1) Build secondary EEG dataset (per-run parquet windows)
 
 ```bash
-python3 scripts/build_secondary_dataset.py \
+uv run scripts/build_secondary_dataset.py \
   --config eeg_analysis/configs/secondary_processing.yaml \
   build-secondary
 ```
@@ -181,7 +191,7 @@ Key config: `eeg_analysis/configs/secondary_processing.yaml`
 ### 2) (Optional) Convert secondary window size
 
 ```bash
-python3 scripts/convert_secondary_window_size.py \
+uv run scripts/convert_secondary_window_size.py \
   --input-root eeg_analysis/secondarydata/raw/sr256_ws4s \
   --output-base eeg_analysis/secondarydata/raw \
   --factor 2
@@ -190,7 +200,7 @@ python3 scripts/convert_secondary_window_size.py \
 ### 3) Self-supervised pretraining
 
 ```bash
-python3 eeg_analysis/src/training/pretrain_mamba.py \
+uv run eeg_analysis/src/training/pretrain_mamba.py \
   --config eeg_analysis/configs/pretrain.yaml
 ```
 
@@ -206,14 +216,14 @@ torchrun --standalone --nproc_per_node=2 \
 Mask-ratio sweep:
 
 ```bash
-python3 eeg_analysis/src/training/sweep_mask_ratio.py \
+uv run eeg_analysis/src/training/sweep_mask_ratio.py \
   --config eeg_analysis/configs/pretrain.yaml
 ```
 
 ### 4) Supervised fine-tuning
 
 ```bash
-python3 eeg_analysis/src/training/finetune_mamba.py \
+uv run eeg_analysis/src/training/finetune_mamba.py \
   --config eeg_analysis/configs/finetune.yaml \
   --pretrain-config eeg_analysis/configs/pretrain.yaml \
   --data-path eeg_analysis/data/processed/features/primary/10s_af7-af8-tp9-tp10_primary_dataset.parquet \
@@ -250,13 +260,13 @@ This section is the single command index for the current codebase.
 Show top-level help:
 
 ```bash
-python3 eeg_analysis/run_pipeline.py --help
+uv run eeg_analysis/run_pipeline.py --help
 ```
 
 Show command-specific help (requires a config):
 
 ```bash
-python3 eeg_analysis/run_pipeline.py \
+uv run eeg_analysis/run_pipeline.py \
   --config eeg_analysis/configs/window_model_config.yaml \
   train --help
 ```
@@ -264,15 +274,15 @@ python3 eeg_analysis/run_pipeline.py \
 Run pipeline stages:
 
 ```bash
-python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/processing_config.yaml process
-python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/processing_config.yaml process-primary
-python3 eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml list-datasets
+uv run eeg_analysis/run_pipeline.py --config eeg_analysis/configs/processing_config.yaml process
+uv run eeg_analysis/run_pipeline.py --config eeg_analysis/configs/processing_config.yaml process-primary
+uv run eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml list-datasets
 ```
 
 Training template:
 
 ```bash
-python3 eeg_analysis/run_pipeline.py \
+uv run eeg_analysis/run_pipeline.py \
   --config eeg_analysis/configs/window_model_config.yaml \
   train \
   --level window \
@@ -287,10 +297,10 @@ python3 eeg_analysis/run_pipeline.py \
 Evaluation template:
 
 ```bash
-python3 eeg_analysis/run_pipeline.py \
+uv run eeg_analysis/run_pipeline.py \
   --config eeg_analysis/configs/window_model_config.yaml \
   evaluate \
-  --model-id <model_uuid> \
+  --run-id <mlflow_run_id> \
   --data-path <features.parquet> \
   --window-size 10
 ```
@@ -335,13 +345,13 @@ Notes:
 Secondary dataset builder:
 
 ```bash
-python3 scripts/build_secondary_dataset.py --config eeg_analysis/configs/secondary_processing.yaml build-secondary
+uv run scripts/build_secondary_dataset.py --config eeg_analysis/configs/secondary_processing.yaml build-secondary
 ```
 
 Secondary window-size conversion:
 
 ```bash
-python3 scripts/convert_secondary_window_size.py \
+uv run scripts/convert_secondary_window_size.py \
   --input-root eeg_analysis/secondarydata/raw/sr256_ws4s \
   --output-base eeg_analysis/secondarydata/raw \
   --factor 2
@@ -350,7 +360,7 @@ python3 scripts/convert_secondary_window_size.py \
 Pretraining:
 
 ```bash
-python3 eeg_analysis/src/training/pretrain_mamba.py --config eeg_analysis/configs/pretrain.yaml
+uv run eeg_analysis/src/training/pretrain_mamba.py --config eeg_analysis/configs/pretrain.yaml
 ```
 
 Distributed pretraining:
@@ -365,14 +375,14 @@ torchrun --standalone --nproc_per_node=2 \
 Mask-ratio sweep:
 
 ```bash
-python3 eeg_analysis/src/training/sweep_mask_ratio.py --config eeg_analysis/configs/pretrain.yaml
-python3 eeg_analysis/src/training/sweep_mask_ratio.py --config eeg_analysis/configs/pretrain.yaml --mask-ratios 0.2,0.4,0.6 --torchrun --num-gpus 2
+uv run eeg_analysis/src/training/sweep_mask_ratio.py --config eeg_analysis/configs/pretrain.yaml
+uv run eeg_analysis/src/training/sweep_mask_ratio.py --config eeg_analysis/configs/pretrain.yaml --mask-ratios 0.2,0.4,0.6 --torchrun --num-gpus 2
 ```
 
 SFT / fine-tuning:
 
 ```bash
-python3 eeg_analysis/src/training/finetune_mamba.py \
+uv run eeg_analysis/src/training/finetune_mamba.py \
   --config eeg_analysis/configs/finetune.yaml \
   --pretrain-config eeg_analysis/configs/pretrain.yaml \
   --data-path eeg_analysis/data/processed/features/primary/10s_af7-af8-tp9-tp10_primary_dataset.parquet \
@@ -382,9 +392,9 @@ python3 eeg_analysis/src/training/finetune_mamba.py \
 ### Position Leakage / Masking Diagnostics
 
 ```bash
-python3 scripts/diagnose_100pct_masking.py
-python3 scripts/diagnose_100pct_masking.py --checkpoint <checkpoint.pt> --num-samples 100 --diagnostic-mask-ratio 1.0
-python3 scripts/diagnose_100pct_masking.py --checkpoint <checkpoint.pt> --decode-to-signal --mask-replacement gaussian_noise
+uv run scripts/diagnose_100pct_masking.py
+uv run scripts/diagnose_100pct_masking.py --checkpoint <checkpoint.pt> --num-samples 100 --diagnostic-mask-ratio 1.0
+uv run scripts/diagnose_100pct_masking.py --checkpoint <checkpoint.pt> --decode-to-signal --mask-replacement gaussian_noise
 ```
 
 ### Dataset Helper Scripts
@@ -392,21 +402,21 @@ python3 scripts/diagnose_100pct_masking.py --checkpoint <checkpoint.pt> --decode
 Find matching dataset run:
 
 ```bash
-python3 scripts/find_dataset.py <window_seconds>
-python3 scripts/find_dataset.py <window_seconds> sequential
-python3 scripts/find_dataset.py <window_seconds> completion
+uv run scripts/find_dataset.py <window_seconds>
+uv run scripts/find_dataset.py <window_seconds> sequential
+uv run scripts/find_dataset.py <window_seconds> completion
 ```
 
 Create filtered-channel dataset:
 
 ```bash
-python3 scripts/filter_dataset.py <run_id> "af7 af8" <window_seconds>
+uv run scripts/filter_dataset.py <run_id> "af7 af8" <window_seconds>
 ```
 
 ### Random-State Sweep Scripts
 
 ```bash
-python3 scripts/sweep_random_state.py --config eeg_analysis/configs/window_model_config
+uv run scripts/sweep_random_state.py --config eeg_analysis/configs/window_model_config
 # Optional: override model from config by editing top-level model_type first
 ```
 
@@ -423,14 +433,14 @@ Common optional flags for all sweep scripts:
 Clean up old model versions:
 
 ```bash
-python3 scripts/cleanup_old_model_versions.py --model <registered_model_name> --keep 1
-python3 scripts/cleanup_old_model_versions.py --all --keep 2
+uv run scripts/cleanup_old_model_versions.py --model <registered_model_name> --keep 1
+uv run scripts/cleanup_old_model_versions.py --all --keep 2
 ```
 
 Count Mamba model parameters:
 
 ```bash
-python3 scripts/count_model_parameters.py
+uv run scripts/count_model_parameters.py
 ```
 
 MLflow UI helpers:
@@ -445,10 +455,10 @@ mlflow ui --port 5000
 
 ```bash
 pytest eeg_analysis/tests
-python3 scripts/test_dataset_logging.py
-python3 scripts/test_feature_filtering.py
-python3 scripts/test_feature_filtering.py list
-python3 scripts/test_model_utils.py
+uv run scripts/test_dataset_logging.py
+uv run scripts/test_feature_filtering.py
+uv run scripts/test_feature_filtering.py list
+uv run scripts/test_model_utils.py
 ```
 
 ## Important Path Note

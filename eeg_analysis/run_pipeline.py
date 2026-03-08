@@ -9,7 +9,6 @@ from pathlib import Path
 from src.utils.logger import setup_logger
 from src.utils.config import load_config
 from src.utils.data_versioning import create_data_versioner, DataVersioner
-from src.utils.model_serialization import create_model_serializer
 
 from src.processing.data_loader import load_eeg_data
 from src.processing.filter import filter_eeg_data
@@ -26,6 +25,17 @@ from src.models.evaluation import ModelEvaluator
 from src.utils.feature_filter import FeatureFilter
 
 logger = setup_logger(__name__)
+
+
+def _extract_run_id_from_model_uri(model_uri: str):
+    """Extract run ID from a runs:/ URI if possible."""
+    if not model_uri or not model_uri.startswith("runs:/"):
+        return None
+    uri_without_prefix = model_uri[len("runs:/"):]
+    uri_parts = uri_without_prefix.split("/", 1)
+    if not uri_parts or not uri_parts[0]:
+        return None
+    return uri_parts[0]
 
 def setup_mlflow_tracking(config):
     """Set up MLflow tracking with error handling and fallback for malformed experiments.
@@ -576,8 +586,6 @@ def train(ctx, level, window_size, model_type, enable_feature_selection, n_featu
     
     logger.info(f"Model type '{model_type}' validated against available models: {', '.join(available_models)}")
 
-    model_serializer = create_model_serializer(config['paths']['models'])
-    
     # Load processing config to get window size, channels, and ordering if not provided
     try:
         script_dir = Path(__file__).parent
@@ -849,53 +857,15 @@ def train(ctx, level, window_size, model_type, enable_feature_selection, n_featu
             for key, value in feature_filtering_info.items():
                 mlflow.log_param(key, value)
             
-            # Train model with dataset
-            model = trainer.train(dataset=dataset_to_use)
-            
-            # Get sample data for model signature - prioritize dataset if available
-            if dataset_to_use:
-                df = dataset_to_use.df
-            else:
-                data_path = config['data']['feature_path']
-                df = pd.read_parquet(data_path)
-            
-            if level == 'patient':
-                # For patient-level training, aggregate the data first like in training
-                patient_df = trainer.aggregate_windows(df)
-                X, y, _ = trainer._prepare_data(patient_df)
-            else:
-                X, y, _ = trainer._prepare_data(df)
-            
-            # Use the same feature selection that was applied during training
-            if hasattr(trainer, 'selected_feature_names'):
-                X_sample = X[trainer.selected_feature_names].iloc[:100]  # Use selected features only
-            else:
-                X_sample = X.iloc[:100]  # Fallback to all features if no selection was applied
-                
-            y_proba_sample = model.predict_proba(X_sample)[:, 1]
-            
-            # Log window size as a parameter
+            # Train model with dataset (trainer logs model artifacts directly to MLflow).
+            trainer.train(dataset=dataset_to_use)
+            mlflow.log_param("level", level)
             mlflow.log_param("window_size", window_size)
-            
-            # Save model
-            model_info = {
-                'level': level, 
-                'config': config,
-                'window_size': window_size,
-                'X_sample': X_sample,
-                'y_proba_sample': y_proba_sample
-            }
-            
-            # Add dataset info to model metadata if available
-            if dataset_to_use:
-                model_info['dataset_name'] = dataset_to_use.name
-                model_info['dataset_digest'] = dataset_to_use.digest
-                model_info['used_mlflow_dataset'] = True
-            else:
-                model_info['used_mlflow_dataset'] = False
-            
-            model_id = model_serializer.save_model(model, model_info=model_info)
-            
+
+            run_id = run.info.run_id
+            model_uri = f"runs:/{run_id}/model"
+            logger.info(f"Training run ID: {run_id}")
+            logger.info(f"MLflow model URI: {model_uri}")
             logger.info(f"{level.capitalize()} training completed successfully")
             
     except Exception as e:
@@ -903,51 +873,25 @@ def train(ctx, level, window_size, model_type, enable_feature_selection, n_featu
         raise
 
 @cli.command()
-@click.option('--model-id', type=str, required=True)
+@click.option('--run-id', type=str, required=False, help='MLflow run ID containing a model artifact at path "model"')
+@click.option('--model-uri', type=str, required=False, help='MLflow model URI (for example: runs:/<run_id>/model)')
+@click.option('--level', type=click.Choice(['patient', 'window']), required=False, help='Evaluation level override; if omitted, inferred from run params')
 @click.option('--data-path', type=click.Path(exists=True), required=False)
 @click.option('--window-size', type=int, help='Window size in seconds for feature path')
 @click.pass_context
-def evaluate(ctx, model_id, data_path, window_size):
+def evaluate(ctx, run_id, model_uri, level, data_path, window_size):
     """Evaluate model performance"""
     config = ctx.obj['config']
-    model_serializer = create_model_serializer(config['paths']['models'])
     evaluator = ModelEvaluator()
-    
-    # If data path not provided, construct it from config and window size
-    if data_path is None:
-        # Get window size from model info if not provided
-        if window_size is None:
-            model_info = model_serializer.get_model_info(model_id)
-            window_size = model_info.get('window_size')
-            
-            if window_size is None:
-                # Try to get from processing config
-                try:
-                    with open('configs/processing_config.yaml', 'r') as f:
-                        processing_config = yaml.safe_load(f)
-                        window_size = processing_config['window_slicer']['window_seconds']
-                        channels = processing_config['data_loader']['channels']
-                        channels_str = "-".join(channels)
-                except Exception as e:
-                    logger.error(f"Failed to determine window size: {str(e)}")
-                    raise
-            else:
-                # Get channels from processing config
-                try:
-                    with open('configs/processing_config.yaml', 'r') as f:
-                        processing_config = yaml.safe_load(f)
-                        channels = processing_config['data_loader']['channels']
-                        channels_str = "-".join(channels)
-                except Exception as e:
-                    logger.error(f"Failed to load channels from processing config: {str(e)}")
-                    raise
-        
-        # Format the feature path with the window size and channels
-        data_path = config['data']['feature_path'].format(
-            window_size=window_size,
-            channels=channels_str
-        )
-        logger.info(f"Using feature path: {data_path}")
+
+    if run_id is None and model_uri is None:
+        raise click.BadParameter("Provide at least one of --run-id or --model-uri")
+
+    if model_uri is None:
+        model_uri = f"runs:/{run_id}/model"
+
+    if run_id is None:
+        run_id = _extract_run_id_from_model_uri(model_uri)
     
     # Set up MLflow tracking
     tracking_uri = config.get('mlflow', {}).get('tracking_uri', "file:./mlruns")
@@ -959,11 +903,56 @@ def evaluate(ctx, model_id, data_path, window_size):
         logger.error(f"Critical error setting up MLflow for evaluation: {e}")
         raise
 
+    source_run = None
+    if run_id:
+        try:
+            source_run = mlflow.get_run(run_id)
+        except Exception as e:
+            logger.warning(f"Could not fetch run metadata for run_id='{run_id}': {e}")
+
+    if level is None and source_run is not None:
+        inferred_level = source_run.data.params.get("level")
+        if inferred_level in {"patient", "window"}:
+            level = inferred_level
+
+    if level is None:
+        level = "window"
+        logger.warning("Could not infer model level from MLflow run; defaulting evaluation level to 'window'.")
+
+    # If data path not provided, construct it from config and window size
+    if data_path is None:
+        if window_size is None and source_run is not None:
+            run_window_size = source_run.data.params.get("window_size")
+            if run_window_size is not None:
+                try:
+                    window_size = int(float(run_window_size))
+                except ValueError:
+                    logger.warning(f"Could not parse window_size='{run_window_size}' from run metadata.")
+
+        try:
+            with open('configs/processing_config.yaml', 'r') as f:
+                processing_config = yaml.safe_load(f)
+        except Exception as e:
+            logger.error(f"Failed to load channels from processing config: {str(e)}")
+            raise
+
+        if window_size is None:
+            window_size = processing_config['window_slicer']['window_seconds']
+
+        channels = processing_config['data_loader']['channels']
+        channels_str = "-".join(channels)
+
+        # Format the feature path with the window size and channels
+        data_path = config['data']['feature_path'].format(
+            window_size=window_size,
+            channels=channels_str
+        )
+        logger.info(f"Using feature path: {data_path}")
+
     with mlflow.start_run(run_name="evaluation"):
         try:
             # Load model and data
-            model = model_serializer.load_model(model_id)
-            model_info = model_serializer.get_model_info(model_id)
+            model = mlflow.sklearn.load_model(model_uri)
             test_data = pd.read_parquet(data_path)
             
             # Prepare data
@@ -974,9 +963,14 @@ def evaluate(ctx, model_id, data_path, window_size):
             # Get predictions
             y_pred = model.predict(X)
             y_prob = model.predict_proba(X)[:, 1]
+
+            mlflow.log_param("evaluated_model_uri", model_uri)
+            mlflow.log_param("evaluation_level", level)
+            if run_id:
+                mlflow.log_param("evaluated_run_id", run_id)
             
             # Evaluate based on model level
-            if model_info['level'] == 'patient':
+            if level == 'patient':
                 metrics = evaluator.evaluate_patient_predictions(groups, y, y_prob)
             else:
                 metrics = evaluator.evaluate_window_predictions(y, y_pred, y_prob)

@@ -13,6 +13,9 @@ from pathlib import Path
 import mlflow
 import pandas as pd
 import yaml
+from mlflow.entities import ViewType
+from mlflow.exceptions import MlflowException
+from mlflow.tracking import MlflowClient
 
 # Resolve project root and use stable absolute paths.
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -30,6 +33,63 @@ EXPERIMENT_NAME_PREFIX = "random_state_sweep"
 ENABLE_FEATURE_SELECTION = True
 N_FEATURES_SELECT = 5
 FS_METHOD = "select_k_best_f_classif"
+
+
+def ensure_mlflow_experiment_ready(experiment_name):
+    """
+    Ensure a usable MLflow experiment exists and return its name.
+
+    Behavior:
+    - If the experiment exists and is active, keep it.
+    - If it does not exist, create it with the requested name.
+    - If the requested name exists only in deleted state, create a fresh experiment
+      with a unique derived name (do not restore deleted experiments).
+    """
+    client = MlflowClient()
+    experiment = client.get_experiment_by_name(experiment_name)
+    deleted_match = None
+
+    # Some MLflow versions may not return deleted experiments by name.
+    if experiment is None:
+        deleted_experiments = client.search_experiments(view_type=ViewType.DELETED_ONLY)
+        for exp in deleted_experiments:
+            if exp.name == experiment_name:
+                deleted_match = exp
+                break
+    elif experiment.lifecycle_stage == "deleted":
+        deleted_match = experiment
+
+    if experiment is not None and experiment.lifecycle_stage == "active":
+        return experiment_name
+
+    if deleted_match is not None:
+        timestamp = time.strftime("%Y%m%d_%H%M%S")
+        candidate_name = f"{experiment_name}_fresh_{timestamp}"
+        suffix = 1
+
+        # Ensure uniqueness across active and deleted experiments.
+        while True:
+            existing_active = client.get_experiment_by_name(candidate_name)
+            existing_deleted = [
+                exp for exp in client.search_experiments(view_type=ViewType.DELETED_ONLY)
+                if exp.name == candidate_name
+            ]
+            if existing_active is None and not existing_deleted:
+                break
+            candidate_name = f"{experiment_name}_fresh_{timestamp}_{suffix}"
+            suffix += 1
+
+        client.create_experiment(candidate_name)
+        print(
+            f"Experiment '{experiment_name}' is deleted "
+            f"(id={deleted_match.experiment_id}). "
+            f"Created new experiment: {candidate_name}"
+        )
+        return candidate_name
+
+    client.create_experiment(experiment_name)
+    print(f"Created MLflow experiment: {experiment_name}")
+    return experiment_name
 
 
 def resolve_config_path(config_path):
@@ -293,15 +353,27 @@ def main():
     resolved_config_path = resolve_config_path(args.config)
     config = load_config(resolved_config_path)
     model_type = detect_model_type(config)
-    experiment_name = args.experiment or f"{EXPERIMENT_NAME_PREFIX}_{model_type}"
+    requested_experiment_name = args.experiment or f"{EXPERIMENT_NAME_PREFIX}_{model_type}"
+    experiment_name = requested_experiment_name
     output_path = Path(args.output) if args.output else default_output_path(model_type)
     if not output_path.is_absolute():
         output_path = PROJECT_ROOT / output_path
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
+    # Ensure MLflow experiment exists and is active (without restoring deleted).
+    try:
+        experiment_name = ensure_mlflow_experiment_ready(experiment_name)
+    except Exception as e:
+        print(f"Note: MLflow experiment setup: {e}")
+        experiment_name = requested_experiment_name
+
     print(f"Using config: {resolved_config_path}")
     print(f"Sweeping model_type: {model_type}")
-    print(f"MLflow experiment: {experiment_name}")
+    if experiment_name != requested_experiment_name:
+        print(f"Requested MLflow experiment: {requested_experiment_name}")
+        print(f"Using MLflow experiment: {experiment_name}")
+    else:
+        print(f"MLflow experiment: {experiment_name}")
     print(f"Output CSV: {output_path}")
 
     # Create or load results DataFrame
@@ -315,15 +387,6 @@ def main():
         all_results_df = pd.DataFrame(columns=["model_type", "random_state", "patient_accuracy", "run_id", "timestamp"])
         print("Starting new sweep")
     results_df = all_results_df[all_results_df["model_type"] == model_type].copy()
-
-    # Ensure MLflow experiment exists
-    try:
-        experiment = mlflow.get_experiment_by_name(experiment_name)
-        if experiment is None:
-            mlflow.create_experiment(experiment_name)
-            print(f"Created MLflow experiment: {experiment_name}")
-    except Exception as e:
-        print(f"Note: MLflow experiment setup: {e}")
 
     # Determine starting point
     if not results_df.empty:
@@ -362,7 +425,21 @@ def main():
 
         try:
             # Set MLflow experiment for this run
-            mlflow.set_experiment(experiment_name)
+            try:
+                mlflow.set_experiment(experiment_name)
+            except MlflowException as e:
+                if "deleted experiment" in str(e).lower():
+                    previous_experiment_name = experiment_name
+                    experiment_name = ensure_mlflow_experiment_ready(experiment_name)
+                    if experiment_name != previous_experiment_name:
+                        print(f"   Switched to new MLflow experiment: {experiment_name}")
+                        if "mlflow" not in config:
+                            config["mlflow"] = {}
+                        config["mlflow"]["experiment_name"] = experiment_name
+                        save_config(config, temp_config)
+                    mlflow.set_experiment(experiment_name)
+                else:
+                    raise
 
             # Run training with optional feature selection
             print(f"🚀 Starting training with random_state={random_state}...")

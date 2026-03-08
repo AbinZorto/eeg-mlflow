@@ -283,21 +283,12 @@ class PatientLevelTrainer(BaseTrainer):
             patient_df = self.aggregate_windows(df)
             X_orig, y, groups = self._prepare_data(patient_df)
             
-            # *** CRITICAL FIX: Handle NaN values before any feature selection or cross-validation ***
-            # This prevents failures in sklearn algorithms that cannot handle missing values
-            if np.isnan(X_orig).any().any():
-                logger.warning("NaN values detected in dataset. Applying median imputation before feature selection...")
-                from sklearn.impute import SimpleImputer
-                imputer = SimpleImputer(strategy='median')
-                X_orig = pd.DataFrame(
-                    imputer.fit_transform(X_orig),
-                    columns=X_orig.columns,
-                    index=X_orig.index
-                )
-                logger.info("Global NaN imputation completed before feature selection")
-                mlflow.log_param("global_nan_imputation_applied", True)
-            else:
-                mlflow.log_param("global_nan_imputation_applied", False)
+            # Sanitize once globally before feature selection/CV so sklearn never sees inf/NaN.
+            X_orig, sanitization_info = self._sanitize_features_for_training(X_orig)
+            mlflow.log_param("global_nan_imputation_applied", sanitization_info["imputation_applied"])
+            mlflow.log_param("global_non_finite_values_detected", sanitization_info["non_finite_count"] > 0)
+            mlflow.log_param("global_non_finite_count", sanitization_info["non_finite_count"])
+            mlflow.log_param("global_non_numeric_column_count", sanitization_info["non_numeric_column_count"])
             
             # Feature Selection
             perform_selection = self.feature_selection_config.get('enabled', False)
@@ -500,13 +491,7 @@ class PatientLevelTrainer(BaseTrainer):
             logger.error(f"Failed to log model with signature: {e}. Logging model without signature.")
             mlflow.sklearn.log_model(model, "model")
         
-        # Save model to disk
-        model_path = output_dir / 'model.joblib'
-        import joblib
-        joblib.dump(model, model_path)
-        logger.info(f"Saved model to {model_path}")
-        
-        # Save model metadata
+        # Save model metadata to MLflow (instead of local model registry metadata).
         metadata = {
             'window_size': self._get_window_size(),
             'best_classifier': best_classifier,
@@ -514,10 +499,7 @@ class PatientLevelTrainer(BaseTrainer):
             'metrics': best_metrics,
             'timestamp': pd.Timestamp.now().isoformat()
         }
-        
-        import json
-        with open(output_dir / 'model_metadata.json', 'w') as f:
-            json.dump(metadata, f, indent=2)
+        mlflow.log_dict(metadata, "model_metadata.json")
         
         # Log misclassified patients
         logger.info("\nMisclassified Patients:")

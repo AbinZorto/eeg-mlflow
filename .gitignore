@@ -77,3 +77,4 @@ eeg_analysis/finetuned_model/
 ehthumbs.db
 Thumbs.db
 mlflow.pid
+backups/mlruns_backup_20260305_145935.zip

@@ -7,6 +7,9 @@ import mlflow.data
 from mlflow.data.pandas_dataset import PandasDataset
 from src.models.model_utils import create_classifier
 from src.utils.feature_filter import FeatureFilter
+import logging
+
+logger = logging.getLogger(__name__)
 
 class BaseTrainer:
     def __init__(self, config: Dict[str, Any]):
@@ -32,6 +35,72 @@ class BaseTrainer:
         
         X = df.drop(existing_metadata_to_drop, axis=1)
         return X, y, groups
+
+    def _sanitize_features_for_training(self, X: pd.DataFrame) -> Tuple[pd.DataFrame, Dict[str, Any]]:
+        """
+        Ensure feature matrix is numeric and finite for sklearn/model training.
+        Converts non-numeric values to NaN, replaces inf/-inf with NaN, then imputes
+        missing values with per-column medians.
+        """
+        non_numeric_columns = X.select_dtypes(exclude=[np.number]).columns.tolist()
+        if non_numeric_columns:
+            logger.warning(
+                "Found %d non-numeric feature columns. Coercing to numeric with NaN on failure.",
+                len(non_numeric_columns),
+            )
+
+        X_numeric = X.apply(pd.to_numeric, errors="coerce")
+        values = X_numeric.to_numpy(dtype=np.float64, copy=True)
+
+        inf_count = int(np.isinf(values).sum())
+        nan_count_before = int(np.isnan(values).sum())
+        non_finite_mask = ~np.isfinite(values)
+        non_finite_count = int(non_finite_mask.sum())
+
+        if non_finite_count:
+            logger.warning(
+                "Detected %d non-finite feature values (%d inf, %d NaN). Replacing with NaN.",
+                non_finite_count,
+                inf_count,
+                nan_count_before,
+            )
+            values[non_finite_mask] = np.nan
+
+        X_clean = pd.DataFrame(values, columns=X_numeric.columns, index=X_numeric.index)
+
+        nan_count_for_impute = int(np.isnan(values).sum())
+        imputation_applied = False
+        all_nan_columns: list[str] = []
+
+        if nan_count_for_impute:
+            # Median imputation keeps distribution robust; all-NaN columns fall back to 0.0.
+            medians = X_clean.median(axis=0, skipna=True)
+            all_nan_columns = medians[medians.isna()].index.tolist()
+            if all_nan_columns:
+                logger.warning(
+                    "Found %d all-NaN feature columns after coercion/sanitization. Filling with 0.0.",
+                    len(all_nan_columns),
+                )
+                medians = medians.fillna(0.0)
+
+            X_clean = X_clean.fillna(medians)
+            imputation_applied = True
+            logger.info("Applied global median imputation to training features.")
+
+        final_values = X_clean.to_numpy(dtype=np.float64, copy=False)
+        if not np.isfinite(final_values).all():
+            raise ValueError("Feature sanitization failed: non-finite values remain after imputation.")
+
+        sanitization_info = {
+            "non_numeric_column_count": len(non_numeric_columns),
+            "non_finite_count": non_finite_count,
+            "inf_count": inf_count,
+            "nan_count_before": nan_count_before,
+            "nan_count_imputed": nan_count_for_impute,
+            "all_nan_column_count": len(all_nan_columns),
+            "imputation_applied": imputation_applied,
+        }
+        return X_clean, sanitization_info
 
     def _create_and_train_model(self, X_train: pd.DataFrame, y_train: pd.Series) -> BaseEstimator:
         model = create_classifier(self.classifier_name, self.classifier_params)
