@@ -925,11 +925,12 @@ def main():
                         all_test_preds.append(patient_pred)
                         all_window_labels.extend(window_labels)
                         all_window_preds.extend(window_preds)
-                        mlflow.log_metric("fold_patient_accuracy", patient_accuracy)
-                        mlflow.log_metric("fold_patient_prob", patient_prob)
-                        mlflow.log_metric("fold_window_accuracy", test_metrics.get("window_accuracy", 0.0))
-                        mlflow.log_param("fold_patient_true", patient_true)
-                        mlflow.log_param("fold_patient_pred", patient_pred)
+                        # Use stable metric keys; fold identity is carried by fold_index.
+                        mlflow.log_metric("patient_accuracy", patient_accuracy, step=fold_idx)
+                        mlflow.log_metric("patient_prob", patient_prob, step=fold_idx)
+                        mlflow.log_metric("window_accuracy", test_metrics.get("window_accuracy", 0.0), step=fold_idx)
+                        mlflow.log_param("patient_true", patient_true)
+                        mlflow.log_param("patient_pred", patient_pred)
                 else:
                     if best_threshold is not None:
                         test_metrics, test_labels, test_probs = evaluate(
@@ -949,10 +950,11 @@ def main():
                         all_test_labels.append(patient_true)
                         all_test_probs.append(patient_prob)
                         all_test_preds.append(patient_pred)
-                        mlflow.log_metric("fold_patient_accuracy", patient_accuracy)
-                        mlflow.log_metric("fold_patient_prob", patient_prob)
-                        mlflow.log_param("fold_patient_true", patient_true)
-                        mlflow.log_param("fold_patient_pred", patient_pred)
+                        # Use stable metric keys; fold identity is carried by fold_index.
+                        mlflow.log_metric("patient_accuracy", patient_accuracy, step=fold_idx)
+                        mlflow.log_metric("patient_prob", patient_prob, step=fold_idx)
+                        mlflow.log_param("patient_true", patient_true)
+                        mlflow.log_param("patient_pred", patient_pred)
                 
                 # Log best model
                 if best_path is not None:

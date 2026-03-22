@@ -2008,20 +2008,19 @@ class DeepLearningTrainer(BaseTrainer):
                 }
                 patient_predictions.append(current_patient_prediction)
                 
-                # Log fold-specific metrics
+                # Log fold metadata and metrics with stable names.
+                # Fold identity is tracked via nested run + fold_index param.
                 patient_accuracy = int(true_label == patient_pred)
                 print(f"   🔍 DEBUG: true_label={true_label}, patient_pred={patient_pred}, patient_accuracy={patient_accuracy}")
-                mlflow.log_metric(f"fold_{fold_idx}_patient_accuracy", patient_accuracy)
-                mlflow.log_metric(f"fold_{fold_idx}_window_accuracy", window_test_accuracy)
-                mlflow.log_metric(f"fold_{fold_idx}_patient_id", test_participant)
-                mlflow.log_metric(f"fold_{fold_idx}_true_remission", true_label)
-                mlflow.log_metric(f"fold_{fold_idx}_predicted_remission", patient_pred)
+                mlflow.log_param("fold_index", fold_idx)
+                mlflow.log_param("patient_id", test_participant)
+                mlflow.log_param("true_remission", int(true_label))
+                mlflow.log_param("predicted_remission", int(patient_pred))
+                mlflow.log_metric("patient_accuracy", patient_accuracy)
+                mlflow.log_metric("window_accuracy", window_test_accuracy)
                 
                 # Print detailed test results for this fold
-                print(f"   🔍 MLFLOW LOGGING: fold_{fold_idx}_window_accuracy = {window_test_accuracy}")
-                
-                mlflow.log_metric(f"fold_{fold_idx}_patient_accuracy", patient_accuracy)
-                mlflow.log_metric(f"fold_{fold_idx}_window_accuracy", window_test_accuracy)
+                print(f"   🔍 MLFLOW LOGGING: window_accuracy = {window_test_accuracy}")
         
         # Calculate and log patient-level metrics
         patient_metrics = evaluator.evaluate_patient_predictions(
@@ -2074,8 +2073,8 @@ class DeepLearningTrainer(BaseTrainer):
         print(f"   The following metrics were logged to MLflow:")
         for i, pred in enumerate(patient_predictions):
             calculated_accuracy = int(pred['true_label'] == pred['predicted_label'])
-            print(f"   - fold_{i}_patient_accuracy = {calculated_accuracy}")
-            print(f"   - fold_{i}_window_accuracy = {pred['window_accuracy']:.4f}")
+            print(f"   - patient_accuracy (fold {i + 1}) = {calculated_accuracy}")
+            print(f"   - window_accuracy (fold {i + 1}) = {pred['window_accuracy']:.4f}")
         
         # Log overall metrics
         mlflow.log_metrics({f"patient_{k}": v for k, v in patient_metrics.items()})

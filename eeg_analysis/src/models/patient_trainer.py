@@ -368,11 +368,18 @@ class PatientLevelTrainer(BaseTrainer):
                         'correct_prediction': true_label == pred_label
                     })
                     
-                    # Log fold metrics
-                    mlflow.log_metric(f"{name}_fold_{fold_idx}_accuracy", 
-                                    int(all_results[name][-1]['correct_prediction']))
-                    mlflow.log_metric(f"{name}_fold_{fold_idx}_confidence", 
-                                    all_results[name][-1]['confidence'])
+                    # Log fold metrics with stable names and fold in step.
+                    # This prevents metric-key explosion across folds.
+                    mlflow.log_metric(
+                        f"{name}_accuracy",
+                        int(all_results[name][-1]['correct_prediction']),
+                        step=fold_idx
+                    )
+                    mlflow.log_metric(
+                        f"{name}_confidence",
+                        all_results[name][-1]['confidence'],
+                        step=fold_idx
+                    )
             
             # Calculate and log overall metrics for each classifier
             best_classifier = None

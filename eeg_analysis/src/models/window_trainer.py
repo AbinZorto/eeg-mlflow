@@ -414,14 +414,16 @@ class WindowLevelTrainer(BaseTrainer):
                     'window_accuracy': np.mean(y_pred == y_test)
                 })
 
-                # Log fold-specific metrics
+                # Log fold metadata and metrics with stable names.
+                # Fold identity is tracked via nested run + fold_index param.
                 patient_accuracy = int(true_label == patient_pred)
                 print(f"   🔍 DEBUG: true_label={true_label}, patient_pred={patient_pred}, patient_accuracy={patient_accuracy}")
-                mlflow.log_metric(f"fold_{fold_idx}_patient_accuracy", patient_accuracy)
-                mlflow.log_metric(f"fold_{fold_idx}_window_accuracy", np.mean(y_pred == y_test))
-                mlflow.log_param(f"fold_{fold_idx}_patient_id", test_participant)
-                mlflow.log_param(f"fold_{fold_idx}_true_remission", true_label)
-                mlflow.log_param(f"fold_{fold_idx}_predicted_remission", patient_pred)
+                mlflow.log_param("fold_index", fold_idx)
+                mlflow.log_param("patient_id", test_participant)
+                mlflow.log_param("true_remission", int(true_label))
+                mlflow.log_param("predicted_remission", int(patient_pred))
+                mlflow.log_metric("patient_accuracy", patient_accuracy)
+                mlflow.log_metric("window_accuracy", np.mean(y_pred == y_test))
 
         # Calculate and log patient-level metrics
         patient_metrics = evaluator.evaluate_patient_predictions(
