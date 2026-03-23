@@ -49,6 +49,7 @@ experiment_log_*.txt
 processing_log_*.txt
 
 # Project specific
+eeg_analysis/configs/temp_*
 eeg_analysis/data/processed/*
 eeg_analysis/secondarydata/raw/*
 !eeg_analysis/data/processed/.gitkeep
