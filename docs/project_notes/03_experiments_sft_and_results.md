@@ -139,7 +139,7 @@ This would mean there's a bug in the masking or forward pass that allows unmaske
 ### Step 1: Run Training
 
 ```bash
-cd /home/abin/eeg-mlflow
+cd ~/eeg-mlflow
 source .venv/bin/activate
 
 # Train with control configuration (already set in eeg_analysis/configs/pretrain.yaml)
@@ -153,7 +153,7 @@ Watch for loss behavior:
 
 ```bash
 # In another terminal, monitor MLflow
-cd /home/abin/eeg-mlflow
+cd ~/eeg-mlflow
 source .venv/bin/activate
 mlflow ui --port 5000
 

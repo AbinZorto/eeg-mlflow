@@ -2,8 +2,9 @@ import numpy as np
 import pandas as pd
 from scipy.signal import welch
 from scipy.stats import skew, kurtosis, entropy
-import nolds
+import importlib.util
 from pathlib import Path
+import sys
 from typing import Dict, Any, List, Tuple, Optional
 from ..utils.logger import get_logger
 import mlflow
@@ -14,6 +15,41 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import os
 
 logger = get_logger(__name__)
+
+
+def _load_nolds_module():
+    """Load nolds, falling back to its measures module when package init is broken."""
+    try:
+        import nolds as nolds_module
+        return nolds_module
+    except Exception as exc:
+        logger.warning(f"Failed to import nolds package directly, trying measures fallback: {exc}")
+
+    for entry in sys.path:
+        measures_path = Path(entry) / "nolds" / "measures.py"
+        if not measures_path.exists():
+            continue
+
+        spec = importlib.util.spec_from_file_location("nolds_measures_fallback", measures_path)
+        if spec is None or spec.loader is None:
+            continue
+
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        logger.warning(f"Loaded nolds fallback module from {measures_path}")
+        return module
+
+    logger.warning("nolds is unavailable; complexity and sample entropy features will be NaN")
+    return None
+
+
+nolds = _load_nolds_module()
+
+
+def _nolds_call(method_name: str, *args, **kwargs):
+    if nolds is None:
+        raise ImportError("nolds is unavailable")
+    return getattr(nolds, method_name)(*args, **kwargs)
 
 class EEGFeatureExtractor:
     """EEG signal feature extraction class."""
@@ -376,19 +412,19 @@ class EEGFeatureExtractor:
                 signal = signal[::2]
             
             # Sample entropy
-            features['sample_entropy'] = nolds.sampen(signal)
+            features['sample_entropy'] = _nolds_call('sampen', signal)
             
             # Correlation dimension
-            features['correlation_dim'] = nolds.corr_dim(signal, emb_dim=5)
+            features['correlation_dim'] = _nolds_call('corr_dim', signal, emb_dim=5)
             
             # Hurst exponent
-            features['hurst'] = nolds.hurst_rs(signal)
+            features['hurst'] = _nolds_call('hurst_rs', signal)
             
             # Lyapunov exponent
-            features['lyapunov'] = nolds.lyap_r(signal)
+            features['lyapunov'] = _nolds_call('lyap_r', signal)
             
             # Detrended Fluctuation Analysis
-            features['dfa'] = nolds.dfa(signal)
+            features['dfa'] = _nolds_call('dfa', signal)
             
         except Exception as e:
             logger.warning(f"Error computing complexity features: {str(e)}")
@@ -575,7 +611,7 @@ class EEGFeatureExtractor:
                 if self.compute_entropy:
                     # Sample entropy
                     if self.entropy_sample_entropy:
-                        features[f"{channel}_sample_entropy"] = nolds.sampen(signal)
+                        features[f"{channel}_sample_entropy"] = _nolds_call('sampen', signal)
                     
                     # Spectral entropy (using cached PSD)
                     if self.entropy_spectral_entropy:
@@ -604,7 +640,7 @@ class EEGFeatureExtractor:
                         if self.complexity_correlation_dimension:
                             try:
                                 # Correlation dimension
-                                features[f"{channel}_correlation_dim"] = nolds.corr_dim(complexity_signal, emb_dim=5)
+                                features[f"{channel}_correlation_dim"] = _nolds_call('corr_dim', complexity_signal, emb_dim=5)
                             except Exception as e:
                                 self.logger.warning(f"Error computing correlation dimension for {channel}: {str(e)}")
                                 features[f"{channel}_correlation_dim"] = np.nan
@@ -612,7 +648,7 @@ class EEGFeatureExtractor:
                         if self.complexity_hurst_exponent:
                             try:
                                 # Hurst exponent
-                                features[f"{channel}_hurst"] = nolds.hurst_rs(complexity_signal)
+                                features[f"{channel}_hurst"] = _nolds_call('hurst_rs', complexity_signal)
                             except Exception as e:
                                 self.logger.warning(f"Error computing Hurst exponent for {channel}: {str(e)}")
                                 features[f"{channel}_hurst"] = np.nan
@@ -620,7 +656,7 @@ class EEGFeatureExtractor:
                         if self.complexity_lyapunov_exponent:
                             try:
                                 # Lyapunov exponent
-                                features[f"{channel}_lyapunov"] = nolds.lyap_r(complexity_signal)
+                                features[f"{channel}_lyapunov"] = _nolds_call('lyap_r', complexity_signal)
                             except Exception as e:
                                 self.logger.warning(f"Error computing Lyapunov exponent for {channel}: {str(e)}")
                                 features[f"{channel}_lyapunov"] = np.nan
@@ -628,7 +664,7 @@ class EEGFeatureExtractor:
                         if self.complexity_dfa:
                             try:
                                 # Detrended Fluctuation Analysis
-                                features[f"{channel}_dfa"] = nolds.dfa(complexity_signal)
+                                features[f"{channel}_dfa"] = _nolds_call('dfa', complexity_signal)
                             except Exception as e:
                                 self.logger.warning(f"Error computing DFA for {channel}: {str(e)}")
                                 features[f"{channel}_dfa"] = np.nan

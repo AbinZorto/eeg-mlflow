@@ -7,6 +7,7 @@ from .logger import get_logger
 import mlflow
 
 logger = get_logger(__name__)
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
 class ConfigurationError(Exception):
     """Custom exception for configuration errors."""
@@ -71,6 +72,40 @@ def validate_parameters(config: Dict[str, Any]) -> None:
     if config['window_slicer'].get('window_seconds', 0) <= 0:
         raise ConfigurationError("Window size must be positive")
 
+
+def _resolve_project_path(path_value: str) -> str:
+    """Resolve repo-relative config paths against the project root."""
+    path = Path(path_value).expanduser()
+    if path.is_absolute():
+        return str(path)
+    return str((PROJECT_ROOT / path).resolve())
+
+
+def _normalize_config_paths(value: Any) -> Any:
+    if isinstance(value, dict):
+        return {key: _normalize_config_paths(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_normalize_config_paths(item) for item in value]
+    return value
+
+
+def normalize_config(config: Dict[str, Any]) -> Dict[str, Any]:
+    """Normalize path-bearing config sections to absolute paths."""
+    normalized = dict(config)
+    normalized_paths = {}
+    for key, value in config.get('paths', {}).items():
+        if isinstance(value, dict):
+            normalized_paths[key] = {
+                nested_key: _resolve_project_path(nested_value)
+                for nested_key, nested_value in value.items()
+            }
+        elif isinstance(value, str):
+            normalized_paths[key] = _resolve_project_path(value)
+        else:
+            normalized_paths[key] = value
+    normalized['paths'] = normalized_paths
+    return _normalize_config_paths(normalized)
+
 def load_config(config_path: str, env: Optional[str] = None) -> Dict[str, Any]:
     """
     Load and validate configuration file.
@@ -99,6 +134,10 @@ def load_config(config_path: str, env: Optional[str] = None) -> Dict[str, Any]:
                 with open(env_config_path, 'r') as f:
                     env_config = yaml.safe_load(f)
                     config = deep_update(config, env_config)
+
+        config = normalize_config(config)
+        validate_paths(config)
+        validate_parameters(config)
         
         # Log configuration
         log_config(config)

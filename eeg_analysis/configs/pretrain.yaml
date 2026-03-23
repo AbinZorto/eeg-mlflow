@@ -5,8 +5,8 @@
 # - Multiple model profiles (not limited to Mamba)
 #
 # Shared paths
-asa_path: "/home/abin/eeg-mlflow/eeg_analysis/secondarydata/raw/asa_electrodes.txt"
-save_dir: "/home/abin/eeg-mlflow/eeg_analysis/checkpoints"
+asa_path: "~/eeg-mlflow/eeg_analysis/secondarydata/raw/asa_electrodes.txt"
+save_dir: "~/eeg-mlflow/eeg_analysis/checkpoints"
 
 # MLflow defaults (dataset profile can override experiment)
 mlflow_tracking_uri: "mlruns"
@@ -18,11 +18,11 @@ mlflow_experiment: "eeg_pretraining_representation"
 active_dataset: "open_pretrain"
 datasets:
   open_pretrain:
-    dataset_path: "/home/abin/eeg-mlflow/eeg_analysis/secondarydata/raw"
+    dataset_path: "~/eeg-mlflow/eeg_analysis/secondarydata/raw"
     dataset_suffix: "open_pretrain"
     mlflow_experiment: "eeg_pretraining_open_pretrain"
   closed_pretrain:
-    dataset_path: "/home/abin/eeg-closed-pretrain-data"
+    dataset_path: "~/eeg-closed-pretrain-data"
     dataset_suffix: "closed_pretrain"
     mlflow_experiment: "eeg_pretraining_closed_pretrain"
 

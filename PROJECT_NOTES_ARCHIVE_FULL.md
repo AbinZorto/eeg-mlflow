@@ -1507,7 +1507,7 @@ This would mean there's a bug in the masking or forward pass that allows unmaske
 ### Step 1: Run Training
 
 ```bash
-cd /home/abin/eeg-mlflow
+cd ~/eeg-mlflow
 source .venv/bin/activate
 
 # Train with control configuration (already set in eeg_analysis/configs/pretrain.yaml)
@@ -1521,7 +1521,7 @@ Watch for loss behavior:
 
 ```bash
 # In another terminal, monitor MLflow
-cd /home/abin/eeg-mlflow
+cd ~/eeg-mlflow
 source .venv/bin/activate
 mlflow ui --port 5000
 
@@ -6529,7 +6529,7 @@ target = model.encode_tokens_only(windows)  # Varies, but depends on current wei
 ### Step 2: Restart with Fix
 
 ```bash
-cd /home/abin/eeg-mlflow
+cd ~/eeg-mlflow
 source .venv/bin/activate
 
 # Fix is already applied in eeg_analysis/src/training/pretrain_mamba.py
@@ -7410,7 +7410,7 @@ Epoch 13: loss=0.400  ← Still decreasing!
 ### Step 2: Restart training with fix
 
 ```bash
-cd /home/abin/eeg-mlflow
+cd ~/eeg-mlflow
 source .venv/bin/activate
 
 # The fix is already in eeg_analysis/src/training/pretrain_mamba.py
@@ -7907,7 +7907,7 @@ mask_ratio: 0.75  # Changed from 1.0
 ### 1. Retrain with new config
 
 ```bash
-cd /home/abin/eeg-mlflow
+cd ~/eeg-mlflow
 source .venv/bin/activate
 
 # Start training with 75% masking

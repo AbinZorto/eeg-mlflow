@@ -3056,7 +3056,7 @@ target = model.encode_tokens_only(windows)  # Varies, but depends on current wei
 ### Step 2: Restart with Fix
 
 ```bash
-cd /home/abin/eeg-mlflow
+cd ~/eeg-mlflow
 source .venv/bin/activate
 
 # Fix is already applied in eeg_analysis/src/training/pretrain_mamba.py
@@ -3254,7 +3254,7 @@ mask_ratio: 0.75  # Changed from 1.0
 ### 1. Retrain with new config
 
 ```bash
-cd /home/abin/eeg-mlflow
+cd ~/eeg-mlflow
 source .venv/bin/activate
 
 # Start training with 75% masking

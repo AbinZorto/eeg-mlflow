@@ -2,16 +2,16 @@
 
 # Paths
 paths:
-  raw_data: "/home/abin/eeg-closed-finetune-data/MDD_21_subjects_EC_EEG_data_remission_and_non_remission_seperated.mat"
+  raw_data: "~/eeg-closed-finetune-data/MDD_21_subjects_EC_EEG_data_remission_and_non_remission_seperated.mat"
   interim:
-    demeaned: "/home/abin/eeg-mlflow/eeg_analysis/data/processed/interim/demeaned"
-    upsampled: "/home/abin/eeg-mlflow/eeg_analysis/data/processed/interim/upsampled"
-    filtered: "/home/abin/eeg-mlflow/eeg_analysis/data/processed/interim/filtered"
-    downsampled: "/home/abin/eeg-mlflow/eeg_analysis/data/processed/interim/downsampled"
-    windowed: "/home/abin/eeg-mlflow/eeg_analysis/data/processed/interim/windowed"
+    demeaned: "eeg_analysis/data/processed/interim/demeaned"
+    upsampled: "eeg_analysis/data/processed/interim/upsampled"
+    filtered: "eeg_analysis/data/processed/interim/filtered"
+    downsampled: "eeg_analysis/data/processed/interim/downsampled"
+    windowed: "eeg_analysis/data/processed/interim/windowed"
   features:
-    window: "/home/abin/eeg-mlflow/eeg_analysis/data/processed/features/window_features.parquet"
-    patient: "/home/abin/eeg-mlflow/eeg_analysis/data/processed/features/patient_features.parquet"
+    window: "eeg_analysis/data/processed/features/window_features.parquet"
+    patient: "eeg_analysis/data/processed/features/patient_features.parquet"
 
 # Data Loader Parameters
 data_loader:

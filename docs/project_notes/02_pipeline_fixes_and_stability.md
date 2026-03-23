@@ -1965,7 +1965,7 @@ Epoch 13: loss=0.400  ← Still decreasing!
 ### Step 2: Restart training with fix
 
 ```bash
-cd /home/abin/eeg-mlflow
+cd ~/eeg-mlflow
 source .venv/bin/activate
 
 # The fix is already in eeg_analysis/src/training/pretrain_mamba.py

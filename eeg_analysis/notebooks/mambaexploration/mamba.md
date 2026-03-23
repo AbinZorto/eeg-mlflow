@@ -24,11 +24,11 @@ print(f"Pandas version: {pd.__version__}")
 ```
 
 ```python
-# Discover EEG runs under /home/abin/eeg-open-pretrain-data/ds* and load one per dataset
+# Discover EEG runs under ~/eeg-open-pretrain-data/ds* and load one per dataset
 from pathlib import Path
 import json
 
-HOME = Path("/home/abin/eeg-open-pretrain-data")
+HOME = Path("~/eeg-open-pretrain-data")
 MAX_RUNS = None  # set to an int to cap the number of datasets
 
 def discover_one_per_ds(root: Path):

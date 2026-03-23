@@ -1,5 +1,5 @@
 paths:
-  source_root: "/home/abin/eeg-open-pretrain-data"
+  source_root: "~/eeg-open-pretrain-data"
   output_dir: "eeg_analysis/secondarydata/raw"
 
 processing:

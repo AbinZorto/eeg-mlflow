@@ -7,7 +7,7 @@ This project provides two connected workflows:
 1. Traditional EEG feature pipeline (processing + feature extraction + classical/deep-learning classifiers).
 2. Representation-learning workflow (dataset build/conversion + self-supervised pretraining + supervised fine-tuning).
 
-All commands below assume you run from the repository root: `/home/abin/eeg-mlflow`.
+All commands below assume you run from the repository root: `~/eeg-mlflow`.
 
 ## Repository Layout
 
@@ -246,7 +246,7 @@ If `--data-path` is omitted, the script will try to build/find the representatio
 Use `--model <profile>` or `--all-models` to fine-tune specific/all enabled model profiles from `pretrain.yaml`.
 
 Closed pretraining profile default path:
-- `datasets.closed_pretrain.dataset_path: /home/abin/eeg-closed-pretrain-data`
+- `datasets.closed_pretrain.dataset_path: ~/eeg-closed-pretrain-data`
 
 ## Training Configs and Model Types
 
