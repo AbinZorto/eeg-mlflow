@@ -9,6 +9,32 @@ This project provides two connected workflows:
 
 All commands below assume you run from the repository root: `~/eeg-mlflow`.
 
+## Starter Sweep Command
+
+```bash
+set -euo pipefail
+
+for ws in 1 3 5 7 9; do
+  for ik in 1 3 5 7 9; do
+    for ok in 1 3 5 7 9; do
+      ./scripts/run_experiments.py \
+        --config eeg_analysis/configs/model_config.yaml \
+        --processing-config eeg_analysis/configs/processing_config.yaml \
+        --model-sets traditional \
+        --mode fs \
+        --fs-methods select_k_best_f_classif \
+        --feature-counts 10 \
+        --window-sizes "$ws" \
+        --ordering sequential \
+        --inner-k "$ik" \
+        --outer-k "$ok" \
+        --artifacts-dir sweeps/artifacts \
+        --stop-on-error
+    done
+  done
+done
+```
+
 ## Repository Layout
 
 - `eeg_analysis/run_pipeline.py`: main CLI for processing/training/evaluation.
