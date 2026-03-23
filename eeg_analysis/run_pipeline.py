@@ -45,7 +45,7 @@ def setup_mlflow_tracking(config):
     Returns:
         experiment_id: ID of the MLflow experiment
     """
-    # Check for environment variable first (set by scripts/run_all_experiments.sh)
+    # Check for environment variable first (set by experiment orchestration scripts)
     experiment_name = os.environ.get('MLFLOW_EXPERIMENT_NAME')
     
     # Fall back to config if environment variable not set
@@ -436,7 +436,7 @@ def list_datasets(ctx):
             print(f"   python run_pipeline.py --config <config> train --model-type <model> --use-dataset-from-run <run_id>")
             print()
             print("To run all experiments with automatic dataset selection:")
-            print("   ./scripts/run_all_experiments.sh")
+            print("   ./scripts/run_experiments.py")
             print("   (This will find a 4-channel dataset and filter it for your channel config)")
         else:
             print(f"No datasets found with {window_seconds}s window size. You may need to:")

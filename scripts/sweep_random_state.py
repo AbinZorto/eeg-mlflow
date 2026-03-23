@@ -29,7 +29,7 @@ TARGET_ACCURACY = 0.91  # 91% accuracy target
 MAX_RANDOM_STATE = 200  # Maximum to check (safety limit)
 EXPERIMENT_NAME_PREFIX = "random_state_sweep"
 
-# Feature selection settings (matching scripts/rerun_experiments.sh)
+# Feature selection settings (matching unified experiment runner defaults)
 ENABLE_FEATURE_SELECTION = True
 N_FEATURES_SELECT = 5
 FS_METHOD = "select_k_best_f_classif"

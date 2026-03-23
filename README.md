@@ -264,8 +264,9 @@ Model types are validated from the selected config file:
 - Processing and training runs log dataset lineage via MLflow dataset inputs.
 - Helper scripts at repo root:
   - `scripts/run_all_processing.sh`
-  - `scripts/run_all_experiments.sh`
-  - `scripts/rerun_experiments.sh`
+  - `scripts/run_experiments.py`
+  - `scripts/find_dataset.py`
+  - `scripts/filter_dataset.py`
 
 ## Complete Run Command Reference
 
@@ -333,28 +334,18 @@ bash scripts/run_all_processing.sh --dry-run
 Run full experiment sweep across window sizes / models:
 
 ```bash
-bash scripts/run_all_experiments.sh
-bash scripts/run_all_experiments.sh --ordering sequential
-bash scripts/run_all_experiments.sh --model xgboost_gpu
-bash scripts/run_all_experiments.sh --dataset-run-id <run_id>
-bash scripts/run_all_experiments.sh --dry-run --ordering completion
-```
-
-Rerun selected models with feature-selection controls:
-
-```bash
-bash scripts/rerun_experiments.sh --channels 'af7 af8 tp9 tp10' --window-size 10 --n-features 5 --fs-method select_k_best_f_classif
-```
-
-Traditional-only experiment script:
-
-```bash
-bash scripts/run_traditional_experiments.sh
-bash scripts/run_traditional_experiments.sh --dry-run
+./scripts/run_experiments.py
+./scripts/run_experiments.py --ordering sequential
+./scripts/run_experiments.py --model-sets traditional
+./scripts/run_experiments.py --models xgboost_gpu
+./scripts/run_experiments.py --dataset-run-id <run_id>
+./scripts/run_experiments.py --dry-run --ordering completion
+./scripts/run_experiments.py --mode fs --fs-methods select_k_best_f_classif --feature-counts 5
 ```
 
 Notes:
-- `scripts/run_all_experiments.sh` and `scripts/run_traditional_experiments.sh` now assume `uv` is installed and available on `PATH`.
+- `scripts/run_experiments.py` is the unified replacement for the old experiment shell scripts.
+- Default execution uses `uv run python3`; override with `--python-cmd` if needed.
 
 ### Representation Commands
 

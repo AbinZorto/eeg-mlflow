@@ -191,7 +191,7 @@ if [[ "$SHOW_HELP" == "true" ]]; then
     echo ""
     echo "After completion:"
     echo "  • Use 'python eeg_analysis/run_pipeline.py --config <config> list-datasets' to view"
-    echo "  • Use './scripts/run_all_experiments.sh' for training with automatic dataset selection"
+    echo "  • Use './scripts/run_experiments.py' for training with automatic dataset selection"
     exit 0
 fi
 
@@ -335,7 +335,7 @@ except Exception as e:
     echo ""
     log_message "All processing completed!"
     log_message "View datasets with: python eeg_analysis/run_pipeline.py --config $PROCESSING_CONFIG list-datasets"
-    log_message "Start training with: ./scripts/run_all_experiments.sh"
+    log_message "Start training with: ./scripts/run_experiments.py"
     log_message "Full log saved to: $LOG_FILE"
     
     if [ $failed_runs -gt 0 ]; then
