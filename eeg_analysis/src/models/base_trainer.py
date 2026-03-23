@@ -222,9 +222,13 @@ class BaseTrainer:
         consensus_n_features: Optional[int] = None,
     ) -> Tuple[List[str], Dict[str, Any]]:
         """
-        Run inner group CV on outer-train data and select features by frequency consensus
-        across inner-train folds. Falls back to single-pass selection when inner CV is not
-        configured or not feasible.
+        Optional helper for trainers that want a true inner group-CV feature-selection loop.
+        The current classical and deep-learning trainers use per-outer-fold single-pass
+        selection plus cross-fold consensus instead of calling this helper.
+
+        When used, this runs inner group CV on outer-train data and selects features by
+        frequency consensus across inner-train folds. Falls back to single-pass selection
+        when inner CV is not configured or not feasible.
         """
         info: Dict[str, Any] = {
             "enabled": False,

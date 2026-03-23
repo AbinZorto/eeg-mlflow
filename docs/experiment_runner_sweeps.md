@@ -6,6 +6,12 @@ This guide documents how to run sweeps with:
 
 All commands assume repo root as working directory.
 
+Methodology note:
+- Outer evaluation remains Leave-One-Participant/Group-Out throughout.
+- `--inner-k` controls how many features are selected on each outer training fold.
+- `--outer-k` controls how many consensus features are kept at the end from correctly predicted outer folds.
+- These flags do not change the number of CV splits.
+
 ## 1) Quick Start
 
 ```bash
@@ -44,7 +50,7 @@ Use `--dry-run` first to validate command expansion:
   --ordering sequential
 ```
 
-### Sweep inner/outer for one fixed run
+### Sweep per-fold and consensus feature counts for one fixed run
 
 ```bash
 ./scripts/run_experiments.py \
@@ -111,8 +117,8 @@ done
 - `--fs-methods`: comma-separated feature selection methods
 - `--feature-counts`: comma-separated feature counts
 - `--window-sizes`: comma-separated window sizes
-- `--inner-k`: override nested CV inner feature count
-- `--outer-k`: override nested CV consensus feature count
+- `--inner-k`: features to select within each outer LOPO training fold
+- `--outer-k`: final consensus features kept from correctly predicted outer folds
 - `--ordering`: dataset ordering requirement (`sequential` or `completion`)
 - `--dataset-run-id`: pin dataset lineage for all launched jobs
 - `--dry-run`: print planned jobs without executing

@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import posixpath
+import re
 import shlex
 import shutil
 import subprocess
@@ -19,12 +20,14 @@ EXPERIMENT_ID_PLACEHOLDER = "'__EXPERIMENT_ID__'"
 ARTIFACT_URI_PLACEHOLDER = "__ARTIFACT_URI__"
 ARTIFACT_LOCATION_PLACEHOLDER = "__ARTIFACT_LOCATION__"
 TIMESTAMP_PLACEHOLDER = "__TIMESTAMP__"
+HOME_PATH_PATTERN = re.compile(r"/(?:home|Users)/[^/\s\"']+")
 
 
 REMOTE_INVENTORY_SCRIPT = r"""
 import hashlib
 import json
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -33,6 +36,7 @@ EXPERIMENT_ID_PLACEHOLDER = "'__EXPERIMENT_ID__'"
 ARTIFACT_URI_PLACEHOLDER = "__ARTIFACT_URI__"
 ARTIFACT_LOCATION_PLACEHOLDER = "__ARTIFACT_LOCATION__"
 TIMESTAMP_PLACEHOLDER = "__TIMESTAMP__"
+HOME_PATH_PATTERN = re.compile(r"/(?:home|Users)/[^/\s\"']+")
 
 
 def replace_field(text, field, value):
@@ -54,12 +58,14 @@ def normalize_experiment_meta(text):
     text = replace_field(text, "experiment_id", EXPERIMENT_ID_PLACEHOLDER)
     text = replace_field(text, "artifact_location", ARTIFACT_LOCATION_PLACEHOLDER)
     text = replace_field(text, "creation_time", TIMESTAMP_PLACEHOLDER)
-    return replace_field(text, "last_update_time", TIMESTAMP_PLACEHOLDER)
+    text = replace_field(text, "last_update_time", TIMESTAMP_PLACEHOLDER)
+    return HOME_PATH_PATTERN.sub("__HOME__", text)
 
 
 def normalize_run_meta(text):
     text = replace_field(text, "experiment_id", EXPERIMENT_ID_PLACEHOLDER)
-    return replace_field(text, "artifact_uri", ARTIFACT_URI_PLACEHOLDER)
+    text = replace_field(text, "artifact_uri", ARTIFACT_URI_PLACEHOLDER)
+    return HOME_PATH_PATTERN.sub("__HOME__", text)
 
 
 def hash_bytes(data):
@@ -71,8 +77,15 @@ def hash_tree(root, normalize_run):
     for path in sorted(p for p in root.rglob("*") if p.is_file()):
         rel = path.relative_to(root).as_posix()
         data = path.read_bytes()
-        if normalize_run and rel == "meta.yaml":
-            data = normalize_run_meta(data.decode("utf-8")).encode("utf-8")
+        try:
+            text = data.decode("utf-8")
+        except UnicodeDecodeError:
+            text = None
+
+        if normalize_run and rel == "meta.yaml" and text is not None:
+            data = normalize_run_meta(text).encode("utf-8")
+        elif text is not None:
+            data = HOME_PATH_PATTERN.sub("__HOME__", text).encode("utf-8")
         hasher.update(rel.encode("utf-8"))
         hasher.update(b"\0")
         hasher.update(hash_bytes(data).encode("utf-8"))
@@ -212,6 +225,35 @@ Path(meta_path).write_text(text)
 """
 
 
+REMOTE_REWRITE_TREE_PATHS_SCRIPT = r"""
+from pathlib import Path
+import sys
+
+
+def rewrite_file(path, source_prefix, destination_prefix):
+    try:
+        text = path.read_text()
+    except UnicodeDecodeError:
+        return
+
+    rewritten = text.replace(source_prefix, destination_prefix)
+    if rewritten != text:
+        path.write_text(rewritten)
+
+
+root = Path(sys.argv[1])
+source_prefix = sys.argv[2]
+destination_prefix = sys.argv[3]
+
+if root.is_file():
+    rewrite_file(root, source_prefix, destination_prefix)
+else:
+    for path in sorted(root.rglob("*")):
+        if path.is_file():
+            rewrite_file(path, source_prefix, destination_prefix)
+"""
+
+
 class SyncError(RuntimeError):
     """Raised when MLflow sync cannot complete safely."""
 
@@ -278,12 +320,14 @@ def normalize_experiment_meta_text(text: str) -> str:
     text = replace_meta_field(text, "experiment_id", EXPERIMENT_ID_PLACEHOLDER)
     text = replace_meta_field(text, "artifact_location", ARTIFACT_LOCATION_PLACEHOLDER)
     text = replace_meta_field(text, "creation_time", TIMESTAMP_PLACEHOLDER)
-    return replace_meta_field(text, "last_update_time", TIMESTAMP_PLACEHOLDER)
+    text = replace_meta_field(text, "last_update_time", TIMESTAMP_PLACEHOLDER)
+    return HOME_PATH_PATTERN.sub("__HOME__", text)
 
 
 def normalize_run_meta_text(text: str) -> str:
     text = replace_meta_field(text, "experiment_id", EXPERIMENT_ID_PLACEHOLDER)
-    return replace_meta_field(text, "artifact_uri", ARTIFACT_URI_PLACEHOLDER)
+    text = replace_meta_field(text, "artifact_uri", ARTIFACT_URI_PLACEHOLDER)
+    return HOME_PATH_PATTERN.sub("__HOME__", text)
 
 
 def rewrite_experiment_meta_text(text: str, experiment_id: str, artifact_location: str) -> str:
@@ -309,8 +353,15 @@ def hash_directory_tree(root: Path, *, normalize_run_meta: bool) -> str:
     for path in _iter_object_files(root):
         rel_path = path.relative_to(root).as_posix()
         data = path.read_bytes()
-        if normalize_run_meta and rel_path == "meta.yaml":
-            data = normalize_run_meta_text(data.decode("utf-8")).encode("utf-8")
+        try:
+            text = data.decode("utf-8")
+        except UnicodeDecodeError:
+            text = None
+
+        if normalize_run_meta and rel_path == "meta.yaml" and text is not None:
+            data = normalize_run_meta_text(text).encode("utf-8")
+        elif text is not None:
+            data = HOME_PATH_PATTERN.sub("__HOME__", text).encode("utf-8")
         hasher.update(rel_path.encode("utf-8"))
         hasher.update(b"\0")
         hasher.update(hash_bytes(data).encode("utf-8"))
@@ -535,6 +586,23 @@ def rewrite_local_metadata(path: Path, kind: ObjectKind, experiment_id: str, art
     path.write_text(text)
 
 
+def rewrite_local_tree_paths(path: Path, source_prefix: str, destination_prefix: str) -> None:
+    if path.is_file():
+        candidates = [path]
+    else:
+        candidates = sorted(file_path for file_path in path.rglob("*") if file_path.is_file())
+
+    for file_path in candidates:
+        try:
+            text = file_path.read_text()
+        except UnicodeDecodeError:
+            continue
+
+        rewritten = text.replace(source_prefix, destination_prefix)
+        if rewritten != text:
+            file_path.write_text(rewritten)
+
+
 def rewrite_remote_metadata(
     remote_host: str,
     path: str,
@@ -550,6 +618,21 @@ def rewrite_remote_metadata(
         path,
         experiment_id,
         artifact_path,
+    )
+
+
+def rewrite_remote_tree_paths(
+    remote_host: str,
+    path: str,
+    source_prefix: str,
+    destination_prefix: str,
+) -> None:
+    run_remote_python(
+        remote_host,
+        REMOTE_REWRITE_TREE_PATHS_SCRIPT,
+        path,
+        source_prefix,
+        destination_prefix,
     )
 
 
@@ -612,6 +695,8 @@ def sync_object_push(
     remote_host: str,
     remote_experiment_root: str,
     remote_experiment_id: str,
+    local_home: str,
+    remote_home: str,
 ) -> None:
     source = local_object_source_path(local_experiment_root, obj)
     destination = remote_object_source_path(remote_experiment_root, obj)
@@ -624,6 +709,7 @@ def sync_object_push(
         else:
             ensure_remote_dir(remote_host, temp_destination)
             rsync_to_remote(source, remote_host, temp_destination, source_is_dir=True)
+        rewrite_remote_tree_paths(remote_host, temp_destination, local_home, remote_home)
         if obj.kind == "experiment_meta":
             rewrite_remote_metadata(
                 remote_host,
@@ -656,6 +742,8 @@ def sync_object_pull(
     local_experiment_id: str,
     remote_host: str,
     remote_experiment_root: str,
+    local_home: str,
+    remote_home: str,
 ) -> None:
     source = remote_object_source_path(remote_experiment_root, obj)
     destination = local_object_source_path(local_experiment_root, obj)
@@ -668,6 +756,7 @@ def sync_object_pull(
         else:
             ensure_local_dir(temp_destination)
             rsync_from_remote(remote_host, source, temp_destination, source_is_dir=True)
+        rewrite_local_tree_paths(temp_destination, remote_home, local_home)
         if obj.kind == "experiment_meta":
             rewrite_local_metadata(temp_destination, obj.kind, local_experiment_id, str(local_experiment_root))
         elif obj.kind == "run":
@@ -695,7 +784,9 @@ def sync_experiment(
     exclude_run_ids: Sequence[str] | None = None,
 ) -> SyncResult:
     local_root_path = Path(local_root).expanduser().resolve()
-    resolved_remote_root = resolve_remote_root(remote_host, remote_root)
+    local_home = str(Path.home())
+    remote_home = resolve_remote_home(remote_host)
+    resolved_remote_root = run_remote_python(remote_host, REMOTE_RESOLVE_PATH_SCRIPT, remote_root)
 
     local_inventory = collect_local_inventory(local_root_path, local_experiment_id, exclude_run_ids=exclude_run_ids)
     remote_inventory = collect_remote_inventory(
@@ -729,6 +820,8 @@ def sync_experiment(
             remote_host=remote_host,
             remote_experiment_root=remote_experiment_root,
             remote_experiment_id=remote_experiment_id,
+            local_home=local_home,
+            remote_home=remote_home,
         )
 
     for obj in plan.pull:
@@ -738,6 +831,8 @@ def sync_experiment(
             local_experiment_id=local_experiment_id,
             remote_host=remote_host,
             remote_experiment_root=remote_experiment_root,
+            local_home=local_home,
+            remote_home=remote_home,
         )
 
     result.executed = True

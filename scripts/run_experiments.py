@@ -676,7 +676,7 @@ def fetch_mlflow_run_snapshot(
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Unified experiment runner with model-set and inner/outer-k support."
+        description="Unified experiment runner with model-set support plus per-fold and consensus feature-count overrides."
     )
     parser.add_argument(
         "--config",
@@ -734,13 +734,13 @@ def parse_args() -> argparse.Namespace:
         "--inner-k",
         type=int,
         default=None,
-        help="Forwarded to run_pipeline train --inner-k",
+        help="Forwarded to run_pipeline train --inner-k (features selected within each outer LOPO training fold).",
     )
     parser.add_argument(
         "--outer-k",
         type=int,
         default=None,
-        help="Forwarded to run_pipeline train --outer-k",
+        help="Forwarded to run_pipeline train --outer-k (final consensus feature count from correct outer folds).",
     )
     parser.add_argument(
         "--python-cmd",

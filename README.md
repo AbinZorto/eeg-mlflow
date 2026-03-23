@@ -376,7 +376,7 @@ Sweep with CLI flags (single command):
 ```
 
 ```bash
-# Inner/outer K for one run (no loop)
+# Per-fold and consensus feature counts for one run (no loop)
 ./scripts/run_experiments.py \
   --config eeg_analysis/configs/model_config.yaml \
   --mode fs \
@@ -387,6 +387,12 @@ Sweep with CLI flags (single command):
   --inner-k 5 \
   --outer-k 10
 ```
+
+Methodology note:
+- Outer evaluation stays Leave-One-Participant/Group-Out.
+- `--inner-k` is the number of features selected on each outer training fold.
+- `--outer-k` is the number of final consensus features kept from correctly predicted outer folds.
+- These flags do not change the split count.
 
 Sweep with loops (inner-k, outer-k, window-size):
 

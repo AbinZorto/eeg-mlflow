@@ -3,6 +3,7 @@ from pathlib import Path
 from src.utils.mlflow_sync import (
     build_sync_plan,
     collect_local_inventory,
+    rewrite_local_tree_paths,
     rewrite_experiment_meta_text,
     rewrite_run_meta_text,
 )
@@ -51,6 +52,11 @@ def create_run(experiment_root: Path, experiment_id: str, run_id: str, metric_va
     write_text(run_root / "params" / "window_size", "10")
 
 
+def create_run_with_feature_path(experiment_root: Path, experiment_id: str, run_id: str, feature_path: str) -> None:
+    create_run(experiment_root, experiment_id, run_id)
+    write_text(experiment_root / run_id / "params" / "feature_file_path", feature_path)
+
+
 def create_dataset(experiment_root: Path, dataset_id: str, digest: str = "abc123") -> None:
     dataset_root = experiment_root / "datasets" / dataset_id
     write_text(dataset_root / "meta.yaml", f"digest: {digest}\nname: dataset_{dataset_id}\n")
@@ -77,6 +83,34 @@ def test_run_digest_ignores_experiment_id_and_artifact_uri(tmp_path):
 
     local_run = local_inventory.objects[("run", "18efe04bc6a2488fac966a342fe5aa1c")]
     remote_run = remote_inventory.objects[("run", "18efe04bc6a2488fac966a342fe5aa1c")]
+    assert local_run.digest == remote_run.digest
+
+
+def test_run_digest_ignores_home_prefix_in_text_metadata(tmp_path):
+    local_root = tmp_path / "local" / "mlruns"
+    remote_root = tmp_path / "remote" / "mlruns"
+
+    local_experiment = create_experiment(local_root, "134978379211635499", "/Users/abin/eeg-mlflow/mlruns/134978379211635499")
+    remote_experiment = create_experiment(remote_root, "714557200892293258", "/home/abin/eeg-mlflow/mlruns/714557200892293258")
+
+    create_run_with_feature_path(
+        local_experiment,
+        "134978379211635499",
+        "run_with_path",
+        "/Users/abin/eeg-mlflow/eeg_analysis/data/processed/features/4s.parquet",
+    )
+    create_run_with_feature_path(
+        remote_experiment,
+        "714557200892293258",
+        "run_with_path",
+        "/home/abin/eeg-mlflow/eeg_analysis/data/processed/features/4s.parquet",
+    )
+
+    local_inventory = collect_local_inventory(local_root, "134978379211635499")
+    remote_inventory = collect_local_inventory(remote_root, "714557200892293258")
+
+    local_run = local_inventory.objects[("run", "run_with_path")]
+    remote_run = remote_inventory.objects[("run", "run_with_path")]
     assert local_run.digest == remote_run.digest
 
 
@@ -187,3 +221,18 @@ def test_build_sync_plan_excludes_run_ids(tmp_path):
 
     assert [obj.identifier for obj in plan.push] == ["keep_local"]
     assert [obj.identifier for obj in plan.pull] == []
+
+
+def test_rewrite_local_tree_paths_updates_text_and_skips_binary(tmp_path):
+    root = tmp_path / "run_dir"
+    write_text(root / "params" / "feature_file_path", "/home/abin/eeg-mlflow/file.parquet\n")
+    write_text(root / "datasets" / "meta.yaml", 'source: \'{"uri": "/home/abin/eeg-mlflow/data.parquet"}\'\n')
+    binary_file = root / "artifacts" / "blob.bin"
+    binary_file.parent.mkdir(parents=True, exist_ok=True)
+    binary_file.write_bytes(b"\xff\xfe\x00\x01")
+
+    rewrite_local_tree_paths(root, "/home/abin", "/Users/abin")
+
+    assert "/Users/abin/eeg-mlflow/file.parquet" in (root / "params" / "feature_file_path").read_text()
+    assert "/Users/abin/eeg-mlflow/data.parquet" in (root / "datasets" / "meta.yaml").read_text()
+    assert binary_file.read_bytes() == b"\xff\xfe\x00\x01"

@@ -1922,13 +1922,15 @@ class DeepLearningTrainer(BaseTrainer):
         )
         df_balanced = df.copy()
         
-        # Feature Selection (nested inside each LOPO fold to avoid leakage)
+        # Feature selection is fit on each LOPO training fold only, then aggregated later by
+        # cross-fold consensus. There is no separate inner-CV split loop in this trainer path.
         perform_selection = self.feature_selection_config.get('enabled', False)
         n_features_target = self.feature_selection_config.get('n_features', 20)  # Use more features for DL
         mlflow.log_param("feature_selection_enabled", perform_selection)
         if perform_selection:
             mlflow.log_param("target_n_features_to_select", n_features_target)
-            mlflow.log_param("feature_selection_scope", "nested_group_cv")
+            mlflow.log_param("feature_selection_scope", "per_outer_fold_train_selection")
+            mlflow.log_param("feature_selection_methodology", "per_outer_fold_selection_plus_correct_fold_consensus")
         
         # Log dataset statistics
         unique_patients = groups.unique()
@@ -1957,7 +1959,7 @@ class DeepLearningTrainer(BaseTrainer):
         logger.info(f"\nPerforming LOGO cross-validation with {n_splits} splits")
         mlflow.log_param("outer_cv_strategy", "leave_one_group_out")
         mlflow.log_param("outer_cv_effective_splits", n_splits)
-        mlflow.log_param("outer_cv_requested_k", "not_used_for_splitting")
+        mlflow.log_param("outer_cv_requested_k", "leave_one_group_out_fixed")
         
         # Store predictions for evaluation
         patient_predictions = []
@@ -1989,6 +1991,8 @@ class DeepLearningTrainer(BaseTrainer):
                 outer_consensus_k = None
         mlflow.log_param("inner_feature_selection_k", inner_feature_k)
         mlflow.log_param("outer_feature_selection_k", outer_consensus_k if outer_consensus_k is not None else n_features_target)
+        mlflow.log_param("inner_k_role", "per_outer_fold_feature_count")
+        mlflow.log_param("outer_k_role", "final_correct_fold_consensus_feature_count")
 
         for fold_idx, (train_index, test_index) in enumerate(outer_splits):
             X_train_raw_unbalanced, X_test_raw = X_orig.iloc[train_index], X_orig.iloc[test_index]

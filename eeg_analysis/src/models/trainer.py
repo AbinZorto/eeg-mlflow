@@ -304,15 +304,20 @@ class Trainer(BaseTrainer):
         )
         df_balanced = df.copy()
         
-        # Feature Selection (nested inside each LOPO fold to avoid leakage)
+        # Feature selection is fit on each LOPO training fold only, then aggregated later by
+        # cross-fold consensus. There is no separate inner-CV split loop in this trainer path.
         perform_selection = self.feature_selection_config.get('enabled', False)
         n_features_target = self.feature_selection_config.get('n_features', 10)
         logger.info(f"In train method: perform_selection is {perform_selection}, feature_selection_config: {self.feature_selection_config}")
         mlflow.log_param("feature_selection_enabled", perform_selection)
         if perform_selection:
-            logger.info(f"In train method, nested feature selection enabled. Target n_features: {n_features_target}")
+            logger.info(
+                "Per-fold feature selection enabled. Base feature count target: %s",
+                n_features_target,
+            )
             mlflow.log_param("target_n_features_to_select", n_features_target)
-            mlflow.log_param("feature_selection_scope", "nested_group_cv")
+            mlflow.log_param("feature_selection_scope", "per_outer_fold_train_selection")
+            mlflow.log_param("feature_selection_methodology", "per_outer_fold_selection_plus_correct_fold_consensus")
 
         # Log detailed dataset statistics
         unique_patients = groups.unique()
@@ -338,14 +343,14 @@ class Trainer(BaseTrainer):
         patient_predictions = []
         window_predictions = []
         
-        # Outer evaluation split remains LOPO. outer_k is used only for feature-selection consensus.
+        # Outer evaluation split remains LOPO. outer_k controls only the final consensus feature count.
         logo = LeaveOneGroupOut()
         outer_splits = list(logo.split(X_orig, y, groups))
         n_splits = len(outer_splits)
         logger.info(f"\nPerforming Leave-One-Group-Out cross-validation with {n_splits} splits")
         mlflow.log_param("outer_cv_strategy", "leave_one_group_out")
         mlflow.log_param("outer_cv_effective_splits", n_splits)
-        mlflow.log_param("outer_cv_requested_k", "not_used_for_splitting")
+        mlflow.log_param("outer_cv_requested_k", "leave_one_group_out_fixed")
         
         # Store true and predicted labels for patient-level evaluation
         patient_true_labels = []
@@ -375,6 +380,8 @@ class Trainer(BaseTrainer):
                 outer_consensus_k = None
         mlflow.log_param("inner_feature_selection_k", inner_feature_k)
         mlflow.log_param("outer_feature_selection_k", outer_consensus_k if outer_consensus_k is not None else n_features_target)
+        mlflow.log_param("inner_k_role", "per_outer_fold_feature_count")
+        mlflow.log_param("outer_k_role", "final_correct_fold_consensus_feature_count")
 
         for fold_idx, (train_idx, test_idx) in enumerate(outer_splits):
             X_train_raw_unbalanced, X_test_raw = X_orig.iloc[train_idx], X_orig.iloc[test_idx]

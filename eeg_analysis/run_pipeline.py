@@ -475,8 +475,8 @@ def get_available_models_from_config(config_path):
               type=click.Choice(['model_based', 'select_k_best_f_classif', 'select_k_best_mutual_info', 'select_from_model_l1', 'rfe']), 
               default='model_based', 
               help='Feature selection method.')
-@click.option('--outer-k', type=int, default=None, help='Optional number of most-common features to keep from inner_k consensus (does not change evaluation splits).')
-@click.option('--inner-k', type=int, default=None, help='Optional number of features to select per outer fold before consensus.')
+@click.option('--outer-k', type=int, default=None, help='Optional number of final consensus features to keep from correctly predicted outer folds. Does not change evaluation splits.')
+@click.option('--inner-k', type=int, default=None, help='Optional number of features to select within each outer LOPO training fold.')
 @click.option('--feature-categories', type=str, help='Comma-separated list of feature categories to include (e.g., "spectral_features,psd_statistics,temporal_features"). Use "list" to see available categories.')
 @click.option('--use-dataset-from-run', type=str, help='MLflow run ID to load dataset from (optional)')
 @click.pass_context
@@ -550,7 +550,7 @@ def train(ctx, window_size, model_type, enable_feature_selection, n_features_sel
     }
     logger.info(f"Config for feature selection set to: {config['feature_selection']}")
 
-    # Add CV override config for outer/inner nested group CV.
+    # Store per-fold feature-count and final consensus-count overrides under cv config.
     cv_config = config.get('cv', {})
     if not isinstance(cv_config, dict):
         cv_config = {}
