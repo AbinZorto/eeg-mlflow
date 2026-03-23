@@ -5,6 +5,9 @@
 ### Scope
 This document captures control-experiment protocol, SFT workflow, run configuration guidance, and observed training outcomes.
 
+For window-model orchestration and CV sweep commands (`scripts/run_experiments.py`, `--inner-k`, `--outer-k`, `--window-sizes`), see:
+- `docs/experiment_runner_sweeps.md`
+
 ### Key Findings
 - Control experiments are essential to separate true signal learning from positional or implementation leakage.
 - The SFT pipeline is operationally straightforward once prerequisite artifacts are in place (pretrained checkpoint + closed_finetune dataset).

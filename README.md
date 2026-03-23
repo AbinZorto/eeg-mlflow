@@ -19,6 +19,7 @@ All commands below assume you run from the repository root: `~/eeg-mlflow`.
 - `eeg_analysis/run_representation_pipeline.py`: CLI for representation dataset prep + pretraining/fine-tuning orchestration.
 - `scripts/build_open_pretrain_dataset.py`: wrapper for open_pretrain dataset build.
 - `scripts/convert_open_pretrain_window_size.py`: conversion utility used by the representation CLI.
+- `docs/experiment_runner_sweeps.md`: sweep recipes for `scripts/run_experiments.py`.
 - `mlruns/`: MLflow tracking data.
 - `models/`: local outputs (predictions/metadata, plus legacy artifacts).
 
@@ -332,9 +333,68 @@ Run full experiment sweep across window sizes / models:
 ./scripts/run_experiments.py --mode fs --fs-methods select_k_best_f_classif --feature-counts 5
 ```
 
+Sweep with CLI flags (single command):
+
+```bash
+# Baseline + FS across model families and multiple windows
+./scripts/run_experiments.py \
+  --config eeg_analysis/configs/model_config.yaml \
+  --processing-config eeg_analysis/configs/processing_config.yaml \
+  --model-sets traditional,boosting,deep_learning \
+  --mode both \
+  --fs-methods select_k_best_f_classif,select_k_best_mutual_info \
+  --feature-counts 5,10 \
+  --window-sizes 2,4,6,8,10 \
+  --ordering sequential
+```
+
+```bash
+# Inner/outer K for one run (no loop)
+./scripts/run_experiments.py \
+  --config eeg_analysis/configs/model_config.yaml \
+  --mode fs \
+  --model-sets traditional \
+  --window-sizes 10 \
+  --fs-methods select_k_best_f_classif \
+  --feature-counts 10 \
+  --inner-k 5 \
+  --outer-k 10
+```
+
+Sweep with loops (inner-k, outer-k, window-size):
+
+```bash
+for ws in 2 4 6 8 10; do
+  for ik in 2 4 6 8 10; do
+    for ok in 2 4 6 8 10; do
+      ./scripts/run_experiments.py \
+        --config eeg_analysis/configs/model_config.yaml \
+        --processing-config eeg_analysis/configs/processing_config.yaml \
+        --model-sets traditional \
+        --mode fs \
+        --fs-methods select_k_best_f_classif,select_k_best_mutual_info \
+        --feature-counts 10 \
+        --window-sizes "$ws" \
+        --ordering sequential \
+        --inner-k "$ik" \
+        --outer-k "$ok"
+    done
+  done
+done
+```
+
+Sweep count formulas:
+- Per-command jobs = `(num_models) * (num_windows) * (baseline_jobs + fs_jobs)`
+- `baseline_jobs = 1` if `--mode baseline` or `--mode both`, else `0`
+- `fs_jobs = (#fs_methods * #feature_counts)` if `--mode fs` or `--mode both`, else `0`
+- Loop total = `(per-command jobs) * (#window loop) * (#inner-k loop) * (#outer-k loop)`
+
 Notes:
 - `scripts/run_experiments.py` is the unified replacement for the old experiment shell scripts.
 - Default execution uses `uv run python3`; override with `--python-cmd` if needed.
+- `--dataset-run-id <run_id>` pins a specific dataset run for all windows and skips auto-discovery.
+- For preview and count checks, use `--dry-run`.
+- Additional sweep guide: `docs/experiment_runner_sweeps.md`
 
 ### Representation Commands
 
