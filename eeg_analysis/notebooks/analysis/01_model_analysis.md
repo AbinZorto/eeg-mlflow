@@ -35,7 +35,7 @@ sns.set_context('talk')
 
 ```python
 # Load model and predictions
-config = load_config('../../configs/window_model_config.yaml')
+config = load_config('../../configs/model_config.yaml')
 seconds = '2'
 
 # Fix the path access - the correct structure based on your YAML file
@@ -59,10 +59,10 @@ def plot_roc_curves(patient_pred, window_pred):
                            patient_pred['probability'])
     plt.plot(fpr, tpr, label='Patient-level')
     
-    # Window-level ROC
+    # Window-based ROC
     fpr, tpr, _ = roc_curve(window_pred['true_label'], 
                            window_pred['probability'])
-    plt.plot(fpr, tpr, label='Window-level')
+    plt.plot(fpr, tpr, label='Window-based')
     
     plt.plot([0, 1], [0, 1], 'k--')
     plt.xlabel('False Positive Rate')

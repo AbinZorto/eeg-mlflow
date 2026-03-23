@@ -2,8 +2,8 @@ import pytest
 import numpy as np
 import pandas as pd
 from src.models.model_utils import create_classifier
-from src.models.patient_trainer import PatientLevelTrainer
-from src.models.window_trainer import WindowLevelTrainer
+from src.models.trainer import Trainer
+from src.models.evaluation import ModelEvaluator
 
 @pytest.fixture
 def sample_training_data():
@@ -31,15 +31,25 @@ def sample_training_data():
 
 @pytest.fixture
 def training_config():
-    """Generate training configuration."""
+    """Generate minimal valid window trainer configuration."""
     return {
-        'model_name': 'test_model',
-        'classifier': 'random_forest',
-        'classifier_params': {
-            'n_estimators': 100,
-            'min_samples_leaf': 20
+        'model_type': 'random_forest',
+        'model': {
+            'params': {
+                'random_forest': {
+                    'n_estimators': 10,
+                    'min_samples_leaf': 2,
+                    'random_state': 42
+                }
+            }
         },
-        'output_path': 'models/test'
+        'paths': {
+            'models': 'models/test'
+        },
+        'metrics': {
+            'window': ['accuracy', 'precision', 'recall', 'f1', 'roc_auc']
+        },
+        'use_smote': False
     }
 
 class TestModelUtils:
@@ -60,68 +70,42 @@ class TestModelUtils:
         with pytest.raises(ValueError):
             create_classifier('invalid_classifier')
 
-class TestPatientTrainer:
-    def test_patient_aggregation(self, sample_training_data):
-        """Test window-to-patient feature aggregation."""
-        trainer = PatientLevelTrainer({})
-        patient_df = trainer.aggregate_windows(sample_training_data)
-        
-        # Check result properties
-        assert len(patient_df) == len(sample_training_data['Participant'].unique())
-        assert all(col in patient_df.columns for col in ['Participant', 'Remission'])
-        
-        # Check aggregation functions
-        feature_cols = sample_training_data.columns.difference(['Participant', 'Remission'])
-        for col in feature_cols:
-            assert f"{col}_mean" in patient_df.columns
-            assert f"{col}_std" in patient_df.columns
-    
-    def test_patient_training(self, sample_training_data, training_config):
-        """Test patient-level model training."""
-        trainer = PatientLevelTrainer(training_config)
-        
-        # Split features and target
-        X = sample_training_data.drop(['Participant', 'Remission'], axis=1)
-        y = sample_training_data['Remission']
-        groups = sample_training_data['Participant']
-        
-        # Train and evaluate
-        metrics, predictions = trainer.train_evaluate(X, y, groups)
-        
-        # Check results
-        assert all(metric in metrics for metric in 
-                  ['accuracy', 'precision', 'recall', 'f1'])
-        assert len(predictions) == len(groups.unique())
+class TestTrainer:
+    def test_window_to_patient_prediction_aggregation(self, training_config):
+        """Trainer should retain patient-level aggregation outputs."""
+        trainer = Trainer(training_config)
+        groups = pd.Series(['P001', 'P001', 'P001', 'P001'])
+        y_true = pd.Series([1, 1, 1, 1])
+        y_pred = np.array([1, 1, 0, 1])
+        y_prob = np.array([0.9, 0.8, 0.2, 0.7])
 
-class TestWindowTrainer:
-    def test_window_aggregation(self, sample_training_data):
-        """Test window prediction aggregation to patient level."""
-        trainer = WindowLevelTrainer({})
-        window_preds = np.random.randint(0, 2, len(sample_training_data))
-        window_probs = np.random.random(len(sample_training_data))
-        
-        patient_pred, patient_prob = trainer.calculate_patient_prediction(
-            window_preds, window_probs
+        patient_pred = trainer._create_patient_prediction(
+            fold_idx=0,
+            groups=groups,
+            y_true=y_true,
+            y_pred=y_pred,
+            y_prob=y_prob,
         )
-        
-        assert isinstance(patient_pred, int)
-        assert isinstance(patient_prob, float)
-        assert 0 <= patient_prob <= 1
-    
-    def test_window_training(self, sample_training_data, training_config):
-        """Test window-level model training."""
-        trainer = WindowLevelTrainer(training_config)
-        
-        # Split features and target
-        X = sample_training_data.drop(['Participant', 'Remission'], axis=1)
-        y = sample_training_data['Remission']
-        groups = sample_training_data['Participant']
-        
-        # Train and evaluate
-        metrics, window_preds, patient_preds = trainer.train_evaluate(X, y, groups)
-        
-        # Check results
-        assert 'window_level' in metrics
-        assert 'patient_level' in metrics
-        assert len(window_preds) == len(sample_training_data)
-        assert len(patient_preds) == len(groups.unique())
+
+        assert patient_pred['participant'] == 'P001'
+        assert patient_pred['true_label'] == 1
+        assert patient_pred['predicted_label'] == 1
+        assert patient_pred['probability'] == 0.75
+        assert patient_pred['n_windows'] == 4
+        assert patient_pred['n_positive_windows'] == 3
+
+
+class TestEvaluator:
+    def test_patient_level_metrics_available(self):
+        """Patient-level metrics remain available for window-based aggregations."""
+        evaluator = ModelEvaluator()
+        y_true = np.array([1, 0, 1, 0])
+        y_pred = np.array([1, 0, 0, 0])
+        y_prob = np.array([0.8, 0.1, 0.4, 0.2])
+
+        metrics = evaluator.evaluate_patient_predictions(y_true, y_pred, y_prob)
+
+        assert 'accuracy' in metrics
+        assert 'roc_auc' in metrics
+        assert 'n_patients' in metrics
+        assert metrics['n_patients'] == 4

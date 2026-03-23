@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 Sweep random_state values for whichever model is selected in config.
-Collects patient-level accuracy for each random_state and saves to CSV.
+Collects patient-level aggregated accuracy (from window-based predictions)
+for each random_state and saves to CSV.
 Continues until target accuracy is reached or max random_state is hit.
 """
 
@@ -22,7 +23,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 mlflow.set_tracking_uri(f"file:{PROJECT_ROOT / 'mlruns'}")
 
 # Configuration
-CONFIG_FILE = str(PROJECT_ROOT / "eeg_analysis" / "configs" / "window_model_config")
+CONFIG_FILE = str(PROJECT_ROOT / "eeg_analysis" / "configs" / "model_config")
 START_RANDOM_STATE = 10
 MIN_RANDOM_STATE = 60  # Minimum to check up to
 TARGET_ACCURACY = 0.91  # 91% accuracy target
@@ -97,9 +98,9 @@ def resolve_config_path(config_path):
     Resolve config path with extension fallback.
 
     Supports:
-    - eeg_analysis/configs/window_model_config
-    - eeg_analysis/configs/window_model_config.yaml
-    - eeg_analysis/configs/window_model_config.yml
+    - eeg_analysis/configs/model_config
+    - eeg_analysis/configs/model_config.yaml
+    - eeg_analysis/configs/model_config.yml
     """
     path = Path(config_path)
     if not path.is_absolute():
@@ -175,7 +176,6 @@ def run_training(model_type, config_path, enable_feature_selection=False, n_feat
         "uv", "run", "python3", "eeg_analysis/run_pipeline.py",
         "--config", str(config_path),
         "train",
-        "--level", "window",
         "--model-type", model_type
     ]
 
@@ -191,7 +191,7 @@ def run_training(model_type, config_path, enable_feature_selection=False, n_feat
     return result.returncode == 0, result.stdout, result.stderr
 
 def get_patient_accuracy_from_mlflow(experiment_name):
-    """Get patient-level accuracy from the most recent MLflow parent run (not nested runs)."""
+    """Get patient-level aggregated accuracy from the most recent MLflow parent run."""
     try:
         # Get the experiment
         experiment = mlflow.get_experiment_by_name(experiment_name)

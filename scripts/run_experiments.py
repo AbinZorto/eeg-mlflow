@@ -29,32 +29,14 @@ RUN_PIPELINE = REPO_ROOT / "eeg_analysis" / "run_pipeline.py"
 FIND_DATASET_SCRIPT = REPO_ROOT / "scripts" / "find_dataset.py"
 FILTER_DATASET_SCRIPT = REPO_ROOT / "scripts" / "filter_dataset.py"
 
-ALL_FOUR_CHANNELS = {"af7", "af8", "tp9", "tp10"}
+EEG_ANALYSIS_ROOT = REPO_ROOT / "eeg_analysis"
+if str(EEG_ANALYSIS_ROOT) not in sys.path:
+    sys.path.insert(0, str(EEG_ANALYSIS_ROOT))
 
-MODEL_SETS: Dict[str, List[str]] = {
-    "traditional": [
-        "random_forest",
-        "gradient_boosting",
-        "logistic_regression",
-        "svm_rbf",
-    ],
-    "boosting": [
-        "xgboost_gpu",
-        "catboost_gpu",
-        "lightgbm_gpu",
-    ],
-    "deep_learning": [
-        "pytorch_mlp",
-        "keras_mlp",
-        "hybrid_1dcnn_lstm",
-        "advanced_hybrid_1dcnn_lstm",
-        "efficient_tabular_mlp",
-        "advanced_lstm",
-    ],
-}
-MODEL_SETS["all"] = (
-    MODEL_SETS["traditional"] + MODEL_SETS["boosting"] + MODEL_SETS["deep_learning"]
-)
+from src.utils.model_registry import get_model_metadata  # noqa: E402
+
+ALL_FOUR_CHANNELS = {"af7", "af8", "tp9", "tp10"}
+CANONICAL_MODEL_SETS = ("traditional", "boosting", "deep_learning")
 
 
 @dataclass
@@ -118,40 +100,73 @@ def has_all_four_channels(channels: Sequence[str]) -> bool:
     return set(channels) == ALL_FOUR_CHANNELS
 
 
-def resolve_models(model_sets_raw: str, explicit_models_raw: Optional[str]) -> List[str]:
+def resolve_models(
+    model_sets_raw: str,
+    explicit_models_raw: Optional[str],
+    model_metadata: Dict[str, Dict[str, object]],
+) -> List[str]:
+    available_models = [
+        model_name
+        for model_name, info in model_metadata.items()
+        if bool(info.get("enabled", True))
+    ]
+
     if explicit_models_raw:
         explicit_models = parse_csv_list(explicit_models_raw, str)
         if not explicit_models:
             raise ValueError("--models was provided but no valid model names were parsed.")
-        return dedupe_preserve_order(explicit_models)
+        explicit_models = dedupe_preserve_order(explicit_models)
+        unknown = [model_name for model_name in explicit_models if model_name not in available_models]
+        if unknown:
+            raise ValueError(
+                f"Unknown or unsupported model(s): {unknown}. "
+                f"Available models: {', '.join(available_models)}"
+            )
+        return explicit_models
 
     requested_sets = parse_csv_list(model_sets_raw, str)
     if not requested_sets:
         requested_sets = ["all"]
+    requested_sets = [set_name.lower() for set_name in requested_sets]
 
-    unknown = [s for s in requested_sets if s not in MODEL_SETS]
+    valid_sets = set(CANONICAL_MODEL_SETS) | {"all"}
+    unknown = [s for s in requested_sets if s not in valid_sets]
     if unknown:
-        valid = ", ".join(sorted(MODEL_SETS.keys()))
+        valid = ", ".join(sorted(valid_sets))
         raise ValueError(f"Unknown model set(s): {unknown}. Valid model sets: {valid}")
 
     if "all" in requested_sets:
-        return dedupe_preserve_order(MODEL_SETS["all"])
+        if not available_models:
+            raise ValueError("No enabled models found in training config.")
+        return available_models
 
     models: List[str] = []
     for set_name in requested_sets:
-        models.extend(MODEL_SETS[set_name])
-    return dedupe_preserve_order(models)
+        set_models = [
+            model_name
+            for model_name in available_models
+            if str(model_metadata.get(model_name, {}).get("family", "")).lower() == set_name
+        ]
+        models.extend(set_models)
+
+    models = dedupe_preserve_order(models)
+    if not models:
+        raise ValueError(
+            f"No models resolved for --model-sets '{model_sets_raw}'. "
+            "Check model_families/model_registry in config."
+        )
+    return models
 
 
-def experiment_name_for_model(model: str, fs_enabled: bool) -> str:
+def experiment_name_for_model(
+    model: str, fs_enabled: bool, model_metadata: Dict[str, Dict[str, object]]
+) -> str:
     suffix = "feature_selection" if fs_enabled else "baseline"
-    if model in {"pytorch_mlp", "keras_mlp", "hybrid_1dcnn_lstm", "advanced_hybrid_1dcnn_lstm", "efficient_tabular_mlp", "advanced_lstm"}:
-        return f"eeg_deep_learning_gpu_{suffix}"
-    if model in {"xgboost_gpu", "catboost_gpu", "lightgbm_gpu"}:
-        return f"eeg_boosting_gpu_{suffix}"
-    if model in {"random_forest", "gradient_boosting", "logistic_regression", "svm_rbf"}:
-        return f"eeg_traditional_models_{suffix}"
-    return f"eeg_other_models_{suffix}"
+    model_info = model_metadata.get(model, {})
+    base_experiment = str(model_info.get("experiment_group", "eeg_other_models"))
+    if base_experiment.endswith(f"_{suffix}"):
+        return base_experiment
+    return f"{base_experiment}_{suffix}"
 
 
 def run_and_capture(cmd: Sequence[str], cwd: Path) -> Tuple[int, str, str]:
@@ -299,8 +314,6 @@ def build_train_cmd(
         "--config",
         args.config,
         "train",
-        "--level",
-        args.level,
         "--window-size",
         str(window_seconds),
         "--model-type",
@@ -348,7 +361,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--config",
-        default="eeg_analysis/configs/window_model_config.yaml",
+        default="eeg_analysis/configs/model_config.yaml",
         help="Path to training config passed to run_pipeline.py",
     )
     parser.add_argument(
@@ -357,20 +370,14 @@ def parse_args() -> argparse.Namespace:
         help="Path to processing config for channels and window sizes",
     )
     parser.add_argument(
-        "--level",
-        default="window",
-        choices=["window", "patient"],
-        help="Training level passed to run_pipeline train",
-    )
-    parser.add_argument(
         "--model-sets",
         default="all",
-        help="Comma-separated model sets (traditional,boosting,deep_learning,all). Ignored if --models is set.",
+        help="Comma-separated model sets (traditional,boosting,deep_learning,all), resolved from training config metadata. Ignored if --models is set.",
     )
     parser.add_argument(
         "--models",
         default=None,
-        help="Comma-separated explicit models to run (overrides --model-sets).",
+        help="Comma-separated explicit models to run (overrides --model-sets, validated against training config).",
     )
     parser.add_argument(
         "--mode",
@@ -451,9 +458,11 @@ def main() -> int:
         raise FileNotFoundError(f"Training config not found: {train_cfg_path}")
 
     processing_cfg = load_yaml(processing_cfg_path)
+    train_cfg = load_yaml(train_cfg_path)
     channels = get_channels(processing_cfg)
     window_sizes = parse_window_sizes(processing_cfg, args.window_sizes)
-    models = resolve_models(args.model_sets, args.models)
+    model_metadata = get_model_metadata(train_cfg)
+    models = resolve_models(args.model_sets, args.models, model_metadata)
 
     fs_methods = parse_csv_list(args.fs_methods, str)
     feature_counts = parse_csv_list(args.feature_counts, int)
@@ -503,7 +512,7 @@ def main() -> int:
         print(f"Dataset run id: {dataset_run_id}")
 
         for idx, job in enumerate(jobs, start=1):
-            exp_name = experiment_name_for_model(job.model, job.fs_enabled)
+            exp_name = experiment_name_for_model(job.model, job.fs_enabled, model_metadata)
             env = dict(os.environ)
             env["MLFLOW_EXPERIMENT_NAME"] = exp_name
 

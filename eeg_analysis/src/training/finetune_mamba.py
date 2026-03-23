@@ -214,7 +214,7 @@ def _flatten_valid_windows(
     labels: torch.Tensor,
     seq_lengths: torch.Tensor
 ) -> Tuple[torch.Tensor, torch.Tensor]:
-    """Flatten valid windows for window-level loss/metrics."""
+    """Flatten valid windows for window-based loss/metrics."""
     B, W, _ = logits.shape
     device = logits.device
     mask = torch.arange(W, device=device)[None, :] < seq_lengths[:, None]
@@ -323,7 +323,7 @@ def evaluate_window(
     patient_vote: str = "majority",
     patient_threshold: float | None = None,
 ) -> Dict[str, float] | Tuple[Dict[str, float], List[int], List[float], List[int], List[int], List[int]]:
-    """Evaluate window-level model; returns window metrics and patient summaries."""
+    """Evaluate window-based model; returns window metrics and patient summaries."""
     model.eval()
     total_loss = 0.0
     window_preds = []
@@ -350,7 +350,7 @@ def evaluate_window(
             else:
                 preds = (probs[:, :, 1] >= threshold).long()
 
-            # Window-level metrics
+            # Window-based metrics
             for i in range(labels.shape[0]):
                 valid_w = int(seq_lengths[i].item())
                 window_labels.extend([int(labels[i].item())] * valid_w)

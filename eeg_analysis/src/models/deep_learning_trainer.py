@@ -1171,7 +1171,7 @@ class KerasMLPClassifier(BaseEstimator, ClassifierMixin):
 
 class EfficientTabularMLPClassifier(BaseEstimator, ClassifierMixin):
     """
-    Efficient tabular MLP optimized for window-level features.
+    Efficient tabular MLP optimized for window-based features.
     - AdamW (or Adam) optimizer
     - Optional cosine warm restarts
     - Label smoothing and gradient clipping
@@ -2212,7 +2212,7 @@ class DeepLearningTrainer(BaseTrainer):
             logger.info(f"NearMiss version: {self.nearmiss_version}")
         
         self.output_dir = config['paths']['models']
-        self.metrics = config.get('metrics', {}).get('window_level', ['accuracy', 'precision', 'recall', 'f1', 'roc_auc'])
+        self.metrics = config.get('metrics', {}).get('window', ['accuracy', 'precision', 'recall', 'f1', 'roc_auc'])
         self.feature_selection_config = config.get('feature_selection', {})
         
         logger.info(f"DeepLearningTrainer initialized with model_type: {self.model_type}")
@@ -2438,7 +2438,7 @@ class DeepLearningTrainer(BaseTrainer):
                 y_pred = self.model.predict(X_test)
                 y_prob = self.model.predict_proba(X_test)[:, 1]
                 
-                # Calculate test accuracies - only accuracy is meaningful for window-level
+                # Calculate test accuracies - only accuracy is meaningful for window-based
                 # since all windows from a participant belong to the same class
                 window_test_accuracy = float(np.mean(y_pred == y_test))
                 fold_patient_accuracies = []
@@ -2511,7 +2511,7 @@ class DeepLearningTrainer(BaseTrainer):
         print(f"🎯 CROSS-VALIDATION SUMMARY")
         print(f"="*80)
         
-        # Calculate average window-level accuracy across all folds
+        # Calculate average window-based accuracy across all folds
         avg_window_accuracy = np.mean([p['window_accuracy'] for p in patient_predictions])
         
         print(f"\n📊 PATIENT-LEVEL RESULTS:")
@@ -2523,7 +2523,7 @@ class DeepLearningTrainer(BaseTrainer):
         
         print(f"\n📊 WINDOW-LEVEL RESULTS (averaged across folds):")
         print(f"   Average window accuracy: {avg_window_accuracy:.4f}")
-        print(f"   Note: Window-level precision/recall/F1 not meaningful (all windows per participant are same class)")
+        print(f"   Note: Window-based precision/recall/F1 not meaningful (all windows per participant are same class)")
         
         print(f"\n📊 FOLD-BY-FOLD BREAKDOWN:")
         for i, pred in enumerate(patient_predictions):
@@ -2534,7 +2534,7 @@ class DeepLearningTrainer(BaseTrainer):
                   f"Window Acc: {pred['window_accuracy']:.3f} | {status}")
         
         print(f"\n⚠️  OVERFITTING ANALYSIS:")
-        print(f"   If window-level accuracy >> patient-level accuracy: Model overfits to individual windows")
+        print(f"   If window-based accuracy >> patient-level accuracy: Model overfits to individual windows")
         print(f"   If both are low: Model underfits or data is too noisy")
         print(f"   If both are high: Model generalizes well")
         
@@ -2617,7 +2617,7 @@ class DeepLearningTrainer(BaseTrainer):
     def _create_window_predictions(self, fold_idx: int, participant: str, 
                                  y_true: pd.Series, y_pred: np.ndarray, 
                                  y_prob: np.ndarray) -> List[Dict[str, Any]]:
-        """Create window-level prediction records."""
+        """Create window-based prediction records."""
         return [{
             'fold': fold_idx,
             'participant': participant,

@@ -17,11 +17,14 @@ from src.processing.window_slicer import slice_eeg_windows
 from src.processing.feature_extractor import extract_eeg_features as run_feature_extraction
 from src.processing.demean import demean_eeg_data
 
-from src.models.patient_trainer import PatientLevelTrainer
-from src.models.window_trainer import WindowLevelTrainer
+from src.models.trainer import Trainer
 from src.models.deep_learning_trainer import DeepLearningTrainer
 from src.models.evaluation import ModelEvaluator
 from src.utils.feature_filter import FeatureFilter
+from src.utils.model_registry import (
+    get_available_models_from_path,
+    is_deep_learning_model,
+)
 
 logger = setup_logger(__name__)
 
@@ -453,31 +456,17 @@ def list_datasets(ctx):
 def get_available_models_from_config(config_path):
     """Extract available model types from the config file."""
     try:
-        with open(config_path, 'r') as f:
-            config = yaml.safe_load(f)
-        
-        available_models = []
-        
-        # Get traditional models from model.params section
-        if 'model' in config and 'params' in config['model']:
-            available_models.extend(list(config['model']['params'].keys()))
-        
-        # Get deep learning models from deep_learning section
-        if 'deep_learning' in config:
-            available_models.extend(list(config['deep_learning'].keys()))
-        
-        return available_models
+        return get_available_models_from_path(config_path)
     except Exception as e:
         logger.warning(f"Failed to load models from config: {e}")
         # Return default models as fallback
         return [
                 'random_forest', 'gradient_boosting', 'xgboost_gpu', 'catboost_gpu', 'lightgbm_gpu', 'logistic_regression', 
                 'logistic_regression_l1', 'svm_rbf', 'svm_linear', 'extra_trees', 'ada_boost', 'knn', 'decision_tree', 'sgd', 
-                'pytorch_mlp', 'keras_mlp', 'hybrid_1dcnn_lstm', 'advanced_1dcnn', 'advanced_lstm', 'advanced_hybrid_1dcnn_lstm'
+                'pytorch_mlp', 'keras_mlp', 'efficient_tabular_mlp', 'hybrid_1dcnn_lstm', 'advanced_1dcnn', 'advanced_lstm', 'advanced_hybrid_1dcnn_lstm'
             ]
 
 @cli.command()
-@click.option('--level', type=click.Choice(['patient', 'window']), required=True)
 @click.option('--window-size', type=int, help='Window size in seconds (overrides config)')
 @click.option('--model-type', type=str, required=True, help='Model type (will be validated against available models)')
 @click.option('--enable-feature-selection', is_flag=True, help='Enable feature selection.')
@@ -491,11 +480,11 @@ def get_available_models_from_config(config_path):
 @click.option('--feature-categories', type=str, help='Comma-separated list of feature categories to include (e.g., "spectral_features,psd_statistics,temporal_features"). Use "list" to see available categories.')
 @click.option('--use-dataset-from-run', type=str, help='MLflow run ID to load dataset from (optional)')
 @click.pass_context
-def train(ctx, level, window_size, model_type, enable_feature_selection, n_features_select, fs_method, outer_k, inner_k, feature_categories, use_dataset_from_run):
+def train(ctx, window_size, model_type, enable_feature_selection, n_features_select, fs_method, outer_k, inner_k, feature_categories, use_dataset_from_run):
     """Train the model"""
     config = ctx.obj['config']
     logger.info(
-        f"CLI train inputs: level='{level}', window_size={window_size}, model_type='{model_type}', "
+        f"CLI train inputs: window_size={window_size}, model_type='{model_type}', "
         f"enable_feature_selection={enable_feature_selection}, n_features_select={n_features_select}, "
         f"fs_method='{fs_method}', outer_k={outer_k}, inner_k={inner_k}, "
         f"use_dataset_from_run='{use_dataset_from_run}'"
@@ -507,7 +496,7 @@ def train(ctx, level, window_size, model_type, enable_feature_selection, n_featu
         raise click.BadParameter("--inner-k must be >= 1 when provided.")
 
     # Validate model type against available models from config
-    config_path = ctx.obj.get('config_path', 'configs/window_model_config.yaml')
+    config_path = ctx.obj.get('config_path', 'configs/model_config.yaml')
     available_models = get_available_models_from_config(config_path)
     
     if model_type not in available_models:
@@ -765,11 +754,10 @@ def train(ctx, level, window_size, model_type, enable_feature_selection, n_featu
         }
     
     # Create appropriate trainer
-    if model_type in ['pytorch_mlp', 'keras_mlp', 'hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm']:
+    if is_deep_learning_model(config, model_type):
         trainer = DeepLearningTrainer(config)
     else:
-        trainer_cls = PatientLevelTrainer if level == 'patient' else WindowLevelTrainer
-        trainer = trainer_cls(config)
+        trainer = Trainer(config)
     
     try:
         run_name_suffix = ""
@@ -800,14 +788,13 @@ def train(ctx, level, window_size, model_type, enable_feature_selection, n_featu
             
             # Train model with dataset (trainer logs model artifacts directly to MLflow).
             trainer.train(dataset=dataset_to_use)
-            mlflow.log_param("level", level)
             mlflow.log_param("window_size", window_size)
 
             run_id = run.info.run_id
             model_uri = f"runs:/{run_id}/model"
             logger.info(f"Training run ID: {run_id}")
             logger.info(f"MLflow model URI: {model_uri}")
-            logger.info(f"{level.capitalize()} training completed successfully")
+            logger.info("Training completed successfully")
             
     except Exception as e:
         logger.error(f"Training failed: {str(e)}")
@@ -816,11 +803,10 @@ def train(ctx, level, window_size, model_type, enable_feature_selection, n_featu
 @cli.command()
 @click.option('--run-id', type=str, required=False, help='MLflow run ID containing a model artifact at path "model"')
 @click.option('--model-uri', type=str, required=False, help='MLflow model URI (for example: runs:/<run_id>/model)')
-@click.option('--level', type=click.Choice(['patient', 'window']), required=False, help='Evaluation level override; if omitted, inferred from run params')
 @click.option('--data-path', type=click.Path(exists=True), required=False)
 @click.option('--window-size', type=int, help='Window size in seconds for feature path')
 @click.pass_context
-def evaluate(ctx, run_id, model_uri, level, data_path, window_size):
+def evaluate(ctx, run_id, model_uri, data_path, window_size):
     """Evaluate model performance"""
     config = ctx.obj['config']
     evaluator = ModelEvaluator()
@@ -850,15 +836,6 @@ def evaluate(ctx, run_id, model_uri, level, data_path, window_size):
             source_run = mlflow.get_run(run_id)
         except Exception as e:
             logger.warning(f"Could not fetch run metadata for run_id='{run_id}': {e}")
-
-    if level is None and source_run is not None:
-        inferred_level = source_run.data.params.get("level")
-        if inferred_level in {"patient", "window"}:
-            level = inferred_level
-
-    if level is None:
-        level = "window"
-        logger.warning("Could not infer model level from MLflow run; defaulting evaluation level to 'window'.")
 
     # If data path not provided, construct it from config and window size
     if data_path is None:
@@ -899,22 +876,16 @@ def evaluate(ctx, run_id, model_uri, level, data_path, window_size):
             # Prepare data
             X = test_data.drop(['Participant', 'Remission'], axis=1)
             y = test_data['Remission']
-            groups = test_data['Participant']
             
             # Get predictions
             y_pred = model.predict(X)
             y_prob = model.predict_proba(X)[:, 1]
 
             mlflow.log_param("evaluated_model_uri", model_uri)
-            mlflow.log_param("evaluation_level", level)
             if run_id:
                 mlflow.log_param("evaluated_run_id", run_id)
             
-            # Evaluate based on model level
-            if level == 'patient':
-                metrics = evaluator.evaluate_patient_predictions(groups, y, y_prob)
-            else:
-                metrics = evaluator.evaluate_window_predictions(y, y_pred, y_prob)
+            metrics = evaluator.evaluate_window_predictions(y, y_pred, y_prob)
             
             # Log metrics
             for name, value in metrics.items():

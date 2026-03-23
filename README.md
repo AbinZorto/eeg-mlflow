@@ -70,29 +70,18 @@ This creates a parquet representation dataset from windowed channel data (withou
 
 ```bash
 uv run eeg_analysis/run_pipeline.py \
-  --config eeg_analysis/configs/window_model_config.yaml \
+  --config eeg_analysis/configs/model_config.yaml \
   list-datasets
 ```
 
 ### 4) Train models
 
-Window-level example:
+Training example:
 
 ```bash
 uv run eeg_analysis/run_pipeline.py \
-  --config eeg_analysis/configs/window_model_config.yaml \
+  --config eeg_analysis/configs/model_config.yaml \
   train \
-  --level window \
-  --model-type random_forest
-```
-
-Patient-level example:
-
-```bash
-uv run eeg_analysis/run_pipeline.py \
-  --config eeg_analysis/configs/patient_model_config.yaml \
-  train \
-  --level patient \
   --model-type random_forest
 ```
 
@@ -106,7 +95,7 @@ Notes:
 
 ```bash
 uv run eeg_analysis/run_pipeline.py \
-  --config eeg_analysis/configs/window_model_config.yaml \
+  --config eeg_analysis/configs/model_config.yaml \
   evaluate \
   --run-id <mlflow_run_id> \
   --data-path eeg_analysis/data/processed/features/10s_af7_af8_tp9_tp10_window_features_seq.parquet
@@ -116,10 +105,9 @@ Alternative:
 
 ```bash
 uv run eeg_analysis/run_pipeline.py \
-  --config eeg_analysis/configs/window_model_config.yaml \
+  --config eeg_analysis/configs/model_config.yaml \
   evaluate \
-  --model-uri runs:/<mlflow_run_id>/model \
-  --level window
+  --model-uri runs:/<mlflow_run_id>/model
 ```
 
 Passing `--data-path` explicitly is the safest option.
@@ -146,9 +134,8 @@ List available categories:
 
 ```bash
 uv run eeg_analysis/run_pipeline.py \
-  --config eeg_analysis/configs/window_model_config.yaml \
+  --config eeg_analysis/configs/model_config.yaml \
   train \
-  --level window \
   --model-type random_forest \
   --feature-categories list
 ```
@@ -157,9 +144,8 @@ Train with selected categories:
 
 ```bash
 uv run eeg_analysis/run_pipeline.py \
-  --config eeg_analysis/configs/window_model_config.yaml \
+  --config eeg_analysis/configs/model_config.yaml \
   train \
-  --level window \
   --model-type random_forest \
   --feature-categories "spectral_features,psd_statistics"
 ```
@@ -250,13 +236,17 @@ Closed pretraining profile default path:
 
 ## Training Configs and Model Types
 
-- Window-level config: `eeg_analysis/configs/window_model_config.yaml`
-- Patient-level config: `eeg_analysis/configs/patient_model_config.yaml`
+- Training config: `eeg_analysis/configs/model_config.yaml`
 
 Model types are validated from the selected config file:
 
 - Classical/GPU: `random_forest`, `gradient_boosting`, `xgboost_gpu`, `catboost_gpu`, `lightgbm_gpu`, `logistic_regression`, `logistic_regression_l1`, `svm_rbf`, `svm_linear`, `extra_trees`, `ada_boost`, `knn`, `decision_tree`, `sgd`
-- Deep learning (window config): `pytorch_mlp`, `keras_mlp`, `hybrid_1dcnn_lstm`, `advanced_hybrid_1dcnn_lstm`, `efficient_tabular_mlp`, `advanced_lstm`
+- Deep learning (training config): `pytorch_mlp`, `keras_mlp`, `hybrid_1dcnn_lstm`, `advanced_hybrid_1dcnn_lstm`, `efficient_tabular_mlp`, `advanced_lstm`
+
+Model orchestration metadata is config-driven:
+- `model_families`: maps models to orchestration families (`traditional`, `boosting`, `deep_learning`)
+- `experiment_groups`: maps families to MLflow experiment name prefixes
+- Optional `model_registry.<model>` overrides can define `family`, `trainer`, `enabled`, and `include_in_auto`
 
 ## MLflow Notes
 
@@ -284,7 +274,7 @@ Show command-specific help (requires a config):
 
 ```bash
 uv run eeg_analysis/run_pipeline.py \
-  --config eeg_analysis/configs/window_model_config.yaml \
+  --config eeg_analysis/configs/model_config.yaml \
   train --help
 ```
 
@@ -293,16 +283,15 @@ Run pipeline stages:
 ```bash
 uv run eeg_analysis/run_pipeline.py --config eeg_analysis/configs/processing_config.yaml process
 uv run eeg_analysis/run_representation_pipeline.py --config eeg_analysis/configs/processing_config.yaml process-closed-finetune
-uv run eeg_analysis/run_pipeline.py --config eeg_analysis/configs/window_model_config.yaml list-datasets
+uv run eeg_analysis/run_pipeline.py --config eeg_analysis/configs/model_config.yaml list-datasets
 ```
 
 Training template:
 
 ```bash
 uv run eeg_analysis/run_pipeline.py \
-  --config eeg_analysis/configs/window_model_config.yaml \
+  --config eeg_analysis/configs/model_config.yaml \
   train \
-  --level window \
   --model-type random_forest \
   --enable-feature-selection \
   --n-features-select 10 \
@@ -315,7 +304,7 @@ Evaluation template:
 
 ```bash
 uv run eeg_analysis/run_pipeline.py \
-  --config eeg_analysis/configs/window_model_config.yaml \
+  --config eeg_analysis/configs/model_config.yaml \
   evaluate \
   --run-id <mlflow_run_id> \
   --data-path <features.parquet> \
@@ -431,7 +420,7 @@ uv run scripts/filter_dataset.py <run_id> "af7 af8" <window_seconds>
 ### Random-State Sweep Scripts
 
 ```bash
-uv run scripts/sweep_random_state.py --config eeg_analysis/configs/window_model_config
+uv run scripts/sweep_random_state.py --config eeg_analysis/configs/model_config
 # Optional: override model from config by editing top-level model_type first
 ```
 

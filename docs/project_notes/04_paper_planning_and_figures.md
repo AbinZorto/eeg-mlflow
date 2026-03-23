@@ -679,7 +679,7 @@ Recall:  [0.714] [1.000*↑+40%]  [0.571] [0.714↑+25%]
 - **EEG Channels**: 4 channels (AF7, AF8, TP9, TP10) - frontal and temporal regions
 - **Recording Protocol**: 10-second windows, 256 Hz sampling rate
 - **Data Split**: Leave-One-Patient-Out cross-validation (21 folds)
-- **Evaluation Level**: Patient-level aggregation from window-level predictions
+- **Evaluation Level**: Patient-level aggregation from window-based predictions
 - **Class Distribution**: 393 positive windows, 810 negative windows (2.06:1 ratio)
 
 ### 4.2 DC Offset Removal Implementation
@@ -814,7 +814,7 @@ for each window:
   - Precision (patient-level)
   - Accuracy (patient-level)
 - **Secondary Metrics**:
-  - Window-level accuracy
+  - Window-based accuracy
   - Confusion matrix (TP, TN, FP, FN)
 - **Rationale**: Patient-level metrics align with clinical decision-making
 
@@ -1058,7 +1058,7 @@ for each window:
 - **Hardware**: GPU specifications, training time
 
 ### 9.2 Additional Results
-- **Window-Level Metrics**: Detailed window-level performance
+- **Window-Level Metrics**: Detailed window-based performance
 - **Feature Analysis**: Feature importance, correlation analysis
 - **Training Curves**: Loss curves, learning rate schedules
 
@@ -1166,7 +1166,7 @@ for each window:
 
 ### Key Weaknesses to Address
 1. **Confounded Design**: Hybrid experiment has multiple changes
-2. **Small Dataset**: 21 patients (mitigate with window-level analysis)
+2. **Small Dataset**: 21 patients (mitigate with window-based analysis)
 4. **No Ablation**: Can't isolate architecture contribution
 5. **Single Dataset**: Limited generalizability
 

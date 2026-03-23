@@ -16,19 +16,17 @@ from sklearn.svm import SVC
 from mlflow.models.signature import infer_signature
 from imblearn.over_sampling import SMOTE
 from mlflow.data.pandas_dataset import PandasDataset
+from src.utils.model_registry import is_deep_learning_model
 
 
 logger = logging.getLogger(__name__)
 
-class WindowLevelTrainer(BaseTrainer):
+class Trainer(BaseTrainer):
     def __init__(self, config: Dict[str, Any]):
         super().__init__(config)
         self.model_type = config['model_type']
-        
-        # Check if this is a deep learning model
-        deep_learning_models = ['pytorch_mlp', 'keras_mlp', 'hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm', 'advanced_1dcnn', 'advanced_lstm']
-        
-        if self.model_type in deep_learning_models:
+
+        if is_deep_learning_model(config, self.model_type):
             # For deep learning models, get parameters from deep_learning section
             all_model_params = config.get('deep_learning', {})
             self.model_params = all_model_params.get(self.model_type, {})
@@ -43,17 +41,17 @@ class WindowLevelTrainer(BaseTrainer):
             self.model_params = {}
             
         self.output_dir = config['paths']['models']
-        self.metrics = config['metrics']['window_level']
+        self.metrics = config.get('metrics', {}).get('window', ['accuracy', 'precision', 'recall', 'f1', 'roc_auc'])
         self.feature_selection_config = config.get('feature_selection', {})
         self.use_smote = config.get('use_smote', True)
-        logger.info(f"WindowLevelTrainer initialized with model_type: {self.model_type}")
-        logger.info(f"WindowLevelTrainer initialized with feature_selection_config: {self.feature_selection_config}")
+        logger.info(f"Trainer initialized with model_type: {self.model_type}")
+        logger.info(f"Trainer initialized with feature_selection_config: {self.feature_selection_config}")
         if self.use_smote:
-            logger.info("SMOTE is enabled for window-level training.")
+            logger.info("SMOTE is enabled for window-based training.")
     
     def _create_model_instance(self) -> BaseEstimator:
         """Creates a model instance based on the trainer's configuration."""
-        # Uses self.model_type and self.model_params which are specific to WindowLevelTrainer
+        # Uses self.model_type and self.model_params which are specific to Trainer
         return create_classifier(self.model_type, self.model_params)
 
     def _create_and_train_model(self, X_train: pd.DataFrame, y_train: pd.Series) -> BaseEstimator:
@@ -248,7 +246,7 @@ class WindowLevelTrainer(BaseTrainer):
 
     def train(self, data_path: str = None, dataset: Optional[PandasDataset] = None) -> BaseEstimator:
         """
-        Train a window-level model.
+        Train a window-based model.
         
         Args:
             data_path: Optional path to feature data. If None, uses config path.
@@ -575,7 +573,7 @@ class WindowLevelTrainer(BaseTrainer):
                                  y_true: np.ndarray, y_pred: np.ndarray, 
                                  y_prob: np.ndarray) -> List[Dict[str, Any]]:
         """
-        Create window-level prediction records.
+        Create window-based prediction records.
         
         Args:
             fold_idx: Index of the current fold
@@ -626,7 +624,7 @@ class WindowLevelTrainer(BaseTrainer):
         
         # Save predictions
         window_pred_df = pd.DataFrame(window_predictions)
-        window_pred_path = output_dir / 'window_level_predictions.csv'
+        window_pred_path = output_dir / 'window_predictions.csv'
         window_pred_df.to_csv(window_pred_path, index=False)
         mlflow.log_artifact(str(window_pred_path))
         
@@ -645,7 +643,7 @@ class WindowLevelTrainer(BaseTrainer):
                 mlflow.log_artifact(str(importance_path))
         
         # Save model using MLflow
-        model_name = f"window_level_{self.model_type}"
+        model_name = f"window_{self.model_type}"
         signature = infer_signature(X, model.predict_proba(X))
         
         mlflow.sklearn.log_model(

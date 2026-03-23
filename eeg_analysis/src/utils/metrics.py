@@ -68,7 +68,7 @@ class MetricsCalculator:
         participant_results: List[Dict[str, Any]]
     ) -> Tuple[Dict[str, float], Dict[str, List[float]]]:
         """
-        Calculate metrics for window-level predictions.
+        Calculate metrics for window-based predictions.
         
         Args:
             participant_results: List of prediction results by participant

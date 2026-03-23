@@ -806,7 +806,7 @@ def compare_predicted_vs_gt_statistics(model, dataloader, device, num_samples=10
     if len(all_pattern_corrs) > 0:
         print(f"\nPattern Correlation Analysis:")
         print(f"  Mean: {overall_pattern_corr:.4f}")
-        print(f"  Note: Low correlation may indicate model learns window-level patterns")
+        print(f"  Note: Low correlation may indicate model learns window-based patterns")
         print(f"        rather than exact per-channel reconstruction")
         
         if overall_pattern_corr > 0.7:
@@ -825,8 +825,8 @@ def compare_predicted_vs_gt_statistics(model, dataloader, device, num_samples=10
             print("\n⚠️  VERY LOW: Pattern correlation near zero")
             print("   BUT: Consider baseline similarity structure")
             if 'baseline_gt_similarity' in locals() and abs(baseline_pred_similarity - baseline_gt_similarity) < 0.1:
-                print("   ✅ Model maintains GT similarity structure (window-level learning)")
-                print("   Model may be learning window-level patterns correctly")
+                print("   ✅ Model maintains GT similarity structure (window-based learning)")
+                print("   Model may be learning window-based patterns correctly")
                 print("   Low per-window correlation doesn't necessarily mean poor learning")
             else:
                 print("   Model likely learning positional patterns, not signal content")
@@ -1447,7 +1447,7 @@ def main():
                 print("  May still learn useful representations despite position dependence")
             elif "baseline_gt_similarity" in stats_comparison and abs(stats_comparison["baseline_pred_similarity"] - stats_comparison["baseline_gt_similarity"]) < 0.1:
                 print("  BUT: Model maintains GT similarity structure")
-                print("  May be learning window-level patterns (which is correct!)")
+                print("  May be learning window-based patterns (which is correct!)")
                 print("  Low per-window correlation doesn't necessarily mean poor learning")
             else:
                 print("  Model does NOT accurately reconstruct signal patterns")
@@ -1478,14 +1478,14 @@ def main():
                 print(f"  - Baseline GT similarity: {baseline_gt:.3f}")
                 print(f"  - Baseline pred similarity: {baseline_pred:.3f}")
                 if abs(baseline_pred - baseline_gt) < 0.1:
-                    print("  ✅ Model maintains GT similarity structure (window-level learning)")
+                    print("  ✅ Model maintains GT similarity structure (window-based learning)")
         print("\nInterpretation:")
         print("  Model may be learning useful EEG representations")
         if stats_comparison:
             if pattern_corr_val > 0 and pattern_corr_val < 0.5:
                 if "baseline_gt_similarity" in stats_comparison and abs(stats_comparison["baseline_pred_similarity"] - stats_comparison["baseline_gt_similarity"]) < 0.1:
                     print("  ✅ Low per-window correlation BUT maintains similarity structure")
-                    print("  Model likely learning window-level patterns (correct behavior!)")
+                    print("  Model likely learning window-based patterns (correct behavior!)")
                 else:
                     print("  BUT: Pattern correlation is low")
                     print("  May need more training or different mask ratio")

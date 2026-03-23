@@ -1236,8 +1236,8 @@ If correlation is low → Model is not learning ❌
 
 **Issue**: This ignores the fact that:
 - Different channels for the same window should be similar
-- Model might learn window-level patterns correctly
-- But per-window correlation appears low because model predicts window-level features, not exact channel-specific details
+- Model might learn window-based patterns correctly
+- But per-window correlation appears low because model predicts window-based features, not exact channel-specific details
 
 ### Example
 
@@ -1246,7 +1246,7 @@ If correlation is low → Model is not learning ❌
 - Window 1, Channel B: [1.1, 2.1, 3.1, ...] ← Similar to Channel A
 - Window 2, Channel A: [10, 20, 30, ...] ← Different from Window 1
 
-**Model Prediction** (Learning window-level patterns):
+**Model Prediction** (Learning window-based patterns):
 - Window 1, Channel A: [0.9, 1.9, 2.9, ...] ← Learns Window 1 pattern
 - Window 1, Channel B: [0.95, 1.95, 2.95, ...] ← Learns Window 1 pattern (similar!)
 - Window 2, Channel A: [9.5, 19.5, 29.5, ...] ← Learns Window 2 pattern (different!)
@@ -1282,7 +1282,7 @@ Difference: 0.02 ✅
 
 Per-window correlation: 0.15 (low)
 BUT: Model maintains similarity structure!
-→ Model learns window-level patterns correctly
+→ Model learns window-based patterns correctly
 ```
 
 **Poor Learning** (Positional Patterns):
@@ -1316,7 +1316,7 @@ Pred baseline similarity: 0.30
 Difference: 0.02 ✅
 
 → Model maintains similarity structure
-→ Low per-window correlation BUT learns window-level patterns
+→ Low per-window correlation BUT learns window-based patterns
 → This is actually GOOD learning!
 ```
 
@@ -1329,7 +1329,7 @@ In EEG data:
 - **Different windows**: Should be different (different temporal patterns)
 
 **Model should learn**:
-- Window-level temporal patterns ✅
+- Window-based temporal patterns ✅
 - Not exact per-channel reconstruction (channels vary slightly)
 
 **Traditional diagnostic** (per-window correlation) penalizes this correct behavior!
@@ -1337,7 +1337,7 @@ In EEG data:
 ### Example: What Model Should Learn
 
 **Input**: Masked windows from multiple channels
-**Output**: Window-level temporal pattern
+**Output**: Window-based temporal pattern
 
 **Correct behavior**:
 - Predictions for same window across channels: Similar ✅
@@ -1362,7 +1362,7 @@ Difference: -0.0143
 ```
 
 **Interpretation**:
-- Model learns window-level patterns correctly
+- Model learns window-based patterns correctly
 - Maintains GT similarity structure
 - Low per-window correlation is expected (model doesn't match exact channel details)
 
@@ -1387,7 +1387,7 @@ Pred baseline similarity: 0.33
 Difference: 0.02 ✅
 
 → Model maintains GT similarity structure
-→ Learning window-level patterns correctly
+→ Learning window-based patterns correctly
 → Low per-window correlation is OK!
 ```
 
@@ -1401,11 +1401,11 @@ Difference: 0.02 ✅
 **Updated Diagnostic**:
 - Computes baseline GT similarity
 - Compares to predicted baseline similarity
-- If similar → Model learns window-level patterns correctly ✅
+- If similar → Model learns window-based patterns correctly ✅
 - If different → Model learning positional patterns ❌
 
 **Takeaway**: 
-- Window-level learning is correct behavior
+- Window-based learning is correct behavior
 - Baseline similarity analysis reveals this
 - Per-window correlation alone can be misleading
 
@@ -3941,7 +3941,7 @@ mask_samples_within_token: false
 - **EEG Channels**: 4 channels (AF7, AF8, TP9, TP10) - frontal and temporal regions
 - **Recording Protocol**: 10-second windows, 256 Hz sampling rate
 - **Data Split**: Leave-One-Patient-Out cross-validation (21 folds)
-- **Evaluation Level**: Patient-level aggregation from window-level predictions
+- **Evaluation Level**: Patient-level aggregation from window-based predictions
 - **Class Distribution**: 393 positive windows, 810 negative windows (2.06:1 ratio)
 
 ### 4.2 DC Offset Removal Implementation
@@ -4076,7 +4076,7 @@ for each window:
   - Precision (patient-level)
   - Accuracy (patient-level)
 - **Additional Metrics**:
-  - Window-level accuracy
+  - Window-based accuracy
   - Confusion matrix (TP, TN, FP, FN)
 - **Rationale**: Patient-level metrics align with clinical decision-making
 
@@ -4320,7 +4320,7 @@ for each window:
 - **Hardware**: GPU specifications, training time
 
 ### 9.2 Additional Results
-- **Window-Level Metrics**: Detailed window-level performance
+- **Window-Level Metrics**: Detailed window-based performance
 - **Feature Analysis**: Feature importance, correlation analysis
 - **Training Curves**: Loss curves, learning rate schedules
 
@@ -4428,7 +4428,7 @@ for each window:
 
 ### Key Weaknesses to Address
 1. **Confounded Design**: Hybrid experiment has multiple changes
-2. **Small Dataset**: 21 patients (mitigate with window-level analysis)
+2. **Small Dataset**: 21 patients (mitigate with window-based analysis)
 4. **No Ablation**: Can't isolate architecture contribution
 5. **Single Dataset**: Limited generalizability
 

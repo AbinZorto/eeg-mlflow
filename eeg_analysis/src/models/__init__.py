@@ -1,7 +1,5 @@
-from .patient_trainer import PatientLevelTrainer
-from .window_trainer import WindowLevelTrainer
+from .trainer import Trainer
 
 __all__ = [
-    'PatientLevelTrainer',
-    'WindowLevelTrainer'
+    'Trainer'
 ]

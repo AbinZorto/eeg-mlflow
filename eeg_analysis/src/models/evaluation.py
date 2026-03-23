@@ -25,7 +25,7 @@ class ModelEvaluator:
     def evaluate_window_predictions(self, y_true: np.ndarray, y_pred: np.ndarray, 
                                   y_prob: np.ndarray) -> Dict[str, float]:
         """
-        Evaluate predictions at the window level.
+        Evaluate predictions at the window-based granularity.
         
         Args:
             y_true: True labels
