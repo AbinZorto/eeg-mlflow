@@ -297,6 +297,7 @@ def normalize_advanced_hybrid_params(params: Dict[str, Any], model_name: str = "
     # Ensure required nested advanced config blocks are present and well-formed.
     use_cnn = bool(normalized.get("use_cnn", True))
     normalized["use_cnn"] = use_cnn
+    normalized["gap_before_lstm"] = bool(normalized.get("gap_before_lstm", True))
 
     cnn_blocks = normalized.get("cnn_blocks")
     if use_cnn:
@@ -1454,6 +1455,7 @@ class AdvancedHybrid1DCNNLSTMClassifier(BaseEstimator, ClassifierMixin):
     def __init__(self,
                  cnn_blocks=None,
                  use_cnn=True,  # Flag to enable/disable CNN blocks
+                 gap_before_lstm=True,  # Apply global average pooling over CNN sequence before LSTM
                  normalization='layer_norm',
                  cnn_dropout=None,
                  spatial_dropout=True,
@@ -1486,6 +1488,7 @@ class AdvancedHybrid1DCNNLSTMClassifier(BaseEstimator, ClassifierMixin):
         
         # Store all configurations
         self.use_cnn = use_cnn
+        self.gap_before_lstm = gap_before_lstm
         self.cnn_blocks = cnn_blocks if use_cnn else None
         self.normalization = normalization
         self.cnn_dropout = cnn_dropout
@@ -1588,13 +1591,14 @@ class AdvancedHybrid1DCNNLSTMClassifier(BaseEstimator, ClassifierMixin):
             raise ImportError("PyTorch not available. Please install torch.")
         
         class OptimizedHybridModel(nn.Module):
-            def __init__(self, n_features, cnn_blocks, use_cnn, normalization, cnn_dropout, spatial_dropout,
+            def __init__(self, n_features, cnn_blocks, use_cnn, gap_before_lstm, normalization, cnn_dropout, spatial_dropout,
                          gaussian_noise, lstm_architecture, attention_config, fusion_strategy,
                          feature_pyramid, dense_architecture, architecture_enhancements):
                 super(OptimizedHybridModel, self).__init__()
                 
                 self.n_features = n_features
                 self.use_cnn = use_cnn
+                self.gap_before_lstm = gap_before_lstm
                 self.cnn_blocks = cnn_blocks
                 self.normalization = normalization
                 self.cnn_dropout = cnn_dropout
@@ -1786,12 +1790,15 @@ class AdvancedHybrid1DCNNLSTMClassifier(BaseEstimator, ClassifierMixin):
                         x = cnn_block(x)
                         if self.feature_pyramid:
                             cnn_outputs.append(x)
-                    
-                    # Global average pooling over the sequence dimension
-                    cnn_output = torch.mean(x, dim=2)  # (batch, channels)
-                    
-                    # Hierarchical LSTM layers
-                    lstm_output = cnn_output.unsqueeze(1)  # Add sequence dimension
+
+                    if self.gap_before_lstm:
+                        # Global average pooling over the sequence dimension
+                        cnn_output = torch.mean(x, dim=2)  # (batch, channels)
+                        # Feed a single step into LSTM for backward-compatible behavior
+                        lstm_output = cnn_output.unsqueeze(1)  # (batch, 1, channels)
+                    else:
+                        # Preserve temporal resolution for LSTM: (batch, channels, seq) -> (batch, seq, channels)
+                        lstm_output = x.transpose(1, 2).contiguous()
                 else:
                     # Skip CNN blocks - feed feature embedding directly to LSTM
                     # Project to LSTM input size and add sequence dimension
@@ -1837,6 +1844,7 @@ class AdvancedHybrid1DCNNLSTMClassifier(BaseEstimator, ClassifierMixin):
             n_features=n_features,
             cnn_blocks=self.cnn_blocks,
             use_cnn=self.use_cnn,
+            gap_before_lstm=self.gap_before_lstm,
             normalization=self.normalization,
             cnn_dropout=self.cnn_dropout,
             spatial_dropout=self.spatial_dropout,

@@ -196,6 +196,7 @@ deep_learning:
     residual_connections: True  # Enable residual connections for better gradient flow
     batch_norm: True
     mixed_precision: True
+    gap_before_lstm: False # Set False to preserve CNN sequence length for LSTM
     
     # Balanced regularization
     weight_decay: 0.00001  # Moderate weight decay
@@ -205,6 +206,7 @@ deep_learning:
     # OPTIMIZED architecture for maximum speed and GPU utilization
     # Set use_cnn: false to disable CNN blocks and use LSTM only
     use_cnn: true  # Set to false to remove CNN blocks (may be redundant with feature extraction)
+    gap_before_lstm: false # Set false to disable pre-LSTM global average pooling
     cnn_blocks:
       - filters: [64, 64]
         kernel_sizes: [5, 3]  # Optimized kernel sizes
