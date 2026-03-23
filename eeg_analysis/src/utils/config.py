@@ -73,6 +73,19 @@ def validate_parameters(config: Dict[str, Any]) -> None:
         raise ConfigurationError("Window size must be positive")
 
 
+def is_processing_config(config: Dict[str, Any]) -> bool:
+    """Return True when config contains processing pipeline sections."""
+    required_sections = {
+        'data_loader',
+        'upsampler',
+        'filter',
+        'downsampler',
+        'window_slicer',
+        'feature_extractor',
+    }
+    return any(section in config for section in required_sections)
+
+
 def _resolve_project_path(path_value: str) -> str:
     """Resolve repo-relative config paths against the project root."""
     path = Path(path_value).expanduser()
@@ -136,8 +149,11 @@ def load_config(config_path: str, env: Optional[str] = None) -> Dict[str, Any]:
                     config = deep_update(config, env_config)
 
         config = normalize_config(config)
-        validate_paths(config)
-        validate_parameters(config)
+        if is_processing_config(config):
+            validate_paths(config)
+            validate_parameters(config)
+        else:
+            logger.info("Non-processing config detected; skipping processing path/parameter validation.")
         
         # Log configuration
         log_config(config)
