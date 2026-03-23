@@ -24,21 +24,6 @@ except ImportError:
     TORCH_AVAILABLE = False
     warnings.warn("PyTorch not available. Deep learning models will not be functional.")
 
-try:
-    import tensorflow as tf
-    # Handle different TensorFlow versions
-    try:
-        from tensorflow import keras
-        from tensorflow.keras import layers, regularizers, callbacks
-    except ImportError:
-        # For newer TensorFlow versions where keras is separate
-        import keras
-        from keras import layers, regularizers, callbacks
-    TF_AVAILABLE = True
-except ImportError:
-    TF_AVAILABLE = False
-    warnings.warn("TensorFlow not available. Keras models will not be functional.")
-
 # Import SMOTE and NearMiss for handling class imbalance
 try:
     from imblearn.over_sampling import SMOTE
@@ -782,392 +767,6 @@ class PyTorchMLPClassifier(BaseEstimator, ClassifierMixin):
             probabilities = F.softmax(outputs, dim=1)
         
         return probabilities.cpu().numpy()
-
-class KerasMLPClassifier(BaseEstimator, ClassifierMixin):
-    """
-    Keras MLP Classifier with comprehensive overfitting prevention.
-    
-    Features for overfitting prevention:
-    - Dropout regularization
-    - L1/L2 regularization
-    - Early stopping with patience
-    - Batch normalization
-    - Learning rate scheduling
-    - Model checkpointing
-    """
-    
-    def __init__(self,
-                 hidden_layers=[64, 32],
-                 dropout_rate=0.3,
-                 l1_reg=0.01,
-                 l2_reg=0.01,
-                 learning_rate=0.001,
-                 batch_size=32,
-                 epochs=200,
-                 early_stopping_patience=20,
-                 batch_norm=True,
-                 activation='relu',
-                 optimizer='adam',
-                 class_weight=None,
-                 random_state=42,
-                 mixed_precision=False,
-                 gradient_clip_norm=1.0,
-                 use_smote=False,  # Add SMOTE parameter
-                 use_nearmiss=False,  # Add NearMiss parameter
-                 nearmiss_version=1):  # NearMiss version (1, 2, or 3)
-        
-        self.hidden_layers = hidden_layers
-        self.dropout_rate = dropout_rate
-        self.l1_reg = l1_reg
-        self.l2_reg = l2_reg
-        self.learning_rate = learning_rate
-        self.batch_size = batch_size
-        self.epochs = epochs
-        self.early_stopping_patience = early_stopping_patience
-        self.batch_norm = batch_norm
-        self.activation = activation
-        self.optimizer = optimizer
-        self.class_weight = class_weight
-        self.random_state = random_state
-        self.mixed_precision = mixed_precision
-        self.gradient_clip_norm = gradient_clip_norm
-        self.use_smote = use_smote  # Store SMOTE setting
-        self.use_nearmiss = use_nearmiss  # Store NearMiss setting
-        self.nearmiss_version = nearmiss_version  # Store NearMiss version
-        
-        self.model = None
-        self.scaler = StandardScaler()
-        self.classes_ = None
-        self.feature_names_in_ = None
-        
-        # Enable mixed precision for maximum performance
-        if mixed_precision:
-            keras.mixed_precision.set_global_policy('mixed_float16')
-            print("🔥 KERAS MIXED PRECISION ENABLED: Using mixed_float16 for maximum GPU utilization!")
-        
-        # Multi-GPU setup for maximum performance
-        self.strategy = None
-        if len(tf.config.list_physical_devices('GPU')) > 1:
-            self.strategy = tf.distribute.MirroredStrategy()
-            print(f"🚀 KERAS MULTI-GPU MODE: Using {self.strategy.num_replicas_in_sync} GPUs for training!")
-            print(f"💫 Keras model created with MirroredStrategy across {self.strategy.num_replicas_in_sync} GPUs")
-            print(f"🔥 Effective batch size: {self.batch_size} per GPU = {self.batch_size * self.strategy.num_replicas_in_sync} total")
-        
-        # Set random seeds
-        tf.random.set_seed(random_state)
-        np.random.seed(random_state)
-    
-    def _create_model(self, n_features):
-        """Create the neural network model with multi-GPU support."""
-        
-        def create_model_fn():
-            model = keras.Sequential()
-            
-            # Input layer
-            model.add(layers.Input(shape=(n_features,)))
-            
-            # Hidden layers
-            for i, hidden_size in enumerate(self.hidden_layers):
-                # Dense layer with regularization
-                model.add(layers.Dense(
-                    hidden_size,
-                    activation=None,  # Add activation separately
-                    kernel_regularizer=regularizers.l1_l2(l1=self.l1_reg, l2=self.l2_reg),
-                    kernel_initializer='glorot_uniform'
-                ))
-                
-                # Batch normalization
-                if self.batch_norm:
-                    model.add(layers.BatchNormalization())
-                
-                # Activation
-                model.add(layers.Activation(self.activation))
-                
-                # Dropout
-                model.add(layers.Dropout(self.dropout_rate))
-            
-            # Output layer
-            model.add(layers.Dense(2, activation='softmax'))
-            
-            # Compile model
-            if self.optimizer == 'adam':
-                opt = keras.optimizers.Adam(learning_rate=self.learning_rate, clipnorm=self.gradient_clip_norm, epsilon=1e-4)
-            elif self.optimizer == 'sgd':
-                opt = keras.optimizers.SGD(learning_rate=self.learning_rate, momentum=0.9, clipnorm=self.gradient_clip_norm)
-            
-            model.compile(
-                optimizer=opt,
-                loss='sparse_categorical_crossentropy',
-                metrics=['accuracy']
-            )
-            
-            return model
-        
-        # Create model with multi-GPU strategy if available
-        if self.strategy is not None:
-            with self.strategy.scope():
-                model = create_model_fn()
-                print(f"💫 Keras model created with MirroredStrategy across {self.strategy.num_replicas_in_sync} GPUs")
-                print(f"🔥 Effective batch size: {self.batch_size} per GPU = {self.batch_size * self.strategy.num_replicas_in_sync} total")
-        else:
-            model = create_model_fn()
-        
-        return model
-    
-    def fit(self, X, y):
-        """Train the model with comprehensive overfitting prevention."""
-        if not TF_AVAILABLE:
-            raise ImportError("TensorFlow not available. Please install tensorflow.")
-        
-        # Store classes and feature names
-        self.classes_ = np.unique(y)
-        if hasattr(X, 'columns'):
-            self.feature_names_in_ = X.columns.tolist()
-        
-        # Apply SMOTE for class balance if enabled
-        if self.use_smote and SMOTE_AVAILABLE:
-            print(f"   🔄 SMOTE ENABLED: Balancing classes for better remission detection...")
-            print(f"   Original class distribution: {np.bincount(y)}")
-            
-            try:
-                smote = SMOTE(random_state=self.random_state)
-                X_resampled, y_resampled = smote.fit_resample(X, y)
-                
-                # Convert back to DataFrame/Series if needed
-                if hasattr(X, 'columns'):
-                    X_resampled = pd.DataFrame(X_resampled, columns=X.columns)
-                if hasattr(y, 'name'):
-                    y_resampled = pd.Series(y_resampled, name=y.name)
-                
-                print(f"   ✅ SMOTE applied successfully!")
-                print(f"   New class distribution: {np.bincount(y_resampled)}")
-                print(f"   Original samples: {len(X)}, Resampled samples: {len(X_resampled)}")
-                
-                # Update X and y with resampled data
-                X = X_resampled
-                y = y_resampled
-                
-            except Exception as e:
-                print(f"   ⚠️  SMOTE failed: {e}. Continuing without SMOTE...")
-                self.use_smote = False
-        elif self.use_smote and not SMOTE_AVAILABLE:
-            print(f"   ⚠️  SMOTE requested but not available. Install imbalanced-learn package.")
-            self.use_smote = False
-        else:
-            print(f"   ℹ️  SMOTE disabled. Using original class distribution: {np.bincount(y)}")
-        
-        # Convert to numpy if pandas
-        if hasattr(X, 'values'):
-            X = X.values
-        if hasattr(y, 'values'):
-            y = y.values
-        
-        # DEBUG: Check input data for NaN values
-        print(f"🔍 DEBUG: Input X shape: {X.shape}, y shape: {y.shape}")
-        print(f"🔍 DEBUG: X contains NaN: {np.isnan(X).any()}")
-        print(f"🔍 DEBUG: y contains NaN: {np.isnan(y).any()}")
-        if np.isnan(X).any():
-            nan_count = np.isnan(X).sum()
-            print(f"🔍 DEBUG: Number of NaN values in X: {nan_count}")
-        
-        # Scale features
-        X_scaled = self.scaler.fit_transform(X)
-        
-        # DEBUG: Check scaled data for NaN values
-        print(f"🔍 DEBUG: X_scaled contains NaN: {np.isnan(X_scaled).any()}")
-        if np.isnan(X_scaled).any():
-            nan_count = np.isnan(X_scaled).sum()
-            print(f"🔍 DEBUG: Number of NaN values in X_scaled: {nan_count}")
-        
-        # Create model
-        self.model = self._create_model(X_scaled.shape[1])
-        
-        # Calculate class weights if needed - SMOTE/NearMiss-aware
-        if self.use_smote or self.use_nearmiss:
-            print(f"   ℹ️  {'SMOTE' if self.use_smote else 'NearMiss'} enabled - disabling class weights in loss function")
-            class_weight_dict = None
-        elif self.class_weight == 'balanced':
-            class_counts = np.bincount(y)
-            class_weights = len(y) / (len(np.unique(y)) * class_counts)
-            class_weight_dict = {i: weight for i, weight in enumerate(class_weights)}
-            print(f"   ⚖️  Using balanced class weights: {class_weights}")
-        else:
-            class_weight_dict = None
-            print(f"   ℹ️  No class weights applied")
-        
-        # Callbacks for overfitting prevention
-        callbacks_list = [
-            # Early stopping
-            callbacks.EarlyStopping(
-                monitor='loss',
-                patience=self.early_stopping_patience,
-                restore_best_weights=True,
-                verbose=0
-            ),
-            # Learning rate reduction
-            callbacks.ReduceLROnPlateau(
-                monitor='loss',
-                factor=0.5,
-                patience=10,
-                min_lr=1e-7,
-                verbose=0
-            )
-        ]
-        
-        # Smart batch size handling for multi-GPU training
-        if self.strategy is not None:
-            # For multi-GPU, ensure batch size is divisible by number of GPUs
-            n_gpus = self.strategy.num_replicas_in_sync
-            # Also ensure it's not larger than the dataset size
-            max_batch_size = min(self.batch_size, len(X) // 2)  # Leave room for validation
-            effective_batch_size = (max_batch_size // n_gpus) * n_gpus
-            # Ensure minimum batch size
-            effective_batch_size = max(effective_batch_size, n_gpus * 32)
-        else:
-            # Single GPU batch size handling
-            effective_batch_size = min(self.batch_size, len(X) // 4) if len(X) < 100 else self.batch_size
-        
-        print(f"🔥 Keras batch size: {effective_batch_size} (data size: {len(X)})")
-        
-        # DEBUG: Final check before training
-        print(f"🔍 DEBUG: About to train - X_scaled contains NaN: {np.isnan(X_scaled).any()}")
-        print(f"🔍 DEBUG: About to train - y contains NaN: {np.isnan(y).any()}")
-        
-        # Train model
-        self.model.fit(
-            X_scaled, y,
-            batch_size=effective_batch_size,
-            epochs=self.epochs,
-            callbacks=callbacks_list,
-            class_weight=class_weight_dict,
-            verbose=0
-        )
-        
-        # DEBUG: Check model weights after training
-        print(f"🔍 DEBUG: Model trained successfully")
-        
-        return self
-    
-    def predict(self, X):
-        """Make predictions."""
-        if not TF_AVAILABLE or self.model is None:
-            raise ValueError("Model not trained or TensorFlow not available.")
-        
-        # Convert to numpy if pandas
-        if hasattr(X, 'values'):
-            X = X.values
-        
-        # Scale features
-        X_scaled = self.scaler.transform(X)
-        
-        # Predict
-        predictions = self.model.predict(X_scaled, verbose=0)
-        return np.argmax(predictions, axis=1)
-    
-    def predict_proba(self, X):
-        """Predict class probabilities."""
-        if not TF_AVAILABLE or self.model is None:
-            raise ValueError("Model not trained or TensorFlow not available.")
-        
-        # Convert to numpy if pandas
-        if hasattr(X, 'values'):
-            X = X.values
-        
-        # DEBUG: Check input data for NaN values
-        print(f"🔍 DEBUG: predict_proba - Input X shape: {X.shape}")
-        print(f"🔍 DEBUG: predict_proba - X contains NaN: {np.isnan(X).any()}")
-        if np.isnan(X).any():
-            nan_count = np.isnan(X).sum()
-            print(f"🔍 DEBUG: predict_proba - Number of NaN values in X: {nan_count}")
-        
-        # Scale features
-        X_scaled = self.scaler.transform(X)
-        
-        # DEBUG: Check scaled data for NaN values
-        print(f"🔍 DEBUG: predict_proba - X_scaled contains NaN: {np.isnan(X_scaled).any()}")
-        if np.isnan(X_scaled).any():
-            nan_count = np.isnan(X_scaled).sum()
-            print(f"🔍 DEBUG: predict_proba - Number of NaN values in X_scaled: {nan_count}")
-        
-        # Predict probabilities
-        predictions = self.model.predict(X_scaled, verbose=0)
-        
-        # DEBUG: Check predictions for NaN values
-        print(f"🔍 DEBUG: predict_proba - predictions shape: {predictions.shape}")
-        print(f"🔍 DEBUG: predict_proba - predictions contains NaN: {np.isnan(predictions).any()}")
-        if np.isnan(predictions).any():
-            nan_count = np.isnan(predictions).sum()
-            print(f"🔍 DEBUG: predict_proba - Number of NaN values in predictions: {nan_count}")
-            print(f"🔍 DEBUG: predict_proba - predictions sample: {predictions[:5]}")
-            
-            # FALLBACK: Replace NaN predictions with neutral probabilities
-            print(f"🔧 FALLBACK: Replacing NaN predictions with neutral probabilities [0.5, 0.5]")
-            nan_mask = np.isnan(predictions)
-            predictions[nan_mask] = 0.5
-            print(f"🔧 FALLBACK: Fixed predictions - contains NaN: {np.isnan(predictions).any()}")
-        
-        return predictions
-    
-    def __getstate__(self):
-        """Custom serialization to handle TensorFlow objects."""
-        print("🔧 KERAS SERIALIZATION: Preparing model for serialization...")
-        state = self.__dict__.copy()
-        
-        # Remove unpickleable TensorFlow objects
-        if 'strategy' in state:
-            state['strategy'] = None  # Remove MirroredStrategy
-        
-        # Save model weights and architecture separately if model exists
-        if self.model is not None:
-            print("🔧 KERAS SERIALIZATION: Saving model weights and config...")
-            # Save model config and weights
-            state['model_config'] = self.model.get_config()
-            state['model_weights'] = self.model.get_weights()
-            state['model'] = None  # Remove the actual model object
-        else:
-            state['model_config'] = None
-            state['model_weights'] = None
-        
-        print("🔧 KERAS SERIALIZATION: Model prepared for serialization")
-        return state
-    
-    def __setstate__(self, state):
-        """Custom deserialization to rebuild TensorFlow objects."""
-        print("🔧 KERAS DESERIALIZATION: Restoring model from serialization...")
-        self.__dict__.update(state)
-        
-        # Rebuild model if config and weights exist
-        if state.get('model_config') is not None and state.get('model_weights') is not None:
-            print("🔧 KERAS DESERIALIZATION: Rebuilding model from config and weights...")
-            
-            # Recreate strategy if multiple GPUs available
-            if len(tf.config.list_physical_devices('GPU')) > 1:
-                self.strategy = tf.distribute.MirroredStrategy()
-                print(f"🔧 KERAS DESERIALIZATION: Recreated MirroredStrategy with {self.strategy.num_replicas_in_sync} GPUs")
-            else:
-                self.strategy = None
-            
-            # Recreate mixed precision policy if needed
-            if self.mixed_precision:
-                keras.mixed_precision.set_global_policy('mixed_float16')
-                print("🔧 KERAS DESERIALIZATION: Restored mixed precision policy")
-            
-            # Rebuild model
-            if self.strategy is not None:
-                with self.strategy.scope():
-                    self.model = keras.Sequential.from_config(state['model_config'])
-                    self.model.set_weights(state['model_weights'])
-            else:
-                self.model = keras.Sequential.from_config(state['model_config'])
-                self.model.set_weights(state['model_weights'])
-            
-            print("🔧 KERAS DESERIALIZATION: Model successfully restored")
-        else:
-            self.model = None
-            self.strategy = None
-            print("🔧 KERAS DESERIALIZATION: No model to restore")
-        
-        print("🔧 KERAS DESERIALIZATION: Deserialization complete")
 
 class EfficientTabularMLPClassifier(BaseEstimator, ClassifierMixin):
     """
@@ -2202,7 +1801,14 @@ class DeepLearningTrainer(BaseTrainer):
         self.model_params['use_nearmiss'] = self.use_nearmiss
         self.model_params['nearmiss_version'] = self.nearmiss_version
 
-        if self.model_type in {'hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm'}:
+        if self.model_type in {
+            'hybrid_1dcnn_lstm',
+            'hybrid_1dcnn_lstm_gap',
+            'advanced_hybrid_1dcnn_lstm',
+            'advanced_hybrid_1dcnn_lstm_gap',
+            'advanced_1dcnn',
+            'advanced_lstm',
+        }:
             self.model_params = normalize_advanced_hybrid_params(self.model_params, self.model_type)
         
         # Log class balancing configuration
@@ -2216,7 +1822,7 @@ class DeepLearningTrainer(BaseTrainer):
         self.window_metrics = metrics_config.get('window', ['accuracy'])
         self.patient_metrics = metrics_config.get(
             'patient',
-            )
+            metrics_config.get('patient_level', ['accuracy', 'precision', 'recall', 'f1', 'roc_auc']),
         )
         self.feature_selection_config = config.get('feature_selection', {})
         
@@ -2231,17 +1837,19 @@ class DeepLearningTrainer(BaseTrainer):
                 raise ImportError("PyTorch not available. Please install torch.")
             return PyTorchMLPClassifier(**self.model_params)
         
-        elif self.model_type == 'keras_mlp':
-            if not TF_AVAILABLE:
-                raise ImportError("TensorFlow not available. Please install tensorflow.")
-            return KerasMLPClassifier(**self.model_params)
-        
         elif self.model_type == 'efficient_tabular_mlp':
             if not TORCH_AVAILABLE:
                 raise ImportError("PyTorch not available. Please install torch.")
             return EfficientTabularMLPClassifier(**self.model_params)
         
-        elif self.model_type in {'hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm'}:
+        elif self.model_type in {
+            'hybrid_1dcnn_lstm',
+            'hybrid_1dcnn_lstm_gap',
+            'advanced_hybrid_1dcnn_lstm',
+            'advanced_hybrid_1dcnn_lstm_gap',
+            'advanced_1dcnn',
+            'advanced_lstm',
+        }:
             if not TORCH_AVAILABLE:
                 raise ImportError("PyTorch not available. Please install torch.")
             return AdvancedHybrid1DCNNLSTMClassifier(**self.model_params)
@@ -2710,7 +2318,7 @@ class DeepLearningTrainer(BaseTrainer):
             'n_features': int(X_final_train.shape[1]),
             'feature_names': X_final_train.columns.tolist(),
             'timestamp': pd.Timestamp.now().isoformat(),
-            'framework': 'pytorch' if 'pytorch' in self.model_type else 'tensorflow'
+            'framework': 'pytorch'
         }
         
         import json
@@ -2735,30 +2343,12 @@ class DeepLearningTrainer(BaseTrainer):
         except Exception as e:
             logger.warning(f"Could not log model to MLflow: {e}")
             
-            # Handle different model types for fallback saving
             try:
-                if self.model_type == 'keras_mlp' and hasattr(model, 'model') and model.model is not None:
-                    # Save Keras model using TensorFlow's native format
-                    model_path = output_dir / f'{self.model_type}_model.h5'
-                    model.model.save(str(model_path))
-                    mlflow.log_artifact(str(model_path))
-                    logger.info(f"Saved Keras model to {model_path}")
-                    
-                    # Also save the scaler separately
-                    scaler_path = output_dir / f'{self.model_type}_scaler.joblib'
-                    import joblib
-                    joblib.dump(model.scaler, scaler_path)
-                    mlflow.log_artifact(str(scaler_path))
-                    logger.info(f"Saved scaler to {scaler_path}")
-                    
-                else:
-                    # For PyTorch models, try joblib
-                    import joblib
-                    model_path = output_dir / f'{self.model_type}_model.joblib'
-                    joblib.dump(model, model_path)
-                    mlflow.log_artifact(str(model_path))
-                    logger.info(f"Saved model to {model_path}")
-                    
+                import joblib
+                model_path = output_dir / f'{self.model_type}_model.joblib'
+                joblib.dump(model, model_path)
+                mlflow.log_artifact(str(model_path))
+                logger.info(f"Saved model to {model_path}")
             except Exception as e2:
                 logger.warning(f"Could not save model with fallback method: {e2}")
                 logger.info("Model training completed but serialization failed - results and metrics are still saved")

@@ -305,12 +305,11 @@ class ModelBuilder:
             final_params = {**default_params, **user_params}
             model_instance = SGDClassifier(**final_params)
             
-        elif name in ['pytorch_mlp', 'keras_mlp', 'efficient_tabular_mlp', 'hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm', 'advanced_1dcnn', 'advanced_lstm']:
+        elif name in ['pytorch_mlp', 'efficient_tabular_mlp', 'hybrid_1dcnn_lstm', 'hybrid_1dcnn_lstm_gap', 'advanced_hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm_gap', 'advanced_1dcnn', 'advanced_lstm']:
             # Deep learning models are handled by DeepLearningTrainer
             # Return a placeholder that will be replaced by actual DL model
             from .deep_learning_trainer import (
                 PyTorchMLPClassifier,
-                KerasMLPClassifier,
                 AdvancedHybrid1DCNNLSTMClassifier,
                 EfficientTabularMLPClassifier,
                 normalize_advanced_hybrid_params,
@@ -334,26 +333,7 @@ class ModelBuilder:
                 final_params = {**default_params, **user_params}
                 return PyTorchMLPClassifier(**final_params)  # Return directly, not as pipeline
                 
-            elif name == 'keras_mlp':
-                default_params = {
-                    'hidden_layers': [64, 32],
-                    'dropout_rate': 0.3,
-                    'l1_reg': 0.01,
-                    'l2_reg': 0.01,
-                    'learning_rate': 0.001,
-                    'batch_size': 32,
-                    'epochs': 200,
-                    'early_stopping_patience': 20,
-                    'batch_norm': True,
-                    'activation': 'relu',
-                    'optimizer': 'adam',
-                    'class_weight': 'balanced',
-                    'random_state': 42
-                }
-                final_params = {**default_params, **user_params}
-                return KerasMLPClassifier(**final_params)  # Return directly, not as pipeline
-                
-            elif name in ['hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm', 'advanced_1dcnn', 'advanced_lstm']:
+            elif name in ['hybrid_1dcnn_lstm', 'hybrid_1dcnn_lstm_gap', 'advanced_hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm_gap', 'advanced_1dcnn', 'advanced_lstm']:
                 # All advanced models use the same implementation with different configurations
                 filtered_params = normalize_advanced_hybrid_params(user_params, name)
                 return AdvancedHybrid1DCNNLSTMClassifier(**filtered_params)  # Return directly, not as pipeline
@@ -401,7 +381,7 @@ class ModelBuilder:
             supported_models = [
                 'random_forest', 'gradient_boosting', 'xgboost_gpu', 'catboost_gpu', 'lightgbm_gpu', 'logistic_regression', 
                 'logistic_regression_l1', 'svm_rbf', 'svm_linear', 'extra_trees', 'ada_boost', 'knn', 'decision_tree', 'sgd', 
-                'pytorch_mlp', 'keras_mlp', 'efficient_tabular_mlp', 'hybrid_1dcnn_lstm', 'advanced_1dcnn', 'advanced_lstm', 'advanced_hybrid_1dcnn_lstm'
+                'pytorch_mlp', 'efficient_tabular_mlp', 'hybrid_1dcnn_lstm', 'hybrid_1dcnn_lstm_gap', 'advanced_1dcnn', 'advanced_lstm', 'advanced_hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm_gap'
             ]
             raise ValueError(f"Classifier {name} not supported. Choose from: {supported_models}")
         

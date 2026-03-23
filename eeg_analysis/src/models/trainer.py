@@ -44,8 +44,8 @@ class Trainer(BaseTrainer):
         metrics_config = config.get('metrics', {}) if isinstance(config.get('metrics', {}), dict) else {}
         self.window_metrics = metrics_config.get('window', ['accuracy'])
         self.patient_metrics = metrics_config.get(
-            'patient'
-            )
+            'patient',
+            metrics_config.get('patient_level', ['accuracy', 'precision', 'recall', 'f1', 'roc_auc']),
         )
         self.feature_selection_config = config.get('feature_selection', {})
         self.use_smote = config.get('use_smote', True)

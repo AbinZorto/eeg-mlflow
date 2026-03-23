@@ -133,3 +133,53 @@ With outer shell loops:
 1. Start with `--dry-run` and verify model/window expansion.
 2. Run small subsets first (`--models` or one `--window-sizes` value).
 3. Launch full sweep once command expansion and job count look correct.
+
+## 7) Checkpoint / Resume Across Outer Loops
+
+`run_experiments.py` derives artifact names from a normalized command payload and
+stores per-signature files under `--artifacts-dir` by default:
+- `<stem>__<sig12>.checkpoint.json`
+- `<stem>__<sig12>.results.jsonl`
+
+The signature includes sweep-defining args such as `window-sizes`, `inner-k`, and `outer-k`,
+so rerunning outer shell loops resumes each combination independently even when all invocations
+share the same artifacts directory.
+Whitespace/casing-only argument differences normalize to the same signature.
+
+Example:
+
+```bash
+for ws in 2 4 6 8 10; do
+  for ik in 2 4 6 8 10; do
+    for ok in 2 4 6 8 10; do
+      ./scripts/run_experiments.py \
+        --config eeg_analysis/configs/model_config.yaml \
+        --processing-config eeg_analysis/configs/processing_config.yaml \
+        --model-sets traditional \
+        --mode fs \
+        --fs-methods select_k_best_f_classif,select_k_best_mutual_info \
+        --feature-counts 10 \
+        --window-sizes "$ws" \
+        --ordering sequential \
+        --inner-k "$ik" \
+        --outer-k "$ok" \
+        --artifacts-dir sweeps/artifacts
+    done
+  done
+done
+```
+
+Checkpoint/results control flags:
+- `--artifacts-dir <path>`: base directory for auto-generated checkpoint/results files
+- `--checkpoint-file <path>`: explicit checkpoint path override
+- `--results-file <path>`: explicit results path override
+- `--no-resume`: do not skip completed jobs for this invocation
+- `--reset-checkpoint`: clear saved state for this command signature, then run
+- `--disable-checkpoint`: turn checkpointing off
+- `--disable-results-ledger`: disable results ledger writes
+
+Results ledger (`*.results.jsonl`) schema notes:
+- Append-only attempt records per job key (`attempt_index` increments across retries)
+- Includes status, command context, dataset/model/FS metadata, and return code
+- Includes MLflow linkage/snapshot when a train run id is available:
+  `mlflow_run_id`, `mlflow_experiment_id`, `mlflow_params`, `mlflow_metrics`, `mlflow_tags`

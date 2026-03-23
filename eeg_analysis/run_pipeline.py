@@ -463,7 +463,7 @@ def get_available_models_from_config(config_path):
         return [
                 'random_forest', 'gradient_boosting', 'xgboost_gpu', 'catboost_gpu', 'lightgbm_gpu', 'logistic_regression', 
                 'logistic_regression_l1', 'svm_rbf', 'svm_linear', 'extra_trees', 'ada_boost', 'knn', 'decision_tree', 'sgd', 
-                'pytorch_mlp', 'keras_mlp', 'efficient_tabular_mlp', 'hybrid_1dcnn_lstm', 'advanced_1dcnn', 'advanced_lstm', 'advanced_hybrid_1dcnn_lstm'
+                'pytorch_mlp', 'efficient_tabular_mlp', 'hybrid_1dcnn_lstm', 'hybrid_1dcnn_lstm_gap', 'advanced_1dcnn', 'advanced_lstm', 'advanced_hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm_gap'
             ]
 
 @cli.command()
@@ -793,6 +793,8 @@ def train(ctx, window_size, model_type, enable_feature_selection, n_features_sel
             run_id = run.info.run_id
             model_uri = f"runs:/{run_id}/model"
             logger.info(f"Training run ID: {run_id}")
+            # Machine-readable marker consumed by scripts/run_experiments.py.
+            print(f"SUCCESS:TRAIN_RUN_ID:{run_id}")
             logger.info(f"MLflow model URI: {model_uri}")
             logger.info("Training completed successfully")
             

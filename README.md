@@ -20,6 +20,7 @@ All commands below assume you run from the repository root: `~/eeg-mlflow`.
 - `scripts/build_open_pretrain_dataset.py`: wrapper for open_pretrain dataset build.
 - `scripts/convert_open_pretrain_window_size.py`: conversion utility used by the representation CLI.
 - `docs/experiment_runner_sweeps.md`: sweep recipes for `scripts/run_experiments.py`.
+- `docs/plot_comparisons.md`: persistent registry of requested plot/comparison outputs.
 - `mlruns/`: MLflow tracking data.
 - `models/`: local outputs (predictions/metadata, plus legacy artifacts).
 
@@ -242,7 +243,7 @@ Closed pretraining profile default path:
 Model types are validated from the selected config file:
 
 - Classical/GPU: `random_forest`, `gradient_boosting`, `xgboost_gpu`, `catboost_gpu`, `lightgbm_gpu`, `logistic_regression`, `logistic_regression_l1`, `svm_rbf`, `svm_linear`, `extra_trees`, `ada_boost`, `knn`, `decision_tree`, `sgd`
-- Deep learning (training config): `pytorch_mlp`, `keras_mlp`, `hybrid_1dcnn_lstm`, `advanced_hybrid_1dcnn_lstm`, `efficient_tabular_mlp`, `advanced_lstm`
+- Deep learning (training config): `pytorch_mlp`, `hybrid_1dcnn_lstm`, `hybrid_1dcnn_lstm_gap`, `advanced_hybrid_1dcnn_lstm`, `advanced_hybrid_1dcnn_lstm_gap`, `efficient_tabular_mlp`, `advanced_lstm`
 
 Model orchestration metadata is config-driven:
 - `model_families`: maps models to orchestration families (`traditional`, `boosting`, `deep_learning`)
@@ -388,6 +389,48 @@ Sweep count formulas:
 - `baseline_jobs = 1` if `--mode baseline` or `--mode both`, else `0`
 - `fs_jobs = (#fs_methods * #feature_counts)` if `--mode fs` or `--mode both`, else `0`
 - Loop total = `(per-command jobs) * (#window loop) * (#inner-k loop) * (#outer-k loop)`
+
+Checkpoint/resume (including outer-loop combinations):
+
+```bash
+for ws in 2 4 6 8 10; do
+  for ik in 2 4 6 8 10; do
+    for ok in 2 4 6 8 10; do
+      ./scripts/run_experiments.py \
+        --config eeg_analysis/configs/model_config.yaml \
+        --processing-config eeg_analysis/configs/processing_config.yaml \
+        --model-sets traditional \
+        --mode fs \
+        --fs-methods select_k_best_f_classif,select_k_best_mutual_info \
+        --feature-counts 10 \
+        --window-sizes "$ws" \
+        --ordering sequential \
+        --inner-k "$ik" \
+        --outer-k "$ok" \
+        --artifacts-dir sweeps/artifacts
+    done
+  done
+done
+```
+
+Artifact/checkpoint/results flags:
+- `--artifacts-dir <path>` base dir for auto-generated files
+- `--checkpoint-file <path>` explicit checkpoint path override
+- `--results-file <path>` explicit results ledger path override
+- `--no-resume` run all jobs even if completed entries exist
+- `--reset-checkpoint` clear state for the current command signature
+- `--disable-checkpoint` disable checkpoint read/write entirely
+- `--disable-results-ledger` disable JSONL results ledger writes
+
+Auto-generated files are named from normalized args plus a short signature hash, for example:
+- `runexp-...__<sig12>.checkpoint.json`
+- `runexp-...__<sig12>.results.jsonl`
+- Equivalent argument text variations (whitespace/casing) resolve to the same signature and filenames.
+
+The results ledger is append-only (one JSON line per job attempt) and includes:
+- run/job metadata (window, model, FS settings, inner/outer k, dataset run id, command)
+- status (`success`, `failed`, `interrupted`, `dataset_unresolved`, `resume_skipped`)
+- MLflow linkage and snapshot (`mlflow_run_id`, experiment id, params, metrics, tags)
 
 Notes:
 - `scripts/run_experiments.py` is the unified replacement for the old experiment shell scripts.

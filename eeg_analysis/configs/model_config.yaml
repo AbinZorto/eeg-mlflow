@@ -1,6 +1,4 @@
-# ULTRA-EXTREME GPU CONFIGURATION for Dual RTX 3090
-# WARNING: This config pushes hardware beyond normal limits!
-# Designed to maximize VRAM usage and GPU utilization
+# EEG model configuration
 
 # Data Configuration
 data:
@@ -10,32 +8,30 @@ data:
     random_state: 42
     stratify: true
 
-# Model Configuration - ULTRA-EXTREME GPU utilization
-model_type: "advanced_hybrid_1dcnn_lstm" # OPTIMIZED GPU-accelerated hybrid model
+# Model configuration
+model_type: "advanced_hybrid_1dcnn_lstm"
 
 # Model grouping metadata (source of truth for orchestration/category logic)
 model_families:
   traditional:
     - random_forest
     - gradient_boosting
-    - logistic_regression
-    - logistic_regression_l1
     - svm_rbf
     - svm_linear
     - extra_trees
     - ada_boost
     - knn
     - decision_tree
-    - sgd
   boosting:
     - xgboost_gpu
     - catboost_gpu
     - lightgbm_gpu
   deep_learning:
     - pytorch_mlp
-    - keras_mlp
     - hybrid_1dcnn_lstm
+    - hybrid_1dcnn_lstm_gap
     - advanced_hybrid_1dcnn_lstm
+    - advanced_hybrid_1dcnn_lstm_gap
     - efficient_tabular_mlp
     - advanced_lstm
 
@@ -47,7 +43,7 @@ experiment_groups:
   other: eeg_other_models
 
 model:
-  name: "patient_model_ultra_extreme"
+  name: "patient_model"
   # Class balancing options (choose only ONE):
   use_smote: false        # Oversampling technique - creates synthetic minority samples
   use_nearmiss: false    # Undersampling technique - removes majority samples (alternative to SMOTE)
@@ -105,20 +101,6 @@ model:
       class_weight: "balanced"  # Handle class imbalance
       random_state: 42
 
-    logistic_regression:
-      max_iter: 1000
-      class_weight: "balanced"
-      penalty: "l2"
-      solver: "lbfgs"
-      random_state: 42
-
-    logistic_regression_l1:
-      max_iter: 1000
-      class_weight: "balanced"
-      penalty: "l1"
-      solver: "liblinear"
-      random_state: 42
-
     svm_rbf:
       kernel: "rbf"
       C: 1.0
@@ -153,41 +135,16 @@ model:
       class_weight: "balanced"
       random_state: 42
 
-    sgd:
-      loss: "modified_huber"
-      penalty: "elasticnet"
-      class_weight: "balanced"
-      max_iter: 1000
-      random_state: 42
-
-# ULTRA-EXTREME GPU Configuration - MAXIMUM POSSIBLE
+# Deep learning model configuration
 deep_learning:
   pytorch_mlp:
-    hidden_layers: [4096, 2048, 1024, 512, 256, 128] # ENORMOUS 6-layer network!
-    dropout_rate: 0.02 # Extremely minimal dropout for max computation
-    weight_decay: 0.000001 # Almost no weight decay
-    learning_rate: 0.001 # Aggressive but stable learning rate
-    batch_size: 8192 # MAXIMUM batch size - push VRAM to the limit!
-    epochs: 25 # Fewer epochs but massive computational load per epoch
-    early_stopping_patience: 3 # Very aggressive early stopping
-    batch_norm: true
-    activation: "relu"
-    optimizer: "adam"
-    class_weight: "balanced"
-    random_state: 42
-    # Additional extreme settings
-    gradient_accumulation_steps: 1 # Could be increased for even larger effective batch
-    mixed_precision: false # Enable for memory efficiency
-
-  keras_mlp:
-    hidden_layers: [4096, 2048, 1024, 512, 256, 128] # ENORMOUS 6-layer network!
-    dropout_rate: 0.02
-    l1_reg: 0.0000001 # Almost no regularization
-    l2_reg: 0.000001 # Almost no regularization  
-    learning_rate: 0.15 # INSANELY aggressive learning rate
-    batch_size: 8192 # MAXIMUM batch size per GPU = 16384 total effective!
-    epochs: 25 # Fewer epochs
-    early_stopping_patience: 3
+    hidden_layers: [256, 128, 64]
+    dropout_rate: 0.3
+    weight_decay: 0.001
+    learning_rate: 0.001
+    batch_size: 128
+    epochs: 120
+    early_stopping_patience: 15
     batch_norm: true
     activation: "relu"
     optimizer: "adam"
@@ -195,549 +152,270 @@ deep_learning:
     random_state: 42
     mixed_precision: true
 
-  hybrid_1dcnn_lstm:
-    # Improved architecture for better feature learning and generalization
-    cnn_filters: [64, 128, 256]  # Deeper CNN for better feature extraction
-    cnn_kernel_sizes: [3, 3, 3]
+  hybrid_1dcnn_lstm: &hybrid_1dcnn_lstm_base
+    cnn_filters: [32, 64, 128]
+    cnn_kernel_sizes: [5, 3, 3]
     cnn_pool_sizes: [2, 2, 2]
-    cnn_dropout: 0.3  # Moderate dropout for regularization
-    
-    # Multi-layer LSTM for better temporal modeling
-    lstm_units: [128, 64]  # Two layers with decreasing size
-    lstm_dropout: 0.3  # Moderate dropout
-    lstm_recurrent_dropout: 0.2  # Moderate recurrent dropout
-    
-    # Balanced dense layers for better classification
-    dense_layers: [128, 64]  # Two dense layers
-    dense_dropout: 0.4  # Moderate dropout
-    
-    # Optimized training parameters
-    learning_rate: 0.003  # Standard learning rate
-    batch_size: 64  # Moderate batch size
-    epochs: 10  # More epochs for better convergence
-    early_stopping_patience: 25  # More patience
-    
-    # Enhanced features
-    optimizer: 'adam'
-    class_weight: 'balanced'
+    cnn_dropout: 0.25
+    lstm_units: [64, 32]
+    lstm_dropout: 0.25
+    lstm_recurrent_dropout: 0.1
+    dense_layers: [128, 64]
+    dense_dropout: 0.3
+    learning_rate: 0.001
+    batch_size: 128
+    epochs: 120
+    early_stopping_patience: 15
+    optimizer: "adam"
+    class_weight: "balanced"
     random_state: 42
-    sequence_length: 1000
-    n_channels: 4
-    normalize: True
-    bidirectional_lstm: True  # Enable bidirectional for better temporal modeling
-    attention_mechanism: True  # Enable attention for better feature focus
-    residual_connections: True  # Enable residual connections for better gradient flow
-    batch_norm: True
-    mixed_precision: True
-    gap_before_lstm: False # Set False to preserve CNN sequence length for LSTM
-    
-    # Balanced regularization
-    weight_decay: 0.00001  # Moderate weight decay
-    gradient_clip_norm: 1.0  # Standard gradient clipping
+    bidirectional_lstm: true
+    attention_mechanism: true
+    batch_norm: true
+    mixed_precision: true
+    gap_before_lstm: false
+    weight_decay: 0.001
+    gradient_clip_norm: 1.0
 
-  advanced_hybrid_1dcnn_lstm:
-    # OPTIMIZED architecture for maximum speed and GPU utilization
-    # Set use_cnn: false to disable CNN blocks and use LSTM only
-    use_cnn: true  # Set to false to remove CNN blocks (may be redundant with feature extraction)
-    gap_before_lstm: false # Set false to disable pre-LSTM global average pooling
+  hybrid_1dcnn_lstm_gap:
+    <<: *hybrid_1dcnn_lstm_base
+    gap_before_lstm: true
+
+  advanced_hybrid_1dcnn_lstm: &advanced_hybrid_1dcnn_lstm_base
+    use_cnn: true
+    gap_before_lstm: false
     cnn_blocks:
       - filters: [64, 64]
-        kernel_sizes: [5, 3]  # Optimized kernel sizes
+        kernel_sizes: [5, 3]
         pool_size: 2
         dilation_rates: [1, 1]
-        separable_conv: False  # Disabled for speed
-        
+        separable_conv: false
       - filters: [128, 128]
-        kernel_sizes: [3, 3]  # Simplified kernels
+        kernel_sizes: [3, 3]
         pool_size: 2
-        dilation_rates: [1, 1]  # No dilation for speed
-        separable_conv: False
-        
+        dilation_rates: [1, 1]
+        separable_conv: false
       - filters: [256, 128]
-        kernel_sizes: [3, 1]  # Final reduction
+        kernel_sizes: [3, 1]
         pool_size: 1
         dilation_rates: [1, 1]
-        separable_conv: False
-    
-    # Optimized regularization
-    normalization: 'batch_norm'  # Faster than layer_norm
-    cnn_dropout: [0.1, 0.2, 0.3]  # Progressive dropout
-    spatial_dropout: True
-    gaussian_noise: 0.005  # Reduced noise for speed
-    
-    # Simplified LSTM architecture
+        separable_conv: false
+    normalization: "batch_norm"
+    cnn_dropout: [0.1, 0.2, 0.3]
+    spatial_dropout: true
+    gaussian_noise: 0.005
     lstm_architecture:
       - units: 128
-        return_sequences: True
-        bidirectional: True
+        return_sequences: true
+        bidirectional: true
         dropout: 0.2
         recurrent_dropout: 0.1
-        
       - units: 64
-        return_sequences: False
-        bidirectional: True
+        return_sequences: false
+        bidirectional: true
         dropout: 0.3
         recurrent_dropout: 0.2
-    
-    # Simplified attention
     attention_config:
-      num_heads: 8  # Reduced from 8
-      key_dim: 64  # Reduced from 64
+      num_heads: 8
+      key_dim: 64
       dropout: 0.1
-      use_positional_encoding: True  # Disabled for speed
-      attention_type: 'multi_head'
-    
-    # Simplified fusion
-    fusion_strategy: 'concat'  # Simpler than concat_attention
-    feature_pyramid: True
-    
-    # Optimized dense architecture
+      use_positional_encoding: true
+      attention_type: "multi_head"
+    fusion_strategy: "concat"
+    feature_pyramid: true
     dense_architecture:
       - units: 256
-        activation: 'gelu'  # Faster than swish
+        activation: "gelu"
         dropout: 0.3
-        batch_norm: True
-        
+        batch_norm: true
       - units: 128
-        activation: 'gelu'
+        activation: "gelu"
         dropout: 0.4
-        batch_norm: True
-    
-    # Optimized training configuration
+        batch_norm: true
     optimizer_config:
-      name: 'adamw'  # Better than Adam
+      name: "adamw"
       learning_rate: 0.001
       weight_decay: 0.01
       beta_1: 0.9
       beta_2: 0.999
       epsilon: 1e-7
-    
-    # Simplified learning rate schedule
     lr_schedule:
-      type: 'cosine_annealing_warm_restarts'
+      type: "cosine_annealing_warm_restarts"
       initial_lr: 0.001
       min_lr: 1e-6
-      warmup_epochs: 5  # Reduced from 10
-      cycle_length: 20  # Reduced from 30
-      cycle_mult: 1  # No multiplication for speed
-    
-    # Optimized training parameters
-    batch_size: 4096 # Increased for better GPU utilization
-    epochs: 5000 # Reduced from 200
+      warmup_epochs: 5
+      cycle_length: 20
+      cycle_mult: 1
+    batch_size: 4096
+    epochs: 5000
     early_stopping:
-      patience: 50  # Reduced from 30
-      restore_best_weights: True
-      monitor: 'val_f1_macro'
+      patience: 50
+      restore_best_weights: true
+      monitor: "val_f1_macro"
       min_delta: 0.001
-    
-    # Disabled augmentation for speed
     augmentation:
-      time_warping: False
-      magnitude_warping: False
-      window_slicing: False
+      time_warping: false
+      magnitude_warping: false
+      window_slicing: false
       mixup_alpha: 0.0
       cutmix_alpha: 0.0
-      
-    # Simplified preprocessing
     preprocessing:
       sequence_length: 1000
       n_channels: 4
-      normalization: 'standard_scaler'  # Faster than robust_scaler
-      filter_noise: False
-      apply_wavelet_denoising: False
-    
-    # Optimized regularization
+      normalization: "standard_scaler"
+      filter_noise: false
+      apply_wavelet_denoising: false
     regularization:
-      label_smoothing: 0.05  # Reduced from 0.1
+      label_smoothing: 0.05
       gradient_clip_norm: 1.0
       ema_decay: 0.999
-      stochastic_weight_averaging: False  # Disabled for speed
-      dropout_schedule: 'constant'  # No schedule for speed
-    
-    # Disabled ensemble for speed
+      stochastic_weight_averaging: false
+      dropout_schedule: "constant"
     ensemble:
-      num_models: 1  # Single model
+      num_models: 1
       diversity_loss_weight: 0.0
-      uncertainty_estimation: False
-      monte_carlo_dropout: False
-      test_time_augmentation: False
-    
-    # Simplified loss function
+      uncertainty_estimation: false
+      monte_carlo_dropout: false
+      test_time_augmentation: false
     loss_config:
-      primary_loss: 'cross_entropy'  # Faster than focal_loss
-      extra_losses: []  # No extra losses
-      class_weights: 'balanced'
-    
-    # Disabled architecture enhancements for speed
+      primary_loss: "cross_entropy"
+      extra_losses: []
+      class_weights: "balanced"
     architecture_enhancements:
-      squeeze_excitation: False
-      coordinate_attention: False
-      ghost_convolutions: False
-      inverted_residuals: False
-      progressive_resizing: False
-    
-    # Simplified validation
+      squeeze_excitation: false
+      coordinate_attention: false
+      ghost_convolutions: false
+      inverted_residuals: false
+      progressive_resizing: false
     validation:
-      cross_validation_folds: 1  # No CV during training
-      stratified_split: True
-      time_series_split: False
-    
-    # Disabled monitoring for speed
+      cross_validation_folds: 1
+      stratified_split: true
+      time_series_split: false
     monitoring:
-      wandb_logging: False
-      tensorboard_logging: False
-      model_checkpointing: 'best_f1'
-      learning_curves: False
-      attention_visualization: False
-    
-    # Optimized hardware settings
+      wandb_logging: false
+      tensorboard_logging: false
+      model_checkpointing: "best_f1"
+      learning_curves: false
+      attention_visualization: false
     hardware_optimization:
-      mixed_precision: True  # Enable for speed
-      xla_compilation: False  # Disabled for compatibility
-      memory_growth: True
-      distribute_strategy: 'single_gpu'  # Single GPU for simplicity
-      
-    # Reproducibility
+      mixed_precision: true
+      xla_compilation: false
+      memory_growth: true
+      distribute_strategy: "single_gpu"
     random_state: 10
-    deterministic_training: True  # Disabled for speed
-    
-    # Disabled post-training for speed
+    deterministic_training: true
     post_training:
-      knowledge_distillation: False
+      knowledge_distillation: false
       pruning_ratio: 0.0
-      quantization: 'none'
-      onnx_export: False
+      quantization: "none"
+      onnx_export: false
+
+  advanced_hybrid_1dcnn_lstm_gap:
+    <<: *advanced_hybrid_1dcnn_lstm_base
+    gap_before_lstm: true
 
   efficient_tabular_mlp:
-    # Lean, high-performance MLP for tabular window features
-    hidden_layers: [1024, 512, 256, 128]
+    hidden_layers: [256, 128, 64]
     dropout_rate: 0.3
     batch_norm: true
-    
-    # Training config
     mixed_precision: true
-    class_weight: 'balanced'
-    
-    cnn_blocks:
-      - filters: [64, 64]
-        kernel_sizes: [5, 3]  # Optimized kernel sizes
-        pool_size: 2
-        dilation_rates: [1, 1]
-        separable_conv: False  # Disabled for speed
-        
-      - filters: [128, 128]
-        kernel_sizes: [3, 3]  # Simplified kernels
-        pool_size: 2
-        dilation_rates: [1, 1]  # No dilation for speed
-        separable_conv: False
-        
-      - filters: [256, 128]
-        kernel_sizes: [3, 1]  # Final reduction
-        pool_size: 1
-        dilation_rates: [1, 1]
-        separable_conv: False
-    
-    # Optimized regularization
-    normalization: 'batch_norm'  # Faster than layer_norm
-    cnn_dropout: [0.1, 0.2, 0.3]  # Progressive dropout
-    spatial_dropout: True
-    gaussian_noise: 0.005  # Reduced noise for speed
-    
-    # No LSTM architecture (CNN only) - but provide a dummy LSTM to avoid errors
-    # Use 4 units to make it divisible by num_heads=4
-    lstm_architecture:
-      - units: 4  # Changed from 1 to 4 to be divisible by num_heads
-        return_sequences: False
-        bidirectional: False
-        dropout: 0.0
-        recurrent_dropout: 0.0
-    
-    # Simplified attention
-    attention_config:
-      num_heads: 4  # Reduced from 8
-      key_dim: 32  # Reduced from 64
-      dropout: 0.1
-      use_positional_encoding: False  # Disabled for speed
-      attention_type: 'multi_head'
-    
-    # Simplified fusion
-    fusion_strategy: 'concat'  # Simpler than concat_attention
-    feature_pyramid: True
-    
-    # Optimized dense architecture
-    dense_architecture:
-      - units: 256
-        activation: 'relu'  # Faster than swish
-        dropout: 0.3
-        batch_norm: True
-        
-      - units: 128
-        activation: 'relu'
-        dropout: 0.4
-        batch_norm: True
-    
-    # Optimized training configuration
+    class_weight: "balanced"
+    random_state: 42
+    batch_size: 256
+    epochs: 120
     optimizer_config:
-      name: 'adamw'  # Better than Adam
+      name: "adamw"
       learning_rate: 0.001
       weight_decay: 0.01
       beta_1: 0.9
       beta_2: 0.999
       epsilon: 1e-7
-    
-    # Simplified learning rate schedule
     lr_schedule:
-      type: 'cosine_annealing_warm_restarts'
+      type: "cosine_annealing_warm_restarts"
       initial_lr: 0.001
       min_lr: 1e-6
-      warmup_epochs: 5  # Reduced from 10
-      cycle_length: 20  # Reduced from 30
-      cycle_mult: 1  # No multiplication for speed
-    
-    # Optimized training parameters
-    batch_size: 1024  # Increased for better GPU utilization
-    epochs: 100  # Reduced from 200
-    early_stopping:
-      patience: 10  # Reduced from 30
-      restore_best_weights: True
-      monitor: 'val_f1_macro'
-      min_delta: 0.001
-    
-    # Disabled augmentation for speed
-    augmentation:
-      time_warping: False
-      magnitude_warping: False
-      window_slicing: False
-      mixup_alpha: 0.0
-      cutmix_alpha: 0.0
-      
-    # Simplified preprocessing
-    preprocessing:
-      sequence_length: 1000
-      n_channels: 4
-      normalization: 'standard_scaler'  # Faster than robust_scaler
-      filter_noise: False
-      apply_wavelet_denoising: False
-    
-    # Optimized regularization
+      cycle_length: 20
+      cycle_mult: 1
     regularization:
-      label_smoothing: 0.05  # Reduced from 0.1
+      label_smoothing: 0.05
       gradient_clip_norm: 1.0
-      ema_decay: 0.999
-      stochastic_weight_averaging: False  # Disabled for speed
-      dropout_schedule: 'constant'  # No schedule for speed
-    
-    # Disabled ensemble for speed
-    ensemble:
-      num_models: 1  # Single model
-      diversity_loss_weight: 0.0
-      uncertainty_estimation: False
-      monte_carlo_dropout: False
-      test_time_augmentation: False
-    
-    # Simplified loss function
-    loss_config:
-      primary_loss: 'cross_entropy'  # Faster than focal_loss
-      extra_losses: []  # No extra losses
-      class_weights: 'balanced'
-    
-    # Disabled architecture enhancements for speed
-    architecture_enhancements:
-      squeeze_excitation: False
-      coordinate_attention: False
-      ghost_convolutions: False
-      inverted_residuals: False
-      progressive_resizing: False
-    
-    # Simplified validation
-    validation:
-      cross_validation_folds: 1  # No CV during training
-      stratified_split: True
-      time_series_split: False
-    
-    # Disabled monitoring for speed
-    monitoring:
-      wandb_logging: False
-      tensorboard_logging: False
-      model_checkpointing: 'best_f1'
-      learning_curves: False
-      attention_visualization: False
-    
-    # Optimized hardware settings
-    hardware_optimization:
-      mixed_precision: True  # Enable for speed
-      xla_compilation: False  # Disabled for compatibility
-      memory_growth: True
-      distribute_strategy: 'single_gpu'  # Single GPU for simplicity
-      
-    # Reproducibility
-    random_state: 42
-    deterministic_training: False  # Disabled for speed
-    
-    # Disabled post-training for speed
-    post_training:
-      knowledge_distillation: False
-      pruning_ratio: 0.0
-      quantization: 'none'
-      onnx_export: False
+    early_stopping:
+      patience: 15
+      restore_best_weights: true
+      monitor: "loss"
+      min_delta: 0.001
 
   advanced_lstm:
-    # No CNN blocks (LSTM only) - but provide a dummy block to avoid errors
-    cnn_blocks:
-      - filters: [1]  # Dummy single filter
-        kernel_sizes: [1]  # Dummy kernel size
-        pool_size: 1
-        dilation_rates: [1]
-        separable_conv: False
-    
-    # Minimal CNN-specific regularization
-    normalization: 'batch_norm'
-    cnn_dropout: [0.0]  # No dropout for dummy CNN
-    spatial_dropout: False
-    gaussian_noise: 0.005
-    
-    # Simplified LSTM architecture
+    use_cnn: false
+    gap_before_lstm: false
+    normalization: "batch_norm"
+    spatial_dropout: false
+    gaussian_noise: 0.0
     lstm_architecture:
       - units: 128
-        return_sequences: True
-        bidirectional: True
+        return_sequences: true
+        bidirectional: true
         dropout: 0.2
-        recurrent_dropout: 0.1
-        
+        recurrent_dropout: 0.0
       - units: 64
-        return_sequences: False
-        bidirectional: True
-        dropout: 0.3
-        recurrent_dropout: 0.2
-    
-    # Simplified attention
+        return_sequences: false
+        bidirectional: true
+        dropout: 0.2
+        recurrent_dropout: 0.0
     attention_config:
-      num_heads: 4  # Reduced from 8
-      key_dim: 32  # Reduced from 64
+      num_heads: 4
+      key_dim: 32
       dropout: 0.1
-      use_positional_encoding: False  # Disabled for speed
-      attention_type: 'multi_head'
-    
-    # Simplified fusion
-    fusion_strategy: 'concat'  # Simpler than concat_attention
-    feature_pyramid: True
-    
-    # Optimized dense architecture
+      use_positional_encoding: false
+      attention_type: "multi_head"
+    fusion_strategy: "concat"
+    feature_pyramid: false
     dense_architecture:
       - units: 256
-        activation: 'relu'  # Faster than swish
+        activation: "relu"
         dropout: 0.3
-        batch_norm: True
-        
+        batch_norm: true
       - units: 128
-        activation: 'relu'
+        activation: "relu"
         dropout: 0.4
-        batch_norm: True
-    
-    # Optimized training configuration
+        batch_norm: true
     optimizer_config:
-      name: 'adamw'  # Better than Adam
+      name: "adamw"
       learning_rate: 0.001
       weight_decay: 0.01
       beta_1: 0.9
       beta_2: 0.999
       epsilon: 1e-7
-    
-    # Simplified learning rate schedule
     lr_schedule:
-      type: 'cosine_annealing_warm_restarts'
+      type: "cosine_annealing_warm_restarts"
       initial_lr: 0.001
       min_lr: 1e-6
-      warmup_epochs: 5  # Reduced from 10
-      cycle_length: 20  # Reduced from 30
-      cycle_mult: 1  # No multiplication for speed
-    
-    # Optimized training parameters
-    batch_size: 1024  # Increased for better GPU utilization
-    epochs: 100  # Reduced from 200
+      cycle_length: 20
+      cycle_mult: 1
+    batch_size: 128
+    epochs: 120
     early_stopping:
-      patience: 10  # Reduced from 30
-      restore_best_weights: True
-      monitor: 'val_f1_macro'
+      patience: 15
+      restore_best_weights: true
+      monitor: "loss"
       min_delta: 0.001
-    
-    # Disabled augmentation for speed
     augmentation:
-      time_warping: False
-      magnitude_warping: False
-      window_slicing: False
+      time_warping: false
+      magnitude_warping: false
+      window_slicing: false
       mixup_alpha: 0.0
       cutmix_alpha: 0.0
-      
-    # Simplified preprocessing
-    preprocessing:
-      sequence_length: 1000
-      n_channels: 4
-      normalization: 'standard_scaler'  # Faster than robust_scaler
-      filter_noise: False
-      apply_wavelet_denoising: False
-    
-    # Optimized regularization
     regularization:
-      label_smoothing: 0.05  # Reduced from 0.1
+      label_smoothing: 0.05
       gradient_clip_norm: 1.0
-      ema_decay: 0.999
-      stochastic_weight_averaging: False  # Disabled for speed
-      dropout_schedule: 'constant'  # No schedule for speed
-    
-    # Disabled ensemble for speed
-    ensemble:
-      num_models: 1  # Single model
-      diversity_loss_weight: 0.0
-      uncertainty_estimation: False
-      monte_carlo_dropout: False
-      test_time_augmentation: False
-    
-    # Simplified loss function
     loss_config:
-      primary_loss: 'cross_entropy'  # Faster than focal_loss
-      extra_losses: []  # No extra losses
-      class_weights: 'balanced'
-    
-    # Disabled architecture enhancements for speed
-    architecture_enhancements:
-      squeeze_excitation: False
-      coordinate_attention: False
-      ghost_convolutions: False
-      inverted_residuals: False
-      progressive_resizing: False
-    
-    # Simplified validation
-    validation:
-      cross_validation_folds: 1  # No CV during training
-      stratified_split: True
-      time_series_split: False
-    
-    # Disabled monitoring for speed
-    monitoring:
-      wandb_logging: False
-      tensorboard_logging: False
-      model_checkpointing: 'best_f1'
-      learning_curves: False
-      attention_visualization: False
-    
-    # Optimized hardware settings
+      primary_loss: "cross_entropy"
+      extra_losses: []
+      class_weights: "balanced"
     hardware_optimization:
-      mixed_precision: True  # Enable for speed
-      xla_compilation: False  # Disabled for compatibility
-      memory_growth: True
-      distribute_strategy: 'single_gpu'  # Single GPU for simplicity
-      
-    # Reproducibility
+      mixed_precision: true
     random_state: 42
-    deterministic_training: False  # Disabled for speed
-    
-    # Disabled post-training for speed
-    post_training:
-      knowledge_distillation: False
-      pruning_ratio: 0.0
-      quantization: 'none'
-      onnx_export: False
+    deterministic_training: true
 
 # Paths Configuration
 paths:
