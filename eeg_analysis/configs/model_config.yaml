@@ -764,11 +764,7 @@ mlflow:
 metrics:
   window:
     - accuracy
-    - precision
-    - recall
-    - f1
-    - roc_auc
-  patient_level:
+  patient:
     - accuracy
     - precision
     - recall

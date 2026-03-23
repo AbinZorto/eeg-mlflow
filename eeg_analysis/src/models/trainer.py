@@ -41,7 +41,12 @@ class Trainer(BaseTrainer):
             self.model_params = {}
             
         self.output_dir = config['paths']['models']
-        self.metrics = config.get('metrics', {}).get('window', ['accuracy', 'precision', 'recall', 'f1', 'roc_auc'])
+        metrics_config = config.get('metrics', {}) if isinstance(config.get('metrics', {}), dict) else {}
+        self.window_metrics = metrics_config.get('window', ['accuracy'])
+        self.patient_metrics = metrics_config.get(
+            'patient'
+            )
+        )
         self.feature_selection_config = config.get('feature_selection', {})
         self.use_smote = config.get('use_smote', True)
         logger.info(f"Trainer initialized with model_type: {self.model_type}")
@@ -258,7 +263,7 @@ class Trainer(BaseTrainer):
         # Determine data source with priority: MLflow dataset > provided dataset > config path > file path
         final_data_path = data_path or self.config.get('data', {}).get('feature_path')
         
-        evaluator = ModelEvaluator(metrics=self.metrics)
+        patient_evaluator = ModelEvaluator(metrics=self.patient_metrics)
         
         # Load data using the new base trainer method
         df = self._load_data_from_source(
@@ -495,7 +500,7 @@ class Trainer(BaseTrainer):
                     })
 
         # Calculate and log patient-level metrics
-        patient_metrics = evaluator.evaluate_patient_predictions(
+        patient_metrics = patient_evaluator.evaluate_patient_predictions(
             np.array(patient_true_labels),
             np.array(patient_pred_labels),
             np.array(patient_pred_probs)
