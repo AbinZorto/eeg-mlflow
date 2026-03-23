@@ -108,4 +108,5 @@ urllib3==2.5.0
 uvicorn==0.38.0
 Werkzeug==3.1.4
 wheel==0.45.1
+xgboost==3.2.0
 zipp==3.23.0
