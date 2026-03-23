@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from collections import Counter
 from src.models.base_trainer import BaseTrainer
 from src.models.evaluation import ModelEvaluator
 from sklearn.base import BaseEstimator
@@ -115,7 +116,13 @@ class PatientLevelTrainer(BaseTrainer):
                 logger.warning(f"Length of importances ({len(importances_values)}) does not match number of features ({len(feature_names)}). Cannot determine importances.")
         return None
 
-    def _select_features(self, X: pd.DataFrame, y: pd.Series, n_features_to_select: int) -> List[str]:
+    def _select_features(
+        self,
+        X: pd.DataFrame,
+        y: pd.Series,
+        n_features_to_select: int,
+        log_to_mlflow: bool = True
+    ) -> List[str]:
         """
         Select top N features based on various methods.
 
@@ -135,9 +142,10 @@ class PatientLevelTrainer(BaseTrainer):
 
         if n_features_to_select <= 0 or n_features_to_select > X.shape[1]:
             logger.warning(f"Invalid n_features_to_select ({n_features_to_select}). Must be between 1 and {X.shape[1]}. Selecting all features.")
-            mlflow.log_param("num_selected_features", X.shape[1])
-            mlflow.log_param("selected_features_list", original_feature_names)
-            mlflow.log_param("feature_selection_method", selection_method)
+            if log_to_mlflow:
+                mlflow.log_param("num_selected_features", X.shape[1])
+                mlflow.log_param("selected_features_list", original_feature_names)
+                mlflow.log_param("feature_selection_method", selection_method)
             return original_feature_names
 
         if selection_method == 'model_based':
@@ -157,7 +165,8 @@ class PatientLevelTrainer(BaseTrainer):
             selected_features = X.columns[selector.get_support()].tolist()
             feature_scores = pd.DataFrame({'feature': X.columns, 'score': selector.scores_})
             feature_scores = feature_scores.sort_values('score', ascending=False)
-            mlflow.log_dict(feature_scores.head(min(n_features_to_select * 2, X.shape[1])).to_dict('records'), "select_k_best_f_classif_scores.json")
+            if log_to_mlflow:
+                mlflow.log_dict(feature_scores.head(min(n_features_to_select * 2, X.shape[1])).to_dict('records'), "select_k_best_f_classif_scores.json")
 
         elif selection_method == 'select_k_best_mutual_info':
             selector = SelectKBest(score_func=mutual_info_classif, k=n_features_to_select)
@@ -165,7 +174,8 @@ class PatientLevelTrainer(BaseTrainer):
             selected_features = X.columns[selector.get_support()].tolist()
             feature_scores = pd.DataFrame({'feature': X.columns, 'score': selector.scores_})
             feature_scores = feature_scores.sort_values('score', ascending=False)
-            mlflow.log_dict(feature_scores.head(min(n_features_to_select * 2, X.shape[1])).to_dict('records'), "select_k_best_mutual_info_scores.json")
+            if log_to_mlflow:
+                mlflow.log_dict(feature_scores.head(min(n_features_to_select * 2, X.shape[1])).to_dict('records'), "select_k_best_mutual_info_scores.json")
 
         elif selection_method == 'select_from_model_l1':
             estimator = LogisticRegression(penalty='l1', solver='liblinear', class_weight='balanced', random_state=self.config.get('random_seed', 42), C=1.0)
@@ -177,7 +187,8 @@ class PatientLevelTrainer(BaseTrainer):
                 importances = np.abs(estimator.coef_[0])
                 feature_importances_df = pd.DataFrame({'feature': X.columns, 'L1_coeff_abs': importances})
                 feature_importances_df = feature_importances_df.sort_values('L1_coeff_abs', ascending=False)
-                mlflow.log_dict(feature_importances_df.head(min(len(original_feature_names), X.shape[1])).to_dict('records'), "select_from_model_l1_coeffs.json")
+                if log_to_mlflow:
+                    mlflow.log_dict(feature_importances_df.head(min(len(original_feature_names), X.shape[1])).to_dict('records'), "select_from_model_l1_coeffs.json")
 
         elif selection_method == 'rfe':
             estimator = LogisticRegression(solver='liblinear', class_weight='balanced', random_state=self.config.get('random_seed', 42))
@@ -187,7 +198,8 @@ class PatientLevelTrainer(BaseTrainer):
             if hasattr(selector, 'ranking_'):
                 rankings_df = pd.DataFrame({'feature': X.columns, 'rfe_ranking': selector.ranking_})
                 rankings_df = rankings_df.sort_values('rfe_ranking', ascending=True)
-                mlflow.log_dict(rankings_df.head(min(len(original_feature_names),X.shape[1])).to_dict('records'), "rfe_rankings.json")
+                if log_to_mlflow:
+                    mlflow.log_dict(rankings_df.head(min(len(original_feature_names),X.shape[1])).to_dict('records'), "rfe_rankings.json")
 
         else:
             logger.warning(f"Unknown feature selection method: {selection_method}. Defaulting to all features.")
@@ -198,9 +210,10 @@ class PatientLevelTrainer(BaseTrainer):
             selected_features = original_feature_names
 
         logger.info(f"Selected {len(selected_features)} features: {selected_features}")
-        mlflow.log_param("num_selected_features", len(selected_features))
-        mlflow.log_param("selected_features_list", selected_features) 
-        mlflow.log_param("feature_selection_method", selection_method)
+        if log_to_mlflow:
+            mlflow.log_param("num_selected_features", len(selected_features))
+            mlflow.log_param("selected_features_list", selected_features) 
+            mlflow.log_param("feature_selection_method", selection_method)
         return selected_features
     
     def aggregate_windows(self, df: pd.DataFrame) -> pd.DataFrame:
@@ -289,27 +302,36 @@ class PatientLevelTrainer(BaseTrainer):
             mlflow.log_param("global_non_finite_values_detected", sanitization_info["non_finite_count"] > 0)
             mlflow.log_param("global_non_finite_count", sanitization_info["non_finite_count"])
             mlflow.log_param("global_non_numeric_column_count", sanitization_info["non_numeric_column_count"])
+
+            # Keep all groups for LOPO outer evaluation; balance only within each fold's training groups.
+            cv_config = self.config.get('cv', {}) if isinstance(self.config.get('cv', {}), dict) else {}
+            equalize_lopo_groups = cv_config.get('equalize_lopo_groups', True)
+            mlflow.log_param("lopo_group_equalization_enabled", bool(equalize_lopo_groups))
+            mlflow.log_param("lopo_group_equalization_scope", "train_folds_only")
+            mlflow.log_param("lopo_group_equalization_applied", False)
+            mlflow.log_param("lopo_group_equalization_strategy", "random_undersample_majority_to_minority_group_count")
+            mlflow.log_param("lopo_group_count_before", int(groups.nunique()))
+            mlflow.log_param("lopo_group_count_after", int(groups.nunique()))
+            mlflow.log_dict(
+                {
+                    "enabled": bool(equalize_lopo_groups),
+                    "scope": "train_folds_only",
+                    "applied_globally": False,
+                    "n_groups_before": int(groups.nunique()),
+                    "n_groups_after": int(groups.nunique()),
+                },
+                "lopo_group_equalization.json",
+            )
             
             # Feature Selection
             perform_selection = self.feature_selection_config.get('enabled', False)
+            n_features_target = self.feature_selection_config.get('n_features', 10)
             logger.info(f"Feature selection enabled: {perform_selection}")
-            
+            mlflow.log_param("feature_selection_enabled", perform_selection)
             if perform_selection:
-                n_features_target = self.feature_selection_config.get('n_features', 10) 
                 logger.info(f"Target n_features: {n_features_target}")
-                
-                selected_feature_names = self._select_features(X_orig, y, n_features_target)
-                X = X_orig[selected_feature_names]
-                mlflow.log_param("feature_selection_enabled", True)
                 mlflow.log_param("target_n_features_to_select", n_features_target)
-            else:
-                X = X_orig
-                selected_feature_names = X_orig.columns.tolist()
-                mlflow.log_param("feature_selection_enabled", False)
-
-            # Store the selected feature names as an instance variable for external access
-            self.selected_feature_names = selected_feature_names
-            mlflow.log_metric("num_features_trained_on", len(X.columns))
+                mlflow.log_param("feature_selection_scope", "nested_group_cv")
 
             # Log detailed dataset statistics
             unique_patients = groups.unique()
@@ -321,32 +343,85 @@ class PatientLevelTrainer(BaseTrainer):
             logger.info(f"- Remission patients: {n_remission}")
             logger.info(f"- Non-remission patients: {n_non_remission}")
             
-            self._log_dataset_info(X, y, groups)
+            self._log_dataset_info(X_orig, y, groups)
             
             # Get classifiers to try
             classifiers = self._get_classifiers()
             
-            # Cross-validation
+            # Outer evaluation split remains LOPO. outer_k is used only for feature-selection consensus.
             logo = LeaveOneGroupOut()
-            n_splits = logo.get_n_splits(X, y, groups)
+            outer_splits = list(logo.split(X_orig, y, groups))
+            n_splits = len(outer_splits)
             logger.info(f"\nPerforming Leave-One-Group-Out cross-validation with {n_splits} splits")
+            mlflow.log_param("outer_cv_strategy", "leave_one_group_out")
+            mlflow.log_param("outer_cv_effective_splits", n_splits)
+            mlflow.log_param("outer_cv_requested_k", "not_used_for_splitting")
             
             # Dictionary to store results for each classifier
             all_results = {name: [] for name in classifiers.keys()}
+            fold_feature_selections = {}
+            fold_accuracy_by_classifier = {name: {} for name in classifiers.keys()}
+
+            inner_k_raw = cv_config.get("inner_k")
+            inner_feature_k = n_features_target
+            if inner_k_raw is not None:
+                try:
+                    inner_feature_k = int(inner_k_raw)
+                    if inner_feature_k < 1:
+                        raise ValueError("inner_k must be >= 1 when used as per-fold feature count.")
+                except (TypeError, ValueError):
+                    logger.warning("Ignoring invalid inner_k for per-fold feature count: %s", inner_k_raw)
+                    inner_feature_k = n_features_target
+            outer_k_raw = cv_config.get("outer_k")
+            outer_consensus_k = None
+            if outer_k_raw is not None:
+                try:
+                    outer_consensus_k = int(outer_k_raw)
+                    if outer_consensus_k < 1:
+                        raise ValueError("outer_k must be >= 1 when used for feature selection consensus.")
+                except (TypeError, ValueError):
+                    logger.warning("Ignoring invalid outer_k for feature selection consensus: %s", outer_k_raw)
+                    outer_consensus_k = None
+            mlflow.log_param("inner_feature_selection_k", inner_feature_k)
+            mlflow.log_param("outer_feature_selection_k", outer_consensus_k if outer_consensus_k is not None else n_features_target)
             
-            # Perform LOGO cross-validation
-            for fold_idx, (train_idx, test_idx) in enumerate(logo.split(X, y, groups)):
-                test_participant = groups.iloc[test_idx].iloc[0]
-                true_label = y.iloc[test_idx].iloc[0]
-                
+            # Perform group cross-validation.
+            for fold_idx, (train_idx, test_idx) in enumerate(outer_splits):
+                test_participants = groups.iloc[test_idx].tolist()
                 logger.info(f"\nFold {fold_idx + 1}/{n_splits}")
-                logger.info(f"Testing on participant: {test_participant} (true label: {true_label})")
+                logger.info(f"Testing on participants: {test_participants}")
                 logger.info(f"Training patients: {len(train_idx)}")
                 logger.info(f"Test patients: {len(test_idx)}")
                 
                 # Split data
-                X_train, X_test = X.iloc[train_idx], X.iloc[test_idx]
-                y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
+                X_train_raw_unbalanced, X_test_raw = X_orig.iloc[train_idx], X_orig.iloc[test_idx]
+                y_train_unbalanced, y_test = y.iloc[train_idx], y.iloc[test_idx]
+                train_groups_fold = groups.iloc[train_idx]
+
+                X_train_raw, y_train, _, fold_balance_info = self._balance_groups_for_lopo(
+                    X_train_raw_unbalanced,
+                    y_train_unbalanced,
+                    train_groups_fold,
+                    enabled=equalize_lopo_groups,
+                )
+                mlflow.log_metric("train_group_count_before", int(fold_balance_info.get("n_groups_before", train_groups_fold.nunique())), step=fold_idx)
+                mlflow.log_metric("train_group_count_after", int(fold_balance_info.get("n_groups_after", train_groups_fold.nunique())), step=fold_idx)
+                mlflow.log_metric("train_group_balance_applied", int(bool(fold_balance_info.get("applied", False))), step=fold_idx)
+
+                if perform_selection:
+                    selected_feature_names_fold = self._select_features(
+                        X_train_raw,
+                        y_train,
+                        inner_feature_k,
+                        log_to_mlflow=False
+                    )
+                    X_train = X_train_raw[selected_feature_names_fold]
+                    X_test = X_test_raw[selected_feature_names_fold]
+                    mlflow.log_metric("num_features_trained_on", len(X_train.columns), step=fold_idx)
+                    fold_feature_selections[fold_idx] = selected_feature_names_fold
+                else:
+                    X_train = X_train_raw
+                    X_test = X_test_raw
                 
                 # Try each classifier
                 for name, clf in classifiers.items():
@@ -356,31 +431,45 @@ class PatientLevelTrainer(BaseTrainer):
                     clf.fit(X_train, y_train)
                     
                     # Make predictions
-                    pred_prob = clf.predict_proba(X_test)[:, 1][0]
-                    pred_label = clf.predict(X_test)[0]
-                    
-                    # Store results
-                    all_results[name].append({
-                        'participant': test_participant,
-                        'true_label': true_label,
-                        'predicted_label': pred_label,
-                        'confidence': pred_prob,
-                        'correct_prediction': true_label == pred_label
-                    })
+                    pred_probs = clf.predict_proba(X_test)[:, 1]
+                    pred_labels = clf.predict(X_test)
+
+                    fold_correct_flags = []
+                    for i in range(len(X_test)):
+                        true_label = int(y_test.iloc[i])
+                        pred_label = int(pred_labels[i])
+                        pred_prob = float(pred_probs[i])
+                        participant = test_participants[i]
+                        correct_prediction = bool(true_label == pred_label)
+                        fold_correct_flags.append(int(correct_prediction))
+
+                        # Store results
+                        all_results[name].append({
+                            'fold_idx': fold_idx,
+                            'participant': participant,
+                            'true_label': true_label,
+                            'predicted_label': pred_label,
+                            'confidence': pred_prob,
+                            'correct_prediction': correct_prediction
+                        })
+
+                    fold_accuracy = float(np.mean(fold_correct_flags)) if fold_correct_flags else 0.0
+                    fold_confidence = float(np.mean(pred_probs)) if len(pred_probs) else 0.0
+                    fold_accuracy_by_classifier[name][fold_idx] = fold_accuracy
                     
                     # Log fold metrics with stable names and fold in step.
                     # This prevents metric-key explosion across folds.
                     mlflow.log_metric(
                         f"{name}_accuracy",
-                        int(all_results[name][-1]['correct_prediction']),
+                        fold_accuracy,
                         step=fold_idx
                     )
                     mlflow.log_metric(
                         f"{name}_confidence",
-                        all_results[name][-1]['confidence'],
+                        fold_confidence,
                         step=fold_idx
                     )
-            
+
             # Calculate and log overall metrics for each classifier
             best_classifier = None
             best_f1 = -1
@@ -419,14 +508,60 @@ class PatientLevelTrainer(BaseTrainer):
             logger.info(f"\nBest performing classifier: {best_classifier} (F1: {best_f1:.3f})")
             mlflow.log_param("best_classifier", best_classifier)
             mlflow.log_metric("best_f1_score", best_f1)
+
+            # Build final feature set from most common features in correctly predicted folds.
+            if perform_selection:
+                consensus_source = "correct_folds"
+                best_fold_accuracies = fold_accuracy_by_classifier.get(best_classifier, {})
+                selected_fold_ids = [
+                    fold_idx
+                    for fold_idx, fold_accuracy in best_fold_accuracies.items()
+                    if fold_accuracy >= 0.5 and fold_idx in fold_feature_selections
+                ]
+                if not selected_fold_ids:
+                    logger.warning("No correctly predicted folds available for feature consensus. Falling back to all folds.")
+                    selected_fold_ids = sorted(fold_feature_selections.keys())
+                    consensus_source = "all_folds_fallback"
+
+                selected_feature_sets = [fold_feature_selections[idx] for idx in selected_fold_ids]
+                final_feature_k = outer_consensus_k if outer_consensus_k is not None else n_features_target
+
+                feature_counts = Counter()
+                for features in selected_feature_sets:
+                    feature_counts.update(features)
+
+                selected_feature_names = [name for name, _ in feature_counts.most_common(final_feature_k)]
+                if not selected_feature_names:
+                    logger.warning("No fold-level feature selections available. Falling back to all features.")
+                    selected_feature_names = X_orig.columns.tolist()
+                    consensus_source = "all_features_fallback"
+
+                X_final_train = X_orig[selected_feature_names]
+                mlflow.log_param("feature_selection_method", self.feature_selection_config.get('method', 'model_based'))
+                mlflow.log_param("feature_selection_final_strategy", "consensus_frequency")
+                mlflow.log_param("feature_selection_consensus_source", consensus_source)
+                mlflow.log_param("feature_selection_consensus_folds", len(selected_feature_sets))
+                mlflow.log_param("num_selected_features", len(selected_feature_names))
+                mlflow.log_param("selected_features_list", selected_feature_names)
+                mlflow.log_param("feature_selection_effective", len(selected_feature_names) < X_orig.shape[1] or n_features_target >= X_orig.shape[1])
+                mlflow.log_dict(
+                    [{"feature": name, "count": count} for name, count in feature_counts.most_common(min(2 * n_features_target, len(feature_counts)))],
+                    "feature_selection_consensus_counts.json",
+                )
+            else:
+                selected_feature_names = X_orig.columns.tolist()
+                X_final_train = X_orig
+
+            self.selected_feature_names = selected_feature_names
+            mlflow.log_metric("num_features_trained_on", len(X_final_train.columns))
             
             # Train final model on all data using best classifier
             logger.info("\nTraining final model on all data...")
             final_model = classifiers[best_classifier]
-            final_model.fit(X, y)
+            final_model.fit(X_final_train, y)
             
             # Save results with best classifier information
-            self._save_results(final_model, all_results, best_classifier, X)
+            self._save_results(final_model, all_results, best_classifier, X_final_train)
             return final_model
         
         # Execute training with proper MLflow run management

@@ -287,10 +287,10 @@ deep_learning:
       cycle_mult: 1  # No multiplication for speed
     
     # Optimized training parameters
-    batch_size: 1024  # Increased for better GPU utilization
-    epochs: 100  # Reduced from 200
+    batch_size: 4096 # Increased for better GPU utilization
+    epochs: 5000 # Reduced from 200
     early_stopping:
-      patience: 10  # Reduced from 30
+      patience: 50  # Reduced from 30
       restore_best_weights: True
       monitor: 'val_f1_macro'
       min_delta: 0.001

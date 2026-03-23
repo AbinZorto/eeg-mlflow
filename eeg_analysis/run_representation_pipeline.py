@@ -10,7 +10,7 @@ import mlflow
 import yaml
 
 from src.processing.data_loader import load_eeg_data
-from src.processing.dc_offset import remove_dc_offset_eeg_data
+from src.processing.demean import demean_eeg_data
 from src.processing.downsampler import downsample_eeg_data
 from src.processing.filter import filter_eeg_data
 from src.processing.closed_finetune_dataset import create_closed_finetune_dataset
@@ -101,11 +101,11 @@ def _run_process_representation(config):
             raw_data = load_eeg_data(config)
 
             logger.info("Running preprocessing pipeline up to windowing...")
-            upsampled = upsample_eeg_data(config, raw_data)
+            demeaned = demean_eeg_data(config, raw_data)
+            upsampled = upsample_eeg_data(config, demeaned)
             filtered = filter_eeg_data(config, upsampled)
             downsampled = downsample_eeg_data(config, filtered)
             windowed = slice_eeg_windows(config, downsampled)
-            _ = remove_dc_offset_eeg_data(config, windowed)
 
             logger.info("Building closed_finetune dataset...")
             windowed_path = config["paths"]["interim"]["windowed"]

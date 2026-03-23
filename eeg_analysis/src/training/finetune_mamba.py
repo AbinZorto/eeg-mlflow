@@ -31,11 +31,11 @@ if str(EEG_ANALYSIS_ROOT) not in sys.path:
 from src.models.mamba_sft_model import MambaEEGClassifier, MambaEEGWindowClassifier
 from src.data.eeg_sft_dataset import EEGSFTDataset, collate_sft_batch
 from src.processing.data_loader import load_eeg_data
+from src.processing.demean import demean_eeg_data
 from src.processing.upsampler import upsample_eeg_data
 from src.processing.filter import filter_eeg_data
 from src.processing.downsampler import downsample_eeg_data
 from src.processing.window_slicer import slice_eeg_windows
-from src.processing.dc_offset import remove_dc_offset_eeg_data
 from src.processing.closed_finetune_dataset import create_closed_finetune_dataset
 from src.utils.logger import setup_logger
 import numpy as np
@@ -97,11 +97,11 @@ def ensure_closed_finetune_dataset(processing_cfg: Dict[str, Any]) -> str:
         )
     logger.info(f"Building closed_finetune dataset at: {dataset_path}")
     raw_data = load_eeg_data(processing_cfg)
-    upsampled = upsample_eeg_data(processing_cfg, raw_data)
+    demeaned = demean_eeg_data(processing_cfg, raw_data)
+    upsampled = upsample_eeg_data(processing_cfg, demeaned)
     filtered = filter_eeg_data(processing_cfg, upsampled)
     downsampled = downsample_eeg_data(processing_cfg, filtered)
     windowed = slice_eeg_windows(processing_cfg, downsampled)
-    _ = remove_dc_offset_eeg_data(processing_cfg, windowed)
     windowed_path = processing_cfg["paths"]["interim"]["windowed"]
     dataset_df, _ = create_closed_finetune_dataset(processing_cfg, windowed_path)
     logger.info(f"Closed_finetune dataset created: rows={len(dataset_df)} path={dataset_path}")

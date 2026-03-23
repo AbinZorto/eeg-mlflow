@@ -1,7 +1,9 @@
 import pandas as pd
 import numpy as np
-from typing import Dict, Any, Tuple, Optional
+from collections import Counter
+from typing import Dict, Any, Tuple, Optional, Callable, List
 from sklearn.base import BaseEstimator
+from sklearn.model_selection import LeaveOneGroupOut, StratifiedGroupKFold, GroupKFold
 import mlflow
 import mlflow.data
 from mlflow.data.pandas_dataset import PandasDataset
@@ -106,6 +108,300 @@ class BaseTrainer:
         model = create_classifier(self.classifier_name, self.classifier_params)
         model.fit(X_train, y_train)
         return model
+
+    def _get_cv_config(self) -> Dict[str, Any]:
+        cv_config = self.config.get("cv", {})
+        return cv_config if isinstance(cv_config, dict) else {}
+
+    def _get_cv_random_state(self) -> int:
+        cv_config = self._get_cv_config()
+        return int(cv_config.get("random_state", self.config.get("random_seed", 42)))
+
+    def _parse_optional_k(self, raw_value: Any, field_name: str) -> Optional[int]:
+        if raw_value is None:
+            return None
+        if isinstance(raw_value, str) and raw_value.strip().lower() in {"", "none", "null"}:
+            return None
+        try:
+            value = int(raw_value)
+        except (TypeError, ValueError) as exc:
+            raise ValueError(f"{field_name} must be an integer >= 2 when provided.") from exc
+        if value < 2:
+            raise ValueError(f"{field_name} must be >= 2 when provided.")
+        return value
+
+    def _build_group_cv_splits(
+        self,
+        X: pd.DataFrame,
+        y: pd.Series,
+        groups: pd.Series,
+        k: Optional[int] = None,
+        scope: str = "outer",
+    ) -> Tuple[List[Tuple[np.ndarray, np.ndarray]], Dict[str, Any]]:
+        """
+        Build group-aware CV splits.
+        - Default (k=None): Leave-One-Group-Out
+        - Requested k: StratifiedGroupKFold when feasible, GroupKFold fallback
+        """
+        cv_config = self._get_cv_config()
+        requested_k = self._parse_optional_k(
+            k if k is not None else cv_config.get(f"{scope}_k"),
+            f"cv.{scope}_k",
+        )
+        shuffle = bool(cv_config.get("shuffle", True))
+        random_state = self._get_cv_random_state()
+
+        y_local = pd.Series(y).reset_index(drop=True)
+        groups_local = pd.Series(groups).reset_index(drop=True)
+        n_groups = int(groups_local.nunique())
+
+        if n_groups < 2:
+            raise ValueError(f"Need at least 2 groups for {scope} CV; found {n_groups}.")
+
+        info: Dict[str, Any] = {
+            "scope": scope,
+            "strategy": "leave_one_group_out",
+            "requested_k": requested_k,
+            "effective_k": None,
+            "n_samples": int(len(y_local)),
+            "n_groups": n_groups,
+            "shuffle": shuffle,
+            "random_state": random_state,
+            "stratified": False,
+        }
+
+        if requested_k is None:
+            logo = LeaveOneGroupOut()
+            splits = list(logo.split(X, y_local, groups_local))
+            info["effective_k"] = len(splits)
+            return splits, info
+
+        if requested_k > n_groups:
+            raise ValueError(
+                f"cv.{scope}_k={requested_k} is larger than the number of groups ({n_groups})."
+            )
+
+        group_label_df = pd.DataFrame({"group": groups_local.values, "label": y_local.values})
+        group_labels = group_label_df.groupby("group")["label"].agg(
+            lambda s: s.mode().iloc[0] if not s.mode().empty else s.iloc[0]
+        )
+        label_counts = group_labels.value_counts()
+        min_groups_per_class = int(label_counts.min()) if not label_counts.empty else 0
+        can_use_stratified = group_labels.nunique() > 1 and min_groups_per_class >= requested_k
+
+        if can_use_stratified:
+            splitter = StratifiedGroupKFold(
+                n_splits=requested_k,
+                shuffle=shuffle,
+                random_state=random_state if shuffle else None,
+            )
+            splits = list(splitter.split(X, y_local, groups_local))
+            info["strategy"] = "stratified_group_kfold"
+            info["stratified"] = True
+            info["effective_k"] = requested_k
+            return splits, info
+
+        splitter = GroupKFold(n_splits=requested_k)
+        splits = list(splitter.split(X, y_local, groups_local))
+        info["strategy"] = "group_kfold"
+        info["effective_k"] = requested_k
+        info["fallback_reason"] = (
+            f"StratifiedGroupKFold unavailable for {scope} split: "
+            f"min_groups_per_class={min_groups_per_class}, requested_k={requested_k}."
+        )
+        return splits, info
+
+    def _select_features_with_inner_consensus(
+        self,
+        X_train: pd.DataFrame,
+        y_train: pd.Series,
+        train_groups: pd.Series,
+        n_features_to_select: int,
+        selection_fn: Callable[[pd.DataFrame, pd.Series, int], List[str]],
+        inner_k: Optional[int] = None,
+        consensus_n_features: Optional[int] = None,
+    ) -> Tuple[List[str], Dict[str, Any]]:
+        """
+        Run inner group CV on outer-train data and select features by frequency consensus
+        across inner-train folds. Falls back to single-pass selection when inner CV is not
+        configured or not feasible.
+        """
+        info: Dict[str, Any] = {
+            "enabled": False,
+            "applied": False,
+            "scope": "inner",
+            "requested_k": None,
+            "strategy": "single_pass_selection",
+            "n_inner_splits": 0,
+            "inner_feature_sets": 0,
+        }
+
+        inner_selection_n_features = max(1, int(n_features_to_select))
+        if consensus_n_features is None:
+            consensus_n_features_effective = inner_selection_n_features
+        else:
+            consensus_n_features_effective = max(1, int(consensus_n_features))
+        inner_selection_n_features = max(inner_selection_n_features, consensus_n_features_effective)
+        info["inner_selection_n_features"] = inner_selection_n_features
+        info["consensus_n_features"] = consensus_n_features_effective
+
+        try:
+            requested_inner_k = self._parse_optional_k(
+                inner_k if inner_k is not None else self._get_cv_config().get("inner_k"),
+                "cv.inner_k",
+            )
+        except ValueError as exc:
+            logger.warning("Invalid inner_k configuration. Falling back to single-pass selection: %s", exc)
+            info["reason"] = str(exc)
+            selected_fallback = selection_fn(X_train, y_train, inner_selection_n_features)
+            return selected_fallback[:consensus_n_features_effective], info
+
+        if requested_inner_k is None:
+            info["reason"] = "inner_k_not_set"
+            selected_fallback = selection_fn(X_train, y_train, inner_selection_n_features)
+            return selected_fallback[:consensus_n_features_effective], info
+
+        try:
+            inner_splits, inner_split_info = self._build_group_cv_splits(
+                X_train, y_train, train_groups, k=requested_inner_k, scope="inner"
+            )
+        except ValueError as exc:
+            logger.warning("Inner CV split setup failed. Falling back to single-pass selection: %s", exc)
+            info["requested_k"] = requested_inner_k
+            info["reason"] = str(exc)
+            selected_fallback = selection_fn(X_train, y_train, inner_selection_n_features)
+            return selected_fallback[:consensus_n_features_effective], info
+
+        feature_sets: List[List[str]] = []
+        for inner_train_idx, _ in inner_splits:
+            if len(inner_train_idx) == 0:
+                continue
+            selected_inner = selection_fn(
+                X_train.iloc[inner_train_idx],
+                y_train.iloc[inner_train_idx],
+                inner_selection_n_features,
+            )
+            if selected_inner:
+                feature_sets.append(selected_inner)
+
+        if not feature_sets:
+            info.update({
+                "enabled": True,
+                "applied": False,
+                "requested_k": requested_inner_k,
+                "strategy": inner_split_info.get("strategy"),
+                "n_inner_splits": len(inner_splits),
+                "reason": "no_inner_feature_sets",
+            })
+            selected_fallback = selection_fn(X_train, y_train, inner_selection_n_features)
+            return selected_fallback[:consensus_n_features_effective], info
+
+        feature_counts: Counter = Counter()
+        for feature_set in feature_sets:
+            feature_counts.update(feature_set)
+        selected_features = [name for name, _ in feature_counts.most_common(consensus_n_features_effective)]
+
+        if not selected_features:
+            info.update({
+                "enabled": True,
+                "applied": False,
+                "requested_k": requested_inner_k,
+                "strategy": inner_split_info.get("strategy"),
+                "n_inner_splits": len(inner_splits),
+                "reason": "consensus_empty_fallback",
+            })
+            selected_fallback = selection_fn(X_train, y_train, inner_selection_n_features)
+            return selected_fallback[:consensus_n_features_effective], info
+
+        info.update({
+            "enabled": True,
+            "applied": True,
+            "requested_k": requested_inner_k,
+            "strategy": inner_split_info.get("strategy"),
+            "n_inner_splits": len(inner_splits),
+            "inner_feature_sets": len(feature_sets),
+            "top_feature_counts": [
+                {"feature": name, "count": count}
+                for name, count in feature_counts.most_common(min(2 * consensus_n_features_effective, len(feature_counts)))
+            ],
+        })
+        return selected_features, info
+
+    def _balance_groups_for_lopo(
+        self,
+        X: pd.DataFrame,
+        y: pd.Series,
+        groups: pd.Series,
+        enabled: bool = True,
+    ) -> Tuple[pd.DataFrame, pd.Series, pd.Series, Dict[str, Any]]:
+        """
+        Randomly undersample majority-label groups so each class has the same number of groups.
+        This keeps LOPO test folds class-balanced across the full CV run.
+        """
+        info: Dict[str, Any] = {
+            "enabled": bool(enabled),
+            "applied": False,
+            "strategy": "random_undersample_majority_to_minority_group_count",
+            "n_rows_before": int(len(X)),
+            "n_groups_before": int(groups.nunique()),
+        }
+
+        if not enabled:
+            info["reason"] = "disabled"
+            info["n_rows_after"] = int(len(X))
+            info["n_groups_after"] = int(groups.nunique())
+            return X, y, groups, info
+
+        group_label_df = pd.DataFrame({
+            "group": groups.values,
+            "label": y.values,
+        })
+        # Robustly derive one label per group (all windows for a participant should match).
+        group_labels = group_label_df.groupby("group")["label"].agg(lambda s: s.mode().iloc[0] if not s.mode().empty else s.iloc[0])
+        label_counts_before = group_labels.value_counts().sort_index()
+        info["group_label_counts_before"] = {str(k): int(v) for k, v in label_counts_before.items()}
+
+        if group_labels.nunique() <= 1:
+            info["reason"] = "single_class_groups"
+            info["n_rows_after"] = int(len(X))
+            info["n_groups_after"] = int(groups.nunique())
+            info["group_label_counts_after"] = info["group_label_counts_before"]
+            return X, y, groups, info
+
+        min_group_count = int(label_counts_before.min())
+        random_state = self._get_cv_random_state()
+        rng = np.random.default_rng(random_state)
+
+        selected_groups = []
+        for label_value in label_counts_before.index.tolist():
+            label_groups = group_labels[group_labels == label_value].index.to_numpy()
+            if len(label_groups) > min_group_count:
+                sampled = rng.choice(label_groups, size=min_group_count, replace=False)
+                selected_groups.extend(sampled.tolist())
+            else:
+                selected_groups.extend(label_groups.tolist())
+
+        selected_group_set = set(selected_groups)
+        keep_mask = groups.isin(selected_group_set)
+
+        X_bal = X.loc[keep_mask]
+        y_bal = y.loc[keep_mask]
+        groups_bal = groups.loc[keep_mask]
+
+        group_labels_after = pd.DataFrame({
+            "group": groups_bal.values,
+            "label": y_bal.values,
+        }).groupby("group")["label"].agg(lambda s: s.mode().iloc[0] if not s.mode().empty else s.iloc[0])
+        label_counts_after = group_labels_after.value_counts().sort_index()
+
+        info["applied"] = True
+        info["random_seed"] = random_state
+        info["minority_group_count_before"] = min_group_count
+        info["n_rows_after"] = int(len(X_bal))
+        info["n_groups_after"] = int(groups_bal.nunique())
+        info["group_label_counts_after"] = {str(k): int(v) for k, v in label_counts_after.items()}
+        info["dropped_group_count"] = int(groups.nunique() - groups_bal.nunique())
+        return X_bal, y_bal, groups_bal, info
 
     def _log_dataset_info(self, X: pd.DataFrame, y: pd.Series, groups: pd.Series):
         mlflow.log_params({

@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from collections import Counter
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.model_selection import LeaveOneGroupOut
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
@@ -9,6 +10,7 @@ from pathlib import Path
 from typing import Dict, Any, List, Tuple, Optional
 import logging
 import warnings
+import inspect
 
 # Import deep learning libraries with fallback
 try:
@@ -51,6 +53,404 @@ from src.models.evaluation import ModelEvaluator
 from mlflow.data.pandas_dataset import PandasDataset
 
 logger = logging.getLogger(__name__)
+
+
+def _to_list(value: Any) -> List[Any]:
+    """Normalize scalar/tuple values into a list."""
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return value
+    if isinstance(value, tuple):
+        return list(value)
+    return [value]
+
+
+def _pick_attention_heads(embedding_dim: int) -> int:
+    """Pick a valid multi-head count that divides the embedding dimension."""
+    for num_heads in (8, 4, 2, 1):
+        if embedding_dim >= num_heads and embedding_dim % num_heads == 0:
+            return num_heads
+    return 1
+
+
+def _create_reduce_on_plateau_scheduler(
+    optimizer: Any,
+    mode: str = "min",
+    factor: float = 0.5,
+    patience: int = 10,
+):
+    """Create ReduceLROnPlateau scheduler in a torch-version-compatible way."""
+    scheduler_kwargs = {"mode": mode, "factor": factor, "patience": patience}
+    scheduler_signature = inspect.signature(optim.lr_scheduler.ReduceLROnPlateau.__init__)
+    if "verbose" in scheduler_signature.parameters:
+        scheduler_kwargs["verbose"] = False
+    return optim.lr_scheduler.ReduceLROnPlateau(optimizer, **scheduler_kwargs)
+
+
+def normalize_advanced_hybrid_params(params: Dict[str, Any], model_name: str = "advanced_hybrid_1dcnn_lstm") -> Dict[str, Any]:
+    """
+    Normalize hybrid model params for AdvancedHybrid1DCNNLSTMClassifier.
+
+    Supports legacy `hybrid_1dcnn_lstm` keys (cnn_filters/lstm_units/etc.) and
+    ensures only supported constructor keys are forwarded.
+    """
+    normalized = dict(params or {})
+
+    legacy_keys = {
+        "cnn_filters",
+        "cnn_kernel_sizes",
+        "cnn_pool_sizes",
+        "lstm_units",
+        "lstm_dropout",
+        "lstm_recurrent_dropout",
+        "dense_layers",
+        "dense_dropout",
+        "early_stopping_patience",
+        "learning_rate",
+        "optimizer",
+        "attention_mechanism",
+        "bidirectional_lstm",
+        "mixed_precision",
+    }
+    has_legacy_layout = any(key in normalized for key in legacy_keys) or model_name == "hybrid_1dcnn_lstm"
+
+    if has_legacy_layout:
+        cnn_filters = _to_list(normalized.pop("cnn_filters", [64, 128, 256]))
+        cnn_kernel_sizes = _to_list(normalized.pop("cnn_kernel_sizes", [3] * max(1, len(cnn_filters))))
+        cnn_pool_sizes = _to_list(normalized.pop("cnn_pool_sizes", [2] * max(1, len(cnn_filters))))
+
+        cnn_blocks = []
+        for idx, raw_filters in enumerate(cnn_filters):
+            filters = [int(f) for f in _to_list(raw_filters) if f is not None]
+            if not filters:
+                continue
+
+            kernels = [int(k) for k in _to_list(cnn_kernel_sizes[idx] if idx < len(cnn_kernel_sizes) else 3)]
+            if not kernels:
+                kernels = [3]
+            if len(kernels) < len(filters):
+                kernels.extend([kernels[-1]] * (len(filters) - len(kernels)))
+            elif len(kernels) > len(filters):
+                kernels = kernels[:len(filters)]
+
+            pool_size_raw = cnn_pool_sizes[idx] if idx < len(cnn_pool_sizes) else 1
+            pool_size = int(_to_list(pool_size_raw)[0]) if _to_list(pool_size_raw) else 1
+
+            cnn_blocks.append(
+                {
+                    "filters": filters,
+                    "kernel_sizes": kernels,
+                    "pool_size": max(1, pool_size),
+                    "dilation_rates": [1] * len(filters),
+                    "separable_conv": False,
+                }
+            )
+
+        if cnn_blocks:
+            normalized.setdefault("use_cnn", True)
+            normalized.setdefault("cnn_blocks", cnn_blocks)
+        else:
+            normalized.setdefault("use_cnn", False)
+
+        raw_cnn_dropout = normalized.pop("cnn_dropout", 0.3)
+        cnn_dropout_values = [float(v) for v in _to_list(raw_cnn_dropout) if v is not None]
+        num_blocks = len(normalized.get("cnn_blocks") or [])
+        if num_blocks > 0:
+            if not cnn_dropout_values:
+                cnn_dropout_values = [0.3] * num_blocks
+            if len(cnn_dropout_values) < num_blocks:
+                cnn_dropout_values.extend([cnn_dropout_values[-1]] * (num_blocks - len(cnn_dropout_values)))
+            normalized.setdefault("cnn_dropout", cnn_dropout_values[:num_blocks])
+
+        lstm_units = [int(v) for v in _to_list(normalized.pop("lstm_units", [128, 64])) if v is not None]
+        if not lstm_units:
+            lstm_units = [128]
+        lstm_dropout = float(normalized.pop("lstm_dropout", 0.3))
+        lstm_recurrent_dropout = float(normalized.pop("lstm_recurrent_dropout", 0.0))
+        bidirectional = bool(normalized.pop("bidirectional_lstm", True))
+
+        lstm_architecture = []
+        for idx, units in enumerate(lstm_units):
+            lstm_architecture.append(
+                {
+                    "units": max(1, units),
+                    "return_sequences": idx < len(lstm_units) - 1,
+                    "bidirectional": bidirectional,
+                    "dropout": lstm_dropout,
+                    "recurrent_dropout": lstm_recurrent_dropout,
+                }
+            )
+        normalized.setdefault("lstm_architecture", lstm_architecture)
+
+        attention_enabled = bool(normalized.pop("attention_mechanism", True))
+        final_units = lstm_architecture[-1]["units"] * (2 if lstm_architecture[-1]["bidirectional"] else 1)
+        if attention_enabled:
+            num_heads = _pick_attention_heads(final_units)
+            normalized.setdefault(
+                "attention_config",
+                {
+                    "num_heads": num_heads,
+                    "key_dim": max(1, final_units // num_heads),
+                    "dropout": 0.1,
+                    "use_positional_encoding": False,
+                    "attention_type": "multi_head",
+                },
+            )
+        else:
+            normalized.setdefault(
+                "attention_config",
+                {
+                    "num_heads": 1,
+                    "key_dim": 1,
+                    "dropout": 0.0,
+                    "use_positional_encoding": False,
+                    "attention_type": "none",
+                },
+            )
+
+        dense_layers = [int(v) for v in _to_list(normalized.pop("dense_layers", [128, 64])) if v is not None]
+        if not dense_layers:
+            dense_layers = [64]
+        dense_dropout = float(normalized.pop("dense_dropout", 0.3))
+        batch_norm = bool(normalized.pop("batch_norm", True))
+        normalized.setdefault(
+            "dense_architecture",
+            [
+                {
+                    "units": max(1, units),
+                    "activation": "relu",
+                    "dropout": dense_dropout,
+                    "batch_norm": batch_norm,
+                }
+                for units in dense_layers
+            ],
+        )
+
+        learning_rate = float(normalized.pop("learning_rate", 0.001))
+        weight_decay = float(normalized.pop("weight_decay", 0.01))
+        optimizer_name = str(normalized.pop("optimizer", "adamw")).lower()
+        normalized.setdefault(
+            "optimizer_config",
+            {
+                "name": "adamw" if optimizer_name == "adamw" else "adam",
+                "learning_rate": learning_rate,
+                "weight_decay": weight_decay,
+                "beta_1": 0.9,
+                "beta_2": 0.999,
+                "epsilon": 1e-7,
+            },
+        )
+
+        early_stopping_patience = int(normalized.pop("early_stopping_patience", 30))
+        normalized.setdefault(
+            "early_stopping",
+            {
+                "patience": max(1, early_stopping_patience),
+                "restore_best_weights": True,
+                "monitor": "loss",
+                "min_delta": 0.001,
+            },
+        )
+
+        gradient_clip_norm = float(normalized.pop("gradient_clip_norm", 1.0))
+        normalized.setdefault(
+            "regularization",
+            {
+                "label_smoothing": 0.0,
+                "gradient_clip_norm": gradient_clip_norm,
+            },
+        )
+
+        class_weight = normalized.pop("class_weight", None)
+        if class_weight is not None:
+            normalized.setdefault(
+                "loss_config",
+                {
+                    "primary_loss": "cross_entropy",
+                    "extra_losses": [],
+                    "class_weights": class_weight,
+                },
+            )
+
+        mixed_precision = normalized.pop("mixed_precision", None)
+        if mixed_precision is not None:
+            normalized.setdefault(
+                "hardware_optimization",
+                {
+                    "mixed_precision": bool(mixed_precision),
+                },
+            )
+
+        # Legacy keys that are no longer used by the advanced implementation.
+        normalized.pop("sequence_length", None)
+        normalized.pop("n_channels", None)
+        normalized.pop("normalize", None)
+        normalized.pop("residual_connections", None)
+
+        normalized.setdefault("feature_pyramid", False)
+        normalized.setdefault("fusion_strategy", "concat")
+        normalized.setdefault("normalization", "batch_norm")
+        normalized.setdefault("spatial_dropout", True)
+        normalized.setdefault("gaussian_noise", 0.0)
+
+    # Ensure required nested advanced config blocks are present and well-formed.
+    use_cnn = bool(normalized.get("use_cnn", True))
+    normalized["use_cnn"] = use_cnn
+
+    cnn_blocks = normalized.get("cnn_blocks")
+    if use_cnn:
+        if not isinstance(cnn_blocks, list) or not cnn_blocks:
+            cnn_blocks = [
+                {
+                    "filters": [64, 64],
+                    "kernel_sizes": [3, 3],
+                    "pool_size": 2,
+                    "dilation_rates": [1, 1],
+                    "separable_conv": False,
+                }
+            ]
+        sanitized_blocks = []
+        for block in cnn_blocks:
+            if not isinstance(block, dict):
+                continue
+            filters = [int(f) for f in _to_list(block.get("filters", [64])) if f is not None]
+            if not filters:
+                filters = [64]
+
+            kernel_sizes = [int(k) for k in _to_list(block.get("kernel_sizes", [3])) if k is not None]
+            if not kernel_sizes:
+                kernel_sizes = [3]
+            if len(kernel_sizes) < len(filters):
+                kernel_sizes.extend([kernel_sizes[-1]] * (len(filters) - len(kernel_sizes)))
+            elif len(kernel_sizes) > len(filters):
+                kernel_sizes = kernel_sizes[:len(filters)]
+
+            dilation_rates = [int(d) for d in _to_list(block.get("dilation_rates", [1])) if d is not None]
+            if not dilation_rates:
+                dilation_rates = [1]
+            if len(dilation_rates) < len(filters):
+                dilation_rates.extend([dilation_rates[-1]] * (len(filters) - len(dilation_rates)))
+            elif len(dilation_rates) > len(filters):
+                dilation_rates = dilation_rates[:len(filters)]
+
+            pool_size = int(_to_list(block.get("pool_size", 1))[0])
+            sanitized_blocks.append(
+                {
+                    "filters": filters,
+                    "kernel_sizes": kernel_sizes,
+                    "pool_size": max(1, pool_size),
+                    "dilation_rates": dilation_rates,
+                    "separable_conv": bool(block.get("separable_conv", False)),
+                }
+            )
+
+        normalized["cnn_blocks"] = sanitized_blocks
+
+        raw_dropout = _to_list(normalized.get("cnn_dropout", 0.2))
+        dropout_values = [float(v) for v in raw_dropout if v is not None]
+        if not dropout_values:
+            dropout_values = [0.2]
+        if len(dropout_values) < len(sanitized_blocks):
+            dropout_values.extend([dropout_values[-1]] * (len(sanitized_blocks) - len(dropout_values)))
+        normalized["cnn_dropout"] = dropout_values[:len(sanitized_blocks)]
+    else:
+        normalized["cnn_blocks"] = None
+
+    lstm_architecture = normalized.get("lstm_architecture")
+    if not isinstance(lstm_architecture, list) or not lstm_architecture:
+        lstm_architecture = [{"units": 128, "return_sequences": False, "bidirectional": True, "dropout": 0.2, "recurrent_dropout": 0.0}]
+
+    sanitized_lstm = []
+    for idx, layer in enumerate(lstm_architecture):
+        if not isinstance(layer, dict):
+            continue
+        units = max(1, int(layer.get("units", 128)))
+        return_sequences = bool(layer.get("return_sequences", idx < len(lstm_architecture) - 1))
+        bidirectional = bool(layer.get("bidirectional", True))
+        dropout = float(layer.get("dropout", 0.2))
+        recurrent_dropout = float(layer.get("recurrent_dropout", 0.0))
+        sanitized_lstm.append(
+            {
+                "units": units,
+                "return_sequences": return_sequences,
+                "bidirectional": bidirectional,
+                "dropout": dropout,
+                "recurrent_dropout": recurrent_dropout,
+            }
+        )
+    if not sanitized_lstm:
+        sanitized_lstm = [{"units": 128, "return_sequences": False, "bidirectional": True, "dropout": 0.2, "recurrent_dropout": 0.0}]
+    normalized["lstm_architecture"] = sanitized_lstm
+
+    final_units = sanitized_lstm[-1]["units"] * (2 if sanitized_lstm[-1]["bidirectional"] else 1)
+    attention_config = normalized.get("attention_config")
+    if not isinstance(attention_config, dict):
+        attention_config = {"attention_type": "multi_head", "dropout": 0.1}
+    attention_type = attention_config.get("attention_type", "multi_head")
+    if attention_type == "multi_head":
+        num_heads = int(attention_config.get("num_heads", _pick_attention_heads(final_units)))
+        if num_heads <= 0 or final_units % num_heads != 0:
+            num_heads = _pick_attention_heads(final_units)
+        attention_config["num_heads"] = num_heads
+        attention_config["key_dim"] = int(attention_config.get("key_dim", max(1, final_units // num_heads)))
+        attention_config["dropout"] = float(attention_config.get("dropout", 0.1))
+    else:
+        attention_config["dropout"] = float(attention_config.get("dropout", 0.0))
+    attention_config.setdefault("use_positional_encoding", False)
+    normalized["attention_config"] = attention_config
+
+    dense_architecture = normalized.get("dense_architecture")
+    if not isinstance(dense_architecture, list) or not dense_architecture:
+        dense_architecture = [{"units": 128, "activation": "relu", "dropout": 0.3, "batch_norm": True}]
+    sanitized_dense = []
+    for layer in dense_architecture:
+        if not isinstance(layer, dict):
+            continue
+        sanitized_dense.append(
+            {
+                "units": max(1, int(layer.get("units", 128))),
+                "activation": layer.get("activation", "relu"),
+                "dropout": float(layer.get("dropout", 0.3)),
+                "batch_norm": bool(layer.get("batch_norm", True)),
+            }
+        )
+    if not sanitized_dense:
+        sanitized_dense = [{"units": 128, "activation": "relu", "dropout": 0.3, "batch_norm": True}]
+    normalized["dense_architecture"] = sanitized_dense
+
+    if not isinstance(normalized.get("optimizer_config"), dict):
+        normalized["optimizer_config"] = {
+            "name": "adamw",
+            "learning_rate": 0.001,
+            "weight_decay": 0.01,
+            "beta_1": 0.9,
+            "beta_2": 0.999,
+            "epsilon": 1e-7,
+        }
+    if not isinstance(normalized.get("early_stopping"), dict):
+        normalized["early_stopping"] = {
+            "patience": 30,
+            "restore_best_weights": True,
+            "monitor": "loss",
+            "min_delta": 0.001,
+        }
+    if not isinstance(normalized.get("regularization"), dict):
+        normalized["regularization"] = {
+            "label_smoothing": 0.0,
+            "gradient_clip_norm": 1.0,
+        }
+
+    valid_keys = set(inspect.signature(AdvancedHybrid1DCNNLSTMClassifier.__init__).parameters) - {"self"}
+    unsupported = sorted(set(normalized.keys()) - valid_keys)
+    if unsupported:
+        logger.info(
+            "Dropping unsupported advanced hybrid params for %s: %s",
+            model_name,
+            ", ".join(unsupported),
+        )
+
+    return {key: value for key, value in normalized.items() if key in valid_keys}
 
 class PyTorchMLPClassifier(BaseEstimator, ClassifierMixin):
     """
@@ -276,7 +676,7 @@ class PyTorchMLPClassifier(BaseEstimator, ClassifierMixin):
                                 momentum=0.9)
         
         # Learning rate scheduler
-        scheduler = optim.lr_scheduler.ReduceLROnPlateau(
+        scheduler = _create_reduce_on_plateau_scheduler(
             optimizer, mode='min', factor=0.5, patience=10
         )
         
@@ -948,7 +1348,9 @@ class EfficientTabularMLPClassifier(BaseEstimator, ClassifierMixin):
             )
             use_plateau = False
         else:
-            scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=10, verbose=False)
+            scheduler = _create_reduce_on_plateau_scheduler(
+                optimizer, mode='min', factor=0.5, patience=10
+            )
             use_plateau = True
         
         # Dataloader
@@ -1610,8 +2012,8 @@ class AdvancedHybrid1DCNNLSTMClassifier(BaseEstimator, ClassifierMixin):
                 eta_min=float(self.lr_schedule.get('min_lr'))
             )
         else:
-            scheduler = optim.lr_scheduler.ReduceLROnPlateau(
-                optimizer, mode='min', factor=0.5, patience=10, verbose=False
+            scheduler = _create_reduce_on_plateau_scheduler(
+                optimizer, mode='min', factor=0.5, patience=10
             )
         
         # Early stopping
@@ -1791,6 +2193,9 @@ class DeepLearningTrainer(BaseTrainer):
         self.model_params['use_smote'] = self.use_smote
         self.model_params['use_nearmiss'] = self.use_nearmiss
         self.model_params['nearmiss_version'] = self.nearmiss_version
+
+        if self.model_type in {'hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm'}:
+            self.model_params = normalize_advanced_hybrid_params(self.model_params, self.model_type)
         
         # Log class balancing configuration
         logger.info(f"SMOTE enabled: {self.use_smote}")
@@ -1823,12 +2228,7 @@ class DeepLearningTrainer(BaseTrainer):
                 raise ImportError("PyTorch not available. Please install torch.")
             return EfficientTabularMLPClassifier(**self.model_params)
         
-        elif self.model_type == 'hybrid_1dcnn_lstm':
-            if not TORCH_AVAILABLE:
-                raise ImportError("PyTorch not available. Please install torch.")
-            return AdvancedHybrid1DCNNLSTMClassifier(**self.model_params)
-        
-        elif self.model_type == 'advanced_hybrid_1dcnn_lstm':
+        elif self.model_type in {'hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm'}:
             if not TORCH_AVAILABLE:
                 raise ImportError("PyTorch not available. Please install torch.")
             return AdvancedHybrid1DCNNLSTMClassifier(**self.model_params)
@@ -1879,27 +2279,39 @@ class DeepLearningTrainer(BaseTrainer):
         mlflow.log_param("global_non_finite_values_detected", sanitization_info["non_finite_count"] > 0)
         mlflow.log_param("global_non_finite_count", sanitization_info["non_finite_count"])
         mlflow.log_param("global_non_numeric_column_count", sanitization_info["non_numeric_column_count"])
+
+        # Keep all groups for LOPO outer evaluation; balance only within each fold's training groups.
+        cv_config = self.config.get('cv', {}) if isinstance(self.config.get('cv', {}), dict) else {}
+        equalize_lopo_groups = cv_config.get('equalize_lopo_groups', True)
+        mlflow.log_param("lopo_group_equalization_enabled", bool(equalize_lopo_groups))
+        mlflow.log_param("lopo_group_equalization_scope", "train_folds_only")
+        mlflow.log_param("lopo_group_equalization_applied", False)
+        mlflow.log_param("lopo_group_equalization_strategy", "random_undersample_majority_to_minority_group_count")
+        mlflow.log_param("lopo_group_count_before", int(groups.nunique()))
+        mlflow.log_param("lopo_group_count_after", int(groups.nunique()))
+        mlflow.log_dict(
+            {
+                "enabled": bool(equalize_lopo_groups),
+                "scope": "train_folds_only",
+                "applied_globally": False,
+                "n_groups_before": int(groups.nunique()),
+                "n_groups_after": int(groups.nunique()),
+            },
+            "lopo_group_equalization.json",
+        )
+        df_balanced = df.copy()
         
-        # Feature Selection (inherited from existing framework)
+        # Feature Selection (nested inside each LOPO fold to avoid leakage)
         perform_selection = self.feature_selection_config.get('enabled', False)
+        n_features_target = self.feature_selection_config.get('n_features', 20)  # Use more features for DL
+        mlflow.log_param("feature_selection_enabled", perform_selection)
         if perform_selection:
-            n_features_target = self.feature_selection_config.get('n_features', 20)  # Use more features for DL
-            selected_feature_names = self._select_features(X_orig, y, n_features_target)
-            X = X_orig[selected_feature_names]
-            mlflow.log_param("feature_selection_enabled", True)
             mlflow.log_param("target_n_features_to_select", n_features_target)
-        else:
-            X = X_orig
-            selected_feature_names = X_orig.columns.tolist()
-            mlflow.log_param("feature_selection_enabled", False)
-        
-        # Store selected feature names
-        self.selected_feature_names = selected_feature_names
-        mlflow.log_metric("num_features_trained_on", len(X.columns))
+            mlflow.log_param("feature_selection_scope", "nested_group_cv")
         
         # Log dataset statistics
         unique_patients = groups.unique()
-        patient_labels = df.groupby('Participant')['Remission'].first()
+        patient_labels = df_balanced.groupby('Participant')['Remission'].first()
         n_remission = sum(patient_labels == 1)
         n_non_remission = sum(patient_labels == 0)
         
@@ -1907,20 +2319,24 @@ class DeepLearningTrainer(BaseTrainer):
         logger.info(f"Total patients: {len(unique_patients)}")
         logger.info(f"- Remission: {n_remission}")
         logger.info(f"- Non-remission: {n_non_remission}")
-        logger.info(f"Total windows: {len(df)}")
-        logger.info(f"Features used: {len(X.columns)}")
+        logger.info(f"Total windows: {len(df_balanced)}")
+        logger.info(f"Features available: {len(X_orig.columns)}")
         
-        self._log_dataset_info(X, y, groups)
+        self._log_dataset_info(X_orig, y, groups)
         
-        # Safety check after selection.
-        if not np.isfinite(X.to_numpy(dtype=np.float64, copy=False)).all():
+        # Safety check after sanitization.
+        if not np.isfinite(X_orig.to_numpy(dtype=np.float64, copy=False)).all():
             logger.error("Unexpected non-finite values detected after global sanitization.")
             raise ValueError("Data contains non-finite values after global sanitization")
         
-        # Cross-validation with LOGO (prevents overfitting through proper validation)
+        # Outer evaluation split remains LOPO. outer_k is used only for feature-selection consensus.
         logo = LeaveOneGroupOut()
-        n_splits = logo.get_n_splits(X, y, groups)
+        outer_splits = list(logo.split(X_orig, y, groups))
+        n_splits = len(outer_splits)
         logger.info(f"\nPerforming LOGO cross-validation with {n_splits} splits")
+        mlflow.log_param("outer_cv_strategy", "leave_one_group_out")
+        mlflow.log_param("outer_cv_effective_splits", n_splits)
+        mlflow.log_param("outer_cv_requested_k", "not_used_for_splitting")
         
         # Store predictions for evaluation
         patient_predictions = []
@@ -1928,15 +2344,42 @@ class DeepLearningTrainer(BaseTrainer):
         patient_true_labels = []
         patient_pred_labels = []
         patient_pred_probs = []
+        fold_feature_selections = []
         
-        for fold_idx, (train_index, test_index) in enumerate(logo.split(X, y, groups=groups)):
-            X_train, X_test = X.iloc[train_index], X.iloc[test_index]
-            y_train, y_test = y.iloc[train_index], y.iloc[test_index]
+        inner_k_raw = cv_config.get("inner_k")
+        inner_feature_k = n_features_target
+        if inner_k_raw is not None:
+            try:
+                inner_feature_k = int(inner_k_raw)
+                if inner_feature_k < 1:
+                    raise ValueError("inner_k must be >= 1 when used as per-fold feature count.")
+            except (TypeError, ValueError):
+                logger.warning("Ignoring invalid inner_k for per-fold feature count: %s", inner_k_raw)
+                inner_feature_k = n_features_target
+        outer_k_raw = cv_config.get("outer_k")
+        outer_consensus_k = None
+        if outer_k_raw is not None:
+            try:
+                outer_consensus_k = int(outer_k_raw)
+                if outer_consensus_k < 1:
+                    raise ValueError("outer_k must be >= 1 when used for feature selection consensus.")
+            except (TypeError, ValueError):
+                logger.warning("Ignoring invalid outer_k for feature selection consensus: %s", outer_k_raw)
+                outer_consensus_k = None
+        mlflow.log_param("inner_feature_selection_k", inner_feature_k)
+        mlflow.log_param("outer_feature_selection_k", outer_consensus_k if outer_consensus_k is not None else n_features_target)
+
+        for fold_idx, (train_index, test_index) in enumerate(outer_splits):
+            X_train_raw_unbalanced, X_test_raw = X_orig.iloc[train_index], X_orig.iloc[test_index]
+            y_train_unbalanced, y_test = y.iloc[train_index], y.iloc[test_index]
+            train_groups_fold = groups.iloc[train_index]
+            test_groups_fold = groups.iloc[test_index]
+            test_participants = test_groups_fold.unique().tolist()
             
             # Double-check fold tensors are finite before fitting.
             if (
-                not np.isfinite(X_train.to_numpy(dtype=np.float64, copy=False)).all()
-                or not np.isfinite(y_train.to_numpy(dtype=np.float64, copy=False)).all()
+                not np.isfinite(X_train_raw_unbalanced.to_numpy(dtype=np.float64, copy=False)).all()
+                or not np.isfinite(y_train_unbalanced.to_numpy(dtype=np.float64, copy=False)).all()
             ):
                 logger.error(
                     "Unexpected non-finite values found in fold %d after global sanitization. Skipping fold.",
@@ -1944,16 +2387,37 @@ class DeepLearningTrainer(BaseTrainer):
                 )
                 continue
             
-            test_participant = groups.iloc[test_index].unique()[0]
-            true_label = y.iloc[test_index].iloc[0]
-            patient_true_labels.append(true_label)
-            
             logger.info(f"\nFold {fold_idx + 1}/{n_splits}")
-            logger.info(f"Testing on participant: {test_participant}")
+            logger.info(f"Testing on participants: {test_participants}")
             logger.info(f"Training windows: {len(train_index)}, Test windows: {len(test_index)}")
             
             # Use nested runs for each fold
             with mlflow.start_run(run_name=f"fold_{fold_idx}", nested=True):
+                X_train_raw, y_train, _, fold_balance_info = self._balance_groups_for_lopo(
+                    X_train_raw_unbalanced,
+                    y_train_unbalanced,
+                    train_groups_fold,
+                    enabled=equalize_lopo_groups,
+                )
+                mlflow.log_param("train_group_balance_applied", bool(fold_balance_info.get("applied", False)))
+                mlflow.log_param("train_group_count_before", int(fold_balance_info.get("n_groups_before", train_groups_fold.nunique())))
+                mlflow.log_param("train_group_count_after", int(fold_balance_info.get("n_groups_after", train_groups_fold.nunique())))
+                mlflow.log_dict(fold_balance_info, "train_group_equalization.json")
+
+                if perform_selection:
+                    selected_feature_names_fold = self._select_features(
+                        X_train_raw,
+                        y_train,
+                        inner_feature_k,
+                    )
+                    X_train = X_train_raw[selected_feature_names_fold]
+                    X_test = X_test_raw[selected_feature_names_fold]
+                else:
+                    X_train = X_train_raw
+                    X_test = X_test_raw
+
+                mlflow.log_metric("num_features_trained_on", len(X_train.columns))
+
                 # Create a new model instance for each fold to ensure independence
                 self.model = self._create_model_instance()
                 
@@ -1968,59 +2432,64 @@ class DeepLearningTrainer(BaseTrainer):
                 
                 # Calculate test accuracies - only accuracy is meaningful for window-level
                 # since all windows from a participant belong to the same class
-                window_test_accuracy = np.mean(y_pred == y_test)
-                
-                # Calculate patient-level prediction (using window predictions, not probabilities)
-                # If most windows are predicted as positive, predict patient as positive
-                # If most windows are predicted as negative, predict patient as negative
-                positive_window_count = sum(y_pred == 1)
-                total_windows = len(y_pred)
-                patient_pred = 1 if positive_window_count > total_windows / 2 else 0
-                patient_prob = positive_window_count / total_windows  # Proportion of positive windows
-                patient_pred_labels.append(patient_pred)
-                patient_pred_probs.append(patient_prob)
-                
-                # Print detailed test results for this fold
-                print(f"\n📊 FOLD {fold_idx + 1}/{n_splits} TEST RESULTS:")
-                print(f"   Participant: {test_participant}")
-                print(f"   True patient label: {true_label}")
-                print(f"   Predicted patient label: {patient_pred}")
-                print(f"   Patient prediction method: Majority vote of window predictions")
-                print(f"   Positive windows: {positive_window_count}/{total_windows} ({patient_prob:.1%})")
-                print(f"   Window-level test accuracy: {window_test_accuracy:.4f}")
-                print(f"   Test windows: {len(test_index)}")
-                print(f"   Patient-level correct: {'✅' if true_label == patient_pred else '❌'}")
-                
-                # Store predictions
-                window_predictions.extend(self._create_window_predictions(
-                    fold_idx, test_participant, y_test, y_pred, y_prob))
-                
-                # Store patient prediction with explicit variable scoping
-                current_patient_prediction = {
-                    'fold': fold_idx,
-                    'participant': test_participant,
-                    'true_label': true_label,
-                    'predicted_label': patient_pred,
-                    'probability': patient_prob,
-                    'n_windows': len(test_index),
-                    'n_positive_windows': sum(y_pred == 1),
-                    'window_accuracy': window_test_accuracy
-                }
-                patient_predictions.append(current_patient_prediction)
+                window_test_accuracy = float(np.mean(y_pred == y_test))
+                fold_patient_accuracies = []
+
+                for participant in test_participants:
+                    participant_mask = test_groups_fold.to_numpy() == participant
+                    participant_positions = np.where(participant_mask)[0]
+                    if len(participant_positions) == 0:
+                        continue
+
+                    y_test_part = y_test.iloc[participant_positions]
+                    y_pred_part = y_pred[participant_positions]
+                    y_prob_part = y_prob[participant_positions]
+
+                    true_label = int(y_test_part.iloc[0])
+                    positive_window_count = int(np.sum(y_pred_part == 1))
+                    total_windows = len(y_pred_part)
+                    patient_pred = 1 if positive_window_count > total_windows / 2 else 0
+                    patient_prob = positive_window_count / total_windows if total_windows else 0.0
+                    patient_accuracy = int(true_label == patient_pred)
+
+                    patient_true_labels.append(true_label)
+                    patient_pred_labels.append(patient_pred)
+                    patient_pred_probs.append(patient_prob)
+                    fold_patient_accuracies.append(patient_accuracy)
+
+                    window_predictions.extend(
+                        self._create_window_predictions(
+                            fold_idx, participant, y_test_part, y_pred_part, y_prob_part
+                        )
+                    )
+                    patient_predictions.append({
+                        'fold': fold_idx,
+                        'participant': participant,
+                        'true_label': true_label,
+                        'predicted_label': patient_pred,
+                        'probability': patient_prob,
+                        'n_windows': total_windows,
+                        'n_positive_windows': positive_window_count,
+                        'window_accuracy': float(np.mean(y_pred_part == y_test_part))
+                    })
                 
                 # Log fold metadata and metrics with stable names.
                 # Fold identity is tracked via nested run + fold_index param.
-                patient_accuracy = int(true_label == patient_pred)
-                print(f"   🔍 DEBUG: true_label={true_label}, patient_pred={patient_pred}, patient_accuracy={patient_accuracy}")
+                fold_patient_accuracy = float(np.mean(fold_patient_accuracies)) if fold_patient_accuracies else 0.0
                 mlflow.log_param("fold_index", fold_idx)
-                mlflow.log_param("patient_id", test_participant)
-                mlflow.log_param("true_remission", int(true_label))
-                mlflow.log_param("predicted_remission", int(patient_pred))
-                mlflow.log_metric("patient_accuracy", patient_accuracy)
+                mlflow.log_param("test_group_count", len(test_participants))
+                if len(test_participants) == 1:
+                    mlflow.log_param("patient_id", str(test_participants[0]))
+                mlflow.log_metric("patient_accuracy", fold_patient_accuracy)
                 mlflow.log_metric("window_accuracy", window_test_accuracy)
-                
-                # Print detailed test results for this fold
-                print(f"   🔍 MLFLOW LOGGING: window_accuracy = {window_test_accuracy}")
+                if perform_selection:
+                    fold_feature_selections.append({
+                        "fold_idx": fold_idx,
+                        "correct": bool(fold_patient_accuracy >= 0.5),
+                        "features": selected_feature_names_fold,
+                        "patient_accuracy": fold_patient_accuracy,
+                        "n_test_groups": len(test_participants),
+                    })
         
         # Calculate and log patient-level metrics
         patient_metrics = evaluator.evaluate_patient_predictions(
@@ -2080,20 +2549,60 @@ class DeepLearningTrainer(BaseTrainer):
         mlflow.log_metrics({f"patient_{k}": v for k, v in patient_metrics.items()})
         mlflow.log_metric("avg_window_accuracy", avg_window_accuracy)
         
+        # Build final feature set from most common features in correctly predicted folds.
+        if perform_selection:
+            consensus_source = "correct_folds"
+            selected_feature_rows = [f for f in fold_feature_selections if f["correct"]]
+            if not selected_feature_rows:
+                logger.warning("No correctly predicted folds available for feature consensus. Falling back to all folds.")
+                selected_feature_rows = list(fold_feature_selections)
+                consensus_source = "all_folds_fallback"
+
+            selected_feature_sets = [row["features"] for row in selected_feature_rows]
+            final_feature_k = outer_consensus_k if outer_consensus_k is not None else n_features_target
+            feature_counts = Counter()
+            for features in selected_feature_sets:
+                feature_counts.update(features)
+
+            selected_feature_names = [name for name, _ in feature_counts.most_common(final_feature_k)]
+            if not selected_feature_names:
+                logger.warning("No fold-level feature selections available. Falling back to all features.")
+                selected_feature_names = X_orig.columns.tolist()
+                consensus_source = "all_features_fallback"
+
+            X_final_train = X_orig[selected_feature_names]
+            mlflow.log_param("feature_selection_method", "select_k_best_f_classif")
+            mlflow.log_param("feature_selection_final_strategy", "consensus_frequency")
+            mlflow.log_param("feature_selection_consensus_source", consensus_source)
+            mlflow.log_param("feature_selection_consensus_folds", len(selected_feature_sets))
+            mlflow.log_param("num_selected_features", len(selected_feature_names))
+            mlflow.log_param("selected_features_list", selected_feature_names)
+            mlflow.log_param("feature_selection_effective", len(selected_feature_names) < X_orig.shape[1] or n_features_target >= X_orig.shape[1])
+            mlflow.log_dict(
+                [{"feature": name, "count": count} for name, count in feature_counts.most_common(min(2 * n_features_target, len(feature_counts)))],
+                "feature_selection_consensus_counts.json",
+            )
+        else:
+            selected_feature_names = X_orig.columns.tolist()
+            X_final_train = X_orig
+
+        self.selected_feature_names = selected_feature_names
+        mlflow.log_metric("num_features_trained_on", len(X_final_train.columns))
+
         # Train final model on all data
         logger.info("\nTraining final model on all data...")
         
         # Ensure no non-finite values in final training data (should not be needed).
-        if not np.isfinite(X.to_numpy(dtype=np.float64, copy=False)).all():
+        if not np.isfinite(X_final_train.to_numpy(dtype=np.float64, copy=False)).all():
             logger.error("Unexpected non-finite values detected in final training data after global sanitization.")
             raise ValueError("Data contains non-finite values after global sanitization")
         
         final_model = self._create_model_instance()
-        final_model.fit(X, y)
+        final_model.fit(X_final_train, y)
         
         # Save results
         self._save_results(final_model, patient_metrics, window_predictions, 
-                         patient_predictions, X)
+                         patient_predictions, X_final_train)
         
         return final_model
     

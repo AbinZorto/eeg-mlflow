@@ -308,7 +308,13 @@ class ModelBuilder:
         elif name in ['pytorch_mlp', 'keras_mlp', 'efficient_tabular_mlp', 'hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm', 'advanced_1dcnn', 'advanced_lstm']:
             # Deep learning models are handled by DeepLearningTrainer
             # Return a placeholder that will be replaced by actual DL model
-            from .deep_learning_trainer import PyTorchMLPClassifier, KerasMLPClassifier, AdvancedHybrid1DCNNLSTMClassifier, EfficientTabularMLPClassifier
+            from .deep_learning_trainer import (
+                PyTorchMLPClassifier,
+                KerasMLPClassifier,
+                AdvancedHybrid1DCNNLSTMClassifier,
+                EfficientTabularMLPClassifier,
+                normalize_advanced_hybrid_params,
+            )
             
             if name == 'pytorch_mlp':
                 default_params = {
@@ -349,14 +355,7 @@ class ModelBuilder:
                 
             elif name in ['hybrid_1dcnn_lstm', 'advanced_hybrid_1dcnn_lstm', 'advanced_1dcnn', 'advanced_lstm']:
                 # All advanced models use the same implementation with different configurations
-                # Filter out incompatible parameters for advanced models
-                if name in ['advanced_hybrid_1dcnn_lstm', 'advanced_1dcnn', 'advanced_lstm']:
-                    # Remove parameters that don't belong in the advanced model
-                    filtered_params = {k: v for k, v in user_params.items() 
-                                     if k not in ['class_weight', 'optimizer', 'learning_rate', 
-                                                 'batch_size', 'epochs', 'early_stopping_patience']}
-                else:
-                    filtered_params = user_params
+                filtered_params = normalize_advanced_hybrid_params(user_params, name)
                 return AdvancedHybrid1DCNNLSTMClassifier(**filtered_params)  # Return directly, not as pipeline
             
             elif name == 'efficient_tabular_mlp':

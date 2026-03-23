@@ -15,7 +15,7 @@ from src.processing.upsampler import upsample_eeg_data
 from src.processing.downsampler import downsample_eeg_data
 from src.processing.window_slicer import slice_eeg_windows
 from src.processing.feature_extractor import extract_eeg_features as run_feature_extraction
-from src.processing.dc_offset import remove_dc_offset_eeg_data
+from src.processing.demean import demean_eeg_data
 
 from src.models.patient_trainer import PatientLevelTrainer
 from src.models.window_trainer import WindowLevelTrainer
@@ -249,7 +249,9 @@ def process(ctx):
             
             # Process pipeline
             logger.info("Starting EEG processing pipeline...")
-            upsampled = upsample_eeg_data(config, raw_data)
+            demeaned = demean_eeg_data(config, raw_data)
+            logger.info("Participant/channel demeaning complete.")
+            upsampled = upsample_eeg_data(config, demeaned)
             logger.info("Upsampling complete.")
             filtered = filter_eeg_data(config, upsampled)
             logger.info("Filtering complete.")
@@ -257,9 +259,7 @@ def process(ctx):
             logger.info("Downsampling complete.")
             windowed = slice_eeg_windows(config, downsampled)
             logger.info("Window slicing complete.")
-            dc_removed = remove_dc_offset_eeg_data(config, windowed)
-            logger.info("DC offset removal complete.")
-            features, mlflow_dataset = run_feature_extraction(config, dc_removed)
+            features, mlflow_dataset = run_feature_extraction(config, windowed)
             logger.info("Feature extraction complete.")
             
             mlflow.log_metric("processing_success", 1)
@@ -486,13 +486,25 @@ def get_available_models_from_config(config_path):
               type=click.Choice(['model_based', 'select_k_best_f_classif', 'select_k_best_mutual_info', 'select_from_model_l1', 'rfe']), 
               default='model_based', 
               help='Feature selection method.')
+@click.option('--outer-k', type=int, default=None, help='Optional number of most-common features to keep from inner_k consensus (does not change evaluation splits).')
+@click.option('--inner-k', type=int, default=None, help='Optional number of features to select per outer fold before consensus.')
 @click.option('--feature-categories', type=str, help='Comma-separated list of feature categories to include (e.g., "spectral_features,psd_statistics,temporal_features"). Use "list" to see available categories.')
 @click.option('--use-dataset-from-run', type=str, help='MLflow run ID to load dataset from (optional)')
 @click.pass_context
-def train(ctx, level, window_size, model_type, enable_feature_selection, n_features_select, fs_method, feature_categories, use_dataset_from_run):
+def train(ctx, level, window_size, model_type, enable_feature_selection, n_features_select, fs_method, outer_k, inner_k, feature_categories, use_dataset_from_run):
     """Train the model"""
     config = ctx.obj['config']
-    logger.info(f"CLI train inputs: level='{level}', window_size={window_size}, model_type='{model_type}', enable_feature_selection={enable_feature_selection}, n_features_select={n_features_select}, fs_method='{fs_method}', use_dataset_from_run='{use_dataset_from_run}'")
+    logger.info(
+        f"CLI train inputs: level='{level}', window_size={window_size}, model_type='{model_type}', "
+        f"enable_feature_selection={enable_feature_selection}, n_features_select={n_features_select}, "
+        f"fs_method='{fs_method}', outer_k={outer_k}, inner_k={inner_k}, "
+        f"use_dataset_from_run='{use_dataset_from_run}'"
+    )
+
+    if outer_k is not None and outer_k < 1:
+        raise click.BadParameter("--outer-k must be >= 1 when provided.")
+    if inner_k is not None and inner_k < 1:
+        raise click.BadParameter("--inner-k must be >= 1 when provided.")
 
     # Validate model type against available models from config
     config_path = ctx.obj.get('config_path', 'configs/window_model_config.yaml')
@@ -548,6 +560,17 @@ def train(ctx, level, window_size, model_type, enable_feature_selection, n_featu
         'method': fs_method
     }
     logger.info(f"Config for feature selection set to: {config['feature_selection']}")
+
+    # Add CV override config for outer/inner nested group CV.
+    cv_config = config.get('cv', {})
+    if not isinstance(cv_config, dict):
+        cv_config = {}
+    if outer_k is not None:
+        cv_config['outer_k'] = outer_k
+    if inner_k is not None:
+        cv_config['inner_k'] = inner_k
+    config['cv'] = cv_config
+    logger.info(f"Config for CV set to: {config['cv']}")
     
     # Add feature filtering config
     if feature_categories and feature_categories.lower() != 'list':
