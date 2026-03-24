@@ -3,7 +3,6 @@ import pandas as pd
 from collections import Counter
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.model_selection import LeaveOneGroupOut
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 from sklearn.preprocessing import StandardScaler
 import mlflow
 from pathlib import Path
@@ -34,7 +33,6 @@ except ImportError:
     warnings.warn("SMOTE/NearMiss not available. Install imbalanced-learn for better handling of class imbalance.")
 
 from src.models.base_trainer import BaseTrainer
-from src.models.evaluation import ModelEvaluator
 from mlflow.data.pandas_dataset import PandasDataset
 
 logger = logging.getLogger(__name__)
@@ -71,6 +69,31 @@ def _create_reduce_on_plateau_scheduler(
     if "verbose" in scheduler_signature.parameters:
         scheduler_kwargs["verbose"] = False
     return optim.lr_scheduler.ReduceLROnPlateau(optimizer, **scheduler_kwargs)
+
+
+def _resolve_training_batch_config(dataset_size: int, batch_size: int, num_devices: int) -> Dict[str, int | bool]:
+    """
+    Keep training batches large enough for BatchNorm on every replica.
+
+    With DataParallel, a tail batch of size 2 on 2 GPUs becomes 1 sample per GPU,
+    which makes BatchNorm1d fail. We only drop the final batch when it is unsafe.
+    """
+    safe_batch_size = max(1, int(batch_size))
+    device_count = max(1, int(num_devices))
+    min_safe_batch = 2 * device_count
+
+    if dataset_size > 0 and dataset_size < safe_batch_size and dataset_size >= min_safe_batch:
+        safe_batch_size = dataset_size
+
+    remainder = dataset_size % safe_batch_size if dataset_size > safe_batch_size else dataset_size
+    drop_last = dataset_size > safe_batch_size and remainder != 0 and remainder < min_safe_batch
+
+    return {
+        "batch_size": safe_batch_size,
+        "drop_last": drop_last,
+        "min_safe_batch": min_safe_batch,
+        "device_count": device_count,
+    }
 
 
 def normalize_advanced_hybrid_params(params: Dict[str, Any], model_name: str = "advanced_hybrid_1dcnn_lstm") -> Dict[str, Any]:
@@ -466,6 +489,7 @@ class PyTorchMLPClassifier(BaseEstimator, ClassifierMixin):
                  random_state=42,
                  mixed_precision=False,
                  gradient_accumulation_steps=1,
+                 use_multi_gpu=False,
                  use_smote=False,  # Add SMOTE parameter
                  use_nearmiss=False,  # Add NearMiss parameter
                  nearmiss_version=1):  # NearMiss version (1, 2, or 3)
@@ -484,6 +508,7 @@ class PyTorchMLPClassifier(BaseEstimator, ClassifierMixin):
         self.random_state = random_state
         self.mixed_precision = mixed_precision
         self.gradient_accumulation_steps = gradient_accumulation_steps
+        self.use_multi_gpu = bool(use_multi_gpu) and torch.cuda.device_count() > 1
         self.use_smote = use_smote  # Store SMOTE setting
         self.use_nearmiss = use_nearmiss  # Store NearMiss setting
         self.nearmiss_version = nearmiss_version  # Store NearMiss version
@@ -500,10 +525,11 @@ class PyTorchMLPClassifier(BaseEstimator, ClassifierMixin):
             self.scaler_amp = torch.cuda.amp.GradScaler()
             print("🔥 MIXED PRECISION ENABLED: Using automatic mixed precision for maximum GPU utilization!")
         
-        # Multi-GPU setup for maximum performance
-        self.use_multi_gpu = torch.cuda.device_count() > 1
+        # Multi-GPU is opt-in; default to single-GPU for stability.
         if self.use_multi_gpu:
             print(f"🚀 MULTI-GPU MODE: Using {torch.cuda.device_count()} GPUs for training!")
+        elif torch.cuda.is_available():
+            print(f"🖥️  SINGLE-GPU MODE: Using device {self.device}")
         
         # Set random seeds for reproducibility
         torch.manual_seed(random_state)
@@ -619,7 +645,6 @@ class PyTorchMLPClassifier(BaseEstimator, ClassifierMixin):
         if self.use_multi_gpu:
             self.model = nn.DataParallel(self.model)
             print(f"💫 DataParallel enabled across {torch.cuda.device_count()} GPUs")
-            print(f"🔥 Effective batch size: {self.batch_size} per GPU = {self.batch_size * torch.cuda.device_count()} total")
         
         # Prepare data
         X_tensor = torch.FloatTensor(X_scaled).to(self.device)
@@ -630,10 +655,30 @@ class PyTorchMLPClassifier(BaseEstimator, ClassifierMixin):
         
         # Use smaller batch size for small datasets
         effective_batch_size = min(self.batch_size, len(X) // 4) if len(X) < 100 else self.batch_size
+        batch_config = _resolve_training_batch_config(
+            dataset_size=len(dataset),
+            batch_size=effective_batch_size,
+            num_devices=torch.cuda.device_count() if self.use_multi_gpu else 1,
+        )
+        if batch_config["drop_last"]:
+            print(
+                f"   ℹ️  Dropping final undersized training batch to keep at least "
+                f"{batch_config['min_safe_batch']} samples across {batch_config['device_count']} device(s)."
+            )
+        print(
+            f"🔥 Training batch size: {batch_config['batch_size']} total across "
+            f"{batch_config['device_count']} device(s)"
+        )
         
         # High-performance data loading (no pin_memory since data is already on GPU)
-        dataloader = DataLoader(dataset, batch_size=effective_batch_size, shuffle=True, 
-                              num_workers=0, pin_memory=False)
+        dataloader = DataLoader(
+            dataset,
+            batch_size=batch_config["batch_size"],
+            shuffle=True,
+            num_workers=0,
+            pin_memory=False,
+            drop_last=bool(batch_config["drop_last"]),
+        )
         
         # Loss function with class weights - SMOTE/NearMiss-aware
         if self.use_smote or self.use_nearmiss:
@@ -955,12 +1000,23 @@ class EfficientTabularMLPClassifier(BaseEstimator, ClassifierMixin):
         
         # Dataloader
         effective_batch_size = min(self.batch_size, max(16, len(X_tensor) // 2)) if len(X_tensor) < 100 else self.batch_size
+        batch_config = _resolve_training_batch_config(
+            dataset_size=len(X_tensor),
+            batch_size=effective_batch_size,
+            num_devices=1,
+        )
+        if batch_config["drop_last"]:
+            print(
+                f"   ℹ️  Dropping final undersized training batch to keep at least "
+                f"{batch_config['min_safe_batch']} samples for BatchNorm."
+            )
         dataloader = torch.utils.data.DataLoader(
             torch.utils.data.TensorDataset(X_tensor, y_tensor),
-            batch_size=effective_batch_size,
+            batch_size=batch_config["batch_size"],
             shuffle=True,
             num_workers=0,
-            pin_memory=False
+            pin_memory=False,
+            drop_last=bool(batch_config["drop_last"]),
         )
         
         # Early stopping
@@ -1633,18 +1689,30 @@ class AdvancedHybrid1DCNNLSTMClassifier(BaseEstimator, ClassifierMixin):
         # OPTIMIZED: Better batch size handling
         effective_batch_size = min(self.batch_size, len(X) // 2) if len(X) < 100 else self.batch_size
         effective_batch_size = max(effective_batch_size, 16)  # Minimum batch size
-        
+
         # Create data loader with optimizations
         dataset = torch.utils.data.TensorDataset(X_tensor, y_tensor)
+        batch_config = _resolve_training_batch_config(
+            dataset_size=len(dataset),
+            batch_size=effective_batch_size,
+            num_devices=1,
+        )
+        if batch_config["drop_last"]:
+            print(
+                f"   ℹ️  Dropping final undersized training batch to keep at least "
+                f"{batch_config['min_safe_batch']} samples for BatchNorm."
+            )
+        
         dataloader = torch.utils.data.DataLoader(
             dataset, 
-            batch_size=effective_batch_size, 
+            batch_size=batch_config["batch_size"], 
             shuffle=True,
             num_workers=0,  # Keep 0 for simplicity
-            pin_memory=False  # Disable since tensors are already on GPU
+            pin_memory=False,  # Disable since tensors are already on GPU
+            drop_last=bool(batch_config["drop_last"]),
         )
         
-        print(f"   Effective batch size: {effective_batch_size}")
+        print(f"   Effective batch size: {batch_config['batch_size']}")
         print(f"   Number of batches per epoch: {len(dataloader)}")
         
         # OPTIMIZED: Training loop with minimal overhead
@@ -1819,10 +1887,13 @@ class DeepLearningTrainer(BaseTrainer):
         
         self.output_dir = config['paths']['models']
         metrics_config = config.get('metrics', {}) if isinstance(config.get('metrics', {}), dict) else {}
-        self.window_metrics = metrics_config.get('window', ['accuracy'])
+        self.window_metrics = metrics_config.get('window', ['accuracy', 'f1', 'roc_auc'])
         self.patient_metrics = metrics_config.get(
             'patient',
-            metrics_config.get('patient_level', ['accuracy', 'precision', 'recall', 'f1', 'roc_auc']),
+            metrics_config.get(
+                'patient_level',
+                ['accuracy', 'balanced_accuracy', 'precision', 'recall', 'sensitivity', 'specificity', 'f1', 'roc_auc', 'pr_auc', 'npv', 'mcc'],
+            ),
         )
         self.feature_selection_config = config.get('feature_selection', {})
         
@@ -1879,9 +1950,7 @@ class DeepLearningTrainer(BaseTrainer):
         """
         # Determine data source with priority: MLflow dataset > provided dataset > config path > file path
         final_data_path = data_path or self.config.get('data', {}).get('feature_path')
-        
-        patient_evaluator = ModelEvaluator(metrics=self.patient_metrics)
-        
+
         # Load data using the new base trainer method
         df = self._load_data_from_source(
             data_source=final_data_path,
@@ -1967,6 +2036,8 @@ class DeepLearningTrainer(BaseTrainer):
         patient_true_labels = []
         patient_pred_labels = []
         patient_pred_probs = []
+        fold_patient_accuracy_values = []
+        fold_window_accuracy_values = []
         fold_feature_selections = []
         
         inner_k_raw = cv_config.get("inner_k")
@@ -2101,6 +2172,8 @@ class DeepLearningTrainer(BaseTrainer):
                 # Log fold metadata and metrics with stable names.
                 # Fold identity is tracked via nested run + fold_index param.
                 fold_patient_accuracy = float(np.mean(fold_patient_accuracies)) if fold_patient_accuracies else 0.0
+                fold_patient_accuracy_values.append(fold_patient_accuracy)
+                fold_window_accuracy_values.append(window_test_accuracy)
                 mlflow.log_param("fold_index", fold_idx)
                 mlflow.log_param("test_group_count", len(test_participants))
                 if len(test_participants) == 1:
@@ -2116,31 +2189,40 @@ class DeepLearningTrainer(BaseTrainer):
                         "n_test_groups": len(test_participants),
                     })
         
-        # Calculate and log patient-level metrics
-        patient_metrics = patient_evaluator.evaluate_patient_predictions(
-            np.array(patient_true_labels),
-            np.array(patient_pred_labels),
-            np.array(patient_pred_probs)
+        metric_report = self._build_clinical_metrics_report(
+            patient_true_labels=patient_true_labels,
+            patient_pred_labels=patient_pred_labels,
+            patient_pred_probs=patient_pred_probs,
+            window_predictions=window_predictions,
+            fold_patient_accuracies=fold_patient_accuracy_values,
+            fold_window_accuracies=fold_window_accuracy_values,
+            feature_sets=[row["features"] for row in fold_feature_selections] if perform_selection else None,
         )
+        patient_metrics = metric_report["patient"]["metrics"]
+        window_metrics = metric_report["window"]["metrics"]
         
         # Print comprehensive cross-validation summary
         print(f"\n" + "="*80)
         print(f"🎯 CROSS-VALIDATION SUMMARY")
         print(f"="*80)
         
-        # Calculate average window-based accuracy across all folds
-        avg_window_accuracy = np.mean([p['window_accuracy'] for p in patient_predictions])
-        
         print(f"\n📊 PATIENT-LEVEL RESULTS:")
         print(f"   Overall patient accuracy: {patient_metrics['accuracy']:.4f}")
+        if patient_metrics.get('balanced_accuracy') is not None:
+            print(f"   Overall patient balanced accuracy: {patient_metrics['balanced_accuracy']:.4f}")
+        if patient_metrics.get('specificity') is not None:
+            print(f"   Overall patient specificity: {patient_metrics['specificity']:.4f}")
         print(f"   Overall patient precision: {patient_metrics['precision']:.4f}")
         print(f"   Overall patient recall: {patient_metrics['recall']:.4f}")
         print(f"   Overall patient F1-score: {patient_metrics.get('f1_score', patient_metrics.get('f1', 0.0)):.4f}")
         print(f"   Overall patient AUC: {patient_metrics.get('auc', patient_metrics.get('roc_auc', 0.0)):.4f}")
         
         print(f"\n📊 WINDOW-LEVEL RESULTS (averaged across folds):")
-        print(f"   Average window accuracy: {avg_window_accuracy:.4f}")
-        print(f"   Note: Window-based precision/recall/F1 not meaningful (all windows per participant are same class)")
+        print(f"   Average window accuracy: {window_metrics.get('accuracy', 0.0):.4f}")
+        print(f"   Window F1-score: {window_metrics.get('f1', 0.0):.4f}")
+        if window_metrics.get('roc_auc') is not None:
+            print(f"   Window AUROC: {window_metrics['roc_auc']:.4f}")
+        print(f"   Note: Window-level metrics are supporting only")
         
         print(f"\n📊 FOLD-BY-FOLD BREAKDOWN:")
         for i, pred in enumerate(patient_predictions):
@@ -2170,9 +2252,7 @@ class DeepLearningTrainer(BaseTrainer):
             print(f"   - patient_accuracy (fold {i + 1}) = {calculated_accuracy}")
             print(f"   - window_accuracy (fold {i + 1}) = {pred['window_accuracy']:.4f}")
         
-        # Log overall metrics
-        mlflow.log_metrics({f"patient_{k}": v for k, v in patient_metrics.items()})
-        mlflow.log_metric("avg_window_accuracy", avg_window_accuracy)
+        self._log_clinical_metrics_report(metric_report)
         
         # Build final feature set from most common features in correctly predicted folds.
         if perform_selection:
@@ -2196,7 +2276,7 @@ class DeepLearningTrainer(BaseTrainer):
                 consensus_source = "all_features_fallback"
 
             X_final_train = X_orig[selected_feature_names]
-            mlflow.log_param("feature_selection_method", "select_k_best_f_classif")
+            mlflow.log_param("feature_selection_method", self.feature_selection_config.get('method', 'select_k_best_f_classif'))
             mlflow.log_param("feature_selection_final_strategy", "consensus_frequency")
             mlflow.log_param("feature_selection_consensus_source", consensus_source)
             mlflow.log_param("feature_selection_consensus_folds", len(selected_feature_sets))

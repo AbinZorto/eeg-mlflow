@@ -44,7 +44,7 @@ from src.utils.model_registry import get_model_metadata  # noqa: E402
 ALL_FOUR_CHANNELS = {"af7", "af8", "tp9", "tp10"}
 CANONICAL_MODEL_SETS = ("traditional", "boosting", "deep_learning")
 CHECKPOINT_SCHEMA_VERSION = 1
-RESULTS_SCHEMA_VERSION = 1
+RESULTS_SCHEMA_VERSION = 2
 DEFAULT_ARTIFACTS_DIR = "sweeps/artifacts"
 TRAIN_RUN_ID_PATTERN = re.compile(r"SUCCESS:TRAIN_RUN_ID:([A-Za-z0-9_-]+)")
 
@@ -674,6 +674,151 @@ def fetch_mlflow_run_snapshot(
     return snapshot
 
 
+def _safe_metric_number(value: Any) -> Optional[float]:
+    if isinstance(value, bool) or value is None:
+        return None
+    if isinstance(value, (int, float)):
+        numeric = float(value)
+        if numeric == numeric and numeric not in (float("inf"), float("-inf")):
+            return numeric
+    return None
+
+
+def _metric_value(metrics: Dict[str, Any], *names: str) -> Optional[float]:
+    for name in names:
+        value = _safe_metric_number(metrics.get(name))
+        if value is not None:
+            return value
+    return None
+
+
+def _parse_bool_param(value: Any) -> Optional[bool]:
+    if isinstance(value, bool):
+        return value
+    if not isinstance(value, str):
+        return None
+    lowered = value.strip().lower()
+    if lowered in {"true", "1", "yes"}:
+        return True
+    if lowered in {"false", "0", "no"}:
+        return False
+    return None
+
+
+def _parse_int_param(value: Any) -> Optional[int]:
+    if value is None:
+        return None
+    try:
+        return int(str(value))
+    except (TypeError, ValueError):
+        return None
+
+
+def _parse_float_param(value: Any) -> Optional[float]:
+    if value is None:
+        return None
+    try:
+        numeric = float(str(value))
+    except (TypeError, ValueError):
+        return None
+    if numeric != numeric or numeric in (float("inf"), float("-inf")):
+        return None
+    return numeric
+
+
+def build_normalized_metrics_snapshot(
+    mlflow_metrics: Dict[str, Any],
+    mlflow_params: Dict[str, Any],
+) -> Dict[str, Any]:
+    if not mlflow_metrics and not mlflow_params:
+        return {}
+
+    primary_metric_name = str(
+        mlflow_params.get("primary_metric_name", "balanced_accuracy")
+    )
+    patient = {
+        "role": "primary",
+        "primary_metric_name": primary_metric_name,
+        "accuracy": _metric_value(mlflow_metrics, "patient_accuracy"),
+        "balanced_accuracy": _metric_value(mlflow_metrics, "patient_balanced_accuracy"),
+        "precision": _metric_value(mlflow_metrics, "patient_precision"),
+        "recall": _metric_value(mlflow_metrics, "patient_recall"),
+        "sensitivity": _metric_value(mlflow_metrics, "patient_sensitivity", "patient_recall"),
+        "specificity": _metric_value(mlflow_metrics, "patient_specificity"),
+        "f1": _metric_value(mlflow_metrics, "patient_f1"),
+        "roc_auc": _metric_value(mlflow_metrics, "patient_roc_auc"),
+        "pr_auc": _metric_value(mlflow_metrics, "patient_pr_auc"),
+        "npv": _metric_value(mlflow_metrics, "patient_npv"),
+        "mcc": _metric_value(mlflow_metrics, "patient_mcc"),
+        "true_positives": _metric_value(mlflow_metrics, "patient_true_positives"),
+        "true_negatives": _metric_value(mlflow_metrics, "patient_true_negatives"),
+        "false_positives": _metric_value(mlflow_metrics, "patient_false_positives"),
+        "false_negatives": _metric_value(mlflow_metrics, "patient_false_negatives"),
+        "n_patients": _metric_value(mlflow_metrics, "patient_n_patients"),
+    }
+    patient["primary_metric_value"] = patient.get(primary_metric_name)
+
+    window = {
+        "role": str(mlflow_params.get("window_metrics_role", "supporting")),
+        "accuracy": _metric_value(mlflow_metrics, "window_accuracy", "avg_window_accuracy"),
+        "f1": _metric_value(mlflow_metrics, "window_f1"),
+        "roc_auc": _metric_value(mlflow_metrics, "window_roc_auc"),
+        "n_windows": _metric_value(mlflow_metrics, "window_n_windows"),
+    }
+
+    confidence_intervals = {}
+    for metric_name in ("accuracy", "balanced_accuracy", "sensitivity", "specificity", "f1", "roc_auc"):
+        confidence_intervals[metric_name] = {
+            "low": _metric_value(mlflow_metrics, f"patient_{metric_name}_ci_low"),
+            "high": _metric_value(mlflow_metrics, f"patient_{metric_name}_ci_high"),
+            "std": _metric_value(mlflow_metrics, f"patient_{metric_name}_ci_std"),
+        }
+
+    permutation_metric = str(
+        mlflow_params.get("metrics_reporting_permutation_metric", primary_metric_name)
+    )
+    stats = {
+        "bootstrap_ci_enabled": _parse_bool_param(mlflow_params.get("metrics_reporting_bootstrap_ci_enabled")),
+        "bootstrap_ci_level": _parse_float_param(mlflow_params.get("metrics_reporting_bootstrap_ci_level")),
+        "bootstrap_iterations": _parse_int_param(mlflow_params.get("metrics_reporting_bootstrap_iterations")),
+        "permutation_test_enabled": _parse_bool_param(mlflow_params.get("metrics_reporting_permutation_test_enabled")),
+        "permutation_metric": permutation_metric,
+        "permutation_iterations": _parse_int_param(mlflow_params.get("metrics_reporting_permutation_iterations")),
+        "confidence_intervals": confidence_intervals,
+        "permutation_test": {
+            "p_value": _metric_value(mlflow_metrics, f"patient_{permutation_metric}_permutation_pvalue"),
+            "observed": _metric_value(mlflow_metrics, f"patient_{permutation_metric}_permutation_observed"),
+            "null_mean": _metric_value(mlflow_metrics, f"patient_{permutation_metric}_permutation_null_mean"),
+            "null_std": _metric_value(mlflow_metrics, f"patient_{permutation_metric}_permutation_null_std"),
+        },
+        "fold_summary": {
+            "patient_accuracy_mean": _metric_value(mlflow_metrics, "patient_fold_accuracy_mean", "patient_accuracy"),
+            "patient_accuracy_std": _metric_value(mlflow_metrics, "patient_fold_accuracy_std"),
+            "patient_fold_count": _metric_value(mlflow_metrics, "patient_fold_count"),
+            "window_accuracy_mean": _metric_value(mlflow_metrics, "window_fold_accuracy_mean", "window_accuracy", "avg_window_accuracy"),
+            "window_accuracy_std": _metric_value(mlflow_metrics, "window_fold_accuracy_std"),
+            "window_fold_count": _metric_value(mlflow_metrics, "window_fold_count"),
+        },
+    }
+
+    feature_selection = {
+        "feature_set_count": _metric_value(mlflow_metrics, "feature_selection_feature_set_count"),
+        "average_features_per_fold": _metric_value(mlflow_metrics, "feature_selection_average_features_per_fold"),
+        "mean_pairwise_jaccard": _metric_value(mlflow_metrics, "feature_selection_mean_pairwise_jaccard"),
+        "median_pairwise_jaccard": _metric_value(mlflow_metrics, "feature_selection_median_pairwise_jaccard"),
+        "unique_feature_count": _metric_value(mlflow_metrics, "feature_selection_unique_feature_count"),
+        "top_feature_frequency": _metric_value(mlflow_metrics, "feature_selection_top_feature_frequency"),
+        "top_feature_share": _metric_value(mlflow_metrics, "feature_selection_top_feature_share"),
+    }
+
+    return {
+        "patient": patient,
+        "window": window,
+        "stats": stats,
+        "feature_selection": feature_selection,
+    }
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Unified experiment runner with model-set support plus per-fold and consensus feature-count overrides."
@@ -968,7 +1113,12 @@ def main() -> int:
             "command": list(cmd) if cmd is not None else None,
             "mlflow_experiment_name": experiment_name,
         }
-        record.update(fetch_mlflow_run_snapshot(train_run_id, tracking_uri))
+        snapshot = fetch_mlflow_run_snapshot(train_run_id, tracking_uri)
+        record.update(snapshot)
+        record["metrics"] = build_normalized_metrics_snapshot(
+            snapshot.get("mlflow_metrics", {}),
+            snapshot.get("mlflow_params", {}),
+        )
         append_jsonl_record(results_path, record)
 
     try:

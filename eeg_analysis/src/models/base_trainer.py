@@ -9,6 +9,11 @@ import mlflow.data
 from mlflow.data.pandas_dataset import PandasDataset
 from src.models.model_utils import create_classifier
 from src.utils.feature_filter import FeatureFilter
+from src.utils.clinical_metrics import (
+    DEFAULT_METRICS_REPORTING,
+    build_clinical_metrics_report,
+    flatten_metric_report_for_mlflow,
+)
 import logging
 
 logger = logging.getLogger(__name__)
@@ -19,6 +24,61 @@ class BaseTrainer:
         self.model_name = config.get('model_name', 'model')
         self.classifier_name = config.get('classifier', 'random_forest')
         self.classifier_params = config.get('classifier_params', {})
+
+    def _get_metrics_reporting_config(self) -> Dict[str, Any]:
+        reporting = dict(DEFAULT_METRICS_REPORTING)
+        raw = self.config.get("metrics_reporting", {})
+        if isinstance(raw, dict):
+            reporting.update(raw)
+        return reporting
+
+    def _build_clinical_metrics_report(
+        self,
+        *,
+        patient_true_labels: List[int],
+        patient_pred_labels: List[int],
+        patient_pred_probs: List[float],
+        window_predictions: List[Dict[str, Any]],
+        fold_patient_accuracies: List[float],
+        fold_window_accuracies: List[float],
+        feature_sets: Optional[List[List[str]]] = None,
+    ) -> Dict[str, Any]:
+        window_true_labels = [int(row["true_label"]) for row in window_predictions]
+        window_pred_labels = [int(row["predicted_label"]) for row in window_predictions]
+        window_pred_probs = [float(row["probability"]) for row in window_predictions]
+
+        return build_clinical_metrics_report(
+            patient_true_labels=patient_true_labels,
+            patient_pred_labels=patient_pred_labels,
+            patient_pred_probs=patient_pred_probs,
+            window_true_labels=window_true_labels,
+            window_pred_labels=window_pred_labels,
+            window_pred_probs=window_pred_probs,
+            fold_patient_accuracies=fold_patient_accuracies,
+            fold_window_accuracies=fold_window_accuracies,
+            feature_sets=feature_sets,
+            settings=self._get_metrics_reporting_config(),
+        )
+
+    def _log_clinical_metrics_report(self, report: Dict[str, Any]) -> None:
+        flat_metrics = flatten_metric_report_for_mlflow(report)
+        if flat_metrics:
+            mlflow.log_metrics(flat_metrics)
+
+        settings = report.get("stats", {}).get("settings", {})
+        if isinstance(settings, dict):
+            mlflow.log_param(
+                "primary_metric_name",
+                report.get("patient", {}).get("primary_metric_name", "balanced_accuracy"),
+            )
+            mlflow.log_param(
+                "window_metrics_role",
+                report.get("window", {}).get("role", "supporting"),
+            )
+            for key, value in settings.items():
+                mlflow.log_param(f"metrics_reporting_{key}", value)
+
+        mlflow.log_dict(report, "clinical_metrics_summary.json")
 
     def _prepare_data(self, df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.Series, pd.Series]:
         # Extract y and groups BEFORE dropping columns

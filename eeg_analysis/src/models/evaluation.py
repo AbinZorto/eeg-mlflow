@@ -1,6 +1,11 @@
 from typing import List, Dict, Any
 import numpy as np
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+
+from src.utils.clinical_metrics import (
+    PATIENT_METRIC_NAMES,
+    WINDOW_METRIC_NAMES,
+    compute_binary_classification_metrics,
+)
 
 class ModelEvaluator:
     """Class for evaluating model predictions."""
@@ -12,15 +17,8 @@ class ModelEvaluator:
         Args:
             metrics: List of metric names to compute. If None, computes all available metrics.
         """
-        self.available_metrics = {
-            'accuracy': accuracy_score,
-            'precision': precision_score,
-            'recall': recall_score,
-            'f1': f1_score,
-            'roc_auc': roc_auc_score
-        }
-        
-        self.metrics = metrics if metrics is not None else list(self.available_metrics.keys())
+        self.available_metrics = sorted(set(PATIENT_METRIC_NAMES + WINDOW_METRIC_NAMES))
+        self.metrics = metrics if metrics is not None else list(self.available_metrics)
         
     def evaluate_window_predictions(self, y_true: np.ndarray, y_pred: np.ndarray, 
                                   y_prob: np.ndarray) -> Dict[str, float]:
@@ -35,18 +33,18 @@ class ModelEvaluator:
         Returns:
             Dictionary of metric names and values
         """
-        results = {}
-        
-        for metric_name in self.metrics:
-            if metric_name == 'roc_auc':
-                # ROC AUC needs probabilities
-                score = self.available_metrics[metric_name](y_true, y_prob)
-            else:
-                # Other metrics use predicted labels
-                score = self.available_metrics[metric_name](y_true, y_pred)
-            results[metric_name] = float(score)
-            
-        return results
+        results = compute_binary_classification_metrics(
+            y_true,
+            y_pred,
+            y_prob,
+            metric_names=self.metrics,
+            count_field_name="n_windows",
+        )
+        return {
+            key: value
+            for key, value in results.items()
+            if key in set(self.metrics) | {"n_windows"}
+        }
     
     def evaluate_patient_predictions(self, y_true: np.ndarray, y_pred: np.ndarray, 
                                    y_prob: np.ndarray) -> Dict[str, float]:
@@ -61,32 +59,21 @@ class ModelEvaluator:
         Returns:
             Dictionary of metric names and values
         """
-        results = {}
-        
-        for metric_name in self.metrics:
-            if metric_name == 'roc_auc':
-                # ROC AUC needs probabilities
-                score = self.available_metrics[metric_name](y_true, y_prob)
-            else:
-                # Other metrics use predicted labels
-                score = self.available_metrics[metric_name](y_true, y_pred)
-            results[metric_name] = float(score)
-        
-        # Add confusion matrix counts
-        TP = sum((y_true == 1) & (y_pred == 1))
-        TN = sum((y_true == 0) & (y_pred == 0))
-        FP = sum((y_true == 0) & (y_pred == 1))
-        FN = sum((y_true == 1) & (y_pred == 0))
-        
-        results.update({
-            'true_positives': TP,
-            'true_negatives': TN,
-            'false_positives': FP,
-            'false_negatives': FN,
-            'n_patients': len(y_true)
-        })
-        
-        return results
+        results = compute_binary_classification_metrics(
+            y_true,
+            y_pred,
+            y_prob,
+            metric_names=self.metrics,
+            count_field_name="n_patients",
+        )
+        keep = set(self.metrics) | {
+            "true_positives",
+            "true_negatives",
+            "false_positives",
+            "false_negatives",
+            "n_patients",
+        }
+        return {key: value for key, value in results.items() if key in keep}
 
     def calculate_detailed_metrics(self, y_true: np.ndarray, y_pred: np.ndarray) -> Dict[str, Any]:
         """
@@ -99,26 +86,25 @@ class ModelEvaluator:
         Returns:
             Dictionary with detailed metrics including counts
         """
-        # Basic counts
-        TP = sum((y_true == 1) & (y_pred == 1))
-        TN = sum((y_true == 0) & (y_pred == 0))
-        FP = sum((y_true == 0) & (y_pred == 1))
-        FN = sum((y_true == 1) & (y_pred == 0))
-        
-        # Calculate metrics with proper handling of division by zero
-        accuracy = (TP + TN) / len(y_true) if len(y_true) > 0 else 0
-        precision = TP / (TP + FP) if (TP + FP) > 0 else 0
-        recall = TP / (TP + FN) if (TP + FN) > 0 else 0
-        f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
-        
+        metrics = compute_binary_classification_metrics(
+            y_true,
+            y_pred,
+            None,
+            metric_names=["accuracy", "balanced_accuracy", "precision", "recall", "sensitivity", "specificity", "f1", "npv", "mcc"],
+            count_field_name="n_samples",
+        )
         return {
-            'TP': int(TP),
-            'TN': int(TN),
-            'FP': int(FP),
-            'FN': int(FN),
-            'accuracy': float(accuracy),
-            'precision': float(precision),
-            'recall': float(recall),
-            'f1': float(f1),
-            'n_samples': int(len(y_true))
+            'TP': int(metrics['true_positives']),
+            'TN': int(metrics['true_negatives']),
+            'FP': int(metrics['false_positives']),
+            'FN': int(metrics['false_negatives']),
+            'accuracy': float(metrics['accuracy']) if metrics['accuracy'] is not None else 0.0,
+            'balanced_accuracy': float(metrics['balanced_accuracy']) if metrics['balanced_accuracy'] is not None else 0.0,
+            'precision': float(metrics['precision']) if metrics['precision'] is not None else 0.0,
+            'recall': float(metrics['recall']) if metrics['recall'] is not None else 0.0,
+            'specificity': float(metrics['specificity']) if metrics['specificity'] is not None else 0.0,
+            'f1': float(metrics['f1']) if metrics['f1'] is not None else 0.0,
+            'npv': float(metrics['npv']) if metrics['npv'] is not None else 0.0,
+            'mcc': float(metrics['mcc']) if metrics['mcc'] is not None else 0.0,
+            'n_samples': int(metrics['n_samples'])
         }

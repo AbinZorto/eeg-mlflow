@@ -2,11 +2,10 @@ import numpy as np
 import pandas as pd
 from collections import Counter
 from src.models.base_trainer import BaseTrainer
-from src.models.evaluation import ModelEvaluator
 from sklearn.base import BaseEstimator
 import mlflow
 from sklearn.model_selection import LeaveOneGroupOut
-from src.models.model_utils import save_model_results, log_feature_importance, create_classifier
+from src.models.model_utils import create_classifier
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 import logging
@@ -42,10 +41,13 @@ class Trainer(BaseTrainer):
             
         self.output_dir = config['paths']['models']
         metrics_config = config.get('metrics', {}) if isinstance(config.get('metrics', {}), dict) else {}
-        self.window_metrics = metrics_config.get('window', ['accuracy'])
+        self.window_metrics = metrics_config.get('window', ['accuracy', 'f1', 'roc_auc'])
         self.patient_metrics = metrics_config.get(
             'patient',
-            metrics_config.get('patient_level', ['accuracy', 'precision', 'recall', 'f1', 'roc_auc']),
+            metrics_config.get(
+                'patient_level',
+                ['accuracy', 'balanced_accuracy', 'precision', 'recall', 'sensitivity', 'specificity', 'f1', 'roc_auc', 'pr_auc', 'npv', 'mcc'],
+            ),
         )
         self.feature_selection_config = config.get('feature_selection', {})
         self.use_smote = config.get('use_smote', True)
@@ -262,9 +264,7 @@ class Trainer(BaseTrainer):
         """
         # Determine data source with priority: MLflow dataset > provided dataset > config path > file path
         final_data_path = data_path or self.config.get('data', {}).get('feature_path')
-        
-        patient_evaluator = ModelEvaluator(metrics=self.patient_metrics)
-        
+
         # Load data using the new base trainer method
         df = self._load_data_from_source(
             data_source=final_data_path,
@@ -356,6 +356,8 @@ class Trainer(BaseTrainer):
         patient_true_labels = []
         patient_pred_labels = []
         patient_pred_probs = []
+        fold_patient_accuracy_values = []
+        fold_window_accuracy_values = []
         fold_feature_selections = []
 
         inner_k_raw = cv_config.get("inner_k")
@@ -491,6 +493,8 @@ class Trainer(BaseTrainer):
                     })
 
                 fold_patient_accuracy = float(np.mean(fold_patient_accuracies)) if fold_patient_accuracies else 0.0
+                fold_patient_accuracy_values.append(fold_patient_accuracy)
+                fold_window_accuracy_values.append(fold_window_accuracy)
                 mlflow.log_param("fold_index", fold_idx)
                 mlflow.log_param("test_group_count", len(test_participants))
                 if len(test_participants) == 1:
@@ -506,15 +510,17 @@ class Trainer(BaseTrainer):
                         "n_test_groups": len(test_participants),
                     })
 
-        # Calculate and log patient-level metrics
-        patient_metrics = patient_evaluator.evaluate_patient_predictions(
-            np.array(patient_true_labels),
-            np.array(patient_pred_labels),
-            np.array(patient_pred_probs)
+        metric_report = self._build_clinical_metrics_report(
+            patient_true_labels=patient_true_labels,
+            patient_pred_labels=patient_pred_labels,
+            patient_pred_probs=patient_pred_probs,
+            window_predictions=window_predictions,
+            fold_patient_accuracies=fold_patient_accuracy_values,
+            fold_window_accuracies=fold_window_accuracy_values,
+            feature_sets=[row["features"] for row in fold_feature_selections] if perform_selection else None,
         )
-        
-        # Log overall metrics
-        mlflow.log_metrics({f"patient_{k}": v for k, v in patient_metrics.items()})
+        patient_metrics = metric_report["patient"]["metrics"]
+        self._log_clinical_metrics_report(metric_report)
         mlflow.log_params(self.model_params)
         
         # Build final feature set from most common features in correctly predicted folds.

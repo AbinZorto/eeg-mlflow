@@ -4,6 +4,7 @@ import pandas as pd
 from src.models.model_utils import create_classifier
 from src.models.trainer import Trainer
 from src.models.evaluation import ModelEvaluator
+from src.models.deep_learning_trainer import PyTorchMLPClassifier, _resolve_training_batch_config
 
 @pytest.fixture
 def sample_training_data():
@@ -106,6 +107,27 @@ class TestEvaluator:
         metrics = evaluator.evaluate_patient_predictions(y_true, y_pred, y_prob)
 
         assert 'accuracy' in metrics
+        assert 'balanced_accuracy' in metrics
+        assert 'specificity' in metrics
+        assert 'sensitivity' in metrics
         assert 'roc_auc' in metrics
         assert 'n_patients' in metrics
         assert metrics['n_patients'] == 4
+
+
+class TestDeepLearningBatching:
+    def test_pytorch_mlp_defaults_to_single_gpu_mode(self):
+        classifier = PyTorchMLPClassifier(use_multi_gpu=False)
+
+        assert classifier.use_multi_gpu is False
+
+    def test_drop_last_when_tail_batch_is_unsafe_for_dataparallel_batchnorm(self):
+        config = _resolve_training_batch_config(dataset_size=3970, batch_size=128, num_devices=2)
+
+        assert config["batch_size"] == 128
+        assert config["drop_last"] is True
+
+    def test_keep_last_batch_when_tail_batch_is_large_enough(self):
+        config = _resolve_training_batch_config(dataset_size=4050, batch_size=128, num_devices=2)
+
+        assert config["drop_last"] is False

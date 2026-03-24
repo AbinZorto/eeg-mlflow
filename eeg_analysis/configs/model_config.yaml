@@ -151,6 +151,7 @@ deep_learning:
     class_weight: "balanced"
     random_state: 42
     mixed_precision: true
+    use_multi_gpu: false
 
   hybrid_1dcnn_lstm: &hybrid_1dcnn_lstm_base
     cnn_filters: [32, 64, 128]
@@ -442,12 +443,31 @@ mlflow:
 metrics:
   window:
     - accuracy
-  patient:
-    - accuracy
-    - precision
-    - recall
     - f1
     - roc_auc
+  patient:
+    - accuracy
+    - balanced_accuracy
+    - precision
+    - recall
+    - sensitivity
+    - specificity
+    - f1
+    - roc_auc
+    - pr_auc
+    - npv
+    - mcc
+
+metrics_reporting:
+  primary_metric: "balanced_accuracy"
+  bootstrap_ci_enabled: true
+  bootstrap_ci_level: 0.95
+  bootstrap_iterations: 1000
+  permutation_test_enabled: true
+  permutation_metric: "balanced_accuracy"
+  permutation_iterations: 500
+  random_seed: 42
+  window_auc_enabled: true
 
 # Logging Configuration
 logging:
