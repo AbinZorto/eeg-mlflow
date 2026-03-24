@@ -87,6 +87,8 @@ def build_run_payload(
     ordering: Optional[str],
     inner_k: Optional[int],
     outer_k: Optional[int],
+    equalize_lopo_groups: Optional[str],
+    use_smote: Optional[str],
     python_cmd: Sequence[str],
     jobs: Sequence[Job],
 ) -> Dict[str, Any]:
@@ -120,6 +122,8 @@ def build_run_payload(
         "ordering": str(ordering).lower() if ordering else "any",
         "inner_k": int(inner_k) if inner_k is not None else None,
         "outer_k": int(outer_k) if outer_k is not None else None,
+        "equalize_lopo_groups": str(equalize_lopo_groups).lower() if equalize_lopo_groups is not None else None,
+        "use_smote": str(use_smote).lower() if use_smote is not None else None,
         "python_cmd": list(python_cmd),
         "jobs": normalized_jobs,
     }
@@ -166,6 +170,8 @@ def build_artifact_stem(payload: Dict[str, Any]) -> str:
         f"ord-{slugify(str(payload.get('ordering', 'any')), 20)}",
         f"ik-{payload.get('inner_k') if payload.get('inner_k') is not None else 'na'}",
         f"ok-{payload.get('outer_k') if payload.get('outer_k') is not None else 'na'}",
+        f"eq-{payload.get('equalize_lopo_groups') if payload.get('equalize_lopo_groups') is not None else 'cfg'}",
+        f"sm-{payload.get('use_smote') if payload.get('use_smote') is not None else 'cfg'}",
         f"ds-{'pinned' if payload.get('dataset_run_id') not in (None, 'auto_dataset') else 'auto'}",
     ]
     mode = str(payload.get("mode", "")).lower()
@@ -605,6 +611,10 @@ def build_train_cmd(
         cmd.extend(["--inner-k", str(args.inner_k)])
     if args.outer_k is not None:
         cmd.extend(["--outer-k", str(args.outer_k)])
+    if args.equalize_lopo_groups is not None:
+        cmd.extend(["--equalize-lopo-groups", str(args.equalize_lopo_groups)])
+    if args.use_smote is not None:
+        cmd.extend(["--use-smote", str(args.use_smote)])
 
     return cmd
 
@@ -888,6 +898,18 @@ def parse_args() -> argparse.Namespace:
         help="Forwarded to run_pipeline train --outer-k (final consensus feature count from correct outer folds).",
     )
     parser.add_argument(
+        "--equalize-lopo-groups",
+        choices=["true", "false"],
+        default=None,
+        help="Forwarded to run_pipeline train --equalize-lopo-groups to override non-held-out group balancing.",
+    )
+    parser.add_argument(
+        "--use-smote",
+        choices=["true", "false"],
+        default=None,
+        help="Forwarded to run_pipeline train --use-smote to override SMOTE usage.",
+    )
+    parser.add_argument(
         "--python-cmd",
         default="uv run python3",
         help="Python command prefix for helper scripts and run_pipeline invocations.",
@@ -996,6 +1018,8 @@ def main() -> int:
         ordering=effective_ordering_for_payload,
         inner_k=args.inner_k,
         outer_k=args.outer_k,
+        equalize_lopo_groups=args.equalize_lopo_groups,
+        use_smote=args.use_smote,
         python_cmd=python_cmd,
         jobs=jobs,
     )
@@ -1052,6 +1076,8 @@ def main() -> int:
         print(f"Feature counts: {feature_counts}")
     print(f"inner_k: {args.inner_k}")
     print(f"outer_k: {args.outer_k}")
+    print(f"equalize_lopo_groups: {args.equalize_lopo_groups if args.equalize_lopo_groups is not None else '<config>'}")
+    print(f"use_smote: {args.use_smote if args.use_smote is not None else '<config>'}")
     print(f"Dry run: {args.dry_run}")
     print(f"Total jobs: {expected_jobs}")
     print(f"Run signature: {run_signature[:12]}")
@@ -1109,6 +1135,8 @@ def main() -> int:
             "n_features": job.n_features,
             "inner_k": args.inner_k,
             "outer_k": args.outer_k,
+            "equalize_lopo_groups": args.equalize_lopo_groups,
+            "use_smote": args.use_smote,
             "ordering": args.ordering,
             "command": list(cmd) if cmd is not None else None,
             "mlflow_experiment_name": experiment_name,

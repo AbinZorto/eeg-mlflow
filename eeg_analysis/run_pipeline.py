@@ -39,6 +39,35 @@ def _extract_run_id_from_model_uri(model_uri: str):
         return None
     return uri_parts[0]
 
+
+def _resolve_training_balance_mode(config):
+    """Return a compact label for the effective training-fold balancing strategy."""
+    cv_config = config.get('cv', {}) if isinstance(config.get('cv', {}), dict) else {}
+    equalize_lopo_groups = bool(cv_config.get('equalize_lopo_groups', True))
+    model_config = config.get('model', {}) if isinstance(config.get('model', {}), dict) else {}
+    use_smote = bool(config.get('use_smote', model_config.get('use_smote', False)))
+
+    if equalize_lopo_groups and use_smote:
+        return "undersample_smote"
+    if equalize_lopo_groups:
+        return "undersample"
+    if use_smote:
+        return "smote"
+    return "none"
+
+
+def _build_training_run_name(model_type, window_size, feature_selection_enabled, fs_method, balance_mode, dataset_to_use):
+    """Build a concise MLflow run name for training runs."""
+    name_parts = [f"{model_type}_{window_size}s"]
+    if feature_selection_enabled:
+        name_parts.append(f"fs_{fs_method}")
+    else:
+        name_parts.append("baseline")
+    name_parts.append(f"bal_{balance_mode}")
+    if dataset_to_use:
+        name_parts.append(f"ds_{dataset_to_use.digest[:8]}")
+    return "_".join(name_parts)
+
 def setup_mlflow_tracking(config):
     """Set up MLflow tracking with error handling and fallback for malformed experiments.
     
@@ -477,16 +506,19 @@ def get_available_models_from_config(config_path):
               help='Feature selection method.')
 @click.option('--outer-k', type=int, default=None, help='Optional number of final consensus features to keep from correctly predicted outer folds. Does not change evaluation splits.')
 @click.option('--inner-k', type=int, default=None, help='Optional number of features to select within each outer LOPO training fold.')
+@click.option('--equalize-lopo-groups', type=click.Choice(['true', 'false']), default=None, help='Override cv.equalize_lopo_groups for training-fold group balancing.')
+@click.option('--use-smote', type=click.Choice(['true', 'false']), default=None, help='Override SMOTE usage for training.')
 @click.option('--feature-categories', type=str, help='Comma-separated list of feature categories to include (e.g., "spectral_features,psd_statistics,temporal_features"). Use "list" to see available categories.')
 @click.option('--use-dataset-from-run', type=str, help='MLflow run ID to load dataset from (optional)')
 @click.pass_context
-def train(ctx, window_size, model_type, enable_feature_selection, n_features_select, fs_method, outer_k, inner_k, feature_categories, use_dataset_from_run):
+def train(ctx, window_size, model_type, enable_feature_selection, n_features_select, fs_method, outer_k, inner_k, equalize_lopo_groups, use_smote, feature_categories, use_dataset_from_run):
     """Train the model"""
     config = ctx.obj['config']
     logger.info(
         f"CLI train inputs: window_size={window_size}, model_type='{model_type}', "
         f"enable_feature_selection={enable_feature_selection}, n_features_select={n_features_select}, "
         f"fs_method='{fs_method}', outer_k={outer_k}, inner_k={inner_k}, "
+        f"equalize_lopo_groups={equalize_lopo_groups}, use_smote={use_smote}, "
         f"use_dataset_from_run='{use_dataset_from_run}'"
     )
 
@@ -558,8 +590,19 @@ def train(ctx, window_size, model_type, enable_feature_selection, n_features_sel
         cv_config['outer_k'] = outer_k
     if inner_k is not None:
         cv_config['inner_k'] = inner_k
+    if equalize_lopo_groups is not None:
+        cv_config['equalize_lopo_groups'] = equalize_lopo_groups == 'true'
     config['cv'] = cv_config
     logger.info(f"Config for CV set to: {config['cv']}")
+
+    if use_smote is not None:
+        smote_enabled = use_smote == 'true'
+        config['use_smote'] = smote_enabled
+        model_cfg = config.get('model', {})
+        if isinstance(model_cfg, dict):
+            model_cfg['use_smote'] = smote_enabled
+            config['model'] = model_cfg
+        logger.info(f"Config for SMOTE set to: {smote_enabled}")
     
     # Add feature filtering config
     if feature_categories and feature_categories.lower() != 'list':
@@ -760,16 +803,17 @@ def train(ctx, window_size, model_type, enable_feature_selection, n_features_sel
         trainer = Trainer(config)
     
     try:
-        run_name_suffix = ""
-        if enable_feature_selection:
-            run_name_suffix = f"_fs_{n_features_select}_{fs_method}"
-        
-        # Add dataset info to run name if available
-        dataset_suffix = ""
-        if dataset_to_use:
-            dataset_suffix = f"_ds_{dataset_to_use.digest[:8]}"
-            
-        with mlflow.start_run(run_name=f"{model_type}_{window_size}s{run_name_suffix}{dataset_suffix}") as run:
+        balance_mode = _resolve_training_balance_mode(config)
+        run_name = _build_training_run_name(
+            model_type=model_type,
+            window_size=window_size,
+            feature_selection_enabled=enable_feature_selection,
+            fs_method=fs_method,
+            balance_mode=balance_mode,
+            dataset_to_use=dataset_to_use,
+        )
+
+        with mlflow.start_run(run_name=run_name) as run:
             # Log dataset usage info
             if dataset_to_use:
                 mlflow.log_input(dataset_to_use, context="training")
@@ -781,6 +825,13 @@ def train(ctx, window_size, model_type, enable_feature_selection, n_features_sel
                 mlflow.log_param("used_mlflow_dataset", False)
                 mlflow.log_param("dataset_selection_method", "file_fallback")
                 logger.info("No MLflow dataset available, trainer will fall back to file path")
+
+            mlflow.log_param("training_run_name", run_name)
+            mlflow.log_param("training_balance_mode", balance_mode)
+            mlflow.log_param(
+                "smote_enabled",
+                bool(config.get('use_smote', config.get('model', {}).get('use_smote', False))),
+            )
             
             # Log feature filtering info
             for key, value in feature_filtering_info.items():

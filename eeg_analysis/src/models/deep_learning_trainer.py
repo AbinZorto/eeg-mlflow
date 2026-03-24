@@ -2101,18 +2101,38 @@ class DeepLearningTrainer(BaseTrainer):
                 mlflow.log_dict(fold_balance_info, "train_group_equalization.json")
 
                 if perform_selection:
-                    selected_feature_names_fold = self._select_features(
+                    selected_feature_names_fold, selection_metadata = self._select_features(
                         X_train_raw,
                         y_train,
                         inner_feature_k,
+                    )
+                    mlflow.log_param("num_selected_features", len(selected_feature_names_fold))
+                    mlflow.log_param("selected_features_list", selected_feature_names_fold)
+                    mlflow.log_param(
+                        "feature_selection_method",
+                        self.feature_selection_config.get('method', 'select_k_best_f_classif'),
                     )
                     X_train = X_train_raw[selected_feature_names_fold]
                     X_test = X_test_raw[selected_feature_names_fold]
                 else:
                     X_train = X_train_raw
                     X_test = X_test_raw
+                    selection_metadata = {
+                        "selection_method": None,
+                        "candidate_feature_count": int(X_train_raw.shape[1]),
+                        "ranking_scores": None,
+                        "ranking_source": None,
+                        "selected_feature_count": int(X_train_raw.shape[1]),
+                    }
 
                 mlflow.log_metric("num_features_trained_on", len(X_train.columns))
+                X_train, y_train, row_shuffle_info = self._shuffle_training_rows(
+                    X_train,
+                    y_train,
+                    seed_offset=fold_idx,
+                )
+                mlflow.log_param("train_rows_shuffled_before_fit", bool(row_shuffle_info.get("applied", False)))
+                mlflow.log_dict(row_shuffle_info, "train_row_shuffle.json")
 
                 # Create a new model instance for each fold to ensure independence
                 self.model = self._create_model_instance()
@@ -2130,6 +2150,8 @@ class DeepLearningTrainer(BaseTrainer):
                 # since all windows from a participant belong to the same class
                 window_test_accuracy = float(np.mean(y_pred == y_test))
                 fold_patient_accuracies = []
+                fold_patient_predictions = []
+                fold_window_predictions = []
 
                 for participant in test_participants:
                     participant_mask = test_groups_fold.to_numpy() == participant
@@ -2145,7 +2167,7 @@ class DeepLearningTrainer(BaseTrainer):
                     positive_window_count = int(np.sum(y_pred_part == 1))
                     total_windows = len(y_pred_part)
                     patient_pred = 1 if positive_window_count > total_windows / 2 else 0
-                    patient_prob = positive_window_count / total_windows if total_windows else 0.0
+                    patient_prob = float(np.mean(y_prob_part)) if total_windows else 0.0
                     patient_accuracy = int(true_label == patient_pred)
 
                     patient_true_labels.append(true_label)
@@ -2153,12 +2175,12 @@ class DeepLearningTrainer(BaseTrainer):
                     patient_pred_probs.append(patient_prob)
                     fold_patient_accuracies.append(patient_accuracy)
 
-                    window_predictions.extend(
-                        self._create_window_predictions(
-                            fold_idx, participant, y_test_part, y_pred_part, y_prob_part
-                        )
+                    participant_window_predictions = self._create_window_predictions(
+                        fold_idx, participant, y_test_part, y_pred_part, y_prob_part
                     )
-                    patient_predictions.append({
+                    window_predictions.extend(participant_window_predictions)
+                    fold_window_predictions.extend(participant_window_predictions)
+                    patient_prediction_row = {
                         'fold': fold_idx,
                         'participant': participant,
                         'true_label': true_label,
@@ -2167,7 +2189,9 @@ class DeepLearningTrainer(BaseTrainer):
                         'n_windows': total_windows,
                         'n_positive_windows': positive_window_count,
                         'window_accuracy': float(np.mean(y_pred_part == y_test_part))
-                    })
+                    }
+                    patient_predictions.append(patient_prediction_row)
+                    fold_patient_predictions.append(patient_prediction_row)
                 
                 # Log fold metadata and metrics with stable names.
                 # Fold identity is tracked via nested run + fold_index param.
@@ -2180,23 +2204,40 @@ class DeepLearningTrainer(BaseTrainer):
                     mlflow.log_param("patient_id", str(test_participants[0]))
                 mlflow.log_metric("patient_accuracy", fold_patient_accuracy)
                 mlflow.log_metric("window_accuracy", window_test_accuracy)
+                self._log_fold_outcome(
+                    patient_predictions=fold_patient_predictions,
+                    window_predictions=fold_window_predictions,
+                )
                 if perform_selection:
+                    effect_stats = self._compute_feature_effect_stats(
+                        X_train_raw,
+                        y_train,
+                        selected_feature_names_fold,
+                    )
                     fold_feature_selections.append({
                         "fold_idx": fold_idx,
                         "correct": bool(fold_patient_accuracy >= 0.5),
+                        "fold_target_class": self._infer_feature_selection_fold_target_class(
+                            fold_patient_predictions
+                        ),
                         "features": selected_feature_names_fold,
                         "patient_accuracy": fold_patient_accuracy,
                         "n_test_groups": len(test_participants),
+                        "candidate_feature_count": selection_metadata.get("candidate_feature_count"),
+                        "ranking_scores": selection_metadata.get("ranking_scores"),
+                        "ranking_source": selection_metadata.get("ranking_source"),
+                        "effect_stats": effect_stats,
                     })
         
         metric_report = self._build_clinical_metrics_report(
             patient_true_labels=patient_true_labels,
             patient_pred_labels=patient_pred_labels,
             patient_pred_probs=patient_pred_probs,
+            patient_predictions=patient_predictions,
             window_predictions=window_predictions,
             fold_patient_accuracies=fold_patient_accuracy_values,
             fold_window_accuracies=fold_window_accuracy_values,
-            feature_sets=[row["features"] for row in fold_feature_selections] if perform_selection else None,
+            feature_selection_rows=fold_feature_selections if perform_selection else None,
         )
         patient_metrics = metric_report["patient"]["metrics"]
         window_metrics = metric_report["window"]["metrics"]
@@ -2301,9 +2342,17 @@ class DeepLearningTrainer(BaseTrainer):
         if not np.isfinite(X_final_train.to_numpy(dtype=np.float64, copy=False)).all():
             logger.error("Unexpected non-finite values detected in final training data after global sanitization.")
             raise ValueError("Data contains non-finite values after global sanitization")
+
+        X_final_train, y_final_train, final_row_shuffle_info = self._shuffle_training_rows(
+            X_final_train,
+            y,
+            seed_offset=n_splits,
+        )
+        mlflow.log_param("final_train_rows_shuffled_before_fit", bool(final_row_shuffle_info.get("applied", False)))
+        mlflow.log_dict(final_row_shuffle_info, "final_train_row_shuffle.json")
         
         final_model = self._create_model_instance()
-        final_model.fit(X_final_train, y)
+        final_model.fit(X_final_train, y_final_train)
         
         # Save results
         self._save_results(final_model, patient_metrics, window_predictions, 
@@ -2324,25 +2373,46 @@ class DeepLearningTrainer(BaseTrainer):
             'correct': y_true.iloc[idx] == pred
         } for idx, (pred, prob) in enumerate(zip(y_pred, y_prob))]
     
-    def _select_features(self, X: pd.DataFrame, y: pd.Series, n_features_to_select: int) -> List[str]:
+    def _select_features(
+        self,
+        X: pd.DataFrame,
+        y: pd.Series,
+        n_features_to_select: int,
+    ) -> Tuple[List[str], Dict[str, Any]]:
         """
         Select features using statistical methods (deep learning models don't have feature importance).
         """
         from sklearn.feature_selection import SelectKBest, f_classif
         
         logger.info(f"Selecting {n_features_to_select} features for deep learning")
+        selection_metadata: Dict[str, Any] = {
+            "selection_method": self.feature_selection_config.get('method', 'select_k_best_f_classif'),
+            "candidate_feature_count": int(X.shape[1]),
+            "ranking_scores": None,
+            "ranking_source": None,
+        }
         
         if n_features_to_select >= X.shape[1]:
             logger.info("Requested features >= available features. Using all features.")
-            return X.columns.tolist()
+            selection_metadata["selected_feature_count"] = int(X.shape[1])
+            return X.columns.tolist(), selection_metadata
         
         # Use f_classif for feature selection (fast and effective)
         selector = SelectKBest(score_func=f_classif, k=n_features_to_select)
         selector.fit(X, y)
         selected_features = X.columns[selector.get_support()].tolist()
+        feature_scores = pd.DataFrame({'feature': X.columns, 'score': selector.scores_})
+        feature_scores = feature_scores.sort_values('score', ascending=False)
+        selection_metadata["ranking_scores"] = {
+            str(row["feature"]): float(row["score"])
+            for _, row in feature_scores.iterrows()
+            if pd.notna(row["score"])
+        }
+        selection_metadata["ranking_source"] = "anova_f_score"
+        selection_metadata["selected_feature_count"] = int(len(selected_features))
         
         logger.info(f"Selected features: {len(selected_features)}")
-        return selected_features
+        return selected_features, selection_metadata
     
 
     

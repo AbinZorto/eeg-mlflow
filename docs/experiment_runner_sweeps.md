@@ -6,6 +6,9 @@ This guide documents how to run sweeps with:
 
 All commands assume repo root as working directory.
 
+For metric/report schema and interpretation of logged outputs, see:
+- `docs/metrics_reference.md`
+
 Methodology note:
 - Outer evaluation remains Leave-One-Participant/Group-Out throughout.
 - `--inner-k` controls how many features are selected on each outer training fold.

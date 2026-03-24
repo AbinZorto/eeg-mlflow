@@ -7,7 +7,7 @@ import mlflow
 from sklearn.model_selection import LeaveOneGroupOut
 from src.models.model_utils import create_classifier
 from pathlib import Path
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Tuple
 import logging
 from sklearn.feature_selection import SelectKBest, f_classif, mutual_info_classif, SelectFromModel, RFE
 from sklearn.linear_model import LogisticRegression
@@ -50,7 +50,7 @@ class Trainer(BaseTrainer):
             ),
         )
         self.feature_selection_config = config.get('feature_selection', {})
-        self.use_smote = config.get('use_smote', True)
+        self.use_smote = config.get('use_smote', config.get('model', {}).get('use_smote', False))
         logger.info(f"Trainer initialized with model_type: {self.model_type}")
         logger.info(f"Trainer initialized with feature_selection_config: {self.feature_selection_config}")
         if self.use_smote:
@@ -123,7 +123,7 @@ class Trainer(BaseTrainer):
         y: pd.Series,
         n_features_to_select: int,
         log_to_mlflow: bool = True,
-    ) -> List[str]:
+    ) -> Tuple[List[str], Dict[str, Any]]:
         """
         Select top N features based on various methods.
 
@@ -146,6 +146,12 @@ class Trainer(BaseTrainer):
         
         selected_features = []
         original_feature_names = X.columns.tolist()
+        selection_metadata: Dict[str, Any] = {
+            "selection_method": selection_method,
+            "candidate_feature_count": int(X.shape[1]),
+            "ranking_scores": None,
+            "ranking_source": None,
+        }
 
         if n_features_to_select <= 0 or n_features_to_select > X.shape[1]:
             logger.warning(f"Invalid n_features_to_select ({n_features_to_select}). Must be between 1 and {X.shape[1]}. Selecting all features.")
@@ -153,7 +159,8 @@ class Trainer(BaseTrainer):
                 mlflow.log_param("num_selected_features", X.shape[1])
                 mlflow.log_param("selected_features_list", original_feature_names)
                 mlflow.log_param("feature_selection_method", selection_method)
-            return original_feature_names
+            selection_metadata["selected_feature_count"] = int(len(original_feature_names))
+            return original_feature_names, selection_metadata
 
         if selection_method == 'model_based':
             # Trains a model (same type as specified in config) on the current data fold 
@@ -169,6 +176,12 @@ class Trainer(BaseTrainer):
                 selected_features = original_feature_names
             else:
                 selected_features = importances_df['feature'].head(n_features_to_select).tolist()
+                selection_metadata["ranking_scores"] = {
+                    str(row["feature"]): float(row["importance"])
+                    for _, row in importances_df.iterrows()
+                    if pd.notna(row["importance"])
+                }
+                selection_metadata["ranking_source"] = "model_importance"
 
         elif selection_method == 'select_k_best_f_classif':
             # Uses ANOVA F-statistic to select features. Tests for a linear relationship 
@@ -180,6 +193,12 @@ class Trainer(BaseTrainer):
             selected_features = X.columns[selector.get_support()].tolist()
             feature_scores = pd.DataFrame({'feature': X.columns, 'score': selector.scores_})
             feature_scores = feature_scores.sort_values('score', ascending=False)
+            selection_metadata["ranking_scores"] = {
+                str(row["feature"]): float(row["score"])
+                for _, row in feature_scores.iterrows()
+                if pd.notna(row["score"])
+            }
+            selection_metadata["ranking_source"] = "anova_f_score"
             if log_to_mlflow:
                 mlflow.log_dict(feature_scores.head(min(n_features_to_select * 2, X.shape[1])).to_dict('records'), "select_k_best_f_classif_scores.json")
 
@@ -194,6 +213,12 @@ class Trainer(BaseTrainer):
             selected_features = X.columns[selector.get_support()].tolist()
             feature_scores = pd.DataFrame({'feature': X.columns, 'score': selector.scores_})
             feature_scores = feature_scores.sort_values('score', ascending=False)
+            selection_metadata["ranking_scores"] = {
+                str(row["feature"]): float(row["score"])
+                for _, row in feature_scores.iterrows()
+                if pd.notna(row["score"])
+            }
+            selection_metadata["ranking_source"] = "mutual_info"
             if log_to_mlflow:
                 mlflow.log_dict(feature_scores.head(min(n_features_to_select * 2, X.shape[1])).to_dict('records'), "select_k_best_mutual_info_scores.json")
 
@@ -215,6 +240,12 @@ class Trainer(BaseTrainer):
                 importances = np.abs(estimator.coef_[0])
                 feature_importances_df = pd.DataFrame({'feature': X.columns, 'L1_coeff_abs': importances})
                 feature_importances_df = feature_importances_df.sort_values('L1_coeff_abs', ascending=False)
+                selection_metadata["ranking_scores"] = {
+                    str(row["feature"]): float(row["L1_coeff_abs"])
+                    for _, row in feature_importances_df.iterrows()
+                    if pd.notna(row["L1_coeff_abs"])
+                }
+                selection_metadata["ranking_source"] = "l1_coefficient_abs"
                 if log_to_mlflow:
                     mlflow.log_dict(feature_importances_df.head(min(len(original_feature_names), X.shape[1])).to_dict('records'), "select_from_model_l1_coeffs.json")
 
@@ -233,6 +264,13 @@ class Trainer(BaseTrainer):
             if hasattr(selector, 'ranking_'):
                 rankings_df = pd.DataFrame({'feature': X.columns, 'rfe_ranking': selector.ranking_})
                 rankings_df = rankings_df.sort_values('rfe_ranking', ascending=True)
+                max_rank = float(rankings_df["rfe_ranking"].max()) if not rankings_df.empty else 0.0
+                selection_metadata["ranking_scores"] = {
+                    str(row["feature"]): float(max_rank - float(row["rfe_ranking"]) + 1.0)
+                    for _, row in rankings_df.iterrows()
+                    if pd.notna(row["rfe_ranking"])
+                }
+                selection_metadata["ranking_source"] = "rfe_inverse_rank"
                 if log_to_mlflow:
                     mlflow.log_dict(rankings_df.head(min(len(original_feature_names),X.shape[1])).to_dict('records'), "rfe_rankings.json")
 
@@ -245,11 +283,12 @@ class Trainer(BaseTrainer):
             selected_features = original_feature_names
 
         logger.info(f"Selected {len(selected_features)} features: {selected_features}")
+        selection_metadata["selected_feature_count"] = int(len(selected_features))
         if log_to_mlflow:
             mlflow.log_param("num_selected_features", len(selected_features))
             mlflow.log_param("selected_features_list", selected_features) 
             mlflow.log_param("feature_selection_method", selection_method)
-        return selected_features
+        return selected_features, selection_metadata
 
     def train(self, data_path: str = None, dataset: Optional[PandasDataset] = None) -> BaseEstimator:
         """
@@ -410,7 +449,7 @@ class Trainer(BaseTrainer):
                 mlflow.log_dict(fold_balance_info, "train_group_equalization.json")
 
                 if perform_selection:
-                    selected_feature_names_fold = self._select_features(
+                    selected_feature_names_fold, selection_metadata = self._select_features(
                         X_train_raw,
                         y_train,
                         inner_feature_k,
@@ -424,10 +463,23 @@ class Trainer(BaseTrainer):
                 else:
                     X_train = X_train_raw
                     X_test = X_test_raw
+                    selection_metadata = {
+                        "selection_method": None,
+                        "candidate_feature_count": int(X_train_raw.shape[1]),
+                        "ranking_scores": None,
+                        "ranking_source": None,
+                        "selected_feature_count": int(X_train_raw.shape[1]),
+                    }
 
                 mlflow.log_metric("num_features_trained_on", len(X_train.columns))
 
-                X_train_fold, y_train_fold = X_train, y_train
+                X_train_fold, y_train_fold, row_shuffle_info = self._shuffle_training_rows(
+                    X_train,
+                    y_train,
+                    seed_offset=fold_idx,
+                )
+                mlflow.log_param("train_rows_shuffled_before_fit", bool(row_shuffle_info.get("applied", False)))
+                mlflow.log_dict(row_shuffle_info, "train_row_shuffle.json")
                 if self.use_smote:
                     logger.info(f"Applying SMOTE to fold {fold_idx + 1}...")
                     
@@ -439,10 +491,10 @@ class Trainer(BaseTrainer):
                         )
                         continue  # Skip this fold to avoid crashes
                     
+                    original_balance = y_train_fold.value_counts(normalize=True).get(1, 0)
                     smote = SMOTE(random_state=self.config.get('random_seed', 42))
                     X_train_fold, y_train_fold = smote.fit_resample(X_train_fold, y_train_fold)
                     
-                    original_balance = y_train_fold.value_counts(normalize=True).get(1, 0)
                     smote_balance = y_train_fold.value_counts(normalize=True).get(1, 0)
                     logger.info(f"Original positive class balance: {original_balance:.2f}")
                     logger.info(f"SMOTE-balanced positive class balance: {smote_balance:.2f}")
@@ -453,6 +505,8 @@ class Trainer(BaseTrainer):
 
                 fold_window_accuracy = float(np.mean(y_pred == y_test))
                 fold_patient_accuracies = []
+                fold_patient_predictions = []
+                fold_window_predictions = []
 
                 for participant in test_participants:
                     participant_mask = test_groups_fold.to_numpy() == participant
@@ -468,7 +522,7 @@ class Trainer(BaseTrainer):
                     positive_window_count = int(np.sum(y_pred_part == 1))
                     total_windows = len(y_pred_part)
                     patient_pred = 1 if positive_window_count > total_windows / 2 else 0
-                    patient_prob = positive_window_count / total_windows if total_windows else 0.0
+                    patient_prob = float(np.mean(y_prob_part)) if total_windows else 0.0
                     patient_accuracy = int(true_label == patient_pred)
 
                     patient_true_labels.append(true_label)
@@ -476,12 +530,12 @@ class Trainer(BaseTrainer):
                     patient_pred_probs.append(patient_prob)
                     fold_patient_accuracies.append(patient_accuracy)
 
-                    window_predictions.extend(
-                        self._create_window_predictions(
-                            fold_idx, participant, y_test_part, y_pred_part, y_prob_part
-                        )
+                    participant_window_predictions = self._create_window_predictions(
+                        fold_idx, participant, y_test_part, y_pred_part, y_prob_part
                     )
-                    patient_predictions.append({
+                    window_predictions.extend(participant_window_predictions)
+                    fold_window_predictions.extend(participant_window_predictions)
+                    patient_prediction_row = {
                         'fold': fold_idx,
                         'participant': participant,
                         'true_label': true_label,
@@ -490,7 +544,9 @@ class Trainer(BaseTrainer):
                         'n_windows': total_windows,
                         'n_positive_windows': positive_window_count,
                         'window_accuracy': float(np.mean(y_pred_part == y_test_part))
-                    })
+                    }
+                    patient_predictions.append(patient_prediction_row)
+                    fold_patient_predictions.append(patient_prediction_row)
 
                 fold_patient_accuracy = float(np.mean(fold_patient_accuracies)) if fold_patient_accuracies else 0.0
                 fold_patient_accuracy_values.append(fold_patient_accuracy)
@@ -501,23 +557,40 @@ class Trainer(BaseTrainer):
                     mlflow.log_param("patient_id", str(test_participants[0]))
                 mlflow.log_metric("patient_accuracy", fold_patient_accuracy)
                 mlflow.log_metric("window_accuracy", fold_window_accuracy)
+                self._log_fold_outcome(
+                    patient_predictions=fold_patient_predictions,
+                    window_predictions=fold_window_predictions,
+                )
                 if perform_selection:
+                    effect_stats = self._compute_feature_effect_stats(
+                        X_train_raw,
+                        y_train,
+                        selected_feature_names_fold,
+                    )
                     fold_feature_selections.append({
                         "fold_idx": fold_idx,
                         "correct": bool(fold_patient_accuracy >= 0.5),
+                        "fold_target_class": self._infer_feature_selection_fold_target_class(
+                            fold_patient_predictions
+                        ),
                         "features": selected_feature_names_fold,
                         "patient_accuracy": fold_patient_accuracy,
                         "n_test_groups": len(test_participants),
+                        "candidate_feature_count": selection_metadata.get("candidate_feature_count"),
+                        "ranking_scores": selection_metadata.get("ranking_scores"),
+                        "ranking_source": selection_metadata.get("ranking_source"),
+                        "effect_stats": effect_stats,
                     })
 
         metric_report = self._build_clinical_metrics_report(
             patient_true_labels=patient_true_labels,
             patient_pred_labels=patient_pred_labels,
             patient_pred_probs=patient_pred_probs,
+            patient_predictions=patient_predictions,
             window_predictions=window_predictions,
             fold_patient_accuracies=fold_patient_accuracy_values,
             fold_window_accuracies=fold_window_accuracy_values,
-            feature_sets=[row["features"] for row in fold_feature_selections] if perform_selection else None,
+            feature_selection_rows=fold_feature_selections if perform_selection else None,
         )
         patient_metrics = metric_report["patient"]["metrics"]
         self._log_clinical_metrics_report(metric_report)
@@ -568,7 +641,13 @@ class Trainer(BaseTrainer):
 
         # Train final model on all data
         logger.info("\nTraining final model on all data...")
-        X_final_model_train, y_final_train = X_final_train, y
+        X_final_model_train, y_final_train, final_row_shuffle_info = self._shuffle_training_rows(
+            X_final_train,
+            y,
+            seed_offset=n_splits,
+        )
+        mlflow.log_param("final_train_rows_shuffled_before_fit", bool(final_row_shuffle_info.get("applied", False)))
+        mlflow.log_dict(final_row_shuffle_info, "final_train_row_shuffle.json")
         if self.use_smote:
             logger.info("Applying SMOTE to the full dataset for the final model.")
             

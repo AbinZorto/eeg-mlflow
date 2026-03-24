@@ -38,10 +38,11 @@ class BaseTrainer:
         patient_true_labels: List[int],
         patient_pred_labels: List[int],
         patient_pred_probs: List[float],
+        patient_predictions: List[Dict[str, Any]],
         window_predictions: List[Dict[str, Any]],
         fold_patient_accuracies: List[float],
         fold_window_accuracies: List[float],
-        feature_sets: Optional[List[List[str]]] = None,
+        feature_selection_rows: Optional[List[Dict[str, Any]]] = None,
     ) -> Dict[str, Any]:
         window_true_labels = [int(row["true_label"]) for row in window_predictions]
         window_pred_labels = [int(row["predicted_label"]) for row in window_predictions]
@@ -56,7 +57,9 @@ class BaseTrainer:
             window_pred_probs=window_pred_probs,
             fold_patient_accuracies=fold_patient_accuracies,
             fold_window_accuracies=fold_window_accuracies,
-            feature_sets=feature_sets,
+            feature_selection_rows=feature_selection_rows,
+            patient_prediction_rows=patient_predictions,
+            window_prediction_rows=window_predictions,
             settings=self._get_metrics_reporting_config(),
         )
 
@@ -79,6 +82,157 @@ class BaseTrainer:
                 mlflow.log_param(f"metrics_reporting_{key}", value)
 
         mlflow.log_dict(report, "clinical_metrics_summary.json")
+        feature_selection = report.get("feature_selection")
+        if isinstance(feature_selection, dict):
+            mlflow.log_dict(feature_selection, "feature_selection_stability.json")
+
+    @staticmethod
+    def _to_mlflow_serializable(value: Any) -> Any:
+        if isinstance(value, dict):
+            return {
+                str(key): BaseTrainer._to_mlflow_serializable(item)
+                for key, item in value.items()
+            }
+        if isinstance(value, (list, tuple)):
+            return [BaseTrainer._to_mlflow_serializable(item) for item in value]
+        if isinstance(value, np.generic):
+            return value.item()
+        if isinstance(value, pd.Timestamp):
+            return value.isoformat()
+        return value
+
+    def _log_fold_outcome(
+        self,
+        *,
+        patient_predictions: List[Dict[str, Any]],
+        window_predictions: List[Dict[str, Any]],
+    ) -> None:
+        if patient_predictions:
+            mlflow.log_param("fold_test_patient_count", len(patient_predictions))
+            if len(patient_predictions) == 1:
+                patient_row = patient_predictions[0]
+                if patient_row.get("true_label") is not None:
+                    mlflow.log_param("fold_true_label", int(patient_row["true_label"]))
+                if patient_row.get("predicted_label") is not None:
+                    mlflow.log_param("fold_predicted_label", int(patient_row["predicted_label"]))
+                if patient_row.get("probability") is not None:
+                    mlflow.log_metric("fold_predicted_probability", float(patient_row["probability"]))
+                if (
+                    patient_row.get("true_label") is not None
+                    and patient_row.get("predicted_label") is not None
+                ):
+                    mlflow.log_metric(
+                        "fold_prediction_correct",
+                        int(patient_row["true_label"] == patient_row["predicted_label"]),
+                    )
+                if patient_row.get("n_windows") is not None:
+                    mlflow.log_metric("fold_n_windows", int(patient_row["n_windows"]))
+                if patient_row.get("n_positive_windows") is not None:
+                    mlflow.log_metric(
+                        "fold_n_positive_windows",
+                        int(patient_row["n_positive_windows"]),
+                    )
+
+            mlflow.log_dict(
+                self._to_mlflow_serializable(patient_predictions),
+                "fold_patient_predictions.json",
+            )
+
+        if window_predictions:
+            mlflow.log_metric("fold_test_window_count", len(window_predictions))
+            mlflow.log_dict(
+                self._to_mlflow_serializable(window_predictions),
+                "fold_window_predictions.json",
+            )
+
+    @staticmethod
+    def _infer_feature_selection_fold_target_class(
+        patient_predictions: List[Dict[str, Any]],
+    ) -> str:
+        true_labels = set()
+        for row in patient_predictions:
+            true_label = row.get("true_label")
+            if true_label is None:
+                continue
+            try:
+                true_labels.add(int(true_label))
+            except (TypeError, ValueError):
+                continue
+
+        if not true_labels:
+            return "unknown"
+        if true_labels == {1}:
+            return "remission"
+        if true_labels == {0}:
+            return "non_remission"
+        return "mixed"
+
+    @staticmethod
+    def _compute_cohens_d(positive_values: np.ndarray, negative_values: np.ndarray) -> Optional[float]:
+        if positive_values.size < 2 or negative_values.size < 2:
+            return None
+
+        positive_mean = float(np.mean(positive_values))
+        negative_mean = float(np.mean(negative_values))
+        positive_var = float(np.var(positive_values, ddof=1))
+        negative_var = float(np.var(negative_values, ddof=1))
+        pooled_denominator = positive_values.size + negative_values.size - 2
+        if pooled_denominator <= 0:
+            return None
+
+        pooled_variance = (
+            ((positive_values.size - 1) * positive_var)
+            + ((negative_values.size - 1) * negative_var)
+        ) / pooled_denominator
+        if pooled_variance <= 0 or np.isnan(pooled_variance) or np.isinf(pooled_variance):
+            return None
+
+        return float((positive_mean - negative_mean) / np.sqrt(pooled_variance))
+
+    def _compute_feature_effect_stats(
+        self,
+        X: pd.DataFrame,
+        y: pd.Series,
+        selected_features: List[str],
+    ) -> Dict[str, Dict[str, Any]]:
+        if X.empty or not selected_features:
+            return {}
+
+        positive_mask = y == 1
+        negative_mask = y == 0
+        if int(positive_mask.sum()) < 2 or int(negative_mask.sum()) < 2:
+            return {}
+
+        effect_stats: Dict[str, Dict[str, Any]] = {}
+        for feature_name in selected_features:
+            if feature_name not in X.columns:
+                continue
+
+            positive_values = pd.to_numeric(
+                X.loc[positive_mask, feature_name],
+                errors="coerce",
+            ).dropna().to_numpy(dtype=np.float64, copy=False)
+            negative_values = pd.to_numeric(
+                X.loc[negative_mask, feature_name],
+                errors="coerce",
+            ).dropna().to_numpy(dtype=np.float64, copy=False)
+            cohens_d = self._compute_cohens_d(positive_values, negative_values)
+            if cohens_d is None:
+                continue
+
+            if abs(cohens_d) < 1e-12:
+                sign = "zero"
+            elif cohens_d > 0:
+                sign = "positive"
+            else:
+                sign = "negative"
+
+            effect_stats[feature_name] = {
+                "cohens_d": cohens_d,
+                "sign": sign,
+            }
+
+        return effect_stats
 
     def _prepare_data(self, df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.Series, pd.Series]:
         # Extract y and groups BEFORE dropping columns
@@ -466,6 +620,34 @@ class BaseTrainer:
         info["group_label_counts_after"] = {str(k): int(v) for k, v in label_counts_after.items()}
         info["dropped_group_count"] = int(groups.nunique() - groups_bal.nunique())
         return X_bal, y_bal, groups_bal, info
+
+    def _shuffle_training_rows(
+        self,
+        X: pd.DataFrame,
+        y: pd.Series,
+        *,
+        seed_offset: int = 0,
+    ) -> Tuple[pd.DataFrame, pd.Series, Dict[str, Any]]:
+        """Shuffle aligned training rows deterministically before resampling/model fit."""
+        info: Dict[str, Any] = {
+            "applied": False,
+            "n_rows": int(len(X)),
+            "random_seed": int(self._get_cv_random_state() + seed_offset),
+        }
+        if len(X) <= 1:
+            info["reason"] = "insufficient_rows"
+            return X, y, info
+
+        rng = np.random.default_rng(info["random_seed"])
+        permutation = rng.permutation(len(X))
+        if np.array_equal(permutation, np.arange(len(X))):
+            info["reason"] = "identity_permutation"
+            return X, y, info
+
+        X_shuffled = X.iloc[permutation]
+        y_shuffled = y.iloc[permutation]
+        info["applied"] = True
+        return X_shuffled, y_shuffled, info
 
     def _log_dataset_info(self, X: pd.DataFrame, y: pd.Series, groups: pd.Series):
         mlflow.log_params({

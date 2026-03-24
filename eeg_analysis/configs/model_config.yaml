@@ -166,7 +166,7 @@ deep_learning:
     learning_rate: 0.001
     batch_size: 128
     epochs: 120
-    early_stopping_patience: 15
+    early_stopping_patience: 50
     optimizer: "adam"
     class_weight: "balanced"
     random_state: 42
@@ -209,12 +209,12 @@ deep_learning:
       - units: 128
         return_sequences: true
         bidirectional: true
-        dropout: 0.2
+        dropout: 0.1
         recurrent_dropout: 0.1
       - units: 64
         return_sequences: false
         bidirectional: true
-        dropout: 0.3
+        dropout: 0.1
         recurrent_dropout: 0.2
     attention_config:
       num_heads: 8
@@ -247,10 +247,10 @@ deep_learning:
       warmup_epochs: 5
       cycle_length: 20
       cycle_mult: 1
-    batch_size: 4096
-    epochs: 5000
+    batch_size: 8192
+    epochs: 100
     early_stopping:
-      patience: 50
+      patience: 5
       restore_best_weights: true
       monitor: "val_f1_macro"
       min_delta: 0.001
@@ -341,7 +341,7 @@ deep_learning:
       label_smoothing: 0.05
       gradient_clip_norm: 1.0
     early_stopping:
-      patience: 15
+      patience: 100
       restore_best_weights: true
       monitor: "loss"
       min_delta: 0.001
@@ -356,15 +356,15 @@ deep_learning:
       - units: 128
         return_sequences: true
         bidirectional: true
-        dropout: 0.2
+        dropout: 0.1
         recurrent_dropout: 0.0
       - units: 64
         return_sequences: false
         bidirectional: true
-        dropout: 0.2
+        dropout: 0.1
         recurrent_dropout: 0.0
     attention_config:
-      num_heads: 4
+      num_heads: 8
       key_dim: 32
       dropout: 0.1
       use_positional_encoding: false
@@ -459,15 +459,20 @@ metrics:
     - mcc
 
 metrics_reporting:
-  primary_metric: "balanced_accuracy"
+  primary_metric: "roc_auc"
   bootstrap_ci_enabled: true
   bootstrap_ci_level: 0.95
   bootstrap_iterations: 1000
   permutation_test_enabled: true
-  permutation_metric: "balanced_accuracy"
+  permutation_metric: "roc_auc"
   permutation_iterations: 500
   random_seed: 42
   window_auc_enabled: true
+  patient_probability_aggregation: "mean_window_probability"
+  ranking_stability_top_k: 10
+  resampling_stability_enabled: false
+  resampling_method: "bootstrap"
+  resampling_iterations: 100
 
 # Logging Configuration
 logging:

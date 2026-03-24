@@ -46,6 +46,7 @@ done
 - `scripts/build_open_pretrain_dataset.py`: wrapper for open_pretrain dataset build.
 - `scripts/convert_open_pretrain_window_size.py`: conversion utility used by the representation CLI.
 - `docs/experiment_runner_sweeps.md`: sweep recipes for `scripts/run_experiments.py`.
+- `docs/metrics_reference.md`: metric and biomarker-stability reference for training runs.
 - `docs/plot_comparisons.md`: persistent registry of requested plot/comparison outputs.
 - `mlruns/`: MLflow tracking data.
 - `models/`: local outputs (predictions/metadata, plus legacy artifacts).
@@ -139,6 +140,31 @@ uv run eeg_analysis/run_pipeline.py \
 ```
 
 Passing `--data-path` explicitly is the safest option.
+
+## Metrics And Reporting
+
+Training runs write the main metric outputs to MLflow artifacts:
+
+- `clinical_metrics_summary.json`: full patient, window, fold-level, and statistical report.
+- `feature_selection_stability.json`: feature-selection and biomarker-stability subset.
+- `fold_patient_predictions.json` and `fold_window_predictions.json` inside each nested fold run: raw held-out truth/prediction/probability rows for that fold.
+
+Metric groups currently reported:
+
+- Patient-level primary metrics: `accuracy`, `balanced_accuracy`, `precision`, `recall`/`sensitivity`, `specificity`, `f1`, `roc_auc`, `pr_auc`, `npv`, `mcc`.
+- Window-level supporting metrics: `accuracy`, `f1`, `roc_auc`.
+- Fold-level metrics: per-fold patient/window metric tables plus mean/std summaries across folds.
+- Statistical diagnostics: bootstrap confidence intervals and permutation test results for the configured primary metric.
+- Feature-selection stability: selection frequency, pairwise Jaccard, Kuncheva, top-k overlap, effect-size/sign consistency, importance variance, and remission-vs-non-remission class-conditional selection rates.
+
+Important interpretation details:
+
+- `patient roc_auc` and `patient pr_auc` use mean window probability aggregated per participant.
+- Hard patient classification metrics still use the participant-level predicted label.
+- Feature class-conditional selection metrics are post hoc descriptive biomarker analysis; they do not feed back into model training.
+- When feature selection is enabled, `inner_k` controls the per-fold selected feature count and `outer_k` controls the final consensus feature count built from correctly predicted outer folds.
+
+Use [docs/metrics_reference.md](/home/abin/eeg-mlflow/docs/metrics_reference.md) for the full metric list, exact meanings, and report field names.
 
 ## Feature Selection and Feature Filtering
 
