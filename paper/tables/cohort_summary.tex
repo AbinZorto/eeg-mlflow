@@ -1,0 +1,36 @@
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.42\linewidth}>{\raggedright\arraybackslash}p{0.50\linewidth}}
+\toprule
+Characteristic & Value \\
+\midrule
+\multicolumn{2}{l}{\textbf{Parent trial and cohort descriptors}} \\
+\addlinespace[0.2em]
+Parent trial & Fully remote, multisite, sham-controlled home-based tDCS trial for MDD \citep{woodham2025home} \\
+Participants & 21 \\
+Outcome groups & 7 remission, 14 non-remission \\
+Sex (female/male) & 18/3 \\
+Age (years, mean $\pm$ SD) & 37.1 $\pm$ 9.7 \\
+\midrule
+\multicolumn{2}{l}{\textbf{EEG acquisition and export descriptors}} \\
+\addlinespace[0.2em]
+Rest condition & Eyes-closed resting state \\
+EEG montage & 4 channels (AF7, AF8, TP9, TP10) \\
+Channel coverage & Frontal (AF7, AF8), temporal (TP9, TP10) \\
+Sampling rate & 256 Hz \\
+Recording structure & 10 min total; single file or two 5 min files \\
+Available export segment length & 10 s (2,560 samples/channel) \\
+Total exported windows & 1,203 \\
+Remission windows & 393 (32.7\%) \\
+Non-remission windows & 810 (67.3\%) \\
+Class ratio & 2.06:1 (non-remission:remission) \\
+\midrule
+\multicolumn{2}{l}{\textbf{Current sweep methodology settings}} \\
+\addlinespace[0.2em]
+Sweep window sizes & 2, 4, 6, 8, 10 s \\
+Inner-k sweep & 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70 \\
+Outer-k & 10 \\
+Feature selector & SelectKBest ($f$-classif) \\
+Training adjustments & LOPO-group equalization + SMOTE \\
+Validation & Leave-one-participant-out \\
+Evaluation level & Patient-level aggregation \\
+\bottomrule
+\end{tabular}

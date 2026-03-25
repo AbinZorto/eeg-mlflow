@@ -1,0 +1,293 @@
+[
+  {
+    "source": "OpenAlex",
+    "title": "Concomitant BDNF and sleep slow wave changes indicate ketamine-induced plasticity in major depressive disorder",
+    "authors": "Wallace C. Duncan, Simone Sarasso, Fabio Ferrarelli, Jessica Selter, Brady A. Riedner, Nadia S. Hejazi, Peixiong Yuan, Nancy E. Brutsché, Husseini K. Manji, Giulio Tononi, Carlos A. Zarate",
+    "abstract": "The N-methyl-d-aspartate (NMDA) receptor antagonist ketamine has rapid antidepressant effects in treatment-resistant major depressive disorder (MDD). In rats, ketamine selectively increased electroencephalogram (EEG) slow wave activity (SWA) during non-rapid eye movement (REM) sleep and altered central brain-derived neurotrophic factor (BDNF) expression. Taken together, these findings suggest that higher SWA and BDNF levels may respectively represent electrophysiological and molecular correlates of mood improvement following ketamine treatment. This study investigated the acute effects of a single ketamine infusion on depressive symptoms, EEG SWA, individual slow wave parameters (surrogate markers of central synaptic plasticity) and plasma BDNF (a peripheral marker of plasticity) in 30 patients with treatment-resistant MDD. Montgomery-Åsberg Depression Rating Scale scores rapidly decreased following ketamine. Compared to baseline, BDNF levels and early sleep SWA (during the first non-REM episode) increased after ketamine. The occurrence of high amplitude waves increased during early sleep, accompanied by an increase in slow wave slope, consistent with increased synaptic strength. Changes in BDNF levels were proportional to changes in EEG parameters. Intriguingly, this link was present only in patients who responded to ketamine treatment, suggesting that enhanced synaptic plasticity - as reflected by increased SWA, individual slow wave parameters and plasma BDNF - is part of the physiological mechanism underlying the rapid antidepressant effects of NMDA antagonists. Further studies are required to confirm the link found here between behavioural and synaptic changes, as well as to test the reliability of these central and peripheral biomarkers of rapid antidepressant response.",
+    "year": 2012,
+    "doi": "10.1017/s1461145712000545",
+    "url": "https://doi.org/10.1017/s1461145712000545",
+    "download_url": "https://academic.oup.com/ijnp/article-pdf/16/2/301/30134597/16-2-301.pdf",
+    "venue": "The International Journal of Neuropsychopharmacology",
+    "citation_count": 242,
+    "fields_of_study": [
+      "Treatment of Major Depression",
+      "Tryptophan and brain disorders",
+      "Neuroscience and Neuropharmacology Research"
+    ],
+    "paper_id": "https://openalex.org/W2108898741",
+    "keywords": [
+      "Antidepressant",
+      "Ketamine",
+      "Brain-derived neurotrophic factor",
+      "Synaptic plasticity",
+      "Psychology",
+      "NMDA receptor",
+      "Major depressive disorder",
+      "Neurotrophic factors",
+      "Neuroscience",
+      "Neuroplasticity"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Non-linear Entropy Analysis in EEG to Predict Treatment Response to Repetitive Transcranial Magnetic Stimulation in Depression",
+    "authors": "Reza Shalbaf, Colleen A. Brenner, C. Pang, Daniel M. Blumberger, Jonathan Downar, Zafiris J. Daskalakis, Joseph Tham, Raymond W. Lam, Faranak Farzan, Fidel Vila‐Rodriguez",
+    "abstract": "<b>Background:</b> Biomarkers that predict clinical outcomes in depression are essential for increasing the precision of treatments and clinical outcomes. The electroencephalogram (EEG) is a non-invasive neurophysiological test that has promise as a biomarker sensitive to treatment effects. The aim of our study was to investigate a novel non-linear index of resting state EEG activity as a predictor of clinical outcome, and compare its predictive capacity to traditional frequency-based indices. <b>Methods:</b> EEG was recorded from 62 patients with treatment resistant depression (TRD) and 25 healthy comparison (HC) subjects. TRD patients were treated with excitatory repetitive transcranial magnetic stimulation (rTMS) to the dorsolateral prefrontal cortex (DLPFC) for 4 to 6 weeks. EEG signals were first decomposed using the empirical mode decomposition (EMD) method into band-limited intrinsic mode functions (IMFs). Subsequently, Permutation Entropy (PE) was computed from the obtained second IMF to yield an index named PEIMF2. Receiver Operator Characteristic (ROC) curve analysis and ANOVA test were used to evaluate the efficiency of this index (PEIMF2) and were compared to frequency-band based methods. <b>Results:</b> Responders (RP) to rTMS exhibited an increase in the PEIMF2 index compared to non-responders (NR) at F3, FCz and FC3 sites (<i>p</i> < 0.01). The area under the curve (AUC) for ROC analysis was 0.8 for PEIMF2 index for the FC3 electrode. The PEIMF2 index was superior to ordinary frequency band measures. <b>Conclusion:</b> Our data show that the PEIMF2 index, yields superior outcome prediction performance compared to traditional frequency band indices. Our findings warrant further investigation of EEG-based biomarkers in depression; specifically entropy indices applied in band-limited EEG components. Registration in ClinicalTrials.Gov; identifiers NCT02800226 and NCT01887782.",
+    "year": 2018,
+    "doi": "10.3389/fphar.2018.01188",
+    "url": "https://doi.org/10.3389/fphar.2018.01188",
+    "download_url": "https://www.frontiersin.org/articles/10.3389/fphar.2018.01188/pdf",
+    "venue": "Frontiers in Pharmacology",
+    "citation_count": 34,
+    "fields_of_study": [
+      "EEG and Brain-Computer Interfaces",
+      "Functional Brain Connectivity Studies",
+      "Neural and Behavioral Psychology Studies"
+    ],
+    "paper_id": "https://openalex.org/W2899192547",
+    "keywords": [
+      "Electroencephalography",
+      "Transcranial magnetic stimulation",
+      "Receiver operating characteristic",
+      "Audiology",
+      "Medicine",
+      "Psychology",
+      "Neuroscience",
+      "Stimulation",
+      "Internal medicine"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "A review of critical brain oscillations in depression and the efficacy of transcranial magnetic stimulation treatment",
+    "authors": "Yi‐Chun Tsai, Cheng‐Ta Li, Chi‐Hung Juan",
+    "abstract": "Repetitive transcranial magnetic stimulation (rTMS) and intermittent theta burst stimulation (iTBS) have been proven effective non-invasive treatments for patients with drug-resistant major depressive disorder (MDD). However, some depressed patients do not respond to these treatments. Therefore, the investigation of reliable and valid brain oscillations as potential indices for facilitating the precision of diagnosis and treatment protocols has become a critical issue. The current review focuses on brain oscillations that, mostly based on EEG power analysis and connectivity, distinguish between MDD and controls, responders and non-responders, and potential depression severity indices, prognostic indicators, and potential biomarkers for rTMS or iTBS treatment. The possible roles of each biomarker and the potential reasons for heterogeneous results are discussed, and the directions of future studies are proposed.",
+    "year": 2023,
+    "doi": "10.3389/fpsyt.2023.1073984",
+    "url": "https://doi.org/10.3389/fpsyt.2023.1073984",
+    "download_url": "https://www.frontiersin.org/articles/10.3389/fpsyt.2023.1073984/pdf",
+    "venue": "Frontiers in Psychiatry",
+    "citation_count": 27,
+    "fields_of_study": [
+      "Functional Brain Connectivity Studies",
+      "Transcranial Magnetic Stimulation Studies",
+      "Neural dynamics and brain function"
+    ],
+    "paper_id": "https://openalex.org/W4376956755",
+    "keywords": [
+      "Transcranial magnetic stimulation",
+      "Depression (economics)",
+      "Major depressive disorder",
+      "Brain stimulation",
+      "Neuroscience",
+      "Stimulation",
+      "Psychology",
+      "Biomarker",
+      "Electroencephalography",
+      "Medicine"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "PREDICTING CLINICAL RESPONSE TO TRANSCRANIAL MAGNETIC STIMULATION IN MAJOR DEPRESSION USING TIME-FREQUENCY EEG SIGNAL PROCESSING",
+    "authors": "Elias Ebrahimzadeh, Mostafa Asgarinejad, Sarah Saliminia, Sarvenaz Ashoori, Masoud Seraji",
+    "abstract": "Repetitive transcranial magnetic stimulation (rTMS) is defined as a noninvasive technique of brain stimulation conducted for both diagnostic and therapeutic purposes. rTMS can effectively excite the brain neurons and increase brain plasticity, which becomes particularly useful in psychiatric and neurological fields. Biomarkers that predict clinical outcomes in depression are essential for increasing the precision of treatments and clinical outcomes. The electroencephalogram (EEG) is a noninvasive neurophysiological test that is promising as a biomarker sensitive to treatment effects. The aim of our study was to investigate a novel nonlinear index of the resting state EEG activity as a predictor of clinical outcome and compare its predictive capacity to traditional frequency-based indices. EEG was recorded from 50 patients with treatment resistant depression (TRD) and 24 healthy comparison (HC) subjects. TRD patients were treated with excitatory rTMS to the dorsolateral prefrontal cortex (DLPFC) for 4–6 weeks. EEG signals were first decomposed using the ICA algorithm and the extracted components were then processed by time-frequency analysis. We then go on to compare the participants’ depression severity before, after, and 2 months after finishing the last treatment session using the proposed rTMS therapy. Absolute powers (APs), band powers (BPs), and theta and beta band entropies (BAs), which were extracted from the EEG, are used as features for the classification of changes in patients and normal cases after applying rTMS. Accordingly, we can go beyond the Beck score and clinically classify the EEG signal into two classes: depression and normal. The results demonstrated 78.37%, 74.32%, and 82.43% accuracy for artificial neural network (ANN), [Formula: see text]-nearest neighbor (KNN), and support vector machine (SVM) classifiers, respectively, indicating the superiority of the proposed method to those mentioned in similar studies. Also, the electrophysiological changes are shown to be evident in patients with major depression. Our data show that the time-frequency index yields superior outcome prediction performance compared to the traditional frequency band indices. Our findings warrant further investigation of EEG-based biomarkers in depression.",
+    "year": 2021,
+    "doi": "10.4015/s1016237221500484",
+    "url": "https://doi.org/10.4015/s1016237221500484",
+    "download_url": null,
+    "venue": "Biomedical Engineering Applications Basis and Communications",
+    "citation_count": 21,
+    "fields_of_study": [
+      "Transcranial Magnetic Stimulation Studies",
+      "Functional Brain Connectivity Studies",
+      "EEG and Brain-Computer Interfaces"
+    ],
+    "paper_id": "https://openalex.org/W3195841365",
+    "keywords": [
+      "Electroencephalography",
+      "Transcranial magnetic stimulation",
+      "Neurophysiology",
+      "Clinical neurophysiology",
+      "Depression (economics)",
+      "Dorsolateral prefrontal cortex",
+      "Psychology",
+      "Brain activity and meditation",
+      "Audiology",
+      "Epilepsy"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Neural complexity EEG biomarkers of rapid and post-rapid ketamine effects in late-life treatment-resistant depression: a randomized control trial",
+    "authors": "Nicholas Murphy, Amanda J. F. Tamman, Marijn Lijffijt, Dania Amarneh, Sidra Iqbal, Alan C. Swann, Lynnette A. Averill, Brittany O’Brien, Sanjay J. Mathew",
+    "abstract": "Ketamine is an effective intervention for treatment-resistant depression (TRD), including late-in-life (LL-TRD). The proposed mechanism of antidepressant effects of ketamine is a glutamatergic surge, which can be measured by electroencephalogram (EEG) gamma oscillations. Yet, non-linear EEG biomarkers of ketamine effects such as neural complexity are needed to capture broader systemic effects, represent the level of organization of synaptic communication, and elucidate mechanisms of action for treatment responders. In a secondary analysis of a randomized control trial, we investigated two EEG neural complexity markers (Lempel-Ziv complexity [LZC] and multiscale entropy [MSE]) of rapid (baseline to 240 min) and post-rapid ketamine (24 h and 7 days) effects after one 40-min infusion of IV ketamine or midazolam (active control) in 33 military veterans with LL-TRD. We also studied the relationship between complexity and Montgomery-Åsberg Depression Rating Scale score change at 7 days post-infusion. We found that LZC and MSE both increased 30 min post-infusion, with effects not localized to a single timescale for MSE. Post-rapid effects of reduced complexity with ketamine were observed for MSE. No relationship was observed between complexity and reduction in depressive symptoms. Our findings support the hypothesis that a single sub-anesthetic ketamine infusion has time-varying effects on system-wide contributions to the evoked glutamatergic surge in LL-TRD. Further, changes to complexity were observable outside the time-window previously shown for effects on gamma oscillations. These preliminary results have clinical implications in providing a functional marker of ketamine that is non-linear, amplitude-independent, and represents larger dynamic properties, providing strong advantages over linear measures in highlighting ketamine's effects.",
+    "year": 2023,
+    "doi": "10.1038/s41386-023-01586-4",
+    "url": "https://doi.org/10.1038/s41386-023-01586-4",
+    "download_url": "https://www.nature.com/articles/s41386-023-01586-4.pdf",
+    "venue": "Neuropsychopharmacology",
+    "citation_count": 16,
+    "fields_of_study": [
+      "Functional Brain Connectivity Studies",
+      "Treatment of Major Depression",
+      "Neural dynamics and brain function"
+    ],
+    "paper_id": "https://openalex.org/W4366464003",
+    "keywords": [
+      "Ketamine",
+      "Electroencephalography",
+      "Treatment-resistant depression",
+      "Antidepressant",
+      "Major depressive disorder",
+      "Neuroscience",
+      "Psychology",
+      "Anesthetic",
+      "Medicine",
+      "Anesthesia"
+    ]
+  },
+  {
+    "source": "Semantic Scholar",
+    "title": "Overcoming treatment-resistant depression with machine-learning based tools: a study protocol combining EEG and clinical data to personalize glutamatergic and brain stimulation interventions (SelecTool Project)",
+    "authors": "M. Pettorruso, Giorgio Di Lorenzo, Beatrice Benatti, G. d’Andrea, C. Cavallotto, Rosalba Carullo, G. Mancusi, O. Di Marco, G. Mammarella, A. D'attilio, Elisabetta Barlocci, Ilenia Rosa, Alessio Cocco, Lorenzo Pio Padula, Giovanna Bubbico, M. G. Perrucci, Roberto Guidotti, A. D’Andrea, L. Marzetti, F. Zoratto, B. Dell'osso, Giovanni Martinotti",
+    "abstract": "Treatment-Resistant Depression (TRD) poses a substantial health and economic challenge, persisting as a major concern despite decades of extensive research into novel treatment modalities. The considerable heterogeneity in TRD’s clinical manifestations and neurobiological bases has complicated efforts toward effective interventions. Recognizing the need for precise biomarkers to guide treatment choices in TRD, herein we introduce the SelecTool Project. This initiative focuses on developing (WorkPlane 1/WP1) and conducting preliminary validation (WorkPlane 2/WP2) of a computational tool (SelecTool) that integrates clinical data, neurophysiological (EEG) and peripheral (blood sample) biomarkers through a machine-learning framework designed to optimize TRD treatment protocols. The SelecTool project aims to enhance clinical decision-making by enabling the selection of personalized interventions. It leverages multi-modal data analysis to navigate treatment choices towards two validated therapeutic options for TRD: esketamine nasal spray (ESK-NS) and accelerated repetitive Transcranial Magnetic Stimulation (arTMS). In WP1, 100 subjects with TRD will be randomized to receive either ESK-NS or arTMS, with comprehensive evaluations encompassing neurophysiological (EEG), clinical (psychometric scales), and peripheral (blood samples) assessments both at baseline (T0) and one month post-treatment initiation (T1). WP2 will utilize the data collected in WP1 to train the SelecTool algorithm, followed by its application in a second, out-of-sample cohort of 20 TRD subjects, assigning treatments based on the tool’s recommendations. Ultimately, this research seeks to revolutionize the treatment of TRD by employing advanced machine learning strategies and thorough data analysis, aimed at unraveling the complex neurobiological landscape of depression. This effort is expected to provide pivotal insights that will promote the development of more effective and individually tailored treatment strategies, thus addressing a significant void in current TRD management and potentially reducing its profound societal and economic burdens.",
+    "year": 2024,
+    "doi": "10.3389/fpsyt.2024.1436006",
+    "url": "https://www.semanticscholar.org/paper/169e53dbe54745e1df0495183343bda9d6a8a29e",
+    "download_url": "https://doi.org/10.3389/fpsyt.2024.1436006",
+    "venue": "Frontiers in Psychiatry",
+    "citation_count": 6,
+    "fields_of_study": [
+      "Medicine"
+    ],
+    "paper_id": "169e53dbe54745e1df0495183343bda9d6a8a29e",
+    "keywords": []
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Stanford neuromodulation therapy for treatment‐resistant depression: a randomized controlled trial confirming efficacy, and an <scp>EEG</scp> study providing insight into mechanism of action and a potentially predictive biomarker of efficacy",
+    "authors": "Ian H. Kratter, Christopher W. Austelle, Jennifer I. Lissemore, Masataka Wada, Andrew Geoly, Anna Chaiken, Irakli Kaloiani, Noriah Johnson, Stephanie Wan, Lena Kozyr, Ethan Makarewycz, Brendan L. Wong, Malvika Sridhar, Flint M. Espil, Nick Bassano, Bora Kim, Jarrod Ehrie, Adi Maron‐Katz, Claudia Tischler, Romina Nejad, Jean‐Marie Batail, Angela Phillips, Eleanor Cole, Tiffany J. Ford, Brandon S. Bentzley, Booil Jo, Alan F. Schatzberg, David Spiegel, Cammie Rolle, Gregory L. Sahlem, Nolan Williams",
+    "abstract": "Stanford neuromodulation therapy (SNT) is a rapid-acting, high-dose, intermittent theta-burst stimulation protocol. Although it has previously demonstrated efficacy for treatment-resistant depression (TRD) in a randomized controlled trial (RCT), replication in a larger sample is needed. Additionally, the electrophysiological effects of SNT remain unknown. Here we report results from a new double-blind, sham-controlled RCT along with electroencephalography (EEG) findings from the initial and current trials. In the current RCT, 53 participants with TRD were enrolled, and 48 who continued to meet entry criteria were randomized to receive active (N=24) or sham (N=24) SNT. At 1-month, remission (primary outcome) was achieved in 50.0% of active vs. 20.8% of sham participants (χ<sup>2</sup> <sub>1,48</sub>=4.5, p=0.035), and response (secondary outcome) similarly favored active treatment (54.2% vs. 25.0%; χ<sup>2</sup> <sub>1,48</sub>=4.3, p=0.039). Beta band EEG findings converged across trials: frontal beta power decreased significantly following active but not sham SNT in both the initial pilot study and the current trial. Additionally, beta baseline activity and post-SNT changes related to treatment efficacy in the current study. Specifically, greater post-SNT reduction in left anterior cingulate cortex (L-ACC) beta power correlated with greater clinical improvement immediately (rho=0.48, p=0.019) and 1-month after (rho=0.51, p=0.012) active SNT. Moreover, higher pre-treatment L-ACC beta power predicted greater subsequent clinical benefit from active SNT (immediate-post: β=-10.26, p=0.0042; 1-month after: β=-9.00, p=0.024). Neither of these L-ACC beta power findings was observed with sham stimulation. In sum, this study replicates SNT's therapeutic efficacy, identifies left frontal beta suppression as a potential mechanism of action, and highlights baseline L-ACC beta power as a candidate scalable pre-treatment biomarker of efficacy.",
+    "year": 2026,
+    "doi": "10.1002/wps.70032",
+    "url": "https://doi.org/10.1002/wps.70032",
+    "download_url": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1002/wps.70032",
+    "venue": "World Psychiatry",
+    "citation_count": 2,
+    "fields_of_study": [
+      "Neurological disorders and treatments",
+      "Transcranial Magnetic Stimulation Studies",
+      "Vagus Nerve Stimulation Research"
+    ],
+    "paper_id": "https://openalex.org/W7124304128",
+    "keywords": [
+      "Neuromodulation",
+      "Randomized controlled trial",
+      "Anterior cingulate cortex",
+      "BETA (programming language)",
+      "Biomarker",
+      "Electroencephalography",
+      "Depression (economics)",
+      "Stimulation"
+    ]
+  },
+  {
+    "source": "Semantic Scholar",
+    "title": "Alterations in temporal-spatial brain entropy in treatment-resistant depression treated with nitrous oxide: Evidence from resting-state EEG.",
+    "authors": "Weizhuang Kong, Zhe Sun, Jing Zhu, Lingjiang Li, Guanru Wang, Xuexiao Shao, Xiaowei Li, Bin Hu",
+    "abstract": "OBJECTIVE\nEntropy analysis can quantify the dynamic states of the brain and reflect its information processing capacity. Nitrous oxide has shown rapid antidepressant effects in treatment-resistant depression (TRD) patients, but its biomarkers are not yet established.\n\n\nMETHODS\nWe recruited 44 TRD patients and randomly assigned them to two groups: one received a 1-hour nitrous oxide inhalation treatment, while the other received a placebo. Resting-state EEG (rs-EEG) scans were conducted at baseline and 24 h post-treatment. A novel approach based multivariate multiscale entropy (MMSE) was employed to analyze temporal-spatial brain entropy (ts-BEN) across four hierarchical brain regions.\n\n\nRESULTS\nTRD patients exhibited significant time-dependent increases in BEN in the frontal lobe region (sensor space: time scales 5-10; source space: time scales 1-5), changes not previously observed. Temporal-spatial BEN correlated with the severity of TRD symptoms and treatment efficacy, indicating adaptive adjustments in brain resting states.\n\n\nCONCLUSION\nMMSE offers a novel supplementary method for rs-EEG BEN analysis, quantifying the sensitivity of ts-BEN in monitoring nitrous oxide treatment effects. Changes in frontal region ts-BEN may serve as potential biomarkers for TRD and its treatment outcomes.\n\n\nSIGNIFICANCE\nOur findings enhance the understanding of the physiological mechanisms underlying nitrous oxide treatment for TRD, aiding in clinical diagnosis.",
+    "year": 2025,
+    "doi": "10.1016/j.clinph.2025.01.014",
+    "url": "https://www.semanticscholar.org/paper/4a2e72d2cd526876793bda71fe0052e275f6fec2",
+    "download_url": "",
+    "venue": "Clinical Neurophysiology",
+    "citation_count": 1,
+    "fields_of_study": [
+      "Medicine"
+    ],
+    "paper_id": "4a2e72d2cd526876793bda71fe0052e275f6fec2",
+    "keywords": []
+  },
+  {
+    "source": "CORE",
+    "title": "Guidelines for the recording and evaluation of pharmaco-EEG data in man: the International Pharmaco-EEG Society (IPEG)",
+    "authors": "BABILONI, CLAUDIO, Boeijinga PH, Brunovsky M, Drinkenburg WH, Ffytche DH, Freeman J, Hegerl U, Hirata K, IPEG Pharmaco EEG Guidelines C.o.m.m.i.t.t.e.e. Collaborators, Jobert M, Kinoshita T, Knott VJ, Lopes Da Silva FH, Matousek M, Mucci A, Nottage JF, Olbrich S, Prichep LS, Ruigt GS, Saletu B, Stancak A, Strik WK, van Gerven JM, Wilson FJ, Wise RG",
+    "abstract": "The International Pharmaco-EEG Society (IPEG) presents updated guidelines summarising the requirements for the recording and computerised evaluation of pharmaco-EEG data in man. Since the publication of the first pharmaco-EEG guidelines in 1982, technical and data processing methods have advanced steadily, thus enhancing data quality and expanding the palette of tools available to investigate the action of drugs on the central nervous system (CNS), determine the pharmacokinetic and pharmacodynamic properties of novel therapeutics and evaluate the CNS penetration or toxicity of compounds. However, a review of the literature reveals inconsistent operating procedures from one study to another. While this fact does not invalidate results per se, the lack of standardisation constitutes a regrettable shortcoming, especially in the context of drug development programmes. Moreover, this shortcoming hampers reliable comparisons between outcomes of studies from different laboratories and hence also prevents pooling of data which is a requirement for sufficiently powering the validation of novel analytical algorithms and EEG-based biomarkers. The present updated guidelines reflect the consensus of a global panel of EEG experts and are intended to assist investigators using pharmaco-EEG in clinical research, by providing clear and concise recommendations and thereby enabling standardisation of methodology and facilitating comparability of data across laboratories",
+    "year": 2012,
+    "doi": "10.1159/000343478",
+    "url": "https://iris.uniroma1.it/bitstream/11573/802874/1/Jobert_Guidelines_2012.pdf",
+    "download_url": "https://core.ac.uk/download/54522901.pdf",
+    "venue": null,
+    "citation_count": 0,
+    "fields_of_study": [],
+    "paper_id": "30330986",
+    "keywords": []
+  },
+  {
+    "source": "CORE",
+    "title": "Preliminary prediction of individual response to electroconvulsive therapy using whole-brain functional magnetic resonance imaging data.",
+    "authors": "Abbott, Christopher C, Calhoun, Vince D, Espinoza, Randall, Jiang, Rongtao, Jones, Tom, Narr, Katherine L, Qi, Shile, Sui, Jing, Sun, Hailun, Upston, Joel, Wade, Benjamin Sc",
+    "abstract": "Electroconvulsive therapy (ECT) works rapidly and has been widely used to treat depressive disorders (DEP). However, identifying biomarkers predictive of response to ECT remains a priority to individually tailor treatment and understand treatment mechanisms. This study used a connectome-based predictive modeling (CPM) approach in 122 patients with DEP to determine if pre-ECT whole-brain functional connectivity (FC) predicts depressive rating changes and remission status after ECT (47 of 122 total subjects or 38.5% of sample), and whether pre-ECT and longitudinal changes (pre/post-ECT) in regional brain network biomarkers are associated with treatment-related changes in depression ratings. Results show the networks with the best predictive performance of ECT response were negative (anti-correlated) FC networks, which predict the post-ECT depression severity (continuous measure) with a 76.23% accuracy for remission prediction. FC networks with the greatest predictive power were concentrated in the prefrontal and temporal cortices and subcortical nuclei, and include the inferior frontal (IFG), superior frontal (SFG), superior temporal (STG), inferior temporal gyri (ITG), basal ganglia (BG), and thalamus (Tha). Several of these brain regions were also identified as nodes in the FC networks that show significant change pre-/post-ECT, but these networks were not related to treatment response. This study design has limitations regarding the longitudinal design and the absence of a control group that limit the causal inference regarding mechanism of post-treatment status. Though predictive biomarkers remained below the threshold of those recommended for potential translation, the analysis methods and results demonstrate the promise and generalizability of biomarkers for advancing personalized treatment strategies",
+    "year": 2020,
+    "doi": "10.1016/j.nicl.2019.102080",
+    "url": "https://escholarship.org/uc/item/12x366xr",
+    "download_url": "https://core.ac.uk/download/323308620.pdf",
+    "venue": null,
+    "citation_count": 0,
+    "fields_of_study": [],
+    "paper_id": "85972923",
+    "keywords": []
+  },
+  {
+    "source": "CORE",
+    "title": "Getting the best outcomes from epilepsy surgery.",
+    "authors": "Duncan, John S, Elger, Christian E, Engel, Jerome, Staba, Richard, Vakharia, Vejay N, Witt, Juri-Alexander",
+    "abstract": "Neurosurgery is an underutilized treatment that can potentially cure drug-refractory epilepsy. Careful, multidisciplinary presurgical evaluation is vital for selecting patients and to ensure optimal outcomes. Advances in neuroimaging have improved diagnosis and guided surgical intervention. Invasive electroencephalography allows the evaluation of complex patients who would otherwise not be candidates for neurosurgery. We review the current state of the assessment and selection of patients and consider established and novel surgical procedures and associated outcome data. We aim to dispel myths that may inhibit physicians from referring and patients from considering neurosurgical intervention for drug-refractory focal epilepsies. Ann Neurol 2018;83:676-690",
+    "year": 2018,
+    "doi": null,
+    "url": "https://escholarship.org/content/qt0120f648/qt0120f648.pdf?t=qaehok",
+    "download_url": "https://core.ac.uk/download/323079663.pdf",
+    "venue": null,
+    "citation_count": 0,
+    "fields_of_study": [],
+    "paper_id": "85866616",
+    "keywords": []
+  },
+  {
+    "source": "Semantic Scholar",
+    "title": "Remotely Supervised Home-Based tDCS in Treatment-Resistant Depression: Feasibility, Effectiveness and EEG Biomarkers of Response",
+    "authors": "R. Romero-Marín, S. López-Rodríguez, S. Lakis-Granell, E. Buloz-Osorio, M. Cabello-Toscano, Mikel Urretavizcaya-Sarachaga, Maria del Pino Alonso-Ortega, Mohit Chopra, J. Solana-Sánchez, J. Camprodon, Á. Pascual-Leone, D. Bartrés-Faz, Davide Cappon, G. Cattaneo",
+    "abstract": "Background Remotely supervised home-based transcranial direct current stimulation (HB-tDCS) may expand access to neuromodulation for treatment-resistant depression (TRD), but real-world evidence on candidate biomarkers remains limited. Methods In this naturalistic pre–post study, 40 adults with major depressive disorder and inadequate response to ≥ 2 treatments were enrolled. After MRI/clinical screening, 2 were excluded for potential stimulation contraindications and 5 did not start or discontinued within the first sessions for personal reasons unrelated to stimulation. 33 participants completed a 6-week semi-supervised HB-tDCS protocol (42 sessions, 30 min, 2 mA; anode F3/cathode F4). Baseline and post-treatment assessments included clinician-rated and self-rated depression (MADRS, QIDS-SR16, BDI-II), global cognition (MoCA), quality of life (Q-LES-Q-SF), and neurophysiological markers (resting-state EEG and TMS-EEG). Feasibility, technical incidents, and adverse effects were recorded after each session. Results Completers delivered 1,219/1,386 scheduled sessions (88%). Depressive symptoms decreased from baseline to post-treatment (MADRS − 24%, QIDS-SR16 − 15%, BDI-II − 12%; all p≤.002). Sixteen of 33 (48.5%) achieved ≥ 25% MADRS reduction (partial response), including 5 (15.2%) with ≥ 50% reduction. MoCA improved modestly, whereas Q-LES-Q-SF did not change significantly. Adverse effects were mostly mild/moderate (e.g., tingling, headache, scalp dryness), and no stimulation-related serious adverse events occurred. Exploratory analyses suggested higher baseline left-frontal alpha (F3) relative power and TMS-EEG evoked potentials in the left DLPFC (P30, P180) differentiated responders from non-responders. Conclusions An intensive, semi-supervised HB-tDCS program was feasible and well tolerated in TRD and was associated with clinically meaningful symptom reductions. Candidate EEG/TMS-EEG markers warrant replication in controlled trials.",
+    "year": 2026,
+    "doi": "10.21203/rs.3.rs-8709698/v1",
+    "url": "https://www.semanticscholar.org/paper/7ba628353818d20f18ac5ecdccca2bd39bca3d77",
+    "download_url": "",
+    "venue": "Research Square",
+    "citation_count": 0,
+    "fields_of_study": [
+      "Medicine"
+    ],
+    "paper_id": "7ba628353818d20f18ac5ecdccca2bd39bca3d77",
+    "keywords": []
+  },
+  {
+    "source": "Semantic Scholar",
+    "title": "Resting-state EEG biomarkers of accelerated intermittent theta burst stimulation treatment for depression: a pilot study",
+    "authors": "Ling Guo, Zhuo Zhang, X. Tan, K. Phua, C. Wang, P. Tor, K. Ang",
+    "abstract": "Accelerated intermittent theta burst stimulation (aiTBS) is a novel and effective treatment for drug-resistant depression. While past studies have identified encephalography (EEG) features predicting repetitive transcranial magnetic stimulation (rTMS) outcomes, EEG biomarkers specifically for aiTBS in depression patients have not been explored. In this pilot trial on 5 depression patients undergoing aiTBS, we assessed clinical outcome using the Montgomery-Asberg Depression Rating Scale (MADRS) and collected resting-state EEG pre and post-treatment. All patients showed an improvement in MADRS, with 3 having at least 50% improvement. We found significant correlations between MADRS change and pre-treatment frontal beta power, midline frontal Lempel-Ziv Complexity (LZC) and alpha connectivity. We also observed a trend of increased frontal theta power post-treatment. However, no significant correlations emerged between MADRS change and change in EEG feature post-treatment. This preliminary trial highlights the potential for investigating aiTBS-specific EEG biomarkers, paving the way for larger studies to enhance personalized neurostimulation and predict treatment outcomes in drug-resistant depression patients.",
+    "year": 2024,
+    "doi": "10.1109/EMBC53108.2024.10782112",
+    "url": "https://www.semanticscholar.org/paper/9d00f9320f2f75435719d9cccc4133e989f8737e",
+    "download_url": "",
+    "venue": "Annual International Conference of the IEEE Engineering in Medicine and Biology Society",
+    "citation_count": 0,
+    "fields_of_study": [
+      "Computer Science",
+      "Medicine"
+    ],
+    "paper_id": "9d00f9320f2f75435719d9cccc4133e989f8737e",
+    "keywords": []
+  }
+]

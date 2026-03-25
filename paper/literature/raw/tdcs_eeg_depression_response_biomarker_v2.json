@@ -1,0 +1,185 @@
+[
+  {
+    "source": "OpenAlex",
+    "title": "Evidence-based guidelines on the therapeutic use of repetitive transcranial magnetic stimulation (rTMS): An update (2014–2018)",
+    "authors": "Jean‐Pascal Lefaucheur, André Alemán, Chris Baeken, David Benninger, Jérôme Brunelin, Vincenzo Di Lazzaro, Saša R. Filipović, Christian Grefkes, Alkomiet Hasan, Friedhelm C. Hummel, Satu K. Jääskeläinen, Berthold Langguth, Letizia Leocani, Alain Londero, Raffaele Nardone, Jean-Paul Nguyen, Thomas Nyffeler, Albino J. Oliveira‐Maia, Antonio Oliviero, Frank Padberg, Ulrich Palm, Walter Paulus, Emmanuel Poulet, Angelo Quartarone, Fady Rachid, Irena Rektorová, Símone Rossi, Hanna Sahlsten, Martin Schecklmann, David Szekely, Ulf Ziemann",
+    "abstract": "A group of European experts reappraised the guidelines on the therapeutic efficacy of repetitive transcranial magnetic stimulation (rTMS) previously published in 2014 [Lefaucheur et al., Clin Neurophysiol 2014;125:2150-206]. These updated recommendations take into account all rTMS publications, including data prior to 2014, as well as currently reviewed literature until the end of 2018. Level A evidence (definite efficacy) was reached for: high-frequency (HF) rTMS of the primary motor cortex (M1) contralateral to the painful side for neuropathic pain; HF-rTMS of the left dorsolateral prefrontal cortex (DLPFC) using a figure-of-8 or a H1-coil for depression; low-frequency (LF) rTMS of contralesional M1 for hand motor recovery in the post-acute stage of stroke. Level B evidence (probable efficacy) was reached for: HF-rTMS of the left M1 or DLPFC for improving quality of life or pain, respectively, in fibromyalgia; HF-rTMS of bilateral M1 regions or the left DLPFC for improving motor impairment or depression, respectively, in Parkinson's disease; HF-rTMS of ipsilesional M1 for promoting motor recovery at the post-acute stage of stroke; intermittent theta burst stimulation targeted to the leg motor cortex for lower limb spasticity in multiple sclerosis; HF-rTMS of the right DLPFC in posttraumatic stress disorder; LF-rTMS of the right inferior frontal gyrus in chronic post-stroke non-fluent aphasia; LF-rTMS of the right DLPFC in depression; and bihemispheric stimulation of the DLPFC combining right-sided LF-rTMS (or continuous theta burst stimulation) and left-sided HF-rTMS (or intermittent theta burst stimulation) in depression. Level A/B evidence is not reached concerning efficacy of rTMS in any other condition. The current recommendations are based on the differences reached in therapeutic efficacy of real vs. sham rTMS protocols, replicated in a sufficient number of independent studies. This does not mean that the benefit produced by rTMS inevitably reaches a level of clinical relevance.",
+    "year": 2020,
+    "doi": "10.1016/j.clinph.2019.11.002",
+    "url": "https://doi.org/10.1016/j.clinph.2019.11.002",
+    "download_url": "https://www.sciencedirect.com/science/article/am/pii/S1388245719312799?via%3Dihub",
+    "venue": "Clinical Neurophysiology",
+    "citation_count": 2140,
+    "fields_of_study": [
+      "Transcranial Magnetic Stimulation Studies",
+      "Stroke Rehabilitation and Recovery",
+      "Pain Management and Treatment"
+    ],
+    "paper_id": "https://openalex.org/W2997901555",
+    "keywords": [
+      "Transcranial magnetic stimulation",
+      "Dorsolateral prefrontal cortex",
+      "Deep transcranial magnetic stimulation",
+      "Stroke (engine)",
+      "Physical medicine and rehabilitation",
+      "Psychology",
+      "Primary motor cortex",
+      "Motor cortex",
+      "Supplementary motor area",
+      "Depression (economics)"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Harnessing neuroplasticity for clinical applications",
+    "authors": "Steven C. Cramer, Mriganka Sur, Bruce H. Dobkin, Charles P. O’Brien, Terence D. Sanger, John Q. Trojanowski, Judith M. Rumsey, Ramona Hicks, Judy L. Cameron, David Chen, Wen Chen, Leonardo G. Cohen, C. deCharms, C. J. Duffy, Guinevere F. Eden, E. E. Fetz, Rosemarie Filart, M C Freund, Steven Grant, Suzanne N. Haber, Peter W. Kalivas, Bryan Kolb, Arthur F. Kramer, Michael P. Lynch, Helen S. Mayberg, Patrick S. McQuillen, Ralph Nitkin, A. Pascual–Leone, Patricia A. Reuter‐Lorenz, Nicholas D. Schiff, Anu Sharma, L. Shekim, Michael P. Stryker, Edith V. Sullivan, Sophia Vinogradov",
+    "abstract": "Neuroplasticity can be defined as the ability of the nervous system to respond to intrinsic or extrinsic stimuli by reorganizing its structure, function and connections. Major advances in the understanding of neuroplasticity have to date yielded few established interventions. To advance the translation of neuroplasticity research towards clinical applications, the National Institutes of Health Blueprint for Neuroscience Research sponsored a workshop in 2009. Basic and clinical researchers in disciplines from central nervous system injury/stroke, mental/addictive disorders, paediatric/developmental disorders and neurodegeneration/ageing identified cardinal examples of neuroplasticity, underlying mechanisms, therapeutic implications and common denominators. Promising therapies that may enhance training-induced cognitive and motor learning, such as brain stimulation and neuropharmacological interventions, were identified, along with questions of how best to use this body of information to reduce human disability. Improved understanding of adaptive mechanisms at every level, from molecules to synapses, to networks, to behaviour, can be gained from iterative collaborations between basic and clinical researchers. Lessons can be gleaned from studying fields related to plasticity, such as development, critical periods, learning and response to disease. Improved means of assessing neuroplasticity in humans, including biomarkers for predicting and monitoring treatment response, are needed. Neuroplasticity occurs with many variations, in many forms, and in many contexts. However, common themes in plasticity that emerge across diverse central nervous system conditions include experience dependence, time sensitivity and the importance of motivation and attention. Integration of information across disciplines should enhance opportunities for the translation of neuroplasticity and circuit retraining research into effective clinical therapies.",
+    "year": 2011,
+    "doi": "10.1093/brain/awr039",
+    "url": "https://doi.org/10.1093/brain/awr039",
+    "download_url": "https://academic.oup.com/brain/article-pdf/134/6/1591/1052566/awr039.pdf",
+    "venue": "Brain",
+    "citation_count": 1197,
+    "fields_of_study": [
+      "Attention Deficit Hyperactivity Disorder",
+      "Transcranial Magnetic Stimulation Studies",
+      "EEG and Brain-Computer Interfaces"
+    ],
+    "paper_id": "https://openalex.org/W2107022859",
+    "keywords": [
+      "Neuroplasticity",
+      "Neuroscience",
+      "Psychology",
+      "Psychological intervention",
+      "Brain stimulation",
+      "Cognition",
+      "Medicine",
+      "Psychiatry",
+      "Stimulation"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Cortico-Striatal-Thalamic Loop Circuits of the Salience Network: A Central Pathway in Psychiatric Disease and Treatment",
+    "authors": "Sarah K. Peters, Katharine Dunlop, Jonathan Downar",
+    "abstract": "The salience network (SN) plays a central role in cognitive control by integrating sensory input to guide attention, attend to motivationally salient stimuli and recruit appropriate functional brain-behavior networks to modulate behavior. Mounting evidence suggests that disturbances in SN function underlie abnormalities in cognitive control and may be a common etiology underlying many psychiatric disorders. Such functional and anatomical abnormalities have been recently apparent in studies and meta-analyses of psychiatric illness using functional magnetic resonance imaging (fMRI) and voxel-based morphometry (VBM). Of particular importance, abnormal structure and function in major cortical nodes of the SN, the dorsal anterior cingulate cortex (dACC) and anterior insula (AI), have been observed as a common neurobiological substrate across a broad spectrum of psychiatric disorders. In addition to cortical nodes of the SN, the network's associated subcortical structures, including the dorsal striatum, mediodorsal thalamus and dopaminergic brainstem nuclei, comprise a discrete regulatory loop circuit. The SN's cortico-striato-thalamo-cortical loop increasingly appears to be central to mechanisms of cognitive control, as well as to a broad spectrum of psychiatric illnesses and their available treatments. Functional imbalances within the SN loop appear to impair cognitive control, and specifically may impair self-regulation of cognition, behavior and emotion, thereby leading to symptoms of psychiatric illness. Furthermore, treating such psychiatric illnesses using invasive or non-invasive brain stimulation techniques appears to modulate SN cortical-subcortical loop integrity, and these effects may be central to the therapeutic mechanisms of brain stimulation treatments in many psychiatric illnesses. Here, we review clinical and experimental evidence for abnormalities in SN cortico-striatal-thalamic loop circuits in major depression, substance use disorders (SUD), anxiety disorders, schizophrenia and eating disorders (ED). We also review emergent therapeutic evidence that novel invasive and non-invasive brain stimulation treatments may exert therapeutic effects by normalizing abnormalities in the SN loop, thereby restoring the capacity for cognitive control. Finally, we consider a series of promising directions for future investigations on the role of SN cortico-striatal-thalamic loop circuits in the pathophysiology and treatment of psychiatric disorders.",
+    "year": 2016,
+    "doi": "10.3389/fnsys.2016.00104",
+    "url": "https://doi.org/10.3389/fnsys.2016.00104",
+    "download_url": "https://www.frontiersin.org/articles/10.3389/fnsys.2016.00104/pdf",
+    "venue": "Frontiers in Systems Neuroscience",
+    "citation_count": 605,
+    "fields_of_study": [
+      "Functional Brain Connectivity Studies",
+      "Transcranial Magnetic Stimulation Studies",
+      "Neural dynamics and brain function"
+    ],
+    "paper_id": "https://openalex.org/W2568027254",
+    "keywords": [
+      "Neuroscience",
+      "Deep brain stimulation",
+      "Psychology",
+      "Functional magnetic resonance imaging",
+      "Anterior cingulate cortex",
+      "Ventral striatum",
+      "Cognition",
+      "Thalamus",
+      "Dopaminergic",
+      "Schizophrenia (object-oriented programming)"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "BCI for stroke rehabilitation: motor and beyond",
+    "authors": "Ravikiran Mane, Tushar Chouhan, Cuntai Guan",
+    "abstract": "Stroke is one of the leading causes of long-term disability among adults and contributes to major socio-economic burden globally. Stroke frequently results in multifaceted impairments including motor, cognitive and emotion deficits. In recent years, brain-computer interface (BCI)-based therapy has shown promising results for post-stroke motor rehabilitation. In spite of the success received by BCI-based interventions in the motor domain, non-motor impairments are yet to receive similar attention in research and clinical settings. Some preliminary encouraging results in post-stroke cognitive rehabilitation using BCI seem to suggest that it may also hold potential for treating non-motor deficits such as cognitive and emotion impairments. Moreover, past studies have shown an intricate relationship between motor, cognitive and emotion functions which might influence the overall post-stroke rehabilitation outcome. A number of studies highlight the inability of current treatment protocols to account for the implicit interplay between motor, cognitive and emotion functions. This indicates the necessity to explore an all-inclusive treatment plan targeting the synergistic influence of these standalone interventions. This approach may lead to better overall recovery than treating the individual deficits in isolation. In this paper, we review the recent advances in BCI-based post-stroke motor rehabilitation and highlight the potential for the use of BCI systems beyond the motor domain, in particular, in improving cognition and emotion of stroke patients. Building on the current results and findings of studies in individual domains, we next discuss the possibility of a holistic BCI system for motor, cognitive and affect rehabilitation which may synergistically promote restorative neuroplasticity. Such a system would provide an all-encompassing rehabilitation platform, leading to overarching clinical outcomes and transfer of these outcomes to a better quality of living. This is one of the first works to analyse the possibility of targeting cross-domain influence of post-stroke functional recovery enabled by BCI-based rehabilitation.",
+    "year": 2020,
+    "doi": "10.1088/1741-2552/aba162",
+    "url": "https://doi.org/10.1088/1741-2552/aba162",
+    "download_url": "https://iopscience.iop.org/article/10.1088/1741-2552/aba162/pdf",
+    "venue": "Journal of Neural Engineering",
+    "citation_count": 422,
+    "fields_of_study": [
+      "EEG and Brain-Computer Interfaces",
+      "Functional Brain Connectivity Studies",
+      "Neuroscience and Neural Engineering"
+    ],
+    "paper_id": "https://openalex.org/W3040552008",
+    "keywords": [
+      "Rehabilitation",
+      "Brain–computer interface",
+      "Cognition",
+      "Physical medicine and rehabilitation",
+      "Stroke (engine)",
+      "Psychological intervention",
+      "Psychology",
+      "Motor imagery",
+      "Cognitive psychology",
+      "Neuroscience"
+    ]
+  },
+  {
+    "source": "Semantic Scholar",
+    "title": "Resting-state EEG delta and alpha power predict response to cognitive behavioral therapy in depression: a Canadian biomarker integration network for depression study",
+    "authors": "B. Schwartzmann, Lena C. Quilty, Prabhjot Dhami, R. Uher, T. Allen, S. Kloiber, R. Lam, B. Frey, R. Milev, Daniel J. Müller, Claudio N. Soares, Jane A. Foster, S. Rotzinger, S. Kennedy, F. Farzan",
+    "abstract": "Cognitive behavioral therapy (CBT) is often recommended as a first-line treatment in depression. However, access to CBT remains limited, and up to 50% of patients do not benefit from this therapy. Identifying biomarkers that can predict which patients will respond to CBT may assist in designing optimal treatment allocation strategies. In a Canadian Biomarker Integration Network for Depression (CAN-BIND) study, forty-one adults with depression were recruited to undergo a 16-week course of CBT with thirty having resting-state electroencephalography (EEG) recorded at baseline and week 2 of therapy. Successful clinical response to CBT was defined as a 50% or greater reduction in Montgomery-Åsberg Depression Rating Scale (MADRS) score from baseline to post-treatment completion. EEG relative power spectral measures were analyzed at baseline, week 2, and as early changes from baseline to week 2. At baseline, lower relative delta (0.5–4 Hz) power was observed in responders. This difference was predictive of successful clinical response to CBT. Furthermore, responders exhibited an early increase in relative delta power and a decrease in relative alpha (8–12 Hz) power compared to non-responders. These changes were also found to be good predictors of response to the therapy. These findings showed the potential utility of resting-state EEG in predicting CBT outcomes. They also further reinforce the promise of an EEG-based clinical decision-making tool to support treatment decisions for each patient.",
+    "year": 2023,
+    "doi": "10.1038/s41598-023-35179-4",
+    "url": "https://www.semanticscholar.org/paper/c02758e94b31b81f3e1b958602f570764ea2fac2",
+    "download_url": "https://www.nature.com/articles/s41598-023-35179-4.pdf",
+    "venue": "Scientific Reports",
+    "citation_count": 18,
+    "fields_of_study": [
+      "Medicine"
+    ],
+    "paper_id": "c02758e94b31b81f3e1b958602f570764ea2fac2",
+    "keywords": []
+  },
+  {
+    "source": "CORE",
+    "title": "Effects of dance therapy on balance, gait and neuro-psychological performances in patients with Parkinson's disease and postural instability",
+    "authors": "Agnetti, Virgilio, Aiello, Elena, De Natale, Edoardo, Deriu, Franca, Paulus, Kai Stephan, Sotgiu, Giovanni, Tolu, Eusebio",
+    "abstract": "Postural Instability (PI) is a core feature of\n\nParkinson’s Disease (PD) and a major cause of falls and disabilities. Impairment of executive functions has been called as an aggravating factor on motor performances. Dance therapy has been shown effective for improving gait and has been suggested as an alternative rehabilitative method.\n\nTo evaluate gait performance, spatial-temporal (S-T) gait\n\nparameters and cognitive performances in a cohort of patients with PD and PI modifications in balance after a cycle of dance therapy",
+    "year": 2012,
+    "doi": null,
+    "url": null,
+    "download_url": "https://core.ac.uk/download/16749566.pdf",
+    "venue": null,
+    "citation_count": 0,
+    "fields_of_study": [],
+    "paper_id": "6885557",
+    "keywords": []
+  },
+  {
+    "source": "Semantic Scholar",
+    "title": "Prediction of rTMS Treatment Response in Depression Using a Frequency-Based EEG Biomarker",
+    "authors": "Ali Asadi Zeidabadi, Saeid Rashidi",
+    "abstract": "Major depressive disorder (MDD) is a leading cause of disability worldwide, and a significant proportion of patients do not respond to standard pharmacological and psychotherapeutic treatments. Repetitive transcranial magnetic stimulation (rTMS) provides a non-invasive neuromodulatory therapy for treatment-resistant depression (TRD); however, the absence of reliable biomarkers limits its precision. In this study, resting-state EEG was recorded prior to treatment from 80 MDD patients undergoing a 20-session rTMS protocol. Spectral features across canonical frequency bands were extracted from 19 scalp electrodes, and a regularized feature selection technique identified a single high-frequency component at electrode F4 as the primary discriminator between responders (R) and non-responders (NR). This feature was normalized relative to an empirically derived reference cohort of optimal R to create a differential index. Combined with Support Vector Machine (SVM) and k-Nearest Neighbor (k-NN) classifiers under leave-one-out cross-validation, this index separated R from NR with 100% accuracy. These findings indicate that a succinct, interpretable spectral marker can predict individual rTMS outcomes and may inform personalized neuromodulation strategies in future studies.",
+    "year": 2025,
+    "doi": "10.1109/ICCKE68588.2025.11273345",
+    "url": "https://www.semanticscholar.org/paper/fa7b0c55f517ebfbaa6af5be40ba57129e5d87f2",
+    "download_url": "",
+    "venue": "International Conference on Computer and Knowledge Engineering",
+    "citation_count": 0,
+    "fields_of_study": [],
+    "paper_id": "fa7b0c55f517ebfbaa6af5be40ba57129e5d87f2",
+    "keywords": []
+  },
+  {
+    "source": "Semantic Scholar",
+    "title": "Remotely Supervised Home-Based tDCS in Treatment-Resistant Depression: Feasibility, Effectiveness and EEG Biomarkers of Response",
+    "authors": "R. Romero-Marín, S. López-Rodríguez, S. Lakis-Granell, E. Buloz-Osorio, M. Cabello-Toscano, Mikel Urretavizcaya-Sarachaga, Maria del Pino Alonso-Ortega, Mohit Chopra, J. Solana-Sánchez, J. Camprodon, Á. Pascual-Leone, D. Bartrés-Faz, Davide Cappon, G. Cattaneo",
+    "abstract": "Background Remotely supervised home-based transcranial direct current stimulation (HB-tDCS) may expand access to neuromodulation for treatment-resistant depression (TRD), but real-world evidence on candidate biomarkers remains limited. Methods In this naturalistic pre–post study, 40 adults with major depressive disorder and inadequate response to ≥ 2 treatments were enrolled. After MRI/clinical screening, 2 were excluded for potential stimulation contraindications and 5 did not start or discontinued within the first sessions for personal reasons unrelated to stimulation. 33 participants completed a 6-week semi-supervised HB-tDCS protocol (42 sessions, 30 min, 2 mA; anode F3/cathode F4). Baseline and post-treatment assessments included clinician-rated and self-rated depression (MADRS, QIDS-SR16, BDI-II), global cognition (MoCA), quality of life (Q-LES-Q-SF), and neurophysiological markers (resting-state EEG and TMS-EEG). Feasibility, technical incidents, and adverse effects were recorded after each session. Results Completers delivered 1,219/1,386 scheduled sessions (88%). Depressive symptoms decreased from baseline to post-treatment (MADRS − 24%, QIDS-SR16 − 15%, BDI-II − 12%; all p≤.002). Sixteen of 33 (48.5%) achieved ≥ 25% MADRS reduction (partial response), including 5 (15.2%) with ≥ 50% reduction. MoCA improved modestly, whereas Q-LES-Q-SF did not change significantly. Adverse effects were mostly mild/moderate (e.g., tingling, headache, scalp dryness), and no stimulation-related serious adverse events occurred. Exploratory analyses suggested higher baseline left-frontal alpha (F3) relative power and TMS-EEG evoked potentials in the left DLPFC (P30, P180) differentiated responders from non-responders. Conclusions An intensive, semi-supervised HB-tDCS program was feasible and well tolerated in TRD and was associated with clinically meaningful symptom reductions. Candidate EEG/TMS-EEG markers warrant replication in controlled trials.",
+    "year": 2026,
+    "doi": "10.21203/rs.3.rs-8709698/v1",
+    "url": "https://www.semanticscholar.org/paper/7ba628353818d20f18ac5ecdccca2bd39bca3d77",
+    "download_url": "",
+    "venue": "Research Square",
+    "citation_count": 0,
+    "fields_of_study": [
+      "Medicine"
+    ],
+    "paper_id": "7ba628353818d20f18ac5ecdccca2bd39bca3d77",
+    "keywords": []
+  }
+]

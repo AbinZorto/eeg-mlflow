@@ -1,0 +1,133 @@
+[
+  {
+    "source": "OpenAlex",
+    "title": "Safety and recommendations for TMS use in healthy subjects and patient populations, with updates on training, ethical and regulatory issues: Expert Guidelines",
+    "authors": "Símone Rossi, Andrea Antal, Sven Bestmann, Marom Bikson, Carmen C. Brewer, Jürgen Brockmöller, Linda L. Carpenter, M. Cincotta, Robert Chen, Jeff Daskalakis, Vincenzo Di Lazzaro, Michael Fox, Mark S. George, Donald L. Gilbert, Vasilios Κ. Kimiskidis, Giacomo Koch, Risto J. Ilmoniemi, Jean Pascal Lefaucheur, Letizia Leocani, Sarah H. Lisanby, Carlo Miniussi, Frank Padberg, Álvaro Pascual‐Leone, Walter Paulus, Angel V. Peterchev, Angelo Quartarone, Alexander Rotenberg, John C. Rothwell, Paolo Maria Rossini, Emiliano Santarnecchi, Mouhsin M. Shafi, Hartwig R. Siebner, Yoshikatzu Ugawa, Eric M. Wassermann, Abraham Zangen, Ulf Ziemann, Mark Hallett",
+    "abstract": "This article is based on a consensus conference, promoted and supported by the International Federation of Clinical Neurophysiology (IFCN), which took place in Siena (Italy) in October 2018. The meeting intended to update the ten-year-old safety guidelines for the application of transcranial magnetic stimulation (TMS) in research and clinical settings (Rossi et al., 2009). Therefore, only emerging and new issues are covered in detail, leaving still valid the 2009 recommendations regarding the description of conventional or patterned TMS protocols, the screening of subjects/patients, the need of neurophysiological monitoring for new protocols, the utilization of reference thresholds of stimulation, the managing of seizures and the list of minor side effects. New issues discussed in detail from the meeting up to April 2020 are safety issues of recently developed stimulation devices and pulse configurations; duties and responsibility of device makers; novel scenarios of TMS applications such as in the neuroimaging context or imaging-guided and robot-guided TMS; TMS interleaved with transcranial electrical stimulation; safety during paired associative stimulation interventions; and risks of using TMS to induce therapeutic seizures (magnetic seizure therapy). An update on the possible induction of seizures, theoretically the most serious risk of TMS, is provided. It has become apparent that such a risk is low, even in patients taking drugs acting on the central nervous system, at least with the use of traditional stimulation parameters and focal coils for which large data sets are available. Finally, new operational guidelines are provided for safety in planning future trials based on traditional and patterned TMS protocols, as well as a summary of the minimal training requirements for operators, and a note on ethics of neuroenhancement.",
+    "year": 2020,
+    "doi": "10.1016/j.clinph.2020.10.003",
+    "url": "https://doi.org/10.1016/j.clinph.2020.10.003",
+    "download_url": null,
+    "venue": "Clinical Neurophysiology",
+    "citation_count": 1383,
+    "fields_of_study": [
+      "Transcranial Magnetic Stimulation Studies",
+      "Muscle activation and electromyography studies",
+      "Neurological disorders and treatments"
+    ],
+    "paper_id": "https://openalex.org/W3093743108",
+    "keywords": [
+      "Transcranial magnetic stimulation",
+      "Context (archaeology)",
+      "Clinical neurophysiology",
+      "Brain stimulation",
+      "Neuroimaging",
+      "Physical medicine and rehabilitation",
+      "Clinical trial",
+      "Psychology",
+      "Psychological intervention",
+      "Medicine"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "The entropic brain: a theory of conscious states informed by neuroimaging research with psychedelic drugs",
+    "authors": "Robin Carhart‐Harris, Robert Leech, Peter J. Hellyer, Murray Shanahan, Amanda Feilding, Enzo Tagliazucchi, Dante R. Chialvo, David Nutt",
+    "abstract": "Entropy is a dimensionless quantity that is used for measuring uncertainty about the state of a system but it can also imply physical qualities, where high entropy is synonymous with high disorder. Entropy is applied here in the context of states of consciousness and their associated neurodynamics, with a particular focus on the psychedelic state. The psychedelic state is considered an exemplar of a primitive or primary state of consciousness that preceded the development of modern, adult, human, normal waking consciousness. Based on neuroimaging data with psilocybin, a classic psychedelic drug, it is argued that the defining feature of \"primary states\" is elevated entropy in certain aspects of brain function, such as the repertoire of functional connectivity motifs that form and fragment across time. Indeed, since there is a greater repertoire of connectivity motifs in the psychedelic state than in normal waking consciousness, this implies that primary states may exhibit \"criticality,\" i.e., the property of being poised at a \"critical\" point in a transition zone between order and disorder where certain phenomena such as power-law scaling appear. Moreover, if primary states are critical, then this suggests that entropy is suppressed in normal waking consciousness, meaning that the brain operates just below criticality. It is argued that this entropy suppression furnishes normal waking consciousness with a constrained quality and associated metacognitive functions, including reality-testing and self-awareness. It is also proposed that entry into primary states depends on a collapse of the normally highly organized activity within the default-mode network (DMN) and a decoupling between the DMN and the medial temporal lobes (which are normally significantly coupled). These hypotheses can be tested by examining brain activity and associated cognition in other candidate primary states such as rapid eye movement (REM) sleep and early psychosis and comparing these with non-primary states such as normal waking consciousness and the anaesthetized state.",
+    "year": 2014,
+    "doi": "10.3389/fnhum.2014.00020",
+    "url": "https://doi.org/10.3389/fnhum.2014.00020",
+    "download_url": "https://www.frontiersin.org/articles/10.3389/fnhum.2014.00020/pdf",
+    "venue": "Frontiers in Human Neuroscience",
+    "citation_count": 1234,
+    "fields_of_study": [
+      "Psychedelics and Drug Studies",
+      "Neural dynamics and brain function",
+      "Mental Health Research Topics"
+    ],
+    "paper_id": "https://openalex.org/W2109543774",
+    "keywords": [
+      "Consciousness",
+      "Default mode network",
+      "Psychology",
+      "Neuroscience",
+      "Cognitive psychology",
+      "Cognition"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "REBUS and the Anarchic Brain: Toward a Unified Model of the Brain Action of Psychedelics",
+    "authors": "Robin Carhart‐Harris, Karl Friston",
+    "abstract": "This paper formulates the action of psychedelics by integrating the free-energy principle and entropic brain hypothesis. We call this formulation relaxed beliefs under psychedelics (REBUS) and the anarchic brain, founded on the principle that-via their entropic effect on spontaneous cortical activity-psychedelics work to relax the precision of high-level priors or beliefs, thereby liberating bottom-up information flow, particularly via intrinsic sources such as the limbic system. We assemble evidence for this model and show how it can explain a broad range of phenomena associated with the psychedelic experience. With regard to their potential therapeutic use, we propose that psychedelics work to relax the precision weighting of pathologically overweighted priors underpinning various expressions of mental illness. We propose that this process entails an increased sensitization of high-level priors to bottom-up signaling (stemming from intrinsic sources), and that this heightened sensitivity enables the potential revision and deweighting of overweighted priors. We end by discussing further implications of the model, such as that psychedelics can bring about the revision of other heavily weighted high-level priors, not directly related to mental health, such as those underlying partisan and/or overly-confident political, religious, and/or philosophical perspectives. SIGNIFICANCE STATEMENT: Psychedelics are capturing interest, with efforts underway to bring psilocybin therapy to marketing authorisation and legal access within a decade, spearheaded by the findings of a series of phase 2 trials. In this climate, a compelling unified model of <i>how</i> psychedelics alter brain function to alter consciousness would have appeal. Towards this end, we have sought to integrate a leading model of global brain function, <i>hierarchical predictive coding</i>, with an often-cited model of the acute action of psychedelics, <i>the entropic brain hypothesis</i>. The resulting synthesis states that psychedelics work to relax high-level priors, sensitising them to liberated bottom-up information flow, which, with the right intention, care provision and context, can help guide and cultivate the revision of entrenched pathological priors.",
+    "year": 2019,
+    "doi": "10.1124/pr.118.017160",
+    "url": "https://doi.org/10.1124/pr.118.017160",
+    "download_url": "https://pharmrev.aspetjournals.org/content/pharmrev/71/3/316.full.pdf",
+    "venue": "Pharmacological Reviews",
+    "citation_count": 1078,
+    "fields_of_study": [
+      "Psychedelics and Drug Studies",
+      "Neurotransmitter Receptor Influence on Behavior",
+      "Biochemical Analysis and Sensing Techniques"
+    ],
+    "paper_id": "https://openalex.org/W2949457836",
+    "keywords": [
+      "Prior probability",
+      "Action (physics)",
+      "Psychology",
+      "Consciousness",
+      "Psilocybin",
+      "Epistemology",
+      "Cognitive psychology",
+      "Computer science",
+      "Neuroscience",
+      "Artificial intelligence"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Cortico-Striatal-Thalamic Loop Circuits of the Salience Network: A Central Pathway in Psychiatric Disease and Treatment",
+    "authors": "Sarah K. Peters, Katharine Dunlop, Jonathan Downar",
+    "abstract": "The salience network (SN) plays a central role in cognitive control by integrating sensory input to guide attention, attend to motivationally salient stimuli and recruit appropriate functional brain-behavior networks to modulate behavior. Mounting evidence suggests that disturbances in SN function underlie abnormalities in cognitive control and may be a common etiology underlying many psychiatric disorders. Such functional and anatomical abnormalities have been recently apparent in studies and meta-analyses of psychiatric illness using functional magnetic resonance imaging (fMRI) and voxel-based morphometry (VBM). Of particular importance, abnormal structure and function in major cortical nodes of the SN, the dorsal anterior cingulate cortex (dACC) and anterior insula (AI), have been observed as a common neurobiological substrate across a broad spectrum of psychiatric disorders. In addition to cortical nodes of the SN, the network's associated subcortical structures, including the dorsal striatum, mediodorsal thalamus and dopaminergic brainstem nuclei, comprise a discrete regulatory loop circuit. The SN's cortico-striato-thalamo-cortical loop increasingly appears to be central to mechanisms of cognitive control, as well as to a broad spectrum of psychiatric illnesses and their available treatments. Functional imbalances within the SN loop appear to impair cognitive control, and specifically may impair self-regulation of cognition, behavior and emotion, thereby leading to symptoms of psychiatric illness. Furthermore, treating such psychiatric illnesses using invasive or non-invasive brain stimulation techniques appears to modulate SN cortical-subcortical loop integrity, and these effects may be central to the therapeutic mechanisms of brain stimulation treatments in many psychiatric illnesses. Here, we review clinical and experimental evidence for abnormalities in SN cortico-striatal-thalamic loop circuits in major depression, substance use disorders (SUD), anxiety disorders, schizophrenia and eating disorders (ED). We also review emergent therapeutic evidence that novel invasive and non-invasive brain stimulation treatments may exert therapeutic effects by normalizing abnormalities in the SN loop, thereby restoring the capacity for cognitive control. Finally, we consider a series of promising directions for future investigations on the role of SN cortico-striatal-thalamic loop circuits in the pathophysiology and treatment of psychiatric disorders.",
+    "year": 2016,
+    "doi": "10.3389/fnsys.2016.00104",
+    "url": "https://doi.org/10.3389/fnsys.2016.00104",
+    "download_url": "https://www.frontiersin.org/articles/10.3389/fnsys.2016.00104/pdf",
+    "venue": "Frontiers in Systems Neuroscience",
+    "citation_count": 605,
+    "fields_of_study": [
+      "Functional Brain Connectivity Studies",
+      "Transcranial Magnetic Stimulation Studies",
+      "Neural dynamics and brain function"
+    ],
+    "paper_id": "https://openalex.org/W2568027254",
+    "keywords": [
+      "Neuroscience",
+      "Deep brain stimulation",
+      "Psychology",
+      "Functional magnetic resonance imaging",
+      "Anterior cingulate cortex",
+      "Ventral striatum",
+      "Cognition",
+      "Thalamus",
+      "Dopaminergic",
+      "Schizophrenia (object-oriented programming)"
+    ]
+  },
+  {
+    "source": "CORE",
+    "title": "Privacy for Personal Neuroinformatics",
+    "authors": "Greenwood, Dazza, Hansen, Lars Kai, Pentland, Alex, Stopczynski, Arkadiusz",
+    "abstract": "Human brain activity collected in the form of Electroencephalography (EEG),\neven with low number of sensors, is an extremely rich signal. Traces collected\nfrom multiple channels and with high sampling rates capture many important\naspects of participants' brain activity and can be used as a unique personal\nidentifier. The motivation for sharing EEG signals is significant, as a mean to\nunderstand the relation between brain activity and well-being, or for\ncommunication with medical services. As the equipment for such data collection\nbecomes more available and widely used, the opportunities for using the data\nare growing; at the same time however inherent privacy risks are mounting. The\nsame raw EEG signal can be used for example to diagnose mental diseases, find\ntraces of epilepsy, and decode personality traits. The current practice of the\ninformed consent of the participants for the use of the data either prevents\nreuse of the raw signal or does not truly respect participants' right to\nprivacy by reusing the same raw data for purposes much different than\noriginally consented to. Here we propose an integration of a personal\nneuroinformatics system, Smartphone Brain Scanner, with a general privacy\nframework openPDS. We show how raw high-dimensionality data can be collected on\na mobile device, uploaded to a server, and subsequently operated on and\naccessed by applications or researchers, without disclosing the raw signal.\nThose extracted features of the raw signal, called answers, are of\nsignificantly lower-dimensionality, and provide the full utility of the data in\ngiven context, without the risk of disclosing sensitive raw signal. Such\narchitecture significantly mitigates a very serious privacy risk related to raw\nEEG recordings floating around and being used and reused for various purposes",
+    "year": 2014,
+    "doi": "10.2139/ssrn.2427564",
+    "url": "http://arxiv.org/abs/1403.2745",
+    "download_url": "http://arxiv.org/abs/1403.2745",
+    "venue": null,
+    "citation_count": 0,
+    "fields_of_study": [],
+    "paper_id": "17185731",
+    "keywords": []
+  }
+]

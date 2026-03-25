@@ -1,0 +1,186 @@
+[
+  {
+    "source": "OpenAlex",
+    "title": "Parkinson's disease: clinical features and diagnosis",
+    "authors": "Joseph Jankovic",
+    "abstract": "A thorough understanding of the broad spectrum of clinical manifestations of PD is essential to the proper diagnosis of the disease. Genetic mutations or variants, neuroimaging abnormalities and other tests are potential biomarkers that may improve diagnosis and allow the identification of persons at risk.",
+    "year": 2008,
+    "doi": "10.1136/jnnp.2007.131045",
+    "url": "https://doi.org/10.1136/jnnp.2007.131045",
+    "download_url": "https://jnnp.bmj.com/content/jnnp/79/4/368.full.pdf",
+    "venue": "Journal of Neurology Neurosurgery & Psychiatry",
+    "citation_count": 5556,
+    "fields_of_study": [
+      "Parkinson's Disease Mechanisms and Treatments",
+      "Neurological disorders and treatments",
+      "Parkinson's Disease and Spinal Disorders"
+    ],
+    "paper_id": "https://openalex.org/W2145954079",
+    "keywords": [
+      "Medicine",
+      "Dystonia",
+      "Movement disorders",
+      "Physical medicine and rehabilitation",
+      "Parkinson's disease",
+      "Disease",
+      "Ophthalmoparesis",
+      "Dementia",
+      "Dysarthria",
+      "Ataxia"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Diagnosis and management of dementia with Lewy bodies",
+    "authors": "Ian G. McKeith, Bradley F. Boeve, Dennis W. Dickson, Glenda M. Halliday, John‐Paul Taylor, Daniel Weintraub, Dag Aarsland, James E. Galvin, Johannes Attems, Clive Ballard, Ashley Bayston, Thomas G. Beach, ‪Frederic Blanc‬, Nicolaas I. Bohnen, Laura Bonanni, José Brás, Patrik Brundin, David J. Burn, Alice Chen‐Plotkin, John E. Duda, Omar M. A. El‐Agnaf, Howard Feldman, Tanis J. Ferman, Dominic ffytche, Hiroshige Fujishiro, Douglas Galasko, Jennifer G. Goldman, Stephen N. Gomperts, Neill R. Graff‐Radford, Lawrence S. Honig, Álex Iranzo, Kejal Kantarci, Daniel Kaufer, Walter A. Kukull, Virginia M.‐Y. Lee, James B. Leverenz, Simon J.G. Lewis, Carol F. Lippa, Angela Lunde, Mario Masellis, Eliezer Masliah, Pamela J. McLean, Brit Mollenhauer, Thomas J. Montine, Emilio Moreno, Etsuro Mori, Melissa E. Murray, John T. O’Brien, Sotoshi Orimo, Ronald B. Postuma, Shankar Ramaswamy, Owen A. Ross, David P. Salmon, Andrew Singleton, Angela Taylor, Alan Thomas, Pietro Tiraboschi, Jon B. Toledo, John Q. Trojanowski, Debby W. Tsuang, Zuzana Walker, Masahito Yamada, Kenji Kosaka",
+    "abstract": "The Dementia with Lewy Bodies (DLB) Consortium has refined its recommendations about the clinical and pathologic diagnosis of DLB, updating the previous report, which has been in widespread use for the last decade. The revised DLB consensus criteria now distinguish clearly between clinical features and diagnostic biomarkers, and give guidance about optimal methods to establish and interpret these. Substantial new information has been incorporated about previously reported aspects of DLB, with increased diagnostic weighting given to REM sleep behavior disorder and <sup>123</sup>iodine-metaiodobenzylguanidine (MIBG) myocardial scintigraphy. The diagnostic role of other neuroimaging, electrophysiologic, and laboratory investigations is also described. Minor modifications to pathologic methods and criteria are recommended to take account of Alzheimer disease neuropathologic change, to add previously omitted Lewy-related pathology categories, and to include assessments for substantia nigra neuronal loss. Recommendations about clinical management are largely based upon expert opinion since randomized controlled trials in DLB are few. Substantial progress has been made since the previous report in the detection and recognition of DLB as a common and important clinical disorder. During that period it has been incorporated into DSM-5, as major neurocognitive disorder with Lewy bodies. There remains a pressing need to understand the underlying neurobiology and pathophysiology of DLB, to develop and deliver clinical trials with both symptomatic and disease-modifying agents, and to help patients and carers worldwide to inform themselves about the disease, its prognosis, best available treatments, ongoing research, and how to get adequate support.",
+    "year": 2017,
+    "doi": "10.1212/wnl.0000000000004058",
+    "url": "https://doi.org/10.1212/wnl.0000000000004058",
+    "download_url": "https://n.neurology.org/content/neurology/89/1/88.full.pdf",
+    "venue": "Neurology",
+    "citation_count": 4291,
+    "fields_of_study": [
+      "Parkinson's Disease Mechanisms and Treatments",
+      "Dementia and Cognitive Impairment Research",
+      "Alzheimer's disease research and treatments"
+    ],
+    "paper_id": "https://openalex.org/W2623521763",
+    "keywords": [
+      "Dementia with Lewy bodies",
+      "Neurocognitive",
+      "REM sleep behavior disorder",
+      "Medicine",
+      "Clinical trial",
+      "Neuroimaging",
+      "Dementia",
+      "Disease",
+      "Lewy body",
+      "Psychiatry"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Deep graph learning of multimodal brain networks defines treatment-predictive signatures in major depression",
+    "authors": "Yong Jiao, Kanhao Zhao, Xinxu Wei, Nancy B. Carlisle, Corey J. Keller, Desmond J. Oathes, Gregory A. Fonzo, Yu Zhang",
+    "abstract": "Major depressive disorder (MDD) presents a substantial health burden with low treatment response rates. Predicting antidepressant efficacy is challenging due to MDD's complex and varied neuropathology. Identifying biomarkers for antidepressant treatment requires thorough analysis of clinical trial data. Multimodal neuroimaging, combined with advanced data-driven methods, can enhance our understanding of the neurobiological processes influencing treatment outcomes. To address this, we analyzed resting-state fMRI and EEG connectivity data from 130 patients treated with sertraline and 135 patients with placebo from the Establishing Moderators and Biosignatures of Antidepressant Response in Clinical Care (EMBARC) study. A deep learning framework was developed using graph neural networks to integrate data-augmented connectivity and cross-modality correlation, aiming to predict individual symptom changes by revealing multimodal brain network signatures. The results showed that our model demonstrated promising prediction accuracy, with an R<sup>2</sup> value of 0.24 for sertraline and 0.20 for placebo. It also exhibited potential in transferring predictions using only EEG. Key brain regions identified for predicting sertraline response included the inferior temporal gyrus (fMRI) and posterior cingulate cortex (EEG), while for placebo response, the precuneus (fMRI) and supplementary motor area (EEG) were critical. Additionally, both modalities identified the superior temporal gyrus and posterior cingulate cortex as significant for sertraline response, while the anterior cingulate cortex and postcentral gyrus were common predictors in the placebo arm. Additionally, variations in the frontoparietal control, ventral attention, dorsal attention, and limbic networks were notably associated with MDD treatment. By integrating fMRI and EEG, our study established novel multimodal brain network signatures to predict individual responses to sertraline and placebo in MDD, providing interpretable neural circuit patterns that may guide future targeted interventions. Trial Registration: Establishing Moderators and Biosignatures of Antidepressant Response for Clinical Care for Depression (EMBARC) ClinicalTrials.gov Identifier: NCT#01407094.",
+    "year": 2025,
+    "doi": "10.1038/s41380-025-02974-6",
+    "url": "https://doi.org/10.1038/s41380-025-02974-6",
+    "download_url": "https://www.nature.com/articles/s41380-025-02974-6.pdf",
+    "venue": "Molecular Psychiatry",
+    "citation_count": 25,
+    "fields_of_study": [
+      "Functional Brain Connectivity Studies",
+      "Mental Health Research Topics",
+      "EEG and Brain-Computer Interfaces"
+    ],
+    "paper_id": "https://openalex.org/W4409011605",
+    "keywords": [
+      "Sertraline",
+      "Precuneus",
+      "Anterior cingulate cortex",
+      "Neuroscience",
+      "Middle temporal gyrus",
+      "Psychology",
+      "Neuroimaging",
+      "Major depressive disorder",
+      "Gyrus",
+      "Cingulate cortex"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Resting-state EEG delta and alpha power predict response to cognitive behavioral therapy in depression: a Canadian biomarker integration network for depression study",
+    "authors": "Benjamin Schwartzmann, Lena C. Quilty, Prabhjot Dhami, Rudolf Uher, Timothy A. Allen, Stefan Kloiber, Raymond W. Lam, Benício N. Frey, Roumen Milev, Daniel J. Müller, Cláudio N. Soares, Jane A. Foster, Susan Rotzinger, Sidney H. Kennedy, Faranak Farzan",
+    "abstract": "Cognitive behavioral therapy (CBT) is often recommended as a first-line treatment in depression. However, access to CBT remains limited, and up to 50% of patients do not benefit from this therapy. Identifying biomarkers that can predict which patients will respond to CBT may assist in designing optimal treatment allocation strategies. In a Canadian Biomarker Integration Network for Depression (CAN-BIND) study, forty-one adults with depression were recruited to undergo a 16-week course of CBT with thirty having resting-state electroencephalography (EEG) recorded at baseline and week 2 of therapy. Successful clinical response to CBT was defined as a 50% or greater reduction in Montgomery-Åsberg Depression Rating Scale (MADRS) score from baseline to post-treatment completion. EEG relative power spectral measures were analyzed at baseline, week 2, and as early changes from baseline to week 2. At baseline, lower relative delta (0.5-4 Hz) power was observed in responders. This difference was predictive of successful clinical response to CBT. Furthermore, responders exhibited an early increase in relative delta power and a decrease in relative alpha (8-12 Hz) power compared to non-responders. These changes were also found to be good predictors of response to the therapy. These findings showed the potential utility of resting-state EEG in predicting CBT outcomes. They also further reinforce the promise of an EEG-based clinical decision-making tool to support treatment decisions for each patient.",
+    "year": 2023,
+    "doi": "10.1038/s41598-023-35179-4",
+    "url": "https://doi.org/10.1038/s41598-023-35179-4",
+    "download_url": "https://www.nature.com/articles/s41598-023-35179-4.pdf",
+    "venue": "Scientific Reports",
+    "citation_count": 19,
+    "fields_of_study": [
+      "EEG and Brain-Computer Interfaces",
+      "Functional Brain Connectivity Studies",
+      "Neural and Behavioral Psychology Studies"
+    ],
+    "paper_id": "https://openalex.org/W4377983531",
+    "keywords": [
+      "Electroencephalography",
+      "Depression (economics)",
+      "Biomarker",
+      "Cognitive behavioral therapy",
+      "Baseline (sea)",
+      "Resting state fMRI",
+      "Medicine",
+      "Cognition",
+      "Alpha (finance)",
+      "Rating scale"
+    ]
+  },
+  {
+    "source": "CORE",
+    "title": "Guidelines for the recording and evaluation of pharmaco-EEG data in man: the International Pharmaco-EEG Society (IPEG)",
+    "authors": "BABILONI, CLAUDIO, Boeijinga PH, Brunovsky M, Drinkenburg WH, Ffytche DH, Freeman J, Hegerl U, Hirata K, IPEG Pharmaco EEG Guidelines C.o.m.m.i.t.t.e.e. Collaborators, Jobert M, Kinoshita T, Knott VJ, Lopes Da Silva FH, Matousek M, Mucci A, Nottage JF, Olbrich S, Prichep LS, Ruigt GS, Saletu B, Stancak A, Strik WK, van Gerven JM, Wilson FJ, Wise RG",
+    "abstract": "The International Pharmaco-EEG Society (IPEG) presents updated guidelines summarising the requirements for the recording and computerised evaluation of pharmaco-EEG data in man. Since the publication of the first pharmaco-EEG guidelines in 1982, technical and data processing methods have advanced steadily, thus enhancing data quality and expanding the palette of tools available to investigate the action of drugs on the central nervous system (CNS), determine the pharmacokinetic and pharmacodynamic properties of novel therapeutics and evaluate the CNS penetration or toxicity of compounds. However, a review of the literature reveals inconsistent operating procedures from one study to another. While this fact does not invalidate results per se, the lack of standardisation constitutes a regrettable shortcoming, especially in the context of drug development programmes. Moreover, this shortcoming hampers reliable comparisons between outcomes of studies from different laboratories and hence also prevents pooling of data which is a requirement for sufficiently powering the validation of novel analytical algorithms and EEG-based biomarkers. The present updated guidelines reflect the consensus of a global panel of EEG experts and are intended to assist investigators using pharmaco-EEG in clinical research, by providing clear and concise recommendations and thereby enabling standardisation of methodology and facilitating comparability of data across laboratories",
+    "year": 2012,
+    "doi": "10.1159/000343478",
+    "url": "https://iris.uniroma1.it/bitstream/11573/802874/1/Jobert_Guidelines_2012.pdf",
+    "download_url": "https://core.ac.uk/download/54522901.pdf",
+    "venue": null,
+    "citation_count": 0,
+    "fields_of_study": [],
+    "paper_id": "30330986",
+    "keywords": []
+  },
+  {
+    "source": "Semantic Scholar",
+    "title": "Predictive and mechanistic biomarkers of treatment response to Transcranial Magnetic Stimulation (TMS) in Psychiatric and Neurocognitive Disorders, identified via TMS-Electroencephalography (EEG) and Resting-State EEG: A systematic review.",
+    "authors": "Shelby Prokop-Millar, Anne-Marie Di Passa, Horodjei Yaya, C. McIntyre-Wood, Faranak Farzan, Alexander Terpstra, Allan Fein, Emily Vandehei, E. MacKillop, James MacKillop, Dante Duarte",
+    "abstract": "Electroencephalography (EEG) is a comparatively inexpensive and non-invasive recording technique of neural activity, making it a valuable tool for biomarker discovery in transcranial magnetic stimulation (TMS). This systematic review aimed to examine mechanistic and predictive biomarkers, identified through TMS-EEG or resting-state EEG, of treatment response to TMS in psychiatric and neurocognitive disorders. Nineteen articles were obtained via Embase, APA PsycInfo, MEDLINE, and manual search; conditions included, unipolar depression (k = 13), Alzheimer's disease (k = 3), bipolar depression (k = 2), and schizophrenia (k = 2). Two mechanistic biomarkers were identified: one TMS-EEG marker, reductions in N100 post-dorsolateral prefrontal cortex (DLPFC) repetitive TMS or intermittent theta burst stimulation (iTBS) in unipolar depression (n = 120; k = 2), and one resting-state marker, reductions in theta connectivity post-DLPFC repetitive TMS in unipolar and bipolar depression (n = 89; k = 2). Whereas one predictive TMS-EEG biomarker was isolated: greater baseline N100 was predictive of unipolar depression improvement in DLPFC repetitive TMS and iTBS (n = 113; k = 2). Promising markers were briefly discussed for future research in Alzheimer's disease and schizophrenia. In conclusion, across the psychiatric and neurocognitive disorders considered in this study, TMS-EEG and resting-state mechanistic and predictive biomarkers of depression appear to hold the most promise. Further research is needed to validate the biomarkers identified in depression, to help guide treatment plans and advance precision medicine in psychiatry.",
+    "year": 2025,
+    "doi": "10.1016/j.jad.2025.120194",
+    "url": "https://www.semanticscholar.org/paper/3bc08f283f5abe9b4d811eb8ca887f7e159bfadc",
+    "download_url": "",
+    "venue": "Journal of Affective Disorders",
+    "citation_count": 0,
+    "fields_of_study": [
+      "Medicine"
+    ],
+    "paper_id": "3bc08f283f5abe9b4d811eb8ca887f7e159bfadc",
+    "keywords": []
+  },
+  {
+    "source": "Semantic Scholar",
+    "title": "Prediction of rTMS Treatment Response in Depression Using a Frequency-Based EEG Biomarker",
+    "authors": "Ali Asadi Zeidabadi, Saeid Rashidi",
+    "abstract": "Major depressive disorder (MDD) is a leading cause of disability worldwide, and a significant proportion of patients do not respond to standard pharmacological and psychotherapeutic treatments. Repetitive transcranial magnetic stimulation (rTMS) provides a non-invasive neuromodulatory therapy for treatment-resistant depression (TRD); however, the absence of reliable biomarkers limits its precision. In this study, resting-state EEG was recorded prior to treatment from 80 MDD patients undergoing a 20-session rTMS protocol. Spectral features across canonical frequency bands were extracted from 19 scalp electrodes, and a regularized feature selection technique identified a single high-frequency component at electrode F4 as the primary discriminator between responders (R) and non-responders (NR). This feature was normalized relative to an empirically derived reference cohort of optimal R to create a differential index. Combined with Support Vector Machine (SVM) and k-Nearest Neighbor (k-NN) classifiers under leave-one-out cross-validation, this index separated R from NR with 100% accuracy. These findings indicate that a succinct, interpretable spectral marker can predict individual rTMS outcomes and may inform personalized neuromodulation strategies in future studies.",
+    "year": 2025,
+    "doi": "10.1109/ICCKE68588.2025.11273345",
+    "url": "https://www.semanticscholar.org/paper/fa7b0c55f517ebfbaa6af5be40ba57129e5d87f2",
+    "download_url": "",
+    "venue": "International Conference on Computer and Knowledge Engineering",
+    "citation_count": 0,
+    "fields_of_study": [],
+    "paper_id": "fa7b0c55f517ebfbaa6af5be40ba57129e5d87f2",
+    "keywords": []
+  },
+  {
+    "source": "Semantic Scholar",
+    "title": "Theta-cordance as a biomarker of treatment response to intermittent theta burst stimulation in patients with treatment-resistant depression.",
+    "authors": "Andreas Reissmann, Maximilian Rupprecht, B. Langguth, Johanna Rischer, S. Schoisswohl",
+    "abstract": "OBJECTIVE\nTo test whether baseline or treatment-related changes in prefrontal theta cordance are associated with clinical outcome after intermittent theta burst stimulation (iTBS) for major depressive disorder (MDD).\n\n\nMETHODS\nRetrospective analysis of 30 inpatients receiving 10 sessions of left-sided iTBS over 2 weeks. Resting-state 19-channel EEG was processed to compute theta cordance (plus delta/alpha/beta) in predefined cortical clusters pre/post the iTBS treatment period. Depression was rated pre/post with the Hamilton Depression Rating Scale (HAM-D) and the Major Depression Inventory (MDI); correlations linked baseline values and change scores to symptom improvement.\n\n\nRESULTS\nBaseline prefrontal theta cordance was not associated with outcome. Change scores were region-specific: responders showed greater occipital decreases (OC p = 0.036; MLOC p = 0.009) and a trend toward left-frontal increases (MLFC p = 0.072); exploratory alpha and delta effects also emerged.\n\n\nCONCLUSIONS\nTheta cordance may predict and track symptom improvement following iTBS, indicating state-dependent neurophysiology.\n\n\nSIGNIFICANCE\nTheta cordance may serve as a dynamic, region-specific EEG marker to monitor and personalize iTBS; prospective validation is warranted.",
+    "year": 2026,
+    "doi": "10.1016/j.clinph.2026.2111710",
+    "url": "https://www.semanticscholar.org/paper/c2c05fd78b73d7ebd82bcbd5cb8af3516e1f5751",
+    "download_url": "",
+    "venue": "Clinical Neurophysiology",
+    "citation_count": 0,
+    "fields_of_study": [
+      "Medicine"
+    ],
+    "paper_id": "c2c05fd78b73d7ebd82bcbd5cb8af3516e1f5751",
+    "keywords": []
+  }
+]

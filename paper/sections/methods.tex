@@ -1,0 +1,31 @@
+\subsection{Dataset and signal representation}
+
+The analysis used pretreatment EEG from 21 adults with treatment-resistant depression enrolled in a fully remote, multisite, double-blind, randomized sham-controlled home-based tDCS trial for major depressive disorder \citep{woodham2025home}. The analyzed cohort contained 7 remission cases and 14 non-remission cases in the patient-level outcome labels, with 18 female participants and a mean age of 37.1 $\pm$ 9.7 years. Table~\ref{tab:cohort-summary} summarizes the cohort, acquisition, and sweep configuration.
+
+\begin{table}[H]
+  \centering
+  \caption{Cohort, acquisition, and sweep configuration summary. Trial descriptors derive from the parent home-based tDCS study \citep{woodham2025home}; acquisition totals and sweep settings derive from the analyzed EEG exports and current experiment configuration.}
+  \label{tab:cohort-summary}
+  \small
+  \input{tables/cohort_summary.tex}
+\end{table}
+
+Baseline recordings were collected during eyes-closed rest with a 4-channel montage (\texttt{AF7}, \texttt{AF8}, \texttt{TP9}, \texttt{TP10}) sampled at 256 Hz. The available study exports comprised 10 s segments with 2,560 samples per channel, and the underlying recording sessions were stored either as a single 10 min file or as two 5 min files depending on participant. Across the cohort, the export set contained 1,203 windows, including 393 remission-labeled and 810 non-remission-labeled windows. This acquisition setup uses a limited frontal-temporal montage with clear portable-deployment relevance \citep{Casson2010,stoyell2021high}. The montage also constrained the downstream feature space toward frontal, temporal, cross-hemispheric, and frontal-temporal interaction measures.
+
+For the present sweep, the processing configuration applied participant-level per-channel demeaning before upsampling, followed by a fourth-order Butterworth low-pass filter at 60 Hz, a downsampling step back to 256 Hz, and zero-overlap window slicing. The sweep then compared non-overlapping analysis windows of 2, 4, 6, 8, and 10 s, so the model inputs included both the native 10 s exports and shorter subdivisions derived from the same recordings. These choices materially affect downstream EEG feature distributions, especially in low-density or portable pipelines \citep{Siuly2017,Miranda2019,Mahato2020,babiloni2012_guidelines,simmatis2023_technical}. The feature extractor enabled spectral, temporal, entropy, complexity, connectivity, coherence, asymmetry, and cross-hemispheric descriptors, including frontal/temporal asymmetry, cross-regional ratios, and inter-channel coupling measures. This broad handcrafted feature pool was intended to preserve interpretability while allowing sparse downstream selection.
+
+\subsection{Sweep design and validation}
+
+The experiment runner launched two model families over the same feature-selection sweep: an advanced hybrid 1D CNN-LSTM and a linear SVM. All runs used sequential window ordering, SelectKBest with ANOVA $F$ statistics (\texttt{select\_k\_best\_f\_classif}), a fixed consensus feature budget of \texttt{outer-k=10}, leave-one-participant-out outer evaluation, leave-one-participant-out training-group equalization, and SMOTE within training folds. The sweep varied the per-fold feature-selection budget (\texttt{inner-k}) across 15 values from 1 to 70 and repeated the search across 5 window sizes, yielding 150 successful runs in total (75 per model).
+
+This design matters for interpretation. The outer evaluation remained subject independent throughout, so no participant contributed both training and test windows to the same outer fold. The \texttt{inner-k} parameter controlled how many features were selected inside each outer training fold, whereas \texttt{outer-k} controlled only the final consensus feature budget after cross-validation. The feature-selection stability panels in the manuscript describe shared pipeline behavior because both classifiers consumed the same selected features for matched sweep settings.
+
+\subsection{Models}
+
+The SVM baseline used a linear kernel with class-balanced weighting and probability output enabled. The hybrid model used a substantially richer architecture defined in the project model configuration: stacked convolutional blocks, bidirectional LSTM layers, multi-head attention with positional encoding, feature-pyramid fusion, and GELU-activated dense layers with dropout and batch normalization. The manuscript treats this architecture as a test case for whether a more expressive learner can exploit a very small selected feature set more effectively than a linear baseline.
+
+\subsection{Outcome metrics and biomarker summaries}
+
+The primary endpoint was patient-level ROC-AUC, computed from participant probabilities aggregated over held-out windows. Secondary patient-level metrics included PR-AUC, balanced accuracy, accuracy, F1, MCC, precision, recall, and specificity. The pipeline also reported bootstrap confidence intervals and a permutation test for the patient-level ROC-AUC summary. All main manuscript claims use patient-level metrics. Window-level scores appear only as intermediate outputs.
+
+To characterize biomarker behavior across outer folds, we used several post hoc summaries: mean pairwise Jaccard overlap, Kuncheva index, unique feature count, top-feature share, class-conditional selection deltas, and effect-direction consistency. These summaries are descriptive. They characterize recurrence and directionality across folds and do not support causal interpretation. Low overlap can coexist with recurring features that retain consistent class-separation direction when selected \citep{olbrich2013_eeg,olbrich2015_personalized,simmatis2023_technical}.

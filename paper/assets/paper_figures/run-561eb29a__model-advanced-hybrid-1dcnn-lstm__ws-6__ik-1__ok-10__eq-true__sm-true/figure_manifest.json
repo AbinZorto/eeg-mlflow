@@ -1,0 +1,120 @@
+{
+  "data_sources": {
+    "mlruns_root": "mlruns",
+    "nested_fold_runs": 21,
+    "patient_prediction_rows": 21,
+    "results_artifacts_dir": "sweeps/artifacts",
+    "results_glob": "*.results.jsonl",
+    "window_prediction_rows": 2406
+  },
+  "filters": {
+    "equalize_lopo_groups": "true",
+    "fs_method": "select_k_best_f_classif",
+    "inner_k": 1,
+    "mlflow_run_id": "561eb29a046946818320bea18f21bed6",
+    "model": "advanced_hybrid_1dcnn_lstm",
+    "n_features": 10,
+    "ordering": "sequential",
+    "outer_k": 10,
+    "run_signature": null,
+    "use_smote": "true",
+    "window_size": 6
+  },
+  "generated_figures": [
+    {
+      "figure_id": "roc",
+      "path": "paper/assets/paper_figures/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/performance/patient_roc_curve.png"
+    },
+    {
+      "figure_id": "pr",
+      "path": "paper/assets/paper_figures/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/performance/patient_pr_curve.png"
+    },
+    {
+      "figure_id": "confusion",
+      "path": "paper/assets/paper_figures/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/performance/patient_confusion_matrix.png"
+    },
+    {
+      "figure_id": "metric_summary",
+      "path": "paper/assets/paper_figures/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/performance/patient_metric_summary.png"
+    },
+    {
+      "figure_id": "fold_distribution",
+      "path": "paper/assets/paper_figures/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/fold_behavior/patient_fold_accuracy_distribution.png"
+    },
+    {
+      "figure_id": "calibration",
+      "path": "paper/assets/paper_figures/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/fold_behavior/patient_calibration_plot.png"
+    },
+    {
+      "figure_id": "selection_frequency",
+      "path": "paper/assets/paper_figures/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/biomarker_stability/selection_frequency_top_features.png"
+    },
+    {
+      "figure_id": "selection_distribution",
+      "path": "paper/assets/paper_figures/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/biomarker_stability/selection_frequency_distribution.png"
+    },
+    {
+      "figure_id": "jaccard_heatmap",
+      "path": "paper/assets/paper_figures/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/biomarker_stability/pairwise_jaccard_heatmap.png"
+    },
+    {
+      "figure_id": "jaccard_distribution",
+      "path": "paper/assets/paper_figures/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/biomarker_stability/pairwise_jaccard_distribution.png"
+    },
+    {
+      "figure_id": "kuncheva_summary",
+      "path": "paper/assets/paper_figures/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/biomarker_stability/kuncheva_summary.png"
+    },
+    {
+      "figure_id": "delta_scatter",
+      "path": "paper/assets/paper_figures/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/biomarker_interpretation/delta_vs_frequency_scatter.png"
+    },
+    {
+      "figure_id": "class_conditional_bars",
+      "path": "paper/assets/paper_figures/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/biomarker_interpretation/class_conditional_selection_bars.png"
+    },
+    {
+      "figure_id": "delta_distribution",
+      "path": "paper/assets/paper_figures/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/biomarker_interpretation/delta_distribution.png"
+    },
+    {
+      "figure_id": "effect_size",
+      "path": "paper/assets/paper_figures/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/biomarker_interpretation/effect_size_top_features.png"
+    },
+    {
+      "figure_id": "sign_consistency",
+      "path": "paper/assets/paper_figures/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/biomarker_interpretation/sign_consistency_top_features.png"
+    },
+    {
+      "figure_id": "effect_frequency",
+      "path": "paper/assets/paper_figures/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/biomarker_interpretation/effect_size_vs_frequency_scatter.png"
+    }
+  ],
+  "requested_figures": [
+    "roc",
+    "pr",
+    "confusion",
+    "metric_summary",
+    "fold_distribution",
+    "calibration",
+    "selection_frequency",
+    "selection_distribution",
+    "jaccard_heatmap",
+    "jaccard_distribution",
+    "kuncheva_summary",
+    "delta_scatter",
+    "class_conditional_bars",
+    "delta_distribution",
+    "effect_size",
+    "sign_consistency",
+    "effect_frequency"
+  ],
+  "selected_run": {
+    "artifacts_dir": "mlruns/398165227830907321/561eb29a046946818320bea18f21bed6/artifacts",
+    "mlflow_experiment_id": "398165227830907321",
+    "mlflow_run_id": "561eb29a046946818320bea18f21bed6",
+    "resolved_from_results_row": "sweeps/artifacts/runexp-mode-fs-sets-none-models-advanced_hybrid_1dcnn_ls-ws-6-ord-sequential-ik-1-ok-10-eq-true-sm-true-ds-auto-fsm-select_k_best_f_classif-fn-10__c25fbcf98eff.results.jsonl",
+    "run_dir": "mlruns/398165227830907321/561eb29a046946818320bea18f21bed6"
+  },
+  "skipped_figures": []
+}

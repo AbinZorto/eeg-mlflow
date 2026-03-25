@@ -1,0 +1,148 @@
+[
+  {
+    "source": "OpenAlex",
+    "title": "Diagnosis and management of dementia with Lewy bodies",
+    "authors": "Ian G. McKeith, Bradley F. Boeve, Dennis W. Dickson, Glenda M. Halliday, John‐Paul Taylor, Daniel Weintraub, Dag Aarsland, James E. Galvin, Johannes Attems, Clive Ballard, Ashley Bayston, Thomas G. Beach, ‪Frederic Blanc‬, Nicolaas I. Bohnen, Laura Bonanni, José Brás, Patrik Brundin, David J. Burn, Alice Chen‐Plotkin, John E. Duda, Omar M. A. El‐Agnaf, Howard Feldman, Tanis J. Ferman, Dominic ffytche, Hiroshige Fujishiro, Douglas Galasko, Jennifer G. Goldman, Stephen N. Gomperts, Neill R. Graff‐Radford, Lawrence S. Honig, Álex Iranzo, Kejal Kantarci, Daniel Kaufer, Walter A. Kukull, Virginia M.‐Y. Lee, James B. Leverenz, Simon J.G. Lewis, Carol F. Lippa, Angela Lunde, Mario Masellis, Eliezer Masliah, Pamela J. McLean, Brit Mollenhauer, Thomas J. Montine, Emilio Moreno, Etsuro Mori, Melissa E. Murray, John T. O’Brien, Sotoshi Orimo, Ronald B. Postuma, Shankar Ramaswamy, Owen A. Ross, David P. Salmon, Andrew Singleton, Angela Taylor, Alan Thomas, Pietro Tiraboschi, Jon B. Toledo, John Q. Trojanowski, Debby W. Tsuang, Zuzana Walker, Masahito Yamada, Kenji Kosaka",
+    "abstract": "The Dementia with Lewy Bodies (DLB) Consortium has refined its recommendations about the clinical and pathologic diagnosis of DLB, updating the previous report, which has been in widespread use for the last decade. The revised DLB consensus criteria now distinguish clearly between clinical features and diagnostic biomarkers, and give guidance about optimal methods to establish and interpret these. Substantial new information has been incorporated about previously reported aspects of DLB, with increased diagnostic weighting given to REM sleep behavior disorder and <sup>123</sup>iodine-metaiodobenzylguanidine (MIBG) myocardial scintigraphy. The diagnostic role of other neuroimaging, electrophysiologic, and laboratory investigations is also described. Minor modifications to pathologic methods and criteria are recommended to take account of Alzheimer disease neuropathologic change, to add previously omitted Lewy-related pathology categories, and to include assessments for substantia nigra neuronal loss. Recommendations about clinical management are largely based upon expert opinion since randomized controlled trials in DLB are few. Substantial progress has been made since the previous report in the detection and recognition of DLB as a common and important clinical disorder. During that period it has been incorporated into DSM-5, as major neurocognitive disorder with Lewy bodies. There remains a pressing need to understand the underlying neurobiology and pathophysiology of DLB, to develop and deliver clinical trials with both symptomatic and disease-modifying agents, and to help patients and carers worldwide to inform themselves about the disease, its prognosis, best available treatments, ongoing research, and how to get adequate support.",
+    "year": 2017,
+    "doi": "10.1212/wnl.0000000000004058",
+    "url": "https://doi.org/10.1212/wnl.0000000000004058",
+    "download_url": "https://n.neurology.org/content/neurology/89/1/88.full.pdf",
+    "venue": "Neurology",
+    "citation_count": 4291,
+    "fields_of_study": [
+      "Parkinson's Disease Mechanisms and Treatments",
+      "Dementia and Cognitive Impairment Research",
+      "Alzheimer's disease research and treatments"
+    ],
+    "paper_id": "https://openalex.org/W2623521763",
+    "keywords": [
+      "Dementia with Lewy bodies",
+      "Neurocognitive",
+      "REM sleep behavior disorder",
+      "Medicine",
+      "Clinical trial",
+      "Neuroimaging",
+      "Dementia",
+      "Disease",
+      "Lewy body",
+      "Psychiatry"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Preclinical Alzheimer's disease: Definition, natural history, and diagnostic criteria",
+    "authors": "Bruno Dubois, Harald Hampel, Howard Feldman, Philip Scheltens, Paul Aisen, Sandrine Andrieu, Hovagim Bakardjian, Habib Benali, Lars Bertram, Kaj Blennow, Karl Broich, Enrica Cavedo, Sebastian J. Crutch, Jean‐François Dartigues, Charles Duyckaerts, Stéphane Epelbaum, Giovanni B. Frisoni, Serge Gauthier, Rémy Genthon, Alida A. Gouw, Marie‐Odile Habert, David M. Holtzman, Miia Kivipelto, Simone Lista, José Luís Molinuevo, Sid E. O’Bryant, Gil D. Rabinovici, Christopher C. Rowe, Stephen Salloway, Lon S. Schneider, Reisa A. Sperling, Marc Teichmann, María C. Carrillo, Jeffrey L. Cummings, Cliff R Jack",
+    "abstract": "During the past decade, a conceptual shift occurred in the field of Alzheimer's disease (AD) considering the disease as a continuum. Thanks to evolving biomarker research and substantial discoveries, it is now possible to identify the disease even at the preclinical stage before the occurrence of the first clinical symptoms. This preclinical stage of AD has become a major research focus as the field postulates that early intervention may offer the best chance of therapeutic success. To date, very little evidence is established on this \"silent\" stage of the disease. A clarification is needed about the definitions and lexicon, the limits, the natural history, the markers of progression, and the ethical consequence of detecting the disease at this asymptomatic stage. This article is aimed at addressing all the different issues by providing for each of them an updated review of the literature and evidence, with practical recommendations.",
+    "year": 2016,
+    "doi": "10.1016/j.jalz.2016.02.002",
+    "url": "https://doi.org/10.1016/j.jalz.2016.02.002",
+    "download_url": "https://pure.amsterdamumc.nl/files/159880971/Preclinical-alzheimers-disease-definition-natural-history-and-diagnostic-criteria.pdf",
+    "venue": "Alzheimer s & Dementia",
+    "citation_count": 1865,
+    "fields_of_study": [
+      "Dementia and Cognitive Impairment Research",
+      "Alzheimer's disease research and treatments",
+      "Neurological Disease Mechanisms and Treatments"
+    ],
+    "paper_id": "https://openalex.org/W2309442902",
+    "keywords": [
+      "Natural history",
+      "Disease",
+      "Natural (archaeology)",
+      "Medicine",
+      "History",
+      "Pathology",
+      "Internal medicine"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Leveraging Machine Learning Approaches for Predicting Antidepressant Treatment Response Using Electroencephalography (EEG) and Clinical Data",
+    "authors": "Natalia Jaworska, Sara de la Salle, Mohamed Hamza Ibrahim, Pierre Blier, Verner Knott",
+    "abstract": "<b>Background:</b> Individuals with major depressive disorder (MDD) vary in their response to antidepressants. However, identifying objective biomarkers, prior to or early in the course of treatment that can predict antidepressant efficacy, remains a challenge. <b>Methods:</b> Individuals with MDD participated in a 12-week antidepressant pharmacotherapy trial. Electroencephalographic (EEG) data was collected before and 1 week post-treatment initiation in 51 patients. Response status at week 12 was established with the Montgomery-Asberg Depression Scale (MADRS), with a ≥50% decrease characterizing responders (<i>N</i> = 27/24 responders/non-responders). We used a machine learning (ML)-approach for predicting response status. We focused on Random Forests, though other ML methods were compared. First, we used a tree-based estimator to select a relatively small number of significant features from: (a) demographic/clinical data (age, sex, individual item/total MADRS scores at baseline, week 1, change scores); (b) scalp-level EEG power; (c) source-localized current density (via exact low-resolution electromagnetic tomography [eLORETA] software). Second, we applied kernel principal component analysis to reduce and map important features. Third, a set of ML models were constructed to classify response outcome based on mapped features. For each dataset, predictive features were extracted, followed by a model of all predictive features, and finally by a model of the <i>most</i> predictive features. <b>Results:</b> Fifty eLORETA features were predictive of response (across bands, both time-points); alpha<sub>1</sub>/theta eLORETA features showed the highest predictive value. Eighty-eight scalp EEG features were predictive of response (across bands, both time-points), with theta/alpha<sub>2</sub> being most predictive. Clinical/demographic data consisted of 31 features, with the most important being week 1 \"concentration difficulty\" scores. When all features were included into one model, its predictive utility was high (88% accuracy). When the <i>most</i> important features were extracted in the final model, 12 predictive features emerged (78% accuracy), including baseline scalp-EEG frontopolar theta, parietal alpha<sub>2</sub> and frontopolar alpha<sub>1</sub>. <b>Conclusions:</b> These findings suggest that ML models of pre- and early treatment-emergent EEG profiles and clinical features can serve as tools for predicting antidepressant response. While this must be replicated using large independent samples, it lays the groundwork for research on personalized, \"biomarker\"-based treatment approaches.",
+    "year": 2019,
+    "doi": "10.3389/fpsyt.2018.00768",
+    "url": "https://doi.org/10.3389/fpsyt.2018.00768",
+    "download_url": null,
+    "venue": "Frontiers in Psychiatry",
+    "citation_count": 95,
+    "fields_of_study": [
+      "Functional Brain Connectivity Studies",
+      "Treatment of Major Depression",
+      "EEG and Brain-Computer Interfaces"
+    ],
+    "paper_id": "https://openalex.org/W2909091936",
+    "keywords": [
+      "Electroencephalography",
+      "Antidepressant",
+      "Psychology",
+      "Computer science",
+      "Machine learning",
+      "Artificial intelligence",
+      "Neuroscience",
+      "Psychiatry",
+      "Anxiety"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Frontal theta and posterior alpha in resting EEG: A critical examination of convergent and discriminant validity",
+    "authors": "Ezra E. Smith, Craig E. Tenke, Patricia J. Deldin, Madhukar H. Trivedi, Myrna M. Weissman, Randy P. Auerbach, Gerard E. Bruder, Diego A. Pizzagalli, Jürgen Kayser",
+    "abstract": "Prior research has identified two resting EEG biomarkers with potential for predicting functional outcomes in depression: theta current density in frontal brain regions (especially rostral anterior cingulate cortex) and alpha power over posterior scalp regions. As little is known about the discriminant and convergent validity of these putative biomarkers, a thorough evaluation of these psychometric properties was conducted toward the goal of improving clinical utility of these markers. Resting 71-channel EEG recorded from 35 healthy adults at two sessions (1-week retest) were used to systematically compare different quantification techniques for theta and alpha sources at scalp (surface Laplacian or current source density [CSD]) and brain (distributed inverse; exact low resolution electromagnetic tomography [eLORETA]) level. Signal quality was evaluated with signal-to-noise ratio, participant-level spectra, and frequency PCA covariance decomposition. Convergent and discriminant validity were assessed within a multitrait-multimethod framework. Posterior alpha was reliably identified as two spectral components, each with unique spatial patterns and condition effects (eyes open/closed), high signal quality, and good convergent and discriminant validity. In contrast, frontal theta was characterized by one low-variance component, low signal quality, lack of a distinct spectral peak, and mixed validity. Correlations between candidate biomarkers suggest that posterior alpha components constitute reliable, convergent, and discriminant biometrics in healthy adults. Component-based identification of spectral activity (CSD/eLORETA-fPCA) was superior to fixed, a priori frequency bands. Improved quantification and conceptualization of frontal theta is necessary to determine clinical utility.",
+    "year": 2019,
+    "doi": "10.1111/psyp.13483",
+    "url": "https://doi.org/10.1111/psyp.13483",
+    "download_url": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1111/psyp.13483",
+    "venue": "Psychophysiology",
+    "citation_count": 36,
+    "fields_of_study": [
+      "EEG and Brain-Computer Interfaces",
+      "Neural and Behavioral Psychology Studies",
+      "Functional Brain Connectivity Studies"
+    ],
+    "paper_id": "https://openalex.org/W2978857209",
+    "keywords": [
+      "Psychology",
+      "Alpha (finance)",
+      "Electroencephalography",
+      "Discriminant validity",
+      "Convergent validity",
+      "Cognitive psychology",
+      "Audiology",
+      "Neuroscience",
+      "Clinical psychology",
+      "Psychometrics"
+    ]
+  },
+  {
+    "source": "CORE",
+    "title": "Guidelines for the recording and evaluation of pharmaco-EEG data in man: the International Pharmaco-EEG Society (IPEG)",
+    "authors": "BABILONI, CLAUDIO, Boeijinga PH, Brunovsky M, Drinkenburg WH, Ffytche DH, Freeman J, Hegerl U, Hirata K, IPEG Pharmaco EEG Guidelines C.o.m.m.i.t.t.e.e. Collaborators, Jobert M, Kinoshita T, Knott VJ, Lopes Da Silva FH, Matousek M, Mucci A, Nottage JF, Olbrich S, Prichep LS, Ruigt GS, Saletu B, Stancak A, Strik WK, van Gerven JM, Wilson FJ, Wise RG",
+    "abstract": "The International Pharmaco-EEG Society (IPEG) presents updated guidelines summarising the requirements for the recording and computerised evaluation of pharmaco-EEG data in man. Since the publication of the first pharmaco-EEG guidelines in 1982, technical and data processing methods have advanced steadily, thus enhancing data quality and expanding the palette of tools available to investigate the action of drugs on the central nervous system (CNS), determine the pharmacokinetic and pharmacodynamic properties of novel therapeutics and evaluate the CNS penetration or toxicity of compounds. However, a review of the literature reveals inconsistent operating procedures from one study to another. While this fact does not invalidate results per se, the lack of standardisation constitutes a regrettable shortcoming, especially in the context of drug development programmes. Moreover, this shortcoming hampers reliable comparisons between outcomes of studies from different laboratories and hence also prevents pooling of data which is a requirement for sufficiently powering the validation of novel analytical algorithms and EEG-based biomarkers. The present updated guidelines reflect the consensus of a global panel of EEG experts and are intended to assist investigators using pharmaco-EEG in clinical research, by providing clear and concise recommendations and thereby enabling standardisation of methodology and facilitating comparability of data across laboratories",
+    "year": 2012,
+    "doi": "10.1159/000343478",
+    "url": "https://iris.uniroma1.it/bitstream/11573/802874/1/Jobert_Guidelines_2012.pdf",
+    "download_url": "https://core.ac.uk/download/54522901.pdf",
+    "venue": null,
+    "citation_count": 0,
+    "fields_of_study": [],
+    "paper_id": "30330986",
+    "keywords": []
+  },
+  {
+    "source": "CORE",
+    "title": "Brain Age from the Electroencephalogram of Sleep",
+    "authors": "Akeju, Oluwaseun, Bianchi, Matt T., Carvalho, Diego Z., Cash, Sydney S., Goparaju, Balaji, Oliva, Jefferson T., Paixao, Luis, Sun, Haoqi, Thomas, Robert Joseph, van Leeuwen, Kicky G., Westover, M. Brandon",
+    "abstract": "The human electroencephalogram (EEG) of sleep undergoes profound changes with\nage. These changes can be conceptualized as \"brain age\", which can be compared\nto an age norm to reflect the deviation from normal aging process. Here, we\ndevelop an interpretable machine learning model to predict brain age based on\ntwo large sleep EEG datasets: the Massachusetts General Hospital sleep lab\ndataset (MGH, N = 2,621) covering age 18 to 80; and the Sleep Hearth Health\nStudy (SHHS, N = 3,520) covering age 40 to 80. The model obtains a mean\nabsolute deviation of 8.1 years between brain age and chronological age in the\nhealthy participants in the MGH dataset. As validation, we analyze a subset of\nSHHS containing longitudinal EEGs 5 years apart, which shows a 5.5 years\ndifference in brain age. Participants with neurological and psychiatric\ndiseases, as well as diabetes and hypertension medications show an older brain\nage compared to chronological age. The findings raise the prospect of using\nsleep EEG as a biomarker for healthy brain aging",
+    "year": 2018,
+    "doi": "10.1016/j.neurobiolaging.2018.10.016",
+    "url": "https://ris.utwente.nl/ws/files/255241416/Sun_2019_Brain_age_from_the_electroencephalo.pdf",
+    "download_url": "https://core.ac.uk/download/572220819.pdf",
+    "venue": null,
+    "citation_count": 0,
+    "fields_of_study": [],
+    "paper_id": "51547393",
+    "keywords": []
+  }
+]

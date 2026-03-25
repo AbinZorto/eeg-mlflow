@@ -1,0 +1,196 @@
+[
+  {
+    "source": "OpenAlex",
+    "title": "Safety and recommendations for TMS use in healthy subjects and patient populations, with updates on training, ethical and regulatory issues: Expert Guidelines",
+    "authors": "Símone Rossi, Andrea Antal, Sven Bestmann, Marom Bikson, Carmen C. Brewer, Jürgen Brockmöller, Linda L. Carpenter, M. Cincotta, Robert Chen, Jeff Daskalakis, Vincenzo Di Lazzaro, Michael Fox, Mark S. George, Donald L. Gilbert, Vasilios Κ. Kimiskidis, Giacomo Koch, Risto J. Ilmoniemi, Jean Pascal Lefaucheur, Letizia Leocani, Sarah H. Lisanby, Carlo Miniussi, Frank Padberg, Álvaro Pascual‐Leone, Walter Paulus, Angel V. Peterchev, Angelo Quartarone, Alexander Rotenberg, John C. Rothwell, Paolo Maria Rossini, Emiliano Santarnecchi, Mouhsin M. Shafi, Hartwig R. Siebner, Yoshikatzu Ugawa, Eric M. Wassermann, Abraham Zangen, Ulf Ziemann, Mark Hallett",
+    "abstract": "This article is based on a consensus conference, promoted and supported by the International Federation of Clinical Neurophysiology (IFCN), which took place in Siena (Italy) in October 2018. The meeting intended to update the ten-year-old safety guidelines for the application of transcranial magnetic stimulation (TMS) in research and clinical settings (Rossi et al., 2009). Therefore, only emerging and new issues are covered in detail, leaving still valid the 2009 recommendations regarding the description of conventional or patterned TMS protocols, the screening of subjects/patients, the need of neurophysiological monitoring for new protocols, the utilization of reference thresholds of stimulation, the managing of seizures and the list of minor side effects. New issues discussed in detail from the meeting up to April 2020 are safety issues of recently developed stimulation devices and pulse configurations; duties and responsibility of device makers; novel scenarios of TMS applications such as in the neuroimaging context or imaging-guided and robot-guided TMS; TMS interleaved with transcranial electrical stimulation; safety during paired associative stimulation interventions; and risks of using TMS to induce therapeutic seizures (magnetic seizure therapy). An update on the possible induction of seizures, theoretically the most serious risk of TMS, is provided. It has become apparent that such a risk is low, even in patients taking drugs acting on the central nervous system, at least with the use of traditional stimulation parameters and focal coils for which large data sets are available. Finally, new operational guidelines are provided for safety in planning future trials based on traditional and patterned TMS protocols, as well as a summary of the minimal training requirements for operators, and a note on ethics of neuroenhancement.",
+    "year": 2020,
+    "doi": "10.1016/j.clinph.2020.10.003",
+    "url": "https://doi.org/10.1016/j.clinph.2020.10.003",
+    "download_url": null,
+    "venue": "Clinical Neurophysiology",
+    "citation_count": 1383,
+    "fields_of_study": [
+      "Transcranial Magnetic Stimulation Studies",
+      "Muscle activation and electromyography studies",
+      "Neurological disorders and treatments"
+    ],
+    "paper_id": "https://openalex.org/W3093743108",
+    "keywords": [
+      "Transcranial magnetic stimulation",
+      "Context (archaeology)",
+      "Clinical neurophysiology",
+      "Brain stimulation",
+      "Neuroimaging",
+      "Physical medicine and rehabilitation",
+      "Clinical trial",
+      "Psychology",
+      "Psychological intervention",
+      "Medicine"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Attention-deficit/hyperactivity disorder",
+    "authors": "Stephen V. Faraone, Philip Asherson, Tobias Banaschewski, Joseph Biederman, Jan K. Buitelaar, Josep Antoni Ramos‐Quiroga, Luís Augusto Rohde, Edmund Sonuga‐Barke, Rosemary Tannock, Barbara Franke",
+    "abstract": "Attention-deficit/hyperactivity disorder (ADHD) is a persistent neurodevelopmental disorder that affects 5% of children and adolescents and 2.5% of adults worldwide. Throughout an individual's lifetime, ADHD can increase the risk of other psychiatric disorders, educational and occupational failure, accidents, criminality, social disability and addictions. No single risk factor is necessary or sufficient to cause ADHD. In most cases ADHD arises from several genetic and environmental risk factors that each have a small individual effect and act together to increase susceptibility. The multifactorial causation of ADHD is consistent with the heterogeneity of the disorder, which is shown by its extensive psychiatric co-morbidity, its multiple domains of neurocognitive impairment and the wide range of structural and functional brain anomalies associated with it. The diagnosis of ADHD is reliable and valid when evaluated with standard criteria for psychiatric disorders. Rating scales and clinical interviews facilitate diagnosis and aid screening. The expression of symptoms varies as a function of patient developmental stage and social and academic contexts. Although there are no curative treatments for ADHD, evidenced-based treatments can markedly reduce its symptoms and associated impairments. For example, medications are efficacious and normally well tolerated, and various non-pharmacological approaches are also valuable. Ongoing clinical and neurobiological research holds the promise of advancing diagnostic and therapeutic approaches to ADHD. For an illustrated summary of this Primer, visit: http://go.nature.com/J6jiwl.",
+    "year": 2015,
+    "doi": "10.1038/nrdp.2015.20",
+    "url": "https://doi.org/10.1038/nrdp.2015.20",
+    "download_url": "https://www.nature.com/articles/nrdp201520.pdf",
+    "venue": "Nature Reviews Disease Primers",
+    "citation_count": 1319,
+    "fields_of_study": [
+      "Attention Deficit Hyperactivity Disorder",
+      "Functional Brain Connectivity Studies",
+      "Children's Physical and Motor Development"
+    ],
+    "paper_id": "https://openalex.org/W4210997646",
+    "keywords": [
+      "Neurocognitive",
+      "Attention deficit hyperactivity disorder",
+      "Psychiatry",
+      "Neurodevelopmental disorder",
+      "Psychology",
+      "Clinical psychology",
+      "Addiction",
+      "Medicine",
+      "Cognition",
+      "Autism"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "REBUS and the Anarchic Brain: Toward a Unified Model of the Brain Action of Psychedelics",
+    "authors": "Robin Carhart‐Harris, Karl Friston",
+    "abstract": "This paper formulates the action of psychedelics by integrating the free-energy principle and entropic brain hypothesis. We call this formulation relaxed beliefs under psychedelics (REBUS) and the anarchic brain, founded on the principle that-via their entropic effect on spontaneous cortical activity-psychedelics work to relax the precision of high-level priors or beliefs, thereby liberating bottom-up information flow, particularly via intrinsic sources such as the limbic system. We assemble evidence for this model and show how it can explain a broad range of phenomena associated with the psychedelic experience. With regard to their potential therapeutic use, we propose that psychedelics work to relax the precision weighting of pathologically overweighted priors underpinning various expressions of mental illness. We propose that this process entails an increased sensitization of high-level priors to bottom-up signaling (stemming from intrinsic sources), and that this heightened sensitivity enables the potential revision and deweighting of overweighted priors. We end by discussing further implications of the model, such as that psychedelics can bring about the revision of other heavily weighted high-level priors, not directly related to mental health, such as those underlying partisan and/or overly-confident political, religious, and/or philosophical perspectives. SIGNIFICANCE STATEMENT: Psychedelics are capturing interest, with efforts underway to bring psilocybin therapy to marketing authorisation and legal access within a decade, spearheaded by the findings of a series of phase 2 trials. In this climate, a compelling unified model of <i>how</i> psychedelics alter brain function to alter consciousness would have appeal. Towards this end, we have sought to integrate a leading model of global brain function, <i>hierarchical predictive coding</i>, with an often-cited model of the acute action of psychedelics, <i>the entropic brain hypothesis</i>. The resulting synthesis states that psychedelics work to relax high-level priors, sensitising them to liberated bottom-up information flow, which, with the right intention, care provision and context, can help guide and cultivate the revision of entrenched pathological priors.",
+    "year": 2019,
+    "doi": "10.1124/pr.118.017160",
+    "url": "https://doi.org/10.1124/pr.118.017160",
+    "download_url": "https://pharmrev.aspetjournals.org/content/pharmrev/71/3/316.full.pdf",
+    "venue": "Pharmacological Reviews",
+    "citation_count": 1078,
+    "fields_of_study": [
+      "Psychedelics and Drug Studies",
+      "Neurotransmitter Receptor Influence on Behavior",
+      "Biochemical Analysis and Sensing Techniques"
+    ],
+    "paper_id": "https://openalex.org/W2949457836",
+    "keywords": [
+      "Prior probability",
+      "Action (physics)",
+      "Psychology",
+      "Consciousness",
+      "Psilocybin",
+      "Epistemology",
+      "Cognitive psychology",
+      "Computer science",
+      "Neuroscience",
+      "Artificial intelligence"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Cortico-Striatal-Thalamic Loop Circuits of the Salience Network: A Central Pathway in Psychiatric Disease and Treatment",
+    "authors": "Sarah K. Peters, Katharine Dunlop, Jonathan Downar",
+    "abstract": "The salience network (SN) plays a central role in cognitive control by integrating sensory input to guide attention, attend to motivationally salient stimuli and recruit appropriate functional brain-behavior networks to modulate behavior. Mounting evidence suggests that disturbances in SN function underlie abnormalities in cognitive control and may be a common etiology underlying many psychiatric disorders. Such functional and anatomical abnormalities have been recently apparent in studies and meta-analyses of psychiatric illness using functional magnetic resonance imaging (fMRI) and voxel-based morphometry (VBM). Of particular importance, abnormal structure and function in major cortical nodes of the SN, the dorsal anterior cingulate cortex (dACC) and anterior insula (AI), have been observed as a common neurobiological substrate across a broad spectrum of psychiatric disorders. In addition to cortical nodes of the SN, the network's associated subcortical structures, including the dorsal striatum, mediodorsal thalamus and dopaminergic brainstem nuclei, comprise a discrete regulatory loop circuit. The SN's cortico-striato-thalamo-cortical loop increasingly appears to be central to mechanisms of cognitive control, as well as to a broad spectrum of psychiatric illnesses and their available treatments. Functional imbalances within the SN loop appear to impair cognitive control, and specifically may impair self-regulation of cognition, behavior and emotion, thereby leading to symptoms of psychiatric illness. Furthermore, treating such psychiatric illnesses using invasive or non-invasive brain stimulation techniques appears to modulate SN cortical-subcortical loop integrity, and these effects may be central to the therapeutic mechanisms of brain stimulation treatments in many psychiatric illnesses. Here, we review clinical and experimental evidence for abnormalities in SN cortico-striatal-thalamic loop circuits in major depression, substance use disorders (SUD), anxiety disorders, schizophrenia and eating disorders (ED). We also review emergent therapeutic evidence that novel invasive and non-invasive brain stimulation treatments may exert therapeutic effects by normalizing abnormalities in the SN loop, thereby restoring the capacity for cognitive control. Finally, we consider a series of promising directions for future investigations on the role of SN cortico-striatal-thalamic loop circuits in the pathophysiology and treatment of psychiatric disorders.",
+    "year": 2016,
+    "doi": "10.3389/fnsys.2016.00104",
+    "url": "https://doi.org/10.3389/fnsys.2016.00104",
+    "download_url": "https://www.frontiersin.org/articles/10.3389/fnsys.2016.00104/pdf",
+    "venue": "Frontiers in Systems Neuroscience",
+    "citation_count": 605,
+    "fields_of_study": [
+      "Functional Brain Connectivity Studies",
+      "Transcranial Magnetic Stimulation Studies",
+      "Neural dynamics and brain function"
+    ],
+    "paper_id": "https://openalex.org/W2568027254",
+    "keywords": [
+      "Neuroscience",
+      "Deep brain stimulation",
+      "Psychology",
+      "Functional magnetic resonance imaging",
+      "Anterior cingulate cortex",
+      "Ventral striatum",
+      "Cognition",
+      "Thalamus",
+      "Dopaminergic",
+      "Schizophrenia (object-oriented programming)"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Prognosis and improved outcomes in major depression: a review",
+    "authors": "Christoph Kraus, Bashkim Kadriu, Rupert Lanzenberger, Carlos A. Zarate, Siegfried Kasper",
+    "abstract": "Treatment outcomes for major depressive disorder (MDD) need to be improved. Presently, no clinically relevant tools have been established for stratifying subgroups or predicting outcomes. This literature review sought to investigate factors closely linked to outcome and summarize existing and novel strategies for improvement. The results show that early recognition and treatment are crucial, as duration of untreated depression correlates with worse outcomes. Early improvement is associated with response and remission, while comorbidities prolong course of illness. Potential biomarkers have been explored, including hippocampal volumes, neuronal activity of the anterior cingulate cortex, and levels of brain-derived neurotrophic factor (BDNF) and central and peripheral inflammatory markers (e.g., translocator protein (TSPO), interleukin-6 (IL-6), C-reactive protein (CRP), tumor necrosis factor alpha (TNFα)). However, their integration into routine clinical care has not yet been fully elucidated, and more research is needed in this regard. Genetic findings suggest that testing for CYP450 isoenzyme activity may improve treatment outcomes. Strategies such as managing risk factors, improving clinical trial methodology, and designing structured step-by-step treatments are also beneficial. Finally, drawing on existing guidelines, we outline a sequential treatment optimization paradigm for selecting first-, second-, and third-line treatments for acute and chronically ill patients. Well-established treatments such as electroconvulsive therapy (ECT) are clinically relevant for treatment-resistant populations, and novel transcranial stimulation methods such as theta-burst stimulation (TBS) and magnetic seizure therapy (MST) have shown promising results. Novel rapid-acting antidepressants, such as ketamine, may also constitute a paradigm shift in treatment optimization for MDD.",
+    "year": 2019,
+    "doi": "10.1038/s41398-019-0460-3",
+    "url": "https://doi.org/10.1038/s41398-019-0460-3",
+    "download_url": "https://www.nature.com/articles/s41398-019-0460-3.pdf",
+    "venue": "Translational Psychiatry",
+    "citation_count": 470,
+    "fields_of_study": [
+      "Treatment of Major Depression",
+      "Tryptophan and brain disorders",
+      "Mental Health Research Topics"
+    ],
+    "paper_id": "https://openalex.org/W2934413595",
+    "keywords": [
+      "Anterior cingulate cortex",
+      "Medicine",
+      "Electroconvulsive therapy",
+      "Depression (economics)",
+      "Treatment-resistant depression",
+      "Major depressive disorder",
+      "Neurotrophic factors",
+      "Translocator protein",
+      "Transcranial magnetic stimulation",
+      "Oncology"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Predicting alcohol use disorder remission: a longitudinal multimodal multi-featured machine learning approach",
+    "authors": "Sivan Kinreich, Vivia V. McCutcheon, Fazil Alıev, Jacquelyn L. Meyers, Chella Kamarajan, Ashwini K. Pandey, David B. Chorlian, Jian Zhang, Weipeng Kuang, Gayathri Pandey, Stacey Saenz de Viteri, Meredith W. Francis, Grace Chan, Jessica L. Bourdon, Danielle M. Dick, Andrey P. Anokhin, Lance O. Bauer, Victor Hesselbrock, Marc A. Schuckit, John I. Nürnberger, Tatiana Foroud, Jessica E. Salvatore, Kathleen K. Bucholz, Bernice Porjesz",
+    "abstract": "Predictive models for recovering from alcohol use disorder (AUD) and identifying related predisposition biomarkers can have a tremendous impact on addiction treatment outcomes and cost reduction. Our sample (N = 1376) included individuals of European (EA) and African (AA) ancestry from the Collaborative Study on the Genetics of Alcoholism (COGA) who were initially assessed as having AUD (DSM-5) and reassessed years later as either having AUD or in remission. To predict this difference in AUD recovery status, we analyzed the initial data using multimodal, multi-features machine learning applications including EEG source-level functional brain connectivity, Polygenic Risk Scores (PRS), medications, and demographic information. Sex and ancestry age-matched stratified analyses were performed with supervised linear Support Vector Machine application and were calculated twice, once when the ancestry was defined by self-report and once defined by genetic data. Multifeatured prediction models achieved higher accuracy scores than models based on a single domain and higher scores in male models when the ancestry was based on genetic data. The AA male group model with PRS, EEG functional connectivity, marital and employment status features achieved the highest accuracy of 86.04%. Several discriminative features were identified, including collections of PRS related to neuroticism, depression, aggression, years of education, and alcohol consumption phenotypes. Other discriminated features included being married, employed, medication, lower default mode network and fusiform connectivity, and higher insula connectivity. Results highlight the importance of increasing genetic homogeneity of analyzed groups, identifying sex, and ancestry-specific features to increase prediction scores revealing biomarkers related to AUD remission.",
+    "year": 2021,
+    "doi": "10.1038/s41398-021-01281-2",
+    "url": "https://doi.org/10.1038/s41398-021-01281-2",
+    "download_url": "https://www.nature.com/articles/s41398-021-01281-2.pdf",
+    "venue": "Translational Psychiatry",
+    "citation_count": 50,
+    "fields_of_study": [
+      "Substance Abuse Treatment and Outcomes",
+      "Alcohol Consumption and Health Effects",
+      "Genetic Associations and Epidemiology"
+    ],
+    "paper_id": "https://openalex.org/W3136951845",
+    "keywords": [
+      "Alcohol use disorder",
+      "Medicine",
+      "Clinical psychology",
+      "Machine learning",
+      "Psychiatry",
+      "Artificial intelligence",
+      "Alcohol",
+      "Computer science",
+      "Biology"
+    ]
+  },
+  {
+    "source": "CORE",
+    "title": "Preliminary prediction of individual response to electroconvulsive therapy using whole-brain functional magnetic resonance imaging data.",
+    "authors": "Abbott, Christopher C, Calhoun, Vince D, Espinoza, Randall, Jiang, Rongtao, Jones, Tom, Narr, Katherine L, Qi, Shile, Sui, Jing, Sun, Hailun, Upston, Joel, Wade, Benjamin Sc",
+    "abstract": "Electroconvulsive therapy (ECT) works rapidly and has been widely used to treat depressive disorders (DEP). However, identifying biomarkers predictive of response to ECT remains a priority to individually tailor treatment and understand treatment mechanisms. This study used a connectome-based predictive modeling (CPM) approach in 122 patients with DEP to determine if pre-ECT whole-brain functional connectivity (FC) predicts depressive rating changes and remission status after ECT (47 of 122 total subjects or 38.5% of sample), and whether pre-ECT and longitudinal changes (pre/post-ECT) in regional brain network biomarkers are associated with treatment-related changes in depression ratings. Results show the networks with the best predictive performance of ECT response were negative (anti-correlated) FC networks, which predict the post-ECT depression severity (continuous measure) with a 76.23% accuracy for remission prediction. FC networks with the greatest predictive power were concentrated in the prefrontal and temporal cortices and subcortical nuclei, and include the inferior frontal (IFG), superior frontal (SFG), superior temporal (STG), inferior temporal gyri (ITG), basal ganglia (BG), and thalamus (Tha). Several of these brain regions were also identified as nodes in the FC networks that show significant change pre-/post-ECT, but these networks were not related to treatment response. This study design has limitations regarding the longitudinal design and the absence of a control group that limit the causal inference regarding mechanism of post-treatment status. Though predictive biomarkers remained below the threshold of those recommended for potential translation, the analysis methods and results demonstrate the promise and generalizability of biomarkers for advancing personalized treatment strategies",
+    "year": 2020,
+    "doi": "10.1016/j.nicl.2019.102080",
+    "url": "https://escholarship.org/uc/item/12x366xr",
+    "download_url": "https://core.ac.uk/download/323308620.pdf",
+    "venue": null,
+    "citation_count": 0,
+    "fields_of_study": [],
+    "paper_id": "85972923",
+    "keywords": []
+  }
+]

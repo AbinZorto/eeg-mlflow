@@ -1,0 +1,241 @@
+[
+  {
+    "source": "OpenAlex",
+    "title": "About Sleep's Role in Memory",
+    "authors": "Björn Rasch, Jan Born",
+    "abstract": "Over more than a century of research has established the fact that sleep benefits the retention of memory. In this review we aim to comprehensively cover the field of \"sleep and memory\" research by providing a historical perspective on concepts and a discussion of more recent key findings. Whereas initial theories posed a passive role for sleep enhancing memories by protecting them from interfering stimuli, current theories highlight an active role for sleep in which memories undergo a process of system consolidation during sleep. Whereas older research concentrated on the role of rapid-eye-movement (REM) sleep, recent work has revealed the importance of slow-wave sleep (SWS) for memory consolidation and also enlightened some of the underlying electrophysiological, neurochemical, and genetic mechanisms, as well as developmental aspects in these processes. Specifically, newer findings characterize sleep as a brain state optimizing memory consolidation, in opposition to the waking brain being optimized for encoding of memories. Consolidation originates from reactivation of recently encoded neuronal memory representations, which occur during SWS and transform respective representations for integration into long-term memory. Ensuing REM sleep may stabilize transformed memories. While elaborated with respect to hippocampus-dependent memories, the concept of an active redistribution of memory representations from networks serving as temporary store into long-term stores might hold also for non-hippocampus-dependent memory, and even for nonneuronal, i.e., immunological memories, giving rise to the idea that the offline consolidation of memory during sleep represents a principle of long-term memory formation established in quite different physiological systems.",
+    "year": 2013,
+    "doi": "10.1152/physrev.00032.2012",
+    "url": "https://doi.org/10.1152/physrev.00032.2012",
+    "download_url": "https://www.zora.uzh.ch/id/eprint/77770/1/physiol_rev_93.pdf",
+    "venue": "Physiological Reviews",
+    "citation_count": 2738,
+    "fields_of_study": [
+      "Sleep and Wakefulness Research",
+      "Neuroscience and Neuropharmacology Research",
+      "Memory and Neural Mechanisms"
+    ],
+    "paper_id": "https://openalex.org/W2102656701",
+    "keywords": [
+      "Memory consolidation",
+      "Neuroscience",
+      "Psychology",
+      "Sleep (system call)",
+      "Long-term memory",
+      "Hippocampus",
+      "Rapid eye movement sleep",
+      "Cognitive science",
+      "Cognitive psychology",
+      "Eye movement"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Evidence-based guidelines on the therapeutic use of repetitive transcranial magnetic stimulation (rTMS): An update (2014–2018)",
+    "authors": "Jean‐Pascal Lefaucheur, André Alemán, Chris Baeken, David Benninger, Jérôme Brunelin, Vincenzo Di Lazzaro, Saša R. Filipović, Christian Grefkes, Alkomiet Hasan, Friedhelm C. Hummel, Satu K. Jääskeläinen, Berthold Langguth, Letizia Leocani, Alain Londero, Raffaele Nardone, Jean-Paul Nguyen, Thomas Nyffeler, Albino J. Oliveira‐Maia, Antonio Oliviero, Frank Padberg, Ulrich Palm, Walter Paulus, Emmanuel Poulet, Angelo Quartarone, Fady Rachid, Irena Rektorová, Símone Rossi, Hanna Sahlsten, Martin Schecklmann, David Szekely, Ulf Ziemann",
+    "abstract": "A group of European experts reappraised the guidelines on the therapeutic efficacy of repetitive transcranial magnetic stimulation (rTMS) previously published in 2014 [Lefaucheur et al., Clin Neurophysiol 2014;125:2150-206]. These updated recommendations take into account all rTMS publications, including data prior to 2014, as well as currently reviewed literature until the end of 2018. Level A evidence (definite efficacy) was reached for: high-frequency (HF) rTMS of the primary motor cortex (M1) contralateral to the painful side for neuropathic pain; HF-rTMS of the left dorsolateral prefrontal cortex (DLPFC) using a figure-of-8 or a H1-coil for depression; low-frequency (LF) rTMS of contralesional M1 for hand motor recovery in the post-acute stage of stroke. Level B evidence (probable efficacy) was reached for: HF-rTMS of the left M1 or DLPFC for improving quality of life or pain, respectively, in fibromyalgia; HF-rTMS of bilateral M1 regions or the left DLPFC for improving motor impairment or depression, respectively, in Parkinson's disease; HF-rTMS of ipsilesional M1 for promoting motor recovery at the post-acute stage of stroke; intermittent theta burst stimulation targeted to the leg motor cortex for lower limb spasticity in multiple sclerosis; HF-rTMS of the right DLPFC in posttraumatic stress disorder; LF-rTMS of the right inferior frontal gyrus in chronic post-stroke non-fluent aphasia; LF-rTMS of the right DLPFC in depression; and bihemispheric stimulation of the DLPFC combining right-sided LF-rTMS (or continuous theta burst stimulation) and left-sided HF-rTMS (or intermittent theta burst stimulation) in depression. Level A/B evidence is not reached concerning efficacy of rTMS in any other condition. The current recommendations are based on the differences reached in therapeutic efficacy of real vs. sham rTMS protocols, replicated in a sufficient number of independent studies. This does not mean that the benefit produced by rTMS inevitably reaches a level of clinical relevance.",
+    "year": 2020,
+    "doi": "10.1016/j.clinph.2019.11.002",
+    "url": "https://doi.org/10.1016/j.clinph.2019.11.002",
+    "download_url": "https://www.sciencedirect.com/science/article/am/pii/S1388245719312799?via%3Dihub",
+    "venue": "Clinical Neurophysiology",
+    "citation_count": 2140,
+    "fields_of_study": [
+      "Transcranial Magnetic Stimulation Studies",
+      "Stroke Rehabilitation and Recovery",
+      "Pain Management and Treatment"
+    ],
+    "paper_id": "https://openalex.org/W2997901555",
+    "keywords": [
+      "Transcranial magnetic stimulation",
+      "Dorsolateral prefrontal cortex",
+      "Deep transcranial magnetic stimulation",
+      "Stroke (engine)",
+      "Physical medicine and rehabilitation",
+      "Psychology",
+      "Primary motor cortex",
+      "Motor cortex",
+      "Supplementary motor area",
+      "Depression (economics)"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Harnessing neuroplasticity for clinical applications",
+    "authors": "Steven C. Cramer, Mriganka Sur, Bruce H. Dobkin, Charles P. O’Brien, Terence D. Sanger, John Q. Trojanowski, Judith M. Rumsey, Ramona Hicks, Judy L. Cameron, David Chen, Wen Chen, Leonardo G. Cohen, C. deCharms, C. J. Duffy, Guinevere F. Eden, E. E. Fetz, Rosemarie Filart, M C Freund, Steven Grant, Suzanne N. Haber, Peter W. Kalivas, Bryan Kolb, Arthur F. Kramer, Michael P. Lynch, Helen S. Mayberg, Patrick S. McQuillen, Ralph Nitkin, A. Pascual–Leone, Patricia A. Reuter‐Lorenz, Nicholas D. Schiff, Anu Sharma, L. Shekim, Michael P. Stryker, Edith V. Sullivan, Sophia Vinogradov",
+    "abstract": "Neuroplasticity can be defined as the ability of the nervous system to respond to intrinsic or extrinsic stimuli by reorganizing its structure, function and connections. Major advances in the understanding of neuroplasticity have to date yielded few established interventions. To advance the translation of neuroplasticity research towards clinical applications, the National Institutes of Health Blueprint for Neuroscience Research sponsored a workshop in 2009. Basic and clinical researchers in disciplines from central nervous system injury/stroke, mental/addictive disorders, paediatric/developmental disorders and neurodegeneration/ageing identified cardinal examples of neuroplasticity, underlying mechanisms, therapeutic implications and common denominators. Promising therapies that may enhance training-induced cognitive and motor learning, such as brain stimulation and neuropharmacological interventions, were identified, along with questions of how best to use this body of information to reduce human disability. Improved understanding of adaptive mechanisms at every level, from molecules to synapses, to networks, to behaviour, can be gained from iterative collaborations between basic and clinical researchers. Lessons can be gleaned from studying fields related to plasticity, such as development, critical periods, learning and response to disease. Improved means of assessing neuroplasticity in humans, including biomarkers for predicting and monitoring treatment response, are needed. Neuroplasticity occurs with many variations, in many forms, and in many contexts. However, common themes in plasticity that emerge across diverse central nervous system conditions include experience dependence, time sensitivity and the importance of motivation and attention. Integration of information across disciplines should enhance opportunities for the translation of neuroplasticity and circuit retraining research into effective clinical therapies.",
+    "year": 2011,
+    "doi": "10.1093/brain/awr039",
+    "url": "https://doi.org/10.1093/brain/awr039",
+    "download_url": "https://academic.oup.com/brain/article-pdf/134/6/1591/1052566/awr039.pdf",
+    "venue": "Brain",
+    "citation_count": 1197,
+    "fields_of_study": [
+      "Attention Deficit Hyperactivity Disorder",
+      "Transcranial Magnetic Stimulation Studies",
+      "EEG and Brain-Computer Interfaces"
+    ],
+    "paper_id": "https://openalex.org/W2107022859",
+    "keywords": [
+      "Neuroplasticity",
+      "Neuroscience",
+      "Psychology",
+      "Psychological intervention",
+      "Brain stimulation",
+      "Cognition",
+      "Medicine",
+      "Psychiatry",
+      "Stimulation"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Transcranial Alternating Current Stimulation Enhances Individual Alpha Activity in Human EEG",
+    "authors": "Tino Zaehle, Stefan Rach, Christoph S. Herrmann",
+    "abstract": "Non-invasive electrical stimulation of the human cortex by means of transcranial direct current stimulation (tDCS) has been instrumental in a number of important discoveries in the field of human cortical function and has become a well-established method for evaluating brain function in healthy human participants. Recently, transcranial alternating current stimulation (tACS) has been introduced to directly modulate the ongoing rhythmic brain activity by the application of oscillatory currents on the human scalp. Until now the efficiency of tACS in modulating rhythmic brain activity has been indicated only by inference from perceptual and behavioural consequences of electrical stimulation. No direct electrophysiological evidence of tACS has been reported. We delivered tACS over the occipital cortex of 10 healthy participants to entrain the neuronal oscillatory activity in their individual alpha frequency range and compared results with those from a separate group of participants receiving sham stimulation. The tACS but not the sham stimulation elevated the endogenous alpha power in parieto-central electrodes of the electroencephalogram. Additionally, in a network of spiking neurons, we simulated how tACS can be affected even after the end of stimulation. The results show that spike-timing-dependent plasticity (STDP) selectively modulates synapses depending on the resonance frequencies of the neural circuits that they belong to. Thus, tACS influences STDP which in turn results in aftereffects upon neural activity.The present findings are the first direct electrophysiological evidence of an interaction of tACS and ongoing oscillatory activity in the human cortex. The data demonstrate the ability of tACS to specifically modulate oscillatory brain activity and show its potential both at fostering knowledge on the functional significance of brain oscillations and for therapeutic application.",
+    "year": 2010,
+    "doi": "10.1371/journal.pone.0013766",
+    "url": "https://doi.org/10.1371/journal.pone.0013766",
+    "download_url": "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0013766&type=printable",
+    "venue": "PLoS ONE",
+    "citation_count": 813,
+    "fields_of_study": [
+      "Neural dynamics and brain function",
+      "Transcranial Magnetic Stimulation Studies",
+      "EEG and Brain-Computer Interfaces"
+    ],
+    "paper_id": "https://openalex.org/W2004482271",
+    "keywords": [
+      "Transcranial alternating current stimulation",
+      "Neuroscience",
+      "Transcranial direct-current stimulation",
+      "Stimulation",
+      "Electroencephalography",
+      "Human brain",
+      "Brain stimulation",
+      "Brain activity and meditation",
+      "Electrophysiology",
+      "Psychology"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Transcranial alternating current stimulation: a review of the underlying mechanisms and modulation of cognitive processes",
+    "authors": "Christoph S. Herrmann, Stefan Rach, Toralf Neuling, Daniel Strüber",
+    "abstract": "Brain oscillations of different frequencies have been associated with a variety of cognitive functions. Convincing evidence supporting those associations has been provided by studies using intracranial stimulation, pharmacological interventions and lesion studies. The emergence of novel non-invasive brain stimulation techniques like repetitive transcranial magnetic stimulation (rTMS) and transcranial alternating current stimulation (tACS) now allows to modulate brain oscillations directly. Particularly, tACS offers the unique opportunity to causally link brain oscillations of a specific frequency range to cognitive processes, because it uses sinusoidal currents that are bound to one frequency only. Using tACS allows to modulate brain oscillations and in turn to influence cognitive processes, thereby demonstrating the causal link between the two. Here, we review findings about the physiological mechanism of tACS and studies that have used tACS to modulate basic motor and sensory processes as well as higher cognitive processes like memory, ambiguous perception, and decision making.",
+    "year": 2013,
+    "doi": "10.3389/fnhum.2013.00279",
+    "url": "https://doi.org/10.3389/fnhum.2013.00279",
+    "download_url": "https://www.frontiersin.org/articles/10.3389/fnhum.2013.00279/pdf",
+    "venue": "Frontiers in Human Neuroscience",
+    "citation_count": 806,
+    "fields_of_study": [
+      "Neural dynamics and brain function",
+      "Neural and Behavioral Psychology Studies",
+      "EEG and Brain-Computer Interfaces"
+    ],
+    "paper_id": "https://openalex.org/W2104743992",
+    "keywords": [
+      "Neuroscience",
+      "Hum",
+      "Stimulation",
+      "Transcranial alternating current stimulation",
+      "Transcranial direct-current stimulation",
+      "Cognition",
+      "Modulation (music)",
+      "Brain stimulation",
+      "Psychology",
+      "Medicine"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Cortico-Striatal-Thalamic Loop Circuits of the Salience Network: A Central Pathway in Psychiatric Disease and Treatment",
+    "authors": "Sarah K. Peters, Katharine Dunlop, Jonathan Downar",
+    "abstract": "The salience network (SN) plays a central role in cognitive control by integrating sensory input to guide attention, attend to motivationally salient stimuli and recruit appropriate functional brain-behavior networks to modulate behavior. Mounting evidence suggests that disturbances in SN function underlie abnormalities in cognitive control and may be a common etiology underlying many psychiatric disorders. Such functional and anatomical abnormalities have been recently apparent in studies and meta-analyses of psychiatric illness using functional magnetic resonance imaging (fMRI) and voxel-based morphometry (VBM). Of particular importance, abnormal structure and function in major cortical nodes of the SN, the dorsal anterior cingulate cortex (dACC) and anterior insula (AI), have been observed as a common neurobiological substrate across a broad spectrum of psychiatric disorders. In addition to cortical nodes of the SN, the network's associated subcortical structures, including the dorsal striatum, mediodorsal thalamus and dopaminergic brainstem nuclei, comprise a discrete regulatory loop circuit. The SN's cortico-striato-thalamo-cortical loop increasingly appears to be central to mechanisms of cognitive control, as well as to a broad spectrum of psychiatric illnesses and their available treatments. Functional imbalances within the SN loop appear to impair cognitive control, and specifically may impair self-regulation of cognition, behavior and emotion, thereby leading to symptoms of psychiatric illness. Furthermore, treating such psychiatric illnesses using invasive or non-invasive brain stimulation techniques appears to modulate SN cortical-subcortical loop integrity, and these effects may be central to the therapeutic mechanisms of brain stimulation treatments in many psychiatric illnesses. Here, we review clinical and experimental evidence for abnormalities in SN cortico-striatal-thalamic loop circuits in major depression, substance use disorders (SUD), anxiety disorders, schizophrenia and eating disorders (ED). We also review emergent therapeutic evidence that novel invasive and non-invasive brain stimulation treatments may exert therapeutic effects by normalizing abnormalities in the SN loop, thereby restoring the capacity for cognitive control. Finally, we consider a series of promising directions for future investigations on the role of SN cortico-striatal-thalamic loop circuits in the pathophysiology and treatment of psychiatric disorders.",
+    "year": 2016,
+    "doi": "10.3389/fnsys.2016.00104",
+    "url": "https://doi.org/10.3389/fnsys.2016.00104",
+    "download_url": "https://www.frontiersin.org/articles/10.3389/fnsys.2016.00104/pdf",
+    "venue": "Frontiers in Systems Neuroscience",
+    "citation_count": 605,
+    "fields_of_study": [
+      "Functional Brain Connectivity Studies",
+      "Transcranial Magnetic Stimulation Studies",
+      "Neural dynamics and brain function"
+    ],
+    "paper_id": "https://openalex.org/W2568027254",
+    "keywords": [
+      "Neuroscience",
+      "Deep brain stimulation",
+      "Psychology",
+      "Functional magnetic resonance imaging",
+      "Anterior cingulate cortex",
+      "Ventral striatum",
+      "Cognition",
+      "Thalamus",
+      "Dopaminergic",
+      "Schizophrenia (object-oriented programming)"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Prefrontal Transcranial Direct Current Stimulation Changes Connectivity of Resting-State Networks during fMRI",
+    "authors": "Daniel Keeser, Thomas Meindl, Julie Bor, Ulrich Palm, Oliver Pogarell, Christoph Mulert, Jérôme Brunelin, Hans‐Jürgen Möller, Maximilian F. Reiser, Frank Padberg",
+    "abstract": "Transcranial direct current stimulation (tDCS) has been proposed for experimental and therapeutic modulation of regional brain function. Specifically, anodal tDCS of the dorsolateral prefrontal cortex (DLPFC) together with cathodal tDCS of the supraorbital region have been associated with improvement of cognition and mood, and have been suggested for the treatment of several neurological and psychiatric disorders. Although modeled mathematically, the distribution, direction, and extent of tDCS-mediated effects on brain physiology are not well understood. The current study investigates whether tDCS of the human prefrontal cortex modulates resting-state network (RSN) connectivity measured by functional magnetic resonance imaging (fMRI). Thirteen healthy subjects underwent real and sham tDCS in random order on separate days. tDCS was applied for 20 min at 2 mA with the anode positioned over the left DLPFC and the cathode over the right supraorbital region. Patterns of resting-state brain connectivity were assessed before and after tDCS with 3 T fMRI, and changes were analyzed for relevant networks related to the stimulation-electrode localizations. At baseline, four RSNs were detected, corresponding to the default mode network (DMN), the left and right frontal-parietal networks (FPNs) and the self-referential network. After real tDCS and compared with sham tDCS, significant changes of regional brain connectivity were found for the DMN and the FPNs both close to the primary stimulation site and in connected brain regions. These findings show that prefrontal tDCS modulates resting-state functional connectivity in distinct functional networks of the human brain.",
+    "year": 2011,
+    "doi": "10.1523/jneurosci.0542-11.2011",
+    "url": "https://doi.org/10.1523/jneurosci.0542-11.2011",
+    "download_url": "https://www.jneurosci.org/content/jneuro/31/43/15284.full.pdf",
+    "venue": "Journal of Neuroscience",
+    "citation_count": 590,
+    "fields_of_study": [
+      "Functional Brain Connectivity Studies",
+      "Transcranial Magnetic Stimulation Studies",
+      "Neural and Behavioral Psychology Studies"
+    ],
+    "paper_id": "https://openalex.org/W1990338088",
+    "keywords": [
+      "Transcranial direct-current stimulation",
+      "Resting state fMRI",
+      "Neuroscience",
+      "Functional magnetic resonance imaging",
+      "Prefrontal cortex",
+      "Default mode network",
+      "Psychology",
+      "Functional connectivity",
+      "Brain stimulation",
+      "Dorsolateral prefrontal cortex"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Transcranial Direct Current Stimulation (tDCS): A Beginner's Guide for Design and Implementation",
+    "authors": "Hayley Thair, Amy L. Holloway, Roger Newport, Alastair D. Smith",
+    "abstract": "Transcranial direct current stimulation (tDCS) is a popular brain stimulation method that is used to modulate cortical excitability, producing facilitatory or inhibitory effects upon a variety of behaviors. There is, however, a current lack of consensus between studies, with many results suggesting that polarity-specific effects are difficult to obtain. This article explores some of these differences and highlights the experimental parameters that may underlie their occurrence. We provide a general, practical snapshot of tDCS methodology, including what it is used for, how to use it, and considerations for designing an effective and safe experiment. Our aim is to equip researchers who are new to tDCS with the essential knowledge so that they can make informed and well-rounded decisions when designing and running successful experiments. By summarizing the varied approaches, stimulation parameters, and outcomes, this article should help inform future tDCS research in a variety of fields.",
+    "year": 2017,
+    "doi": "10.3389/fnins.2017.00641",
+    "url": "https://doi.org/10.3389/fnins.2017.00641",
+    "download_url": "https://www.frontiersin.org/articles/10.3389/fnins.2017.00641/pdf",
+    "venue": "Frontiers in Neuroscience",
+    "citation_count": 504,
+    "fields_of_study": [
+      "Transcranial Magnetic Stimulation Studies",
+      "Neural and Behavioral Psychology Studies",
+      "EEG and Brain-Computer Interfaces"
+    ],
+    "paper_id": "https://openalex.org/W2769021531",
+    "keywords": [
+      "Transcranial direct-current stimulation",
+      "Brain stimulation",
+      "Neuroscience",
+      "Variety (cybernetics)",
+      "Stimulation",
+      "Computer science",
+      "Psychology",
+      "Snapshot (computer storage)",
+      "Cognitive psychology",
+      "Artificial intelligence"
+    ]
+  }
+]

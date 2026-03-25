@@ -1,0 +1,257 @@
+[
+  {
+    "source": "OpenAlex",
+    "title": "EEG biomarkers in major depressive disorder: Discriminative power and prediction of treatment response",
+    "authors": "Sebastian Olbrich, Martijn Arns",
+    "abstract": "Major depressive disorder (MDD) has high population prevalence and is associated with substantial impact on quality of life, not least due to an unsatisfactory time span of sometimes several weeks from initiation of treatment to clinical response. Therefore extensive research focused on the identification of cost-effective and widely available electroencephalogram (EEG)-based biomarkers that not only allow distinguishing between patients and healthy controls but also have predictive value for treatment response for a variety of treatments. In this comprehensive overview on EEG research on MDD, biomarkers that are either assessed at baseline or during the early course of treatment and are helpful in discriminating patients from healthy controls and assist in predicting treatment outcome are reviewed, covering recent decades up to now. Reviewed markers include quantitative EEG (QEEG) measures, connectivity measures, EEG vigilance-based measures, sleep-EEG-related measures and event-related potentials (ERPs). Further, the value and limitations of these different markers are discussed. Finally, the need for integrated models of brain function and the necessity for standardized procedures in EEG biomarker research are highlighted to enhance future research in this field.",
+    "year": 2013,
+    "doi": "10.3109/09540261.2013.816269",
+    "url": "https://doi.org/10.3109/09540261.2013.816269",
+    "download_url": null,
+    "venue": "International Review of Psychiatry",
+    "citation_count": 350,
+    "fields_of_study": [
+      "EEG and Brain-Computer Interfaces",
+      "Functional Brain Connectivity Studies",
+      "Heart Rate Variability and Autonomic Control"
+    ],
+    "paper_id": "https://openalex.org/W2130140789",
+    "keywords": [
+      "Electroencephalography",
+      "Vigilance (psychology)",
+      "Biomarker",
+      "Population",
+      "Psychology",
+      "Discriminative model",
+      "Major depressive disorder",
+      "Medicine",
+      "Audiology",
+      "Clinical psychology"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Concomitant BDNF and sleep slow wave changes indicate ketamine-induced plasticity in major depressive disorder",
+    "authors": "Wallace C. Duncan, Simone Sarasso, Fabio Ferrarelli, Jessica Selter, Brady A. Riedner, Nadia S. Hejazi, Peixiong Yuan, Nancy E. Brutsché, Husseini K. Manji, Giulio Tononi, Carlos A. Zarate",
+    "abstract": "The N-methyl-d-aspartate (NMDA) receptor antagonist ketamine has rapid antidepressant effects in treatment-resistant major depressive disorder (MDD). In rats, ketamine selectively increased electroencephalogram (EEG) slow wave activity (SWA) during non-rapid eye movement (REM) sleep and altered central brain-derived neurotrophic factor (BDNF) expression. Taken together, these findings suggest that higher SWA and BDNF levels may respectively represent electrophysiological and molecular correlates of mood improvement following ketamine treatment. This study investigated the acute effects of a single ketamine infusion on depressive symptoms, EEG SWA, individual slow wave parameters (surrogate markers of central synaptic plasticity) and plasma BDNF (a peripheral marker of plasticity) in 30 patients with treatment-resistant MDD. Montgomery-Åsberg Depression Rating Scale scores rapidly decreased following ketamine. Compared to baseline, BDNF levels and early sleep SWA (during the first non-REM episode) increased after ketamine. The occurrence of high amplitude waves increased during early sleep, accompanied by an increase in slow wave slope, consistent with increased synaptic strength. Changes in BDNF levels were proportional to changes in EEG parameters. Intriguingly, this link was present only in patients who responded to ketamine treatment, suggesting that enhanced synaptic plasticity - as reflected by increased SWA, individual slow wave parameters and plasma BDNF - is part of the physiological mechanism underlying the rapid antidepressant effects of NMDA antagonists. Further studies are required to confirm the link found here between behavioural and synaptic changes, as well as to test the reliability of these central and peripheral biomarkers of rapid antidepressant response.",
+    "year": 2012,
+    "doi": "10.1017/s1461145712000545",
+    "url": "https://doi.org/10.1017/s1461145712000545",
+    "download_url": "https://academic.oup.com/ijnp/article-pdf/16/2/301/30134597/16-2-301.pdf",
+    "venue": "The International Journal of Neuropsychopharmacology",
+    "citation_count": 242,
+    "fields_of_study": [
+      "Treatment of Major Depression",
+      "Tryptophan and brain disorders",
+      "Neuroscience and Neuropharmacology Research"
+    ],
+    "paper_id": "https://openalex.org/W2108898741",
+    "keywords": [
+      "Antidepressant",
+      "Ketamine",
+      "Brain-derived neurotrophic factor",
+      "Synaptic plasticity",
+      "Psychology",
+      "NMDA receptor",
+      "Major depressive disorder",
+      "Neurotrophic factors",
+      "Neuroscience",
+      "Neuroplasticity"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Leveraging Machine Learning Approaches for Predicting Antidepressant Treatment Response Using Electroencephalography (EEG) and Clinical Data",
+    "authors": "Natalia Jaworska, Sara de la Salle, Mohamed Hamza Ibrahim, Pierre Blier, Verner Knott",
+    "abstract": "<b>Background:</b> Individuals with major depressive disorder (MDD) vary in their response to antidepressants. However, identifying objective biomarkers, prior to or early in the course of treatment that can predict antidepressant efficacy, remains a challenge. <b>Methods:</b> Individuals with MDD participated in a 12-week antidepressant pharmacotherapy trial. Electroencephalographic (EEG) data was collected before and 1 week post-treatment initiation in 51 patients. Response status at week 12 was established with the Montgomery-Asberg Depression Scale (MADRS), with a ≥50% decrease characterizing responders (<i>N</i> = 27/24 responders/non-responders). We used a machine learning (ML)-approach for predicting response status. We focused on Random Forests, though other ML methods were compared. First, we used a tree-based estimator to select a relatively small number of significant features from: (a) demographic/clinical data (age, sex, individual item/total MADRS scores at baseline, week 1, change scores); (b) scalp-level EEG power; (c) source-localized current density (via exact low-resolution electromagnetic tomography [eLORETA] software). Second, we applied kernel principal component analysis to reduce and map important features. Third, a set of ML models were constructed to classify response outcome based on mapped features. For each dataset, predictive features were extracted, followed by a model of all predictive features, and finally by a model of the <i>most</i> predictive features. <b>Results:</b> Fifty eLORETA features were predictive of response (across bands, both time-points); alpha<sub>1</sub>/theta eLORETA features showed the highest predictive value. Eighty-eight scalp EEG features were predictive of response (across bands, both time-points), with theta/alpha<sub>2</sub> being most predictive. Clinical/demographic data consisted of 31 features, with the most important being week 1 \"concentration difficulty\" scores. When all features were included into one model, its predictive utility was high (88% accuracy). When the <i>most</i> important features were extracted in the final model, 12 predictive features emerged (78% accuracy), including baseline scalp-EEG frontopolar theta, parietal alpha<sub>2</sub> and frontopolar alpha<sub>1</sub>. <b>Conclusions:</b> These findings suggest that ML models of pre- and early treatment-emergent EEG profiles and clinical features can serve as tools for predicting antidepressant response. While this must be replicated using large independent samples, it lays the groundwork for research on personalized, \"biomarker\"-based treatment approaches.",
+    "year": 2019,
+    "doi": "10.3389/fpsyt.2018.00768",
+    "url": "https://doi.org/10.3389/fpsyt.2018.00768",
+    "download_url": null,
+    "venue": "Frontiers in Psychiatry",
+    "citation_count": 95,
+    "fields_of_study": [
+      "Functional Brain Connectivity Studies",
+      "Treatment of Major Depression",
+      "EEG and Brain-Computer Interfaces"
+    ],
+    "paper_id": "https://openalex.org/W2909091936",
+    "keywords": [
+      "Electroencephalography",
+      "Antidepressant",
+      "Psychology",
+      "Computer science",
+      "Machine learning",
+      "Artificial intelligence",
+      "Neuroscience",
+      "Psychiatry",
+      "Anxiety"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "The two decades brainclinics research archive for insights in neurophysiology (TDBRAIN) database",
+    "authors": "Hanneke van Dijk, Guido van Wingen, Damiaan Denys, Sebastian Olbrich, Rosalinde van Ruth, Martijn Arns",
+    "abstract": "In neuroscience, electroencephalography (EEG) data is often used to extract features (biomarkers) to identify neurological or psychiatric dysfunction or to predict treatment response. At the same time neuroscience is becoming more data-driven, made possible by computational advances. In support of biomarker development and methodologies such as training Artificial Intelligent (AI) networks we present the extensive Two Decades-Brainclinics Research Archive for Insights in Neurophysiology (TDBRAIN) EEG database. This clinical lifespan database (5-89 years) contains resting-state, raw EEG-data complemented with relevant clinical and demographic data of a heterogenous collection of 1274 psychiatric patients collected between 2001 to 2021. Main indications included are Major Depressive Disorder (MDD; N = 426), attention deficit hyperactivity disorder (ADHD; N = 271), Subjective Memory Complaints (SMC: N = 119) and obsessive-compulsive disorder (OCD; N = 75). Demographic-, personality- and day of measurement data are included in the database. Thirty percent of clinical and treatment outcome data will remain blinded for prospective validation and replication purposes. The TDBRAIN database and code are available on the Brainclinics Foundation website at www.brainclinics.com/resources and on Synapse at www.synapse.org/TDBRAIN .",
+    "year": 2022,
+    "doi": "10.1038/s41597-022-01409-z",
+    "url": "https://doi.org/10.1038/s41597-022-01409-z",
+    "download_url": "https://www.nature.com/articles/s41597-022-01409-z.pdf",
+    "venue": "Scientific Data",
+    "citation_count": 88,
+    "fields_of_study": [
+      "Functional Brain Connectivity Studies",
+      "EEG and Brain-Computer Interfaces",
+      "Attention Deficit Hyperactivity Disorder"
+    ],
+    "paper_id": "https://openalex.org/W4282928097",
+    "keywords": [
+      "Electroencephalography",
+      "Clinical neurophysiology",
+      "Database",
+      "Replication (statistics)",
+      "Major depressive disorder",
+      "Neurophysiology",
+      "Psychiatry",
+      "Psychology",
+      "Medicine",
+      "Computer science"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Technical and clinical considerations for electroencephalography-based biomarkers for major depressive disorder",
+    "authors": "Leif Simmatis, Emma E. Russo, Joseph Geraci, Irene E. Harmsen, Nardin Samuel",
+    "abstract": "Major depressive disorder (MDD) is a prevalent and debilitating psychiatric disease that leads to substantial loss of quality of life. There has been little progress in developing new MDD therapeutics due to a poor understanding of disease heterogeneity and individuals' responses to treatments. Electroencephalography (EEG) is poised to improve this, owing to the ease of large-scale data collection and the advancement of computational methods to address artifacts. This review summarizes the viability of EEG for developing brain-based biomarkers in MDD. We examine the properties of well-established EEG preprocessing pipelines and consider factors leading to the discovery of sensitive and reliable biomarkers.",
+    "year": 2023,
+    "doi": "10.1038/s44184-023-00038-7",
+    "url": "https://doi.org/10.1038/s44184-023-00038-7",
+    "download_url": "https://www.nature.com/articles/s44184-023-00038-7.pdf",
+    "venue": "npj Mental Health Research",
+    "citation_count": 33,
+    "fields_of_study": [
+      "Functional Brain Connectivity Studies",
+      "Neural dynamics and brain function",
+      "EEG and Brain-Computer Interfaces"
+    ],
+    "paper_id": "https://openalex.org/W4387936925",
+    "keywords": [
+      "Electroencephalography",
+      "Major depressive disorder",
+      "Disease",
+      "Medicine",
+      "Psychiatry",
+      "Mood",
+      "Internal medicine"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "EEG Biomarkers to Predict Response to Sertraline and Placebo Treatment in Major Depressive Disorder",
+    "authors": "Thomas Oakley, Jonathan Coskuner, Andrew Cadwallader, Maryam Ravan, Gary Hasey",
+    "abstract": "The proposed MLA may provide an inexpensive, non-invasive, and readily available tool that clinicians may use to enhance treatment effectiveness, accelerate time to recovery, reduce personal suffering, and decrease treatment costs.",
+    "year": 2022,
+    "doi": "10.1109/tbme.2022.3204861",
+    "url": "https://doi.org/10.1109/tbme.2022.3204861",
+    "download_url": null,
+    "venue": "IEEE Transactions on Biomedical Engineering",
+    "citation_count": 18,
+    "fields_of_study": [
+      "Functional Brain Connectivity Studies",
+      "EEG and Brain-Computer Interfaces",
+      "Neural dynamics and brain function"
+    ],
+    "paper_id": "https://openalex.org/W4295308278",
+    "keywords": [
+      "Sertraline",
+      "Placebo",
+      "Major depressive disorder",
+      "Electroencephalography",
+      "Placebo response",
+      "Population",
+      "Antidepressant",
+      "Medicine",
+      "Psychiatry",
+      "Psychology"
+    ]
+  },
+  {
+    "source": "Semantic Scholar",
+    "title": "N100 as a response prediction biomarker for accelerated 1 Hz right DLPFC-rTMS in major depression.",
+    "authors": "J. Sheen, F. Mazza, D. Momi, J. Miron, Farrokh Mansouri, Thomas Russell, Ryan Zhou, M. Hyde, L. Fox, Helena Voetterl, E. B. Assi, Z. Daskalakis, D. Blumberger, John D. Griffiths, Jonathan Downar",
+    "abstract": "BACKGROUND AND OBJECTIVE\nRepetitive transcranial magnetic stimulation (rTMS) is a safe and effective treatment for major depressive disorder (MDD); however, this treatment currently lacks reliable biomarkers of treatment response. TMS-evoked potentials (TEPs), measured using TMS-electroencephalography (TMS-EEG), have been suggested as potential biomarker candidates, with the N100 peak being one of the most promising. This study investigated the association between baseline N100 amplitude and 1 Hz right dorsolateral prefrontal cortex (R-DLPFC) accelerated rTMS (arTMS) treatment in MDD.\n\n\nMETHODS\nBaseline TMS-EEG sessions were performed for 23 MDD patients. All patients then underwent 40 sessions of 1 Hz R-DLPFC (F4) arTMS over 5 days and a follow-up TMS-EEG session one week after the end of theses arTMS sessions.\n\n\nRESULTS\nBaseline N100 amplitude at F4 showed a strong positive association (p < .001) with treatment outcome. The association between the change in N100 amplitude (baseline to follow-up) and treatment outcome did not remain significant after Bonferroni correction (p = .06, corrected; p = .03, uncorrected). Furthermore, treatment responders had a significantly larger mean baseline F4 TEP amplitude during the N100 time frame compared to non-responders (p < .001). Topographically, after Bonferroni correction, F4 is the only electrode at which its baseline N100 amplitude showed a significant positive association (p < .001) with treatment outcome.\n\n\nLIMITATIONS\nLack of control group and auditory masking.\n\n\nCONCLUSION\nBaseline N100 amplitude showed a strong association with treatment outcome and thus demonstrated great potential to be utilized as a cost-effective and widely adoptable biomarker of rTMS treatment in MDD.",
+    "year": 2024,
+    "doi": "10.1016/j.jad.2024.07.131",
+    "url": "https://www.semanticscholar.org/paper/c0dabdc70010a5fb8ea6f2546d37fe9e83a13071",
+    "download_url": "",
+    "venue": "Journal of Affective Disorders",
+    "citation_count": 10,
+    "fields_of_study": [
+      "Medicine"
+    ],
+    "paper_id": "c0dabdc70010a5fb8ea6f2546d37fe9e83a13071",
+    "keywords": []
+  },
+  {
+    "source": "CORE",
+    "title": "Guidelines for the recording and evaluation of pharmaco-EEG data in man: the International Pharmaco-EEG Society (IPEG)",
+    "authors": "BABILONI, CLAUDIO, Boeijinga PH, Brunovsky M, Drinkenburg WH, Ffytche DH, Freeman J, Hegerl U, Hirata K, IPEG Pharmaco EEG Guidelines C.o.m.m.i.t.t.e.e. Collaborators, Jobert M, Kinoshita T, Knott VJ, Lopes Da Silva FH, Matousek M, Mucci A, Nottage JF, Olbrich S, Prichep LS, Ruigt GS, Saletu B, Stancak A, Strik WK, van Gerven JM, Wilson FJ, Wise RG",
+    "abstract": "The International Pharmaco-EEG Society (IPEG) presents updated guidelines summarising the requirements for the recording and computerised evaluation of pharmaco-EEG data in man. Since the publication of the first pharmaco-EEG guidelines in 1982, technical and data processing methods have advanced steadily, thus enhancing data quality and expanding the palette of tools available to investigate the action of drugs on the central nervous system (CNS), determine the pharmacokinetic and pharmacodynamic properties of novel therapeutics and evaluate the CNS penetration or toxicity of compounds. However, a review of the literature reveals inconsistent operating procedures from one study to another. While this fact does not invalidate results per se, the lack of standardisation constitutes a regrettable shortcoming, especially in the context of drug development programmes. Moreover, this shortcoming hampers reliable comparisons between outcomes of studies from different laboratories and hence also prevents pooling of data which is a requirement for sufficiently powering the validation of novel analytical algorithms and EEG-based biomarkers. The present updated guidelines reflect the consensus of a global panel of EEG experts and are intended to assist investigators using pharmaco-EEG in clinical research, by providing clear and concise recommendations and thereby enabling standardisation of methodology and facilitating comparability of data across laboratories",
+    "year": 2012,
+    "doi": "10.1159/000343478",
+    "url": "https://iris.uniroma1.it/bitstream/11573/802874/1/Jobert_Guidelines_2012.pdf",
+    "download_url": "https://core.ac.uk/download/54522901.pdf",
+    "venue": null,
+    "citation_count": 0,
+    "fields_of_study": [],
+    "paper_id": "30330986",
+    "keywords": []
+  },
+  {
+    "source": "CORE",
+    "title": "Protocol for a randomized controlled trial examining multilevel prediction of response to behavioral activation and exposure-based therapy for generalized anxiety disorder.",
+    "authors": "Abelson, J, Akeman, E, Aupperle, Robin L, Bodurka, J, Clausen, AN, Cosgrove, KT, Craske, MG, Kirlic, N, Martell, C, Mathis, B, McDermott, TJ, Paulus, M, Santiago, J, Thompson, WK, Wolitzky-Taylor, K",
+    "abstract": "BACKGROUND:Only 40-60% of patients with generalized anxiety disorder experience long-lasting improvement with gold standard psychosocial interventions. Identifying neurobehavioral factors that predict treatment success might provide specific targets for more individualized interventions, fostering more optimal outcomes and bringing us closer to the goal of \"personalized medicine.\" Research suggests that reward and threat processing (approach/avoidance behavior) and cognitive control may be important for understanding anxiety and comorbid depressive disorders and may have relevance to treatment outcomes. This study was designed to determine whether approach-avoidance behaviors and associated neural responses moderate treatment response to exposure-based versus behavioral activation therapy for generalized anxiety disorder. METHODS/DESIGN:We are conducting a randomized controlled trial involving two 10-week group-based interventions: exposure-based therapy or behavioral activation therapy. These interventions focus on specific and unique aspects of threat and reward processing, respectively. Prior to and after treatment, participants are interviewed and undergo behavioral, biomarker, and neuroimaging assessments, with a focus on approach and avoidance processing and decision-making. Primary analyses will use mixed models to examine whether hypothesized approach, avoidance, and conflict arbitration behaviors and associated neural responses at baseline moderate symptom change with treatment, as assessed using the Generalized Anxiety Disorder-7 item scale. Exploratory analyses will examine additional potential treatment moderators and use data reduction and machine learning methods. DISCUSSION:This protocol provides a framework for how studies may be designed to move the field toward neuroscience-informed and personalized psychosocial treatments. The results of this trial will have implications for approach-avoidance processing in generalized anxiety disorder, relationships between levels of analysis (i.e., behavioral, neural), and predictors of behavioral therapy outcome. TRIAL REGISTRATION:The study was retrospectively registered within 21 days of first participant enrollment in accordance with FDAAA 801 with ClinicalTrials.gov, NCT02807480. Registered on June 21, 2016, before results",
+    "year": 2020,
+    "doi": "10.21203/rs.2.13364/v2",
+    "url": "https://escholarship.org/uc/item/6cb012mk",
+    "download_url": "https://core.ac.uk/download/323065332.pdf",
+    "venue": null,
+    "citation_count": 0,
+    "fields_of_study": [],
+    "paper_id": "85859800",
+    "keywords": []
+  },
+  {
+    "source": "Semantic Scholar",
+    "title": "Prediction of rTMS Treatment Response in Depression Using a Frequency-Based EEG Biomarker",
+    "authors": "Ali Asadi Zeidabadi, Saeid Rashidi",
+    "abstract": "Major depressive disorder (MDD) is a leading cause of disability worldwide, and a significant proportion of patients do not respond to standard pharmacological and psychotherapeutic treatments. Repetitive transcranial magnetic stimulation (rTMS) provides a non-invasive neuromodulatory therapy for treatment-resistant depression (TRD); however, the absence of reliable biomarkers limits its precision. In this study, resting-state EEG was recorded prior to treatment from 80 MDD patients undergoing a 20-session rTMS protocol. Spectral features across canonical frequency bands were extracted from 19 scalp electrodes, and a regularized feature selection technique identified a single high-frequency component at electrode F4 as the primary discriminator between responders (R) and non-responders (NR). This feature was normalized relative to an empirically derived reference cohort of optimal R to create a differential index. Combined with Support Vector Machine (SVM) and k-Nearest Neighbor (k-NN) classifiers under leave-one-out cross-validation, this index separated R from NR with 100% accuracy. These findings indicate that a succinct, interpretable spectral marker can predict individual rTMS outcomes and may inform personalized neuromodulation strategies in future studies.",
+    "year": 2025,
+    "doi": "10.1109/ICCKE68588.2025.11273345",
+    "url": "https://www.semanticscholar.org/paper/fa7b0c55f517ebfbaa6af5be40ba57129e5d87f2",
+    "download_url": "",
+    "venue": "International Conference on Computer and Knowledge Engineering",
+    "citation_count": 0,
+    "fields_of_study": [],
+    "paper_id": "fa7b0c55f517ebfbaa6af5be40ba57129e5d87f2",
+    "keywords": []
+  },
+  {
+    "source": "Semantic Scholar",
+    "title": "Theta-cordance as a biomarker of treatment response to intermittent theta burst stimulation in patients with treatment-resistant depression.",
+    "authors": "Andreas Reissmann, Maximilian Rupprecht, B. Langguth, Johanna Rischer, S. Schoisswohl",
+    "abstract": "OBJECTIVE\nTo test whether baseline or treatment-related changes in prefrontal theta cordance are associated with clinical outcome after intermittent theta burst stimulation (iTBS) for major depressive disorder (MDD).\n\n\nMETHODS\nRetrospective analysis of 30 inpatients receiving 10 sessions of left-sided iTBS over 2 weeks. Resting-state 19-channel EEG was processed to compute theta cordance (plus delta/alpha/beta) in predefined cortical clusters pre/post the iTBS treatment period. Depression was rated pre/post with the Hamilton Depression Rating Scale (HAM-D) and the Major Depression Inventory (MDI); correlations linked baseline values and change scores to symptom improvement.\n\n\nRESULTS\nBaseline prefrontal theta cordance was not associated with outcome. Change scores were region-specific: responders showed greater occipital decreases (OC p = 0.036; MLOC p = 0.009) and a trend toward left-frontal increases (MLFC p = 0.072); exploratory alpha and delta effects also emerged.\n\n\nCONCLUSIONS\nTheta cordance may predict and track symptom improvement following iTBS, indicating state-dependent neurophysiology.\n\n\nSIGNIFICANCE\nTheta cordance may serve as a dynamic, region-specific EEG marker to monitor and personalize iTBS; prospective validation is warranted.",
+    "year": 2026,
+    "doi": "10.1016/j.clinph.2026.2111710",
+    "url": "https://www.semanticscholar.org/paper/c2c05fd78b73d7ebd82bcbd5cb8af3516e1f5751",
+    "download_url": "",
+    "venue": "Clinical Neurophysiology",
+    "citation_count": 0,
+    "fields_of_study": [
+      "Medicine"
+    ],
+    "paper_id": "c2c05fd78b73d7ebd82bcbd5cb8af3516e1f5751",
+    "keywords": []
+  }
+]

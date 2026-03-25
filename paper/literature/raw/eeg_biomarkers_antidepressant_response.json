@@ -1,0 +1,275 @@
+[
+  {
+    "source": "OpenAlex",
+    "title": "Depression and Sleep",
+    "authors": "Axel Steiger, Marcel Pawlowski",
+    "abstract": "Impaired sleep is both a risk factor and a symptom of depression. Objective sleep is assessed using the sleep electroencephalogram (EEG). Characteristic sleep-EEG changes in patients with depression include disinhibition of rapid eye movement (REM) sleep, changes of sleep continuity, and impaired non-REM sleep. Most antidepressants suppress REM sleep both in healthy volunteers and depressed patients. Various sleep-EEG variables may be suitable as biomarkers for diagnosis, prognosis, and prediction of therapy response in depression. In family studies of depression, enhanced REM density, a measure for frequency of rapid eye movements, is characteristic for an endophenotype. Cordance is an EEG measure distinctly correlated with regional brain perfusion. Prefrontal theta cordance, derived from REM sleep, appears to be a biomarker of antidepressant treatment response. Some predictive sleep-EEG markers of depression appear to be related to hypothalamo-pituitary-adrenocortical system activity.",
+    "year": 2019,
+    "doi": "10.3390/ijms20030607",
+    "url": "https://doi.org/10.3390/ijms20030607",
+    "download_url": "https://www.mdpi.com/1422-0067/20/3/607/pdf?version=1548913635",
+    "venue": "International Journal of Molecular Sciences",
+    "citation_count": 266,
+    "fields_of_study": [
+      "Sleep and Wakefulness Research",
+      "Sleep and related disorders",
+      "EEG and Brain-Computer Interfaces"
+    ],
+    "paper_id": "https://openalex.org/W2912292962",
+    "keywords": [
+      "Endophenotype",
+      "Electroencephalography",
+      "Depression (economics)",
+      "Sleep (system call)",
+      "Disinhibition",
+      "Psychology",
+      "Non-rapid eye movement sleep",
+      "Eye movement",
+      "Antidepressant",
+      "Medicine"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Concomitant BDNF and sleep slow wave changes indicate ketamine-induced plasticity in major depressive disorder",
+    "authors": "Wallace C. Duncan, Simone Sarasso, Fabio Ferrarelli, Jessica Selter, Brady A. Riedner, Nadia S. Hejazi, Peixiong Yuan, Nancy E. Brutsché, Husseini K. Manji, Giulio Tononi, Carlos A. Zarate",
+    "abstract": "The N-methyl-d-aspartate (NMDA) receptor antagonist ketamine has rapid antidepressant effects in treatment-resistant major depressive disorder (MDD). In rats, ketamine selectively increased electroencephalogram (EEG) slow wave activity (SWA) during non-rapid eye movement (REM) sleep and altered central brain-derived neurotrophic factor (BDNF) expression. Taken together, these findings suggest that higher SWA and BDNF levels may respectively represent electrophysiological and molecular correlates of mood improvement following ketamine treatment. This study investigated the acute effects of a single ketamine infusion on depressive symptoms, EEG SWA, individual slow wave parameters (surrogate markers of central synaptic plasticity) and plasma BDNF (a peripheral marker of plasticity) in 30 patients with treatment-resistant MDD. Montgomery-Åsberg Depression Rating Scale scores rapidly decreased following ketamine. Compared to baseline, BDNF levels and early sleep SWA (during the first non-REM episode) increased after ketamine. The occurrence of high amplitude waves increased during early sleep, accompanied by an increase in slow wave slope, consistent with increased synaptic strength. Changes in BDNF levels were proportional to changes in EEG parameters. Intriguingly, this link was present only in patients who responded to ketamine treatment, suggesting that enhanced synaptic plasticity - as reflected by increased SWA, individual slow wave parameters and plasma BDNF - is part of the physiological mechanism underlying the rapid antidepressant effects of NMDA antagonists. Further studies are required to confirm the link found here between behavioural and synaptic changes, as well as to test the reliability of these central and peripheral biomarkers of rapid antidepressant response.",
+    "year": 2012,
+    "doi": "10.1017/s1461145712000545",
+    "url": "https://doi.org/10.1017/s1461145712000545",
+    "download_url": "https://academic.oup.com/ijnp/article-pdf/16/2/301/30134597/16-2-301.pdf",
+    "venue": "The International Journal of Neuropsychopharmacology",
+    "citation_count": 242,
+    "fields_of_study": [
+      "Treatment of Major Depression",
+      "Tryptophan and brain disorders",
+      "Neuroscience and Neuropharmacology Research"
+    ],
+    "paper_id": "https://openalex.org/W2108898741",
+    "keywords": [
+      "Antidepressant",
+      "Ketamine",
+      "Brain-derived neurotrophic factor",
+      "Synaptic plasticity",
+      "Psychology",
+      "NMDA receptor",
+      "Major depressive disorder",
+      "Neurotrophic factors",
+      "Neuroscience",
+      "Neuroplasticity"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Leveraging Machine Learning Approaches for Predicting Antidepressant Treatment Response Using Electroencephalography (EEG) and Clinical Data",
+    "authors": "Natalia Jaworska, Sara de la Salle, Mohamed Hamza Ibrahim, Pierre Blier, Verner Knott",
+    "abstract": "<b>Background:</b> Individuals with major depressive disorder (MDD) vary in their response to antidepressants. However, identifying objective biomarkers, prior to or early in the course of treatment that can predict antidepressant efficacy, remains a challenge. <b>Methods:</b> Individuals with MDD participated in a 12-week antidepressant pharmacotherapy trial. Electroencephalographic (EEG) data was collected before and 1 week post-treatment initiation in 51 patients. Response status at week 12 was established with the Montgomery-Asberg Depression Scale (MADRS), with a ≥50% decrease characterizing responders (<i>N</i> = 27/24 responders/non-responders). We used a machine learning (ML)-approach for predicting response status. We focused on Random Forests, though other ML methods were compared. First, we used a tree-based estimator to select a relatively small number of significant features from: (a) demographic/clinical data (age, sex, individual item/total MADRS scores at baseline, week 1, change scores); (b) scalp-level EEG power; (c) source-localized current density (via exact low-resolution electromagnetic tomography [eLORETA] software). Second, we applied kernel principal component analysis to reduce and map important features. Third, a set of ML models were constructed to classify response outcome based on mapped features. For each dataset, predictive features were extracted, followed by a model of all predictive features, and finally by a model of the <i>most</i> predictive features. <b>Results:</b> Fifty eLORETA features were predictive of response (across bands, both time-points); alpha<sub>1</sub>/theta eLORETA features showed the highest predictive value. Eighty-eight scalp EEG features were predictive of response (across bands, both time-points), with theta/alpha<sub>2</sub> being most predictive. Clinical/demographic data consisted of 31 features, with the most important being week 1 \"concentration difficulty\" scores. When all features were included into one model, its predictive utility was high (88% accuracy). When the <i>most</i> important features were extracted in the final model, 12 predictive features emerged (78% accuracy), including baseline scalp-EEG frontopolar theta, parietal alpha<sub>2</sub> and frontopolar alpha<sub>1</sub>. <b>Conclusions:</b> These findings suggest that ML models of pre- and early treatment-emergent EEG profiles and clinical features can serve as tools for predicting antidepressant response. While this must be replicated using large independent samples, it lays the groundwork for research on personalized, \"biomarker\"-based treatment approaches.",
+    "year": 2019,
+    "doi": "10.3389/fpsyt.2018.00768",
+    "url": "https://doi.org/10.3389/fpsyt.2018.00768",
+    "download_url": null,
+    "venue": "Frontiers in Psychiatry",
+    "citation_count": 95,
+    "fields_of_study": [
+      "Functional Brain Connectivity Studies",
+      "Treatment of Major Depression",
+      "EEG and Brain-Computer Interfaces"
+    ],
+    "paper_id": "https://openalex.org/W2909091936",
+    "keywords": [
+      "Electroencephalography",
+      "Antidepressant",
+      "Psychology",
+      "Computer science",
+      "Machine learning",
+      "Artificial intelligence",
+      "Neuroscience",
+      "Psychiatry",
+      "Anxiety"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Sleep electroencephalography as a biomarker in depression",
+    "authors": "Axel Steiger, Marcel Pawlowski, Mayumi Kimura",
+    "abstract": "Abstract: The sleep electroencephalogram (EEG) provides biomarkers of depression, which may help with diagnosis, prediction of therapy response, and prognosis in the treatment of depression. In patients with depression, characteristic sleep EEG changes include impaired sleep continuity, disinhibition of rapid-eye-movement (REM) sleep, and impaired non-REM sleep. Most antidepressants suppress REM sleep in depressed patients, healthy volunteers, and in animal models. REM suppression appears to be an important, but not an absolute requirement, for antidepressive effects of a substance. Enhanced REM density, a measure for frequency of REM, characterizes high-risk probands for affective disorders. REM-sleep changes were also found in animal models of depression. Sleep-EEG variables were shown to predict the response to treatment with antidepressants. Furthermore, certain clusters of sleep EEG variables predicted the course of the disorder for several years. Some of the predicted sleep EEG markers appear to be related to hypothalamic–pituitary–adrenal system activity. Keywords: biomarkers, depression, sleep EEG, antidepressants, prediction, animal models",
+    "year": 2015,
+    "doi": "10.2147/cpt.s41760",
+    "url": "https://doi.org/10.2147/cpt.s41760",
+    "download_url": "https://www.dovepress.com/getfile.php?fileID=24824",
+    "venue": "ChronoPhysiology and Therapy",
+    "citation_count": 24,
+    "fields_of_study": [
+      "Sleep and Wakefulness Research",
+      "Sleep and related disorders",
+      "Circadian rhythm and melatonin"
+    ],
+    "paper_id": "https://openalex.org/W1682217502",
+    "keywords": [
+      "Electroencephalography",
+      "Depression (economics)",
+      "Sleep (system call)",
+      "Psychology",
+      "Disinhibition",
+      "Non-rapid eye movement sleep",
+      "Slow-wave sleep",
+      "Rapid eye movement sleep",
+      "Eye movement",
+      "Medicine"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Prefrontal EEG Asymmetry as a Potential Biomarker of Antidepressant Treatment Response with Transcranial Magnetic Stimulation (TMS): A Case Series",
+    "authors": "Agnes P. Funk, Mark S. George",
+    "abstract": "We review studies that have used EEG as a response biomarker in depression, and then present preliminary EEG change data from an ongoing TMS depression treatment trial. These data in 4 depressed subjects over 3 weeks of treatment suggest but do not prove that there may be asymmetry changes that occur both within a daily TMS session and over the course of several weeks that may be associated with antidepressant response. EEG shows potential as a biomarker of response for depression treatments, particularly the brain stimulation devices, which, unlike medications, can focally interact with neural tissue in specific frequency patterns.",
+    "year": 2008,
+    "doi": "10.1177/155005940803900306",
+    "url": "https://doi.org/10.1177/155005940803900306",
+    "download_url": null,
+    "venue": "Clinical EEG and Neuroscience",
+    "citation_count": 21,
+    "fields_of_study": [
+      "Transcranial Magnetic Stimulation Studies",
+      "Functional Brain Connectivity Studies",
+      "Neural and Behavioral Psychology Studies"
+    ],
+    "paper_id": "https://openalex.org/W2046950754",
+    "keywords": [
+      "Electroencephalography",
+      "Antidepressant",
+      "Transcranial magnetic stimulation",
+      "Biomarker",
+      "Depression (economics)",
+      "Stimulation",
+      "Neuroscience",
+      "Psychology",
+      "Medicine",
+      "Biology"
+    ]
+  },
+  {
+    "source": "Semantic Scholar",
+    "title": "Concurrent Transcranial Magnetic Stimulation and Electroencephalography Measures are Associated with Antidepressant Response from rTMS Treatment for Depression",
+    "authors": "N. Bailey, K. Hoy, C. Sullivan, B. Allman, N. Rogasch, Z. Daskalakis, P. Fitzgerald",
+    "abstract": "Background Response rates to repetitive transcranial magnetic stimulation (rTMS) for depression are 25-45%. Biomarkers predicting response to rTMS may reduce treatment burden. TMS-evoked neural activity recorded via electroencephalography (EEG) has potential as a biomarker of treatment response. We examined whether these measures could differentiate responders and non-responders to rTMS for depression. Methods Thirty-nine patients with treatment-resistant major depressive disorder (MDD) and 21 healthy controls received TMS during EEG recordings (TMS-EEG). MDD participants then completed 5-8 weeks of rTMS treatment. Repeated measures ANOVAs compared N100 amplitude, N100 slope, and theta power across 3 groups (responders, non-responders and controls), 2 hemispheres (left, F3, and right, F4), and 2 stimulation types (single pulse and paired pulses with a 100ms inter-pulse interval [pp100]). Results Neither N100 amplitude nor theta power differed between responders and non-responders. The control group showed more negative N100 amplitudes than the combined depression group. Responders showed a steeper negative N100 slope for single pulses and steeper positive slope for pp100 pulses at F3 than non-responders. Exploratory analyses suggested this may have been due to the responder group showing larger late P60 and N100 amplitudes. Receiver Operator Characteristic (ROC) curve analysis indicated the difference between single and pp100 slopes provided excellent sensitivity (1.00), but poor specificity (0.455). Limitations Our study had a small sample size. Conclusion Left hemisphere TEPs, in particular N100 slope, may be useful in predicting non-responders to rTMS treatment for depression. Non-response prediction may be useful in saving clinical resources and patient time.",
+    "year": 2023,
+    "doi": "10.1101/2023.02.10.23285794",
+    "url": "https://www.semanticscholar.org/paper/8278c0b8d2b48ae5ed473c09d6c3f9ba34f53391",
+    "download_url": "https://www.medrxiv.org/content/medrxiv/early/2023/02/14/2023.02.10.23285794.full.pdf",
+    "venue": "medRxiv",
+    "citation_count": 5,
+    "fields_of_study": [
+      "Medicine"
+    ],
+    "paper_id": "8278c0b8d2b48ae5ed473c09d6c3f9ba34f53391",
+    "keywords": []
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Machine Learning-Enabled EEG Biomarkers Predict Divergent Antidepressant and Placebo Response in a Clinical Trial of Major Depression",
+    "authors": "Qiang Li, Michael J. Detke, Steve Paul, William Z. Potter, Fan Zhang, Alan Breier, Larry Alphs, Owen M. Wolkowitz, Larry Ereshefsky, Gregory G. Grecco, Ken Wang",
+    "abstract": "Abstract Background Major depressive disorder (MDD) is a heterogeneous neuropsychiatric disorder with highly variable antidepressant outcomes. In randomized controlled trials (RCTs), low drug-placebo differences and high placebo response rates are persistent challenges. An objective biomarker that can prospectively identify which patients will respond to antidepressant or placebo could greatly enhance both clinical care and clinical trial outcomes. Methods Baseline scalp EEG data from EMBARC, a multi-site RCT of the SSRI sertraline vs placebo in adult MDD, were analyzed using unsupervised machine learning to identify subtypes and compare these with their corresponding treatment response profiles. Subtypes response to sertraline versus placebo was evaluated by 8-week HAMD-17 outcomes (change from baseline). Results Of the 215 subjects, three EEG clusters yielded four response phenotypes. (1) Drug–Responders exhibited a large sertraline advantage over placebo (n = 124; d = 1.23; p &lt; 0.0001). (2) Non–Responders derived no benefit from sertraline (n = 37; d = –0.07; p = 0.84). (3) Divergent–Responders shared a distinctive connectivity profile clearly separable from phenotypes 1 and 2. Within this group, participants randomized to placebo improved robustly (Placebo–Responders; n = 54; d = –1.52; p &lt; 0.0001), whereas those receiving sertraline worsened (Adverse Drug–Responders; n = 31; d = -0.67; p = 0.004). Excluding Placebo–Responders more than tripled the overall drug–placebo effect size ( d = 0.89 vs 0.28). Cluster membership was highly stable in 10–fold cross–validation (98–99 % consistency) and reproduced across three independent trial sites, underscoring generalizability. Conclusions Scalp EEG activity analyzed with machine learning identified four biomarker-defined subtypes with strikingly distinct responses to an antidepressant and placebo. These results raise the possibility of using low-cost, noninvasive EEG to guide personalized treatment decisions, avoid ineffective or harmful medications, and improve clinical trial outcomes by identifying drug and high placebo responders in advance of initiating treatment.",
+    "year": 2025,
+    "doi": "10.1101/2025.05.29.25328167",
+    "url": "https://doi.org/10.1101/2025.05.29.25328167",
+    "download_url": "https://www.medrxiv.org/content/medrxiv/early/2025/05/29/2025.05.29.25328167.full.pdf",
+    "venue": null,
+    "citation_count": 2,
+    "fields_of_study": [
+      "Functional Brain Connectivity Studies",
+      "Treatment of Major Depression",
+      "EEG and Brain-Computer Interfaces"
+    ],
+    "paper_id": "https://openalex.org/W4410845534",
+    "keywords": [
+      "Placebo response",
+      "Antidepressant",
+      "Depression (economics)",
+      "Placebo",
+      "Electroencephalography",
+      "Clinical trial",
+      "Psychology",
+      "Neuroscience",
+      "Medicine",
+      "Clinical psychology"
+    ]
+  },
+  {
+    "source": "CORE",
+    "title": "Guidelines for the recording and evaluation of pharmaco-EEG data in man: the International Pharmaco-EEG Society (IPEG)",
+    "authors": "BABILONI, CLAUDIO, Boeijinga PH, Brunovsky M, Drinkenburg WH, Ffytche DH, Freeman J, Hegerl U, Hirata K, IPEG Pharmaco EEG Guidelines C.o.m.m.i.t.t.e.e. Collaborators, Jobert M, Kinoshita T, Knott VJ, Lopes Da Silva FH, Matousek M, Mucci A, Nottage JF, Olbrich S, Prichep LS, Ruigt GS, Saletu B, Stancak A, Strik WK, van Gerven JM, Wilson FJ, Wise RG",
+    "abstract": "The International Pharmaco-EEG Society (IPEG) presents updated guidelines summarising the requirements for the recording and computerised evaluation of pharmaco-EEG data in man. Since the publication of the first pharmaco-EEG guidelines in 1982, technical and data processing methods have advanced steadily, thus enhancing data quality and expanding the palette of tools available to investigate the action of drugs on the central nervous system (CNS), determine the pharmacokinetic and pharmacodynamic properties of novel therapeutics and evaluate the CNS penetration or toxicity of compounds. However, a review of the literature reveals inconsistent operating procedures from one study to another. While this fact does not invalidate results per se, the lack of standardisation constitutes a regrettable shortcoming, especially in the context of drug development programmes. Moreover, this shortcoming hampers reliable comparisons between outcomes of studies from different laboratories and hence also prevents pooling of data which is a requirement for sufficiently powering the validation of novel analytical algorithms and EEG-based biomarkers. The present updated guidelines reflect the consensus of a global panel of EEG experts and are intended to assist investigators using pharmaco-EEG in clinical research, by providing clear and concise recommendations and thereby enabling standardisation of methodology and facilitating comparability of data across laboratories",
+    "year": 2012,
+    "doi": "10.1159/000343478",
+    "url": "https://iris.uniroma1.it/bitstream/11573/802874/1/Jobert_Guidelines_2012.pdf",
+    "download_url": "https://core.ac.uk/download/54522901.pdf",
+    "venue": null,
+    "citation_count": 0,
+    "fields_of_study": [],
+    "paper_id": "30330986",
+    "keywords": []
+  },
+  {
+    "source": "CORE",
+    "title": "Preliminary prediction of individual response to electroconvulsive therapy using whole-brain functional magnetic resonance imaging data.",
+    "authors": "Abbott, Christopher C, Calhoun, Vince D, Espinoza, Randall, Jiang, Rongtao, Jones, Tom, Narr, Katherine L, Qi, Shile, Sui, Jing, Sun, Hailun, Upston, Joel, Wade, Benjamin Sc",
+    "abstract": "Electroconvulsive therapy (ECT) works rapidly and has been widely used to treat depressive disorders (DEP). However, identifying biomarkers predictive of response to ECT remains a priority to individually tailor treatment and understand treatment mechanisms. This study used a connectome-based predictive modeling (CPM) approach in 122 patients with DEP to determine if pre-ECT whole-brain functional connectivity (FC) predicts depressive rating changes and remission status after ECT (47 of 122 total subjects or 38.5% of sample), and whether pre-ECT and longitudinal changes (pre/post-ECT) in regional brain network biomarkers are associated with treatment-related changes in depression ratings. Results show the networks with the best predictive performance of ECT response were negative (anti-correlated) FC networks, which predict the post-ECT depression severity (continuous measure) with a 76.23% accuracy for remission prediction. FC networks with the greatest predictive power were concentrated in the prefrontal and temporal cortices and subcortical nuclei, and include the inferior frontal (IFG), superior frontal (SFG), superior temporal (STG), inferior temporal gyri (ITG), basal ganglia (BG), and thalamus (Tha). Several of these brain regions were also identified as nodes in the FC networks that show significant change pre-/post-ECT, but these networks were not related to treatment response. This study design has limitations regarding the longitudinal design and the absence of a control group that limit the causal inference regarding mechanism of post-treatment status. Though predictive biomarkers remained below the threshold of those recommended for potential translation, the analysis methods and results demonstrate the promise and generalizability of biomarkers for advancing personalized treatment strategies",
+    "year": 2020,
+    "doi": "10.1016/j.nicl.2019.102080",
+    "url": "https://escholarship.org/uc/item/12x366xr",
+    "download_url": "https://core.ac.uk/download/323308620.pdf",
+    "venue": null,
+    "citation_count": 0,
+    "fields_of_study": [],
+    "paper_id": "85972923",
+    "keywords": []
+  },
+  {
+    "source": "CORE",
+    "title": "Standardization of electroencephalography for multi-site, multi-platform and multi-investigator studies: Insights from the canadian biomarker integration network in depression",
+    "authors": "Alonso, Esther, Arnott, Stephen R., Atluri, Sravya, Blumberger, Daniel, Brenner, Colleen A., Daskalakis, Zafiris J., Dhami, Prabhjot, Dharsee, Moyez, Evans, Kenneth R., Farzan, Faranak, Frehlich, Matthew, Frey, Benicio N., Kennedy, Sidney H., Kleffner, Killian, Lam, Raymond W., Liotti, Mario, Mcandrews, Mary Pat, Milev, Roumen, Price, Rae, Ravindran, Arun, Rotzinger, Susan, Vila-Rodriguez, Fidel, Wong, Willy",
+    "abstract": "Subsequent to global initiatives in mapping the human brain and investigations of neurobiological markers for brain disorders, the number of multi-site studies involving the collection and sharing of large volumes of brain data, including electroencephalography (EEG), has been increasing. Among the complexities of conducting multi-site studies and increasing the shelf life of biological data beyond the original study are timely standardization and documentation of relevant study parameters. We presentthe insights gained and guidelines established within the EEG working group of the Canadian Biomarker Integration Network in Depression (CAN-BIND). CAN-BIND is a multi-site, multi-investigator, and multiproject network supported by the Ontario Brain Institute with access to Brain-CODE, an informatics platform that hosts a multitude of biological data across a growing list of brain pathologies. We describe our approaches and insights on documenting and standardizing parameters across the study design,\ndata collection, monitoring, analysis, integration, knowledge-translation, and data archiving phases of CAN-BIND projects. We introduce a custom-built EEG toolbox to track data preprocessing with open-access for the scientific community. We also evaluate the impact of variation in equipment setup on the accuracy of acquired data. Collectively, this work is intended to inspire establishing comprehensive and standardized guidelines for multi-site studies",
+    "year": 2017,
+    "doi": "10.1038/s41598-017-07613-x",
+    "url": "https://www.research.unipd.it/bitstream/11577/3260320/1/Liotti_SciRep2017.pdf",
+    "download_url": "https://core.ac.uk/download/154328957.pdf",
+    "venue": "Scientific Reports",
+    "citation_count": 0,
+    "fields_of_study": [],
+    "paper_id": "50500947",
+    "keywords": []
+  },
+  {
+    "source": "CORE",
+    "title": "Biomarkers to Predict Antidepressant Response",
+    "authors": "Andrew F. Leuchter, Ian A. Cook, Steven P. Hamilton, Katherine L. Narr, Arthur Toga, Aimee M. Hunter, Kym Faull, Julian Whitelegge, Anne M. Andrews, Joseph Loo, Baldwin Way, Stanley F. Nelson, Steven Horvath, Barry D. Lebowitz",
+    "abstract": "During the past several years, we have achieved a deeper understanding of the etiology/pathophysiology of major depressive disorder (MDD). However, this improved understanding has not translated to improved treatment outcome. Treatment often results in symptomatic improvement, but not full recovery. Clinical approaches are largely trial-and-error, and when the first treatment does not result in recovery for the patient, there is little proven scientific basis for choosing the next. One approach to enhancing treatment outcomes in MDD has been the use of standardized sequential treatment algorithms and measurement-based care. Such treatment algorithms stand in contrast to the personalized medicine approach, in which biomarkers would guide decision making. Incorporation of biomarker measurements into treatment algorithms could speed recovery from MDD by shortening or eliminating lengthy and ineffective trials. Recent research results suggest several classes of physiologic biomarkers may be useful for predicting response. These include brain structural or functional findings, as well as genomic, proteomic, and metabolomic measures. Recent data indicate that such measures, at baseline or early in the course of treatment, may constitute useful predictors of treatment outcome. Once such biomarkers are validated, they could form the basis of new paradigms for antidepressant treatment selection",
+    "year": 2010,
+    "doi": "10.1007/s11920-010-0160-4",
+    "url": "file:///data/remote/core/dit/data/Springer-OA/pdf/376/aHR0cDovL2xpbmsuc3ByaW5nZXIuY29tLzEwLjEwMDcvczExOTIwLTAxMC0wMTYwLTQucGRm.pdf",
+    "download_url": "https://core.ac.uk/download/pdf/81749361.pdf",
+    "venue": "Current Psychiatry Reports",
+    "citation_count": 0,
+    "fields_of_study": [],
+    "paper_id": "41012969",
+    "keywords": []
+  },
+  {
+    "source": "Semantic Scholar",
+    "title": "Transient frontal spectral events from EEG predict antidepressant response to sertraline in depression.",
+    "authors": "Darcy A. Waller, Linda L. Carpenter, Stephanie R. Jones",
+    "abstract": "Resting-state scalp electroencephalography (EEG) is a promising method for predicting patient outcomes of antidepressant treatments. Machine-learning-based EEG analyses of averaged power features (APF) have predicted antidepressant responders in standalone samples but have not yet significantly impacted clinical care. Here, we applied new approaches for analyzing transient spectral event features (SEF) - single, short-lived increases in non-averaged power - in efforts to improve prediction of antidepressant response and yield novel mechanistic biomarkers of readiness to respond. We analyzed resting-state EEG data from the Establishing Moderators and Biosignatures of Antidepressant Response in Clinical Care (EMBARC) trial, fitting linear elastic net models predicting depression score change post-treatment from pre-treatment SEF from frontal channels. We found that a model containing SEF only significantly predicted depression score changes rather than categorical response outcomes, and that its performance was similar to existing published models with APF alone. Additionally, a model including both SEF and APF outperformed both the others, emphasizing the utility of including SEF in models using EEG features for predicting antidepressant response to sertraline. We further investigated the most predictive SEF from the SEF only model, with the objective of revealing channel-level biomarkers to guide mechanistic insight into antidepressant response. We found that pre-treatment frontopolar beta duration was significantly correlated with depression score change, with greater degree of symptom response linked to shorter beta events at baseline. This finding replicates prior work on frontopolar beta duration as a possible biomarker of antidepressant response in rTMS and raises the possibility that beta events may be a cross-modal therapeutic biomarker in antidepressant treatment.",
+    "year": 2026,
+    "doi": "10.1016/j.jpsychires.2026.03.010",
+    "url": "https://www.semanticscholar.org/paper/6a3e902c05c07569afa93b0bb3e0b484bf519824",
+    "download_url": "",
+    "venue": "Journal of Psychiatric Research",
+    "citation_count": 0,
+    "fields_of_study": [
+      "Medicine"
+    ],
+    "paper_id": "6a3e902c05c07569afa93b0bb3e0b484bf519824",
+    "keywords": []
+  }
+]

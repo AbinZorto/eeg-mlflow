@@ -1,0 +1,62 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage[round,authoryear]{natbib}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage{caption}
+
+\graphicspath{{figures/}}
+\setlength{\emergencystretch}{3em}
+
+\title{Low Montage Resting-State EEG Biomarker Discovery of tDCS Treatment Response in Adults with Treatment-Resistant Depression}
+\author{
+\begin{tabular}{>{\centering\arraybackslash}p{0.88\textwidth}}
+Abin Daniel Zorto$^{1}$\thanks{Corresponding author: Abin Daniel Zorto, \texttt{u2091940@uel.ac.uk}}, Jijomon C. Moncy$^{2}$, \\ 
+Mhd Saeed Sharif$^{1}$, Cynthia H.Y. Fu$^{2}$ \\[0.75em]
+\small $^{1}$Intelligent Technologies Research Group, University of East London, University Way, London E16 2RD, UK \\
+\small $^{2}$School of Psychology, University of East London, University Way, London E16 2RD, UK \\
+\small \texttt{u2091940@uel.ac.uk}, \texttt{S.Sharif@uel.ac.uk}, \\
+\small \texttt{c.fu@uel.ac.uk}
+\end{tabular}
+}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\input{sections/abstract}
+\end{abstract}
+
+\section{Introduction}
+\input{sections/introduction}
+
+\section{Methods}
+\input{sections/methods}
+
+\section{Results}
+\input{sections/results}
+
+\section{Discussion}
+\input{sections/discussion}
+
+\section{Conclusion}
+\input{sections/conclusion}
+
+% Curated bibliography policy:
+% keep the working bibliography broader in references.bib, but only emit
+% sources that are explicitly cited in the manuscript text.
+
+\bibliographystyle{plainnat}
+\bibliography{references,references_analysis_subset}
+
+\end{document}

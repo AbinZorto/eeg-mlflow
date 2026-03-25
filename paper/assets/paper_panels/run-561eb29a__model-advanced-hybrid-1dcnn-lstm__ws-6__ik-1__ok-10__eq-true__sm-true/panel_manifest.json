@@ -1,0 +1,59 @@
+{
+  "filters": {
+    "equalize_lopo_groups": "true",
+    "fs_method": "select_k_best_f_classif",
+    "inner_k": 1,
+    "model": "advanced_hybrid_1dcnn_lstm",
+    "n_features": 10,
+    "ordering": "sequential",
+    "outer_k": 10,
+    "use_smote": "true",
+    "window_size": 6
+  },
+  "generated_composites": [
+    {
+      "composite_id": "main_results",
+      "path": "paper/assets/paper_panels/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/main_results_composite.png"
+    },
+    {
+      "composite_id": "biomarker_stability",
+      "path": "paper/assets/paper_panels/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/biomarker_stability_composite.png"
+    },
+    {
+      "composite_id": "biomarker_interpretation",
+      "path": "paper/assets/paper_panels/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/biomarker_interpretation_composite.png"
+    }
+  ],
+  "missing_panels": [],
+  "requested_composites": [
+    "main_results",
+    "biomarker_stability",
+    "biomarker_interpretation"
+  ],
+  "resolved_run": {
+    "mlflow_experiment_id": "398165227830907321",
+    "mlflow_run_id": "561eb29a046946818320bea18f21bed6",
+    "results_row_source_file": "sweeps/artifacts/runexp-mode-fs-sets-none-models-advanced_hybrid_1dcnn_ls-ws-6-ord-sequential-ik-1-ok-10-eq-true-sm-true-ds-auto-fsm-select_k_best_f_classif-fn-10__c25fbcf98eff.results.jsonl",
+    "run_signature": "c25fbcf98efff3e854d37ff8cd992d2cfc993349db9c7aeac52119e07f9266ac",
+    "selection_slug": "run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true"
+  },
+  "selection_mode": "mlflow-run-id",
+  "single_panel_generation": {
+    "missing_before_regeneration": [],
+    "regenerated": false,
+    "requested_figure_ids": [
+      "roc",
+      "pr",
+      "confusion",
+      "metric_summary",
+      "selection_frequency",
+      "jaccard_heatmap",
+      "jaccard_distribution",
+      "kuncheva_summary",
+      "delta_scatter",
+      "effect_size",
+      "sign_consistency",
+      "class_conditional_bars"
+    ]
+  }
+}

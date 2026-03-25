@@ -1,0 +1,226 @@
+[
+  {
+    "source": "OpenAlex",
+    "title": "Safety and recommendations for TMS use in healthy subjects and patient populations, with updates on training, ethical and regulatory issues: Expert Guidelines",
+    "authors": "Símone Rossi, Andrea Antal, Sven Bestmann, Marom Bikson, Carmen C. Brewer, Jürgen Brockmöller, Linda L. Carpenter, M. Cincotta, Robert Chen, Jeff Daskalakis, Vincenzo Di Lazzaro, Michael Fox, Mark S. George, Donald L. Gilbert, Vasilios Κ. Kimiskidis, Giacomo Koch, Risto J. Ilmoniemi, Jean Pascal Lefaucheur, Letizia Leocani, Sarah H. Lisanby, Carlo Miniussi, Frank Padberg, Álvaro Pascual‐Leone, Walter Paulus, Angel V. Peterchev, Angelo Quartarone, Alexander Rotenberg, John C. Rothwell, Paolo Maria Rossini, Emiliano Santarnecchi, Mouhsin M. Shafi, Hartwig R. Siebner, Yoshikatzu Ugawa, Eric M. Wassermann, Abraham Zangen, Ulf Ziemann, Mark Hallett",
+    "abstract": "This article is based on a consensus conference, promoted and supported by the International Federation of Clinical Neurophysiology (IFCN), which took place in Siena (Italy) in October 2018. The meeting intended to update the ten-year-old safety guidelines for the application of transcranial magnetic stimulation (TMS) in research and clinical settings (Rossi et al., 2009). Therefore, only emerging and new issues are covered in detail, leaving still valid the 2009 recommendations regarding the description of conventional or patterned TMS protocols, the screening of subjects/patients, the need of neurophysiological monitoring for new protocols, the utilization of reference thresholds of stimulation, the managing of seizures and the list of minor side effects. New issues discussed in detail from the meeting up to April 2020 are safety issues of recently developed stimulation devices and pulse configurations; duties and responsibility of device makers; novel scenarios of TMS applications such as in the neuroimaging context or imaging-guided and robot-guided TMS; TMS interleaved with transcranial electrical stimulation; safety during paired associative stimulation interventions; and risks of using TMS to induce therapeutic seizures (magnetic seizure therapy). An update on the possible induction of seizures, theoretically the most serious risk of TMS, is provided. It has become apparent that such a risk is low, even in patients taking drugs acting on the central nervous system, at least with the use of traditional stimulation parameters and focal coils for which large data sets are available. Finally, new operational guidelines are provided for safety in planning future trials based on traditional and patterned TMS protocols, as well as a summary of the minimal training requirements for operators, and a note on ethics of neuroenhancement.",
+    "year": 2020,
+    "doi": "10.1016/j.clinph.2020.10.003",
+    "url": "https://doi.org/10.1016/j.clinph.2020.10.003",
+    "download_url": null,
+    "venue": "Clinical Neurophysiology",
+    "citation_count": 1383,
+    "fields_of_study": [
+      "Transcranial Magnetic Stimulation Studies",
+      "Muscle activation and electromyography studies",
+      "Neurological disorders and treatments"
+    ],
+    "paper_id": "https://openalex.org/W3093743108",
+    "keywords": [
+      "Transcranial magnetic stimulation",
+      "Context (archaeology)",
+      "Clinical neurophysiology",
+      "Brain stimulation",
+      "Neuroimaging",
+      "Physical medicine and rehabilitation",
+      "Clinical trial",
+      "Psychology",
+      "Psychological intervention",
+      "Medicine"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "An open resource for transdiagnostic research in pediatric mental health and learning disorders",
+    "authors": "Lindsay Alexander, Jasmine Escalera, Lei Ai, Charissa Andreotti, Karina Febre, Alexander Mangone, Natan Vega Potler, Nicolas Langer, Alexis Alexander, Meagan Kovacs, Shannon Litke, Bridget O’Hagan, J. E. Andersen, Batya Bronstein, Anastasia Bui, Marijayne Bushey, H. W. Butler, Victoria Castagna, Nicolas L. Camacho, Elisha Chan, Danielle Citera, Jon Clucas, Samantha Cohen, Sarah Dufek, Megan Eaves, Brian Fradera, Judith Gardner, Natalie Grant-Villegas, Gabriella Green, C. Jane Gregory, Emily Hart, Shana Harris, Megan K. Horton, Danielle Kahn, Katherine E. Kabotyanski, Bernard Z. Karmel, Simon P. Kelly, Kayla Kleinman, Bonhwang Koo, Eliza Kramer, Elizabeth M. Lennon, Catherine Lord, Ginny Mantello, Amy Margolis, Kathleen R. Merikangas, Judith Milham, Giuseppe Minniti, Rebecca Neuhaus, Alexandra M. Levine, Yael Osman, Lucas C. Parra, Ken Pugh, Amy Racanello, Anita Restrepo, Tian Saltzman, Batya Septimus, Russell H. Tobe, Rachel Waltz, Anna Williams, Anna J. Yeo, F. Xavier Castellanos, Arno Klein, Tomáš Paus, Bennett L. Leventhal, R. Cameron Craddock, Harold S. Koplewicz, Michael P. Milham",
+    "abstract": "Technological and methodological innovations are equipping researchers with unprecedented capabilities for detecting and characterizing pathologic processes in the developing human brain. As a result, ambitions to achieve clinically useful tools to assist in the diagnosis and management of mental health and learning disorders are gaining momentum. To this end, it is critical to accrue large-scale multimodal datasets that capture a broad range of commonly encountered clinical psychopathology. The Child Mind Institute has launched the Healthy Brain Network (HBN), an ongoing initiative focused on creating and sharing a biobank of data from 10,000 New York area participants (ages 5-21). The HBN Biobank houses data about psychiatric, behavioral, cognitive, and lifestyle phenotypes, as well as multimodal brain imaging (resting and naturalistic viewing fMRI, diffusion MRI, morphometric MRI), electroencephalography, eye-tracking, voice and video recordings, genetics and actigraphy. Here, we present the rationale, design and implementation of HBN protocols. We describe the first data release (n=664) and the potential of the biobank to advance related areas (e.g., biophysical modeling, voice analysis).",
+    "year": 2017,
+    "doi": "10.1038/sdata.2017.181",
+    "url": "https://doi.org/10.1038/sdata.2017.181",
+    "download_url": "https://www.nature.com/articles/sdata2017181.pdf",
+    "venue": "Scientific Data",
+    "citation_count": 691,
+    "fields_of_study": [
+      "Functional Brain Connectivity Studies",
+      "Advanced Neuroimaging Techniques and Applications",
+      "Health, Environment, Cognitive Aging"
+    ],
+    "paper_id": "https://openalex.org/W2780601052",
+    "keywords": [
+      "Biobank",
+      "Neuroimaging",
+      "Open science",
+      "Mental health",
+      "Psychology",
+      "Psychopathology",
+      "Data sharing",
+      "Data science",
+      "Computer science",
+      "Medicine"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Perspectives on ethnic and racial disparities in Alzheimer's disease and related dementias: Update and areas of immediate need",
+    "authors": "Ganesh M. Babulal, Yakeel T. Quiroz, Benedict C. Albensi, Eider M. Arenaza‐Urquijo, Arlene Astell, Claudio Babiloni, Alex Bahar‐Fuchs, J. Simon Bell, Gene L. Bowman, Adam M. Brickman, Gaël Chételat, Carrie Ciro, Ann D. Cohen, Peggye Dilworth‐Anderson, Hiroko H. Dodge, Simone Dreux, Steven D. Edland, Anna J. Esbensen, Lisbeth Evered, Michael Ewers, Keith N. Fargo, Juan Fortea, Hector M. González, Deborah Gustafson, Elizabeth Head, James A. Hendrix, Scott M. Hofer, Leigh Johnson, Roos J. Jutten, Kerry Kilborn, Krista L. Lanctôt, Jennifer J. Manly, Ralph N. Martins, Michelle M. Mielke, Martha Clare Morris, Melissa E. Murray, Esther S. Oh, Mario A. Parra, Robert A. Rissman, Catherine M. Roe, Octavio A. Santos, Nikolaos Scarmeas, Lon S. Schneider, Nicole Schupf, Sietske A.M. Sikkes, Heather M. Snyder, Hamid R. Sohrabi, Yaakov Stern, André Strydom, Yi Tang, Graciela Muñiz‐Terrera, Charlotte E. Teunissen, Debora Melo van Lent, Michael Weinborn, Linda M.P. Wesselman, Donna M. Wilcock, Henrik Zetterberg, Sid E. O’Bryant",
+    "abstract": "Alzheimer's disease and related dementias (ADRDs) are a global crisis facing the aging population and society as a whole. With the numbers of people with ADRDs predicted to rise dramatically across the world, the scientific community can no longer neglect the need for research focusing on ADRDs among underrepresented ethnoracial diverse groups. The Alzheimer's Association International Society to Advance Alzheimer's Research and Treatment (ISTAART; alz.org/ISTAART) comprises a number of professional interest areas (PIAs), each focusing on a major scientific area associated with ADRDs. We leverage the expertise of the existing international cadre of ISTAART scientists and experts to synthesize a cross-PIA white paper that provides both a concise \"state-of-the-science\" report of ethnoracial factors across PIA foci and updated recommendations to address immediate needs to advance ADRD science across ethnoracial populations.",
+    "year": 2018,
+    "doi": "10.1016/j.jalz.2018.09.009",
+    "url": "https://doi.org/10.1016/j.jalz.2018.09.009",
+    "download_url": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1016/j.jalz.2018.09.009",
+    "venue": "Alzheimer s & Dementia",
+    "citation_count": 527,
+    "fields_of_study": [
+      "Dementia and Cognitive Impairment Research",
+      "Alzheimer's disease research and treatments",
+      "Memory and Neural Mechanisms"
+    ],
+    "paper_id": "https://openalex.org/W2903592416",
+    "keywords": [
+      "Ethnic group",
+      "Neglect",
+      "Leverage (statistics)",
+      "Dementia",
+      "Gerontology",
+      "Population",
+      "Alzheimer's disease",
+      "Disease",
+      "Political science",
+      "Psychology"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Discovery and validation of biomarkers to aid the development of safe and effective pain therapeutics: challenges and opportunities",
+    "authors": "Karen D. Davis, Nima Aghaeepour, Andrew H. Ahn, Martin S. Angst, David Borsook, Ashley Brenton, Michael E. Burczynski, Christopher Crean, Robert R. Edwards, Brice Gaudillière, Georgene W. Hergenroeder, Michael J. Iadarola, Smriti Iyengar, Yunyun Jiang, Jiang‐Ti Kong, Sean Mackey, Carl Y. Saab, Christine N. Sang, Joachim Scholz, Märta Segerdahl, Irene Tracey, Christin Veasley, Jing Wang, Tor D. Wager, Ajay D. Wasan, Mary Ann Pelleymounter",
+    "abstract": "Pain medication plays an important role in the treatment of acute and chronic pain conditions, but some drugs, opioids in particular, have been overprescribed or prescribed without adequate safeguards, leading to an alarming rise in medication-related overdose deaths. The NIH Helping to End Addiction Long-term (HEAL) Initiative is a trans-agency effort to provide scientific solutions to stem the opioid crisis. One component of the initiative is to support biomarker discovery and rigorous validation in collaboration with industry leaders to accelerate high-quality clinical research into neurotherapeutics and pain. The use of objective biomarkers and clinical trial end points throughout the drug discovery and development process is crucial to help define pathophysiological subsets of pain, evaluate target engagement of new drugs and predict the analgesic efficacy of new drugs. In 2018, the NIH-led Discovery and Validation of Biomarkers to Develop Non-Addictive Therapeutics for Pain workshop convened scientific leaders from academia, industry, government and patient advocacy groups to discuss progress, challenges, gaps and ideas to facilitate the development of biomarkers and end points for pain. The outcomes of this workshop are outlined in this Consensus Statement.",
+    "year": 2020,
+    "doi": "10.1038/s41582-020-0362-2",
+    "url": "https://doi.org/10.1038/s41582-020-0362-2",
+    "download_url": "https://www.nature.com/articles/s41582-020-0362-2.pdf",
+    "venue": "Nature Reviews Neurology",
+    "citation_count": 468,
+    "fields_of_study": [
+      "Pain Mechanisms and Treatments",
+      "Pain Management and Opioid Use",
+      "Pain Management and Placebo Effect"
+    ],
+    "paper_id": "https://openalex.org/W3035623431",
+    "keywords": [
+      "Medicine",
+      "Addiction",
+      "Drug development",
+      "Biomarker discovery",
+      "Clinical trial",
+      "Agency (philosophy)",
+      "Chronic pain",
+      "Intensive care medicine",
+      "Biomarker",
+      "Government (linguistics)"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "EEG-based Brain-Computer Interfaces (BCIs): A Survey of Recent Studies&#13;\\n on Signal Sensing Technologies and Computational Intelligence Approaches and&#13;\\n their Applications",
+    "authors": "Xiaotong Gu, Zehong Cao, Alireza Jolfaei, Peng Xu, Dongrui Wu, Tzyy‐Ping Jung, Chin‐Teng Lin",
+    "abstract": "Brain-Computer interfaces (BCIs) enhance the capability of human brain activities to interact with the environment. Recent advancements in technology and machine learning algorithms have increased interest in electroencephalographic (EEG)-based BCI applications. EEG-based intelligent BCI systems can facilitate continuous monitoring of fluctuations in human cognitive states under monotonous tasks, which is both beneficial for people in need of healthcare support and general researchers in different domain areas. In this review, we survey the recent literature on EEG signal sensing technologies and computational intelligence approaches in BCI applications, compensating for the gaps in the systematic summary of the past five years. Specifically, we first review the current status of BCI and signal sensing technologies for collecting reliable EEG signals. Then, we demonstrate state-of-the-art computational intelligence techniques, including fuzzy models and transfer learning in machine learning and deep learning algorithms, to detect, monitor, and maintain human cognitive states and task performance in prevalent applications. Finally, we present a couple of innovative BCI-inspired healthcare applications and discuss future research directions in EEG-based BCI research.",
+    "year": 2021,
+    "doi": "10.1109/tcbb.2021.3052811",
+    "url": "http://hdl.handle.net/10453/147196",
+    "download_url": "http://hdl.handle.net/10453/147196",
+    "venue": "UTS ePRESS (University of Technology Sydney)",
+    "citation_count": 367,
+    "fields_of_study": [
+      "EEG and Brain-Computer Interfaces",
+      "Neural dynamics and brain function",
+      "Advanced Memory and Neural Computing"
+    ],
+    "paper_id": "https://openalex.org/W3121810080",
+    "keywords": [
+      "Brain–computer interface",
+      "Electroencephalography",
+      "Computer science",
+      "Artificial intelligence",
+      "Domain (mathematical analysis)",
+      "Machine learning",
+      "Computational intelligence",
+      "Cognition",
+      "Human–computer interaction",
+      "SIGNAL (programming language)"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Functional Near-Infrared Spectroscopy and Its Clinical Application in the Field of Neuroscience: Advances and Future Directions",
+    "authors": "Wei-Liang Chen, Julie C. Wagner, Nicholas Heugel, Jeffrey Sugar, Yu-Wen Lee, Lisa L. Conant, Marsha Malloy, Joseph Heffernan, Brendan J. Quirk, Anthony Zinos, Scott A. Beardsley, Robert W. Prost, Harry T. Whelan",
+    "abstract": "Similar to functional magnetic resonance imaging (fMRI), functional near-infrared spectroscopy (fNIRS) detects the changes of hemoglobin species inside the brain, but via differences in optical absorption. Within the near-infrared spectrum, light can penetrate biological tissues and be absorbed by chromophores, such as oxyhemoglobin and deoxyhemoglobin. What makes fNIRS more advantageous is its portability and potential for long-term monitoring. This paper reviews the basic mechanisms of fNIRS and its current clinical applications, the limitations toward more widespread clinical usage of fNIRS, and current efforts to improve the temporal and spatial resolution of fNIRS toward robust clinical usage within subjects. Oligochannel fNIRS is adequate for estimating global cerebral function and it has become an important tool in the critical care setting for evaluating cerebral oxygenation and autoregulation in patients with stroke and traumatic brain injury. When it comes to a more sophisticated utilization, spatial and temporal resolution becomes critical. Multichannel NIRS has improved the spatial resolution of fNIRS for brain mapping in certain task modalities, such as language mapping. However, averaging and group analysis are currently required, limiting its clinical use for monitoring and real-time event detection in individual subjects. Advances in signal processing have moved fNIRS toward individual clinical use for detecting certain types of seizures, assessing autonomic function and cortical spreading depression. However, its lack of accuracy and precision has been the major obstacle toward more sophisticated clinical use of fNIRS. The use of high-density whole head optode arrays, precise sensor locations relative to the head, anatomical co-registration, short-distance channels, and multi-dimensional signal processing can be combined to improve the sensitivity of fNIRS and increase its use as a wide-spread clinical tool for the robust assessment of brain function.",
+    "year": 2020,
+    "doi": "10.3389/fnins.2020.00724",
+    "url": "https://doi.org/10.3389/fnins.2020.00724",
+    "download_url": "https://www.frontiersin.org/articles/10.3389/fnins.2020.00724/pdf",
+    "venue": "Frontiers in Neuroscience",
+    "citation_count": 352,
+    "fields_of_study": [
+      "Optical Imaging and Spectroscopy Techniques",
+      "Traumatic Brain Injury and Neurovascular Disturbances",
+      "Non-Invasive Vital Sign Monitoring"
+    ],
+    "paper_id": "https://openalex.org/W3041479158",
+    "keywords": [
+      "Functional near-infrared spectroscopy",
+      "Neuroimaging",
+      "Computer science",
+      "Neuroscience",
+      "Temporal resolution",
+      "Modalities",
+      "Psychology",
+      "Cognition",
+      "Physics"
+    ]
+  },
+  {
+    "source": "CORE",
+    "title": "A Dose Relationship Between Brain Functional Connectivity and Cumulative Head Impact Exposure in Collegiate Water Polo Players.",
+    "authors": "Cecchi, Nicholas J, Gerges, Paul, Hicks, James W, Monroe, Derek C, Phreaner, Jenna, Small, Steven L",
+    "abstract": "A growing body of evidence suggests that chronic, sport-related head impact exposure can impair brain functional integration and brain structure and function. Evidence of a robust inverse relationship between the frequency and magnitude of repeated head impacts and disturbed brain network function is needed to strengthen an argument for causality. In pursuing such a relationship, we used cap-worn inertial sensors to measure the frequency and magnitude of head impacts sustained by eighteen intercollegiate water polo athletes monitored over a single season of play. Participants were evaluated before and after the season using computerized cognitive tests of inhibitory control and resting electroencephalography. Greater head impact exposure was associated with increased phase synchrony [r (16) &gt; 0.626, p &lt; 0.03 corrected], global efficiency [r (16) &gt; 0.601, p &lt; 0.04 corrected], and mean clustering coefficient [r (16) &gt; 0.625, p &lt; 0.03 corrected] in the functional networks formed by slow-wave (delta, theta) oscillations. Head impact exposure was not associated with changes in performance on the inhibitory control tasks. However, those with the greatest impact exposure showed an association between changes in resting-state connectivity and a dissociation between performance on the tasks after the season [r (16) = 0.481, p = 0.043] that could also be attributed to increased slow-wave synchrony [F (4, 135) = 113.546, p &lt; 0.001]. Collectively, our results suggest that athletes sustaining the greatest head impact exposure exhibited changes in whole-brain functional connectivity that were associated with altered information processing and inhibitory control",
+    "year": 2020,
+    "doi": "10.3389/fneur.2020.00218",
+    "url": "https://escholarship.org/content/qt3dk7m0zg/qt3dk7m0zg.pdf?t=qafdxa",
+    "download_url": "https://core.ac.uk/download/323075290.pdf",
+    "venue": null,
+    "citation_count": 0,
+    "fields_of_study": [],
+    "paper_id": "85864369",
+    "keywords": []
+  },
+  {
+    "source": "CORE",
+    "title": "Decoding human mental states by whole-head EEG+fNIRS during category fluency task performance",
+    "authors": "Ahmet Omurtag, Delpy D T, Durduran T, Gudiño-Mendoza B, Haleh Aghajani, Hasan Onur Keles, Schudlo L C, Wickens C D, Zander T O",
+    "abstract": "Objective: Concurrent scalp electroencephalography (EEG) and  functional near-infrared spectroscopy (fNIRS), which we refer to as EEG+fNIRS, promises greater accuracy than the individual modalities while remaining nearly as convenient as EEG. We sought to quantify the hybrid system's ability to decode mental states and compare it with unimodal systems.\n\n \n\nApproach: We recorded from healthy volunteers taking the category fluency test and applied machine learning techniques to the data.\n\n \n\nMain results: EEG+fNIRS's decoding accuracy was greater than that of its subsystems, partly due to the new type of neurovascular features made available by hybrid data.\n\n \n\nSignificance: Availability of an accurate and practical decoding method has potential implications for medical diagnosis, brain-computer interface design, and neuroergonomics ",
+    "year": 2017,
+    "doi": "10.1088/1741-2552/aa814b",
+    "url": "http://irep.ntu.ac.uk/id/eprint/32726/1/PubSub10246_799a_Omurtag.pdf",
+    "download_url": "https://core.ac.uk/download/151169607.pdf",
+    "venue": null,
+    "citation_count": 0,
+    "fields_of_study": [],
+    "paper_id": "7798443",
+    "keywords": []
+  },
+  {
+    "source": "CORE",
+    "title": "Effects of dance therapy on balance, gait and neuro-psychological performances in patients with Parkinson's disease and postural instability",
+    "authors": "Agnetti, Virgilio, Aiello, Elena, De Natale, Edoardo, Deriu, Franca, Paulus, Kai Stephan, Sotgiu, Giovanni, Tolu, Eusebio",
+    "abstract": "Postural Instability (PI) is a core feature of\n\nParkinson’s Disease (PD) and a major cause of falls and disabilities. Impairment of executive functions has been called as an aggravating factor on motor performances. Dance therapy has been shown effective for improving gait and has been suggested as an alternative rehabilitative method.\n\nTo evaluate gait performance, spatial-temporal (S-T) gait\n\nparameters and cognitive performances in a cohort of patients with PD and PI modifications in balance after a cycle of dance therapy",
+    "year": 2012,
+    "doi": null,
+    "url": null,
+    "download_url": "https://core.ac.uk/download/16749566.pdf",
+    "venue": null,
+    "citation_count": 0,
+    "fields_of_study": [],
+    "paper_id": "6885557",
+    "keywords": []
+  }
+]

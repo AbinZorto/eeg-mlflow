@@ -1,0 +1,178 @@
+[
+  {
+    "source": "OpenAlex",
+    "title": "Parkinson's disease: clinical features and diagnosis",
+    "authors": "Joseph Jankovic",
+    "abstract": "A thorough understanding of the broad spectrum of clinical manifestations of PD is essential to the proper diagnosis of the disease. Genetic mutations or variants, neuroimaging abnormalities and other tests are potential biomarkers that may improve diagnosis and allow the identification of persons at risk.",
+    "year": 2008,
+    "doi": "10.1136/jnnp.2007.131045",
+    "url": "https://doi.org/10.1136/jnnp.2007.131045",
+    "download_url": "https://jnnp.bmj.com/content/jnnp/79/4/368.full.pdf",
+    "venue": "Journal of Neurology Neurosurgery & Psychiatry",
+    "citation_count": 5556,
+    "fields_of_study": [
+      "Parkinson's Disease Mechanisms and Treatments",
+      "Neurological disorders and treatments",
+      "Parkinson's Disease and Spinal Disorders"
+    ],
+    "paper_id": "https://openalex.org/W2145954079",
+    "keywords": [
+      "Medicine",
+      "Dystonia",
+      "Movement disorders",
+      "Physical medicine and rehabilitation",
+      "Parkinson's disease",
+      "Disease",
+      "Ophthalmoparesis",
+      "Dementia",
+      "Dysarthria",
+      "Ataxia"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Diagnosis and management of dementia with Lewy bodies",
+    "authors": "Ian G. McKeith, Bradley F. Boeve, Dennis W. Dickson, Glenda M. Halliday, John‐Paul Taylor, Daniel Weintraub, Dag Aarsland, James E. Galvin, Johannes Attems, Clive Ballard, Ashley Bayston, Thomas G. Beach, ‪Frederic Blanc‬, Nicolaas I. Bohnen, Laura Bonanni, José Brás, Patrik Brundin, David J. Burn, Alice Chen‐Plotkin, John E. Duda, Omar M. A. El‐Agnaf, Howard Feldman, Tanis J. Ferman, Dominic ffytche, Hiroshige Fujishiro, Douglas Galasko, Jennifer G. Goldman, Stephen N. Gomperts, Neill R. Graff‐Radford, Lawrence S. Honig, Álex Iranzo, Kejal Kantarci, Daniel Kaufer, Walter A. Kukull, Virginia M.‐Y. Lee, James B. Leverenz, Simon J.G. Lewis, Carol F. Lippa, Angela Lunde, Mario Masellis, Eliezer Masliah, Pamela J. McLean, Brit Mollenhauer, Thomas J. Montine, Emilio Moreno, Etsuro Mori, Melissa E. Murray, John T. O’Brien, Sotoshi Orimo, Ronald B. Postuma, Shankar Ramaswamy, Owen A. Ross, David P. Salmon, Andrew Singleton, Angela Taylor, Alan Thomas, Pietro Tiraboschi, Jon B. Toledo, John Q. Trojanowski, Debby W. Tsuang, Zuzana Walker, Masahito Yamada, Kenji Kosaka",
+    "abstract": "The Dementia with Lewy Bodies (DLB) Consortium has refined its recommendations about the clinical and pathologic diagnosis of DLB, updating the previous report, which has been in widespread use for the last decade. The revised DLB consensus criteria now distinguish clearly between clinical features and diagnostic biomarkers, and give guidance about optimal methods to establish and interpret these. Substantial new information has been incorporated about previously reported aspects of DLB, with increased diagnostic weighting given to REM sleep behavior disorder and <sup>123</sup>iodine-metaiodobenzylguanidine (MIBG) myocardial scintigraphy. The diagnostic role of other neuroimaging, electrophysiologic, and laboratory investigations is also described. Minor modifications to pathologic methods and criteria are recommended to take account of Alzheimer disease neuropathologic change, to add previously omitted Lewy-related pathology categories, and to include assessments for substantia nigra neuronal loss. Recommendations about clinical management are largely based upon expert opinion since randomized controlled trials in DLB are few. Substantial progress has been made since the previous report in the detection and recognition of DLB as a common and important clinical disorder. During that period it has been incorporated into DSM-5, as major neurocognitive disorder with Lewy bodies. There remains a pressing need to understand the underlying neurobiology and pathophysiology of DLB, to develop and deliver clinical trials with both symptomatic and disease-modifying agents, and to help patients and carers worldwide to inform themselves about the disease, its prognosis, best available treatments, ongoing research, and how to get adequate support.",
+    "year": 2017,
+    "doi": "10.1212/wnl.0000000000004058",
+    "url": "https://doi.org/10.1212/wnl.0000000000004058",
+    "download_url": "https://n.neurology.org/content/neurology/89/1/88.full.pdf",
+    "venue": "Neurology",
+    "citation_count": 4291,
+    "fields_of_study": [
+      "Parkinson's Disease Mechanisms and Treatments",
+      "Dementia and Cognitive Impairment Research",
+      "Alzheimer's disease research and treatments"
+    ],
+    "paper_id": "https://openalex.org/W2623521763",
+    "keywords": [
+      "Dementia with Lewy bodies",
+      "Neurocognitive",
+      "REM sleep behavior disorder",
+      "Medicine",
+      "Clinical trial",
+      "Neuroimaging",
+      "Dementia",
+      "Disease",
+      "Lewy body",
+      "Psychiatry"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Consensus statement on concussion in sport—the 5<sup>th</sup> international conference on concussion in sport held in Berlin, October 2016",
+    "authors": "Paul McCrory, Willem Meeuwisse, Jiří Dvořák, Mark Aubry, Julian E. Bailes, Steven P. Broglio, Robert C. Cantu, David J. Cassidy, Ruben J. Echemendía, Rudy J. Castellani, Gavin A Davis, Richard Ellenbogen, Carolyn A. Emery, Lars Engebretsen, Nina Feddermann‐Demont, Christopher C. Giza, Kevin M. Guskiewicz, Stanley A. Herring, Grant L. Iverson, Karen M. Johnston, James Kissick, Jeffrey S. Kutcher, John J. Leddy, David Maddocks, Michael Makdissi, Geoffrey A. Manley, Michael McCrea, William P. Meehan, Sinji Nagahiro, Jon Patricios, Margot Putukian, Kathryn Schneider, Allen K. Sills, Charles H. Tator, Michael S. Turner, Pieter E. Vos",
+    "abstract": "The 2017 Concussion in Sport Group (CISG) consensus statement is designed to build on the principles outlined in the previous statements This document is developed for physicians and healthcare providers who are involved in athlete care, whether at a recreational, elite or professional level. While agreement exists on the principal messages conveyed by this document, the authors acknowledge that the science of SRC is evolving and therefore individual management and return-to-play decisions remain in the realm of clinical judgement.",
+    "year": 2017,
+    "doi": "10.1136/bjsports-2017-097699",
+    "url": "https://doi.org/10.1136/bjsports-2017-097699",
+    "download_url": "https://bjsm.bmj.com/content/bjsports/51/11/838.full.pdf",
+    "venue": "British Journal of Sports Medicine",
+    "citation_count": 3260,
+    "fields_of_study": [
+      "Traumatic Brain Injury Research",
+      "Traumatic Brain Injury and Neurovascular Disturbances",
+      "Injury Epidemiology and Prevention"
+    ],
+    "paper_id": "https://openalex.org/W2610287704",
+    "keywords": [
+      "Concussion",
+      "Statement (logic)",
+      "Medicine",
+      "Physical therapy",
+      "Poison control",
+      "Injury prevention",
+      "Medical emergency",
+      "Political science",
+      "Law"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Evidence-based guidelines on the therapeutic use of repetitive transcranial magnetic stimulation (rTMS): An update (2014–2018)",
+    "authors": "Jean‐Pascal Lefaucheur, André Alemán, Chris Baeken, David Benninger, Jérôme Brunelin, Vincenzo Di Lazzaro, Saša R. Filipović, Christian Grefkes, Alkomiet Hasan, Friedhelm C. Hummel, Satu K. Jääskeläinen, Berthold Langguth, Letizia Leocani, Alain Londero, Raffaele Nardone, Jean-Paul Nguyen, Thomas Nyffeler, Albino J. Oliveira‐Maia, Antonio Oliviero, Frank Padberg, Ulrich Palm, Walter Paulus, Emmanuel Poulet, Angelo Quartarone, Fady Rachid, Irena Rektorová, Símone Rossi, Hanna Sahlsten, Martin Schecklmann, David Szekely, Ulf Ziemann",
+    "abstract": "A group of European experts reappraised the guidelines on the therapeutic efficacy of repetitive transcranial magnetic stimulation (rTMS) previously published in 2014 [Lefaucheur et al., Clin Neurophysiol 2014;125:2150-206]. These updated recommendations take into account all rTMS publications, including data prior to 2014, as well as currently reviewed literature until the end of 2018. Level A evidence (definite efficacy) was reached for: high-frequency (HF) rTMS of the primary motor cortex (M1) contralateral to the painful side for neuropathic pain; HF-rTMS of the left dorsolateral prefrontal cortex (DLPFC) using a figure-of-8 or a H1-coil for depression; low-frequency (LF) rTMS of contralesional M1 for hand motor recovery in the post-acute stage of stroke. Level B evidence (probable efficacy) was reached for: HF-rTMS of the left M1 or DLPFC for improving quality of life or pain, respectively, in fibromyalgia; HF-rTMS of bilateral M1 regions or the left DLPFC for improving motor impairment or depression, respectively, in Parkinson's disease; HF-rTMS of ipsilesional M1 for promoting motor recovery at the post-acute stage of stroke; intermittent theta burst stimulation targeted to the leg motor cortex for lower limb spasticity in multiple sclerosis; HF-rTMS of the right DLPFC in posttraumatic stress disorder; LF-rTMS of the right inferior frontal gyrus in chronic post-stroke non-fluent aphasia; LF-rTMS of the right DLPFC in depression; and bihemispheric stimulation of the DLPFC combining right-sided LF-rTMS (or continuous theta burst stimulation) and left-sided HF-rTMS (or intermittent theta burst stimulation) in depression. Level A/B evidence is not reached concerning efficacy of rTMS in any other condition. The current recommendations are based on the differences reached in therapeutic efficacy of real vs. sham rTMS protocols, replicated in a sufficient number of independent studies. This does not mean that the benefit produced by rTMS inevitably reaches a level of clinical relevance.",
+    "year": 2020,
+    "doi": "10.1016/j.clinph.2019.11.002",
+    "url": "https://doi.org/10.1016/j.clinph.2019.11.002",
+    "download_url": "https://www.sciencedirect.com/science/article/am/pii/S1388245719312799?via%3Dihub",
+    "venue": "Clinical Neurophysiology",
+    "citation_count": 2140,
+    "fields_of_study": [
+      "Transcranial Magnetic Stimulation Studies",
+      "Stroke Rehabilitation and Recovery",
+      "Pain Management and Treatment"
+    ],
+    "paper_id": "https://openalex.org/W2997901555",
+    "keywords": [
+      "Transcranial magnetic stimulation",
+      "Dorsolateral prefrontal cortex",
+      "Deep transcranial magnetic stimulation",
+      "Stroke (engine)",
+      "Physical medicine and rehabilitation",
+      "Psychology",
+      "Primary motor cortex",
+      "Motor cortex",
+      "Supplementary motor area",
+      "Depression (economics)"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Preclinical Alzheimer's disease: Definition, natural history, and diagnostic criteria",
+    "authors": "Bruno Dubois, Harald Hampel, Howard Feldman, Philip Scheltens, Paul Aisen, Sandrine Andrieu, Hovagim Bakardjian, Habib Benali, Lars Bertram, Kaj Blennow, Karl Broich, Enrica Cavedo, Sebastian J. Crutch, Jean‐François Dartigues, Charles Duyckaerts, Stéphane Epelbaum, Giovanni B. Frisoni, Serge Gauthier, Rémy Genthon, Alida A. Gouw, Marie‐Odile Habert, David M. Holtzman, Miia Kivipelto, Simone Lista, José Luís Molinuevo, Sid E. O’Bryant, Gil D. Rabinovici, Christopher C. Rowe, Stephen Salloway, Lon S. Schneider, Reisa A. Sperling, Marc Teichmann, María C. Carrillo, Jeffrey L. Cummings, Cliff R Jack",
+    "abstract": "During the past decade, a conceptual shift occurred in the field of Alzheimer's disease (AD) considering the disease as a continuum. Thanks to evolving biomarker research and substantial discoveries, it is now possible to identify the disease even at the preclinical stage before the occurrence of the first clinical symptoms. This preclinical stage of AD has become a major research focus as the field postulates that early intervention may offer the best chance of therapeutic success. To date, very little evidence is established on this \"silent\" stage of the disease. A clarification is needed about the definitions and lexicon, the limits, the natural history, the markers of progression, and the ethical consequence of detecting the disease at this asymptomatic stage. This article is aimed at addressing all the different issues by providing for each of them an updated review of the literature and evidence, with practical recommendations.",
+    "year": 2016,
+    "doi": "10.1016/j.jalz.2016.02.002",
+    "url": "https://doi.org/10.1016/j.jalz.2016.02.002",
+    "download_url": "https://pure.amsterdamumc.nl/files/159880971/Preclinical-alzheimers-disease-definition-natural-history-and-diagnostic-criteria.pdf",
+    "venue": "Alzheimer s & Dementia",
+    "citation_count": 1865,
+    "fields_of_study": [
+      "Dementia and Cognitive Impairment Research",
+      "Alzheimer's disease research and treatments",
+      "Neurological Disease Mechanisms and Treatments"
+    ],
+    "paper_id": "https://openalex.org/W2309442902",
+    "keywords": [
+      "Natural history",
+      "Disease",
+      "Natural (archaeology)",
+      "Medicine",
+      "History",
+      "Pathology",
+      "Internal medicine"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Electrophysiological assessment methodology of sensory processing dysfunction in schizophrenia and dementia of the Alzheimer type",
+    "authors": "Philippe Danjou, Geoffrey Viardot, Damien Maurice, Pilar Garcés, Emma J. Wams, Keith G. Phillips, Valérie Bertaina‐Anglade, Andrew McCarthy, Darrel J. Pemberton",
+    "abstract": "Schizophrenia and Alzheimer's disease impacts on various sensory processings are extensively reviewed in the present publication. This article describes aspects of a research project whose aim is to delineate the neurobiology that may underlie Social Withdrawal in Alzheimer's disease, Schizophrenia and Major Depression. This is a European-funded IMI 2 project, identified as PRISM (Psychiatric Ratings using Intermediate Stratified Markers). This paper focuses specifically on the selected electrophysiological paradigms chosen based on a comprehensive review of all relevant literature and practical constraints. The choice of the electrophysiological biomarkers were fundamentality based their metrics and capacity to discriminate between populations. The selected electrophysiological paradigms are resting state EEG, auditory mismatch negativity, auditory and visual based oddball paradigms, facial emotion processing ERP's and auditory steady-state response. The primary objective is to study the effect of social withdrawal on various biomarkers and endophenotypes found altered in the target populations. This has never been studied in relationship to social withdrawal, an important component of CNS diseases.",
+    "year": 2018,
+    "doi": "10.1016/j.neubiorev.2018.09.004",
+    "url": "https://doi.org/10.1016/j.neubiorev.2018.09.004",
+    "download_url": null,
+    "venue": "Neuroscience & Biobehavioral Reviews",
+    "citation_count": 32,
+    "fields_of_study": [
+      "Neural dynamics and brain function",
+      "Neuroscience and Music Perception",
+      "EEG and Brain-Computer Interfaces"
+    ],
+    "paper_id": "https://openalex.org/W2890032176",
+    "keywords": [
+      "Mismatch negativity",
+      "Endophenotype",
+      "Psychology",
+      "Schizophrenia (object-oriented programming)",
+      "Neuroscience",
+      "Electrophysiology",
+      "Sensory processing",
+      "Dementia",
+      "Psychosis",
+      "Electroencephalography"
+    ]
+  }
+]

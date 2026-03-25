@@ -1,0 +1,176 @@
+{
+  "best_runs": [
+    {
+      "model": "advanced_hybrid_1dcnn_lstm",
+      "model_label": "Hybrid CNN-LSTM",
+      "mlflow_run_id": "561eb29a046946818320bea18f21bed6",
+      "mlflow_experiment_id": "398165227830907321",
+      "window_seconds": 6,
+      "inner_k": 1,
+      "outer_k": 10,
+      "equalize_lopo_groups": "true",
+      "use_smote": "true",
+      "patient_metrics": {
+        "accuracy": 0.8095238095238095,
+        "balanced_accuracy": 0.7857142857142857,
+        "precision": 0.7142857142857143,
+        "recall": 0.7142857142857143,
+        "sensitivity": 0.7142857142857143,
+        "specificity": 0.8571428571428571,
+        "f1": 0.7142857142857143,
+        "roc_auc": 0.8163265306122449,
+        "pr_auc": 0.5786641929499072,
+        "npv": 0.8571428571428571,
+        "mcc": 0.5714285714285714,
+        "true_positives": 5,
+        "true_negatives": 12,
+        "false_positives": 2,
+        "false_negatives": 2,
+        "n_patients": 21
+      },
+      "roc_auc_ci": {
+        "mean": 0.8120400784816032,
+        "std": 0.1003086330265652,
+        "ci_low": 0.6,
+        "ci_high": 0.9903977272727273,
+        "valid_samples": 1000
+      },
+      "permutation_test": {
+        "metric_name": "roc_auc",
+        "observed": 0.8163265306122449,
+        "p_value": 0.007984031936127744,
+        "null_mean": 0.4891224489795918,
+        "null_std": 0.1293745744268232,
+        "iterations": 500
+      },
+      "feature_selection": {
+        "average_features_per_fold": 1.0,
+        "unique_feature_count": 7,
+        "mean_pairwise_jaccard": 0.19047619047619047,
+        "kuncheva_index_mean": 0.18721198156682026,
+        "top_feature": "tp10_spectral_entropy",
+        "top_feature_frequency": 8,
+        "top_feature_share": 0.38095238095238093,
+        "mean_sign_consistency": 1.0
+      }
+    },
+    {
+      "model": "svm_linear",
+      "model_label": "Linear SVM",
+      "mlflow_run_id": "e0f3834332d545da893277f039d28e4b",
+      "mlflow_experiment_id": "460561734828277417",
+      "window_seconds": 8,
+      "inner_k": 30,
+      "outer_k": 10,
+      "equalize_lopo_groups": "true",
+      "use_smote": "true",
+      "patient_metrics": {
+        "accuracy": 0.6666666666666666,
+        "balanced_accuracy": 0.6428571428571428,
+        "precision": 0.5,
+        "recall": 0.5714285714285714,
+        "sensitivity": 0.5714285714285714,
+        "specificity": 0.7142857142857143,
+        "f1": 0.5333333333333333,
+        "roc_auc": 0.5102040816326531,
+        "pr_auc": 0.4110644257703081,
+        "npv": 0.7692307692307693,
+        "mcc": 0.2773500981126146,
+        "true_positives": 4,
+        "true_negatives": 10,
+        "false_positives": 4,
+        "false_negatives": 3,
+        "n_patients": 21
+      },
+      "roc_auc_ci": {
+        "mean": 0.5081889433056174,
+        "std": 0.15359683311420894,
+        "ci_low": 0.21223557692307718,
+        "ci_high": 0.8270833333333332,
+        "valid_samples": 1000
+      },
+      "permutation_test": {
+        "metric_name": "roc_auc",
+        "observed": 0.5102040816326531,
+        "p_value": 0.469061876247505,
+        "null_mean": 0.49932653061224486,
+        "null_std": 0.13437564602287488,
+        "iterations": 500
+      },
+      "feature_selection": {
+        "average_features_per_fold": 30.0,
+        "unique_feature_count": 103,
+        "mean_pairwise_jaccard": 0.3598228415857385,
+        "kuncheva_index_mean": 0.4315068493150685,
+        "top_feature": "left_frontal_temporal_diff_gamma",
+        "top_feature_frequency": 21,
+        "top_feature_share": 1.0,
+        "mean_sign_consistency": 1.0
+      }
+    }
+  ],
+  "cohort_summary": {
+    "participants": 21,
+    "remission_patients": 7,
+    "non_remission_patients": 14,
+    "female_count": 18,
+    "male_count": 3,
+    "age_mean_years": 37.1,
+    "age_sd_years": 9.7,
+    "rest_condition": "Eyes-closed resting state",
+    "montage_channels": [
+      "AF7",
+      "AF8",
+      "TP9",
+      "TP10"
+    ],
+    "channel_coverage": "Frontal (AF7, AF8), temporal (TP9, TP10)",
+    "sampling_rate_hz": 256,
+    "recording_duration_minutes": 10,
+    "recording_file_structure": "single file or two 5 min files",
+    "available_export_segment_seconds": 10,
+    "samples_per_segment": 2560,
+    "total_windows": 1203,
+    "remission_windows": 393,
+    "non_remission_windows": 810,
+    "class_ratio": "2.06:1 (non-remission:remission)",
+    "window_sizes_seconds": [
+      2,
+      4,
+      6,
+      8,
+      10
+    ],
+    "inner_k_values": [
+      1,
+      5,
+      10,
+      15,
+      20,
+      25,
+      30,
+      35,
+      40,
+      45,
+      50,
+      55,
+      60,
+      65,
+      70
+    ],
+    "outer_k": 10,
+    "feature_selector": "SelectKBest (f-classif)",
+    "validation": "Leave-one-participant-out",
+    "evaluation_level": "Patient-level aggregation",
+    "training_adjustments": "LOPO-group equalization + SMOTE"
+  },
+  "generated_files": {
+    "summary_figure": "paper/figures/figure1_sweep_overview.png",
+    "aggregated_csv": "paper/data/sweep_overview_aggregates.csv",
+    "best_run_comparison_csv": "paper/data/best_run_comparison.csv",
+    "best_run_comparison_tex": "paper/tables/best_run_comparison.tex",
+    "hybrid_biomarker_csv": "paper/data/hybrid_recurrent_biomarkers.csv",
+    "hybrid_biomarker_tex": "paper/tables/hybrid_recurrent_biomarkers.tex",
+    "cohort_summary_tex": "paper/tables/cohort_summary.tex"
+  }
+}

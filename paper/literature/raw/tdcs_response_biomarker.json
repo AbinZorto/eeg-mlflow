@@ -1,0 +1,181 @@
+[
+  {
+    "source": "OpenAlex",
+    "title": "Evidence-based guidelines on the therapeutic use of repetitive transcranial magnetic stimulation (rTMS): An update (2014–2018)",
+    "authors": "Jean‐Pascal Lefaucheur, André Alemán, Chris Baeken, David Benninger, Jérôme Brunelin, Vincenzo Di Lazzaro, Saša R. Filipović, Christian Grefkes, Alkomiet Hasan, Friedhelm C. Hummel, Satu K. Jääskeläinen, Berthold Langguth, Letizia Leocani, Alain Londero, Raffaele Nardone, Jean-Paul Nguyen, Thomas Nyffeler, Albino J. Oliveira‐Maia, Antonio Oliviero, Frank Padberg, Ulrich Palm, Walter Paulus, Emmanuel Poulet, Angelo Quartarone, Fady Rachid, Irena Rektorová, Símone Rossi, Hanna Sahlsten, Martin Schecklmann, David Szekely, Ulf Ziemann",
+    "abstract": "A group of European experts reappraised the guidelines on the therapeutic efficacy of repetitive transcranial magnetic stimulation (rTMS) previously published in 2014 [Lefaucheur et al., Clin Neurophysiol 2014;125:2150-206]. These updated recommendations take into account all rTMS publications, including data prior to 2014, as well as currently reviewed literature until the end of 2018. Level A evidence (definite efficacy) was reached for: high-frequency (HF) rTMS of the primary motor cortex (M1) contralateral to the painful side for neuropathic pain; HF-rTMS of the left dorsolateral prefrontal cortex (DLPFC) using a figure-of-8 or a H1-coil for depression; low-frequency (LF) rTMS of contralesional M1 for hand motor recovery in the post-acute stage of stroke. Level B evidence (probable efficacy) was reached for: HF-rTMS of the left M1 or DLPFC for improving quality of life or pain, respectively, in fibromyalgia; HF-rTMS of bilateral M1 regions or the left DLPFC for improving motor impairment or depression, respectively, in Parkinson's disease; HF-rTMS of ipsilesional M1 for promoting motor recovery at the post-acute stage of stroke; intermittent theta burst stimulation targeted to the leg motor cortex for lower limb spasticity in multiple sclerosis; HF-rTMS of the right DLPFC in posttraumatic stress disorder; LF-rTMS of the right inferior frontal gyrus in chronic post-stroke non-fluent aphasia; LF-rTMS of the right DLPFC in depression; and bihemispheric stimulation of the DLPFC combining right-sided LF-rTMS (or continuous theta burst stimulation) and left-sided HF-rTMS (or intermittent theta burst stimulation) in depression. Level A/B evidence is not reached concerning efficacy of rTMS in any other condition. The current recommendations are based on the differences reached in therapeutic efficacy of real vs. sham rTMS protocols, replicated in a sufficient number of independent studies. This does not mean that the benefit produced by rTMS inevitably reaches a level of clinical relevance.",
+    "year": 2020,
+    "doi": "10.1016/j.clinph.2019.11.002",
+    "url": "https://doi.org/10.1016/j.clinph.2019.11.002",
+    "download_url": "https://www.sciencedirect.com/science/article/am/pii/S1388245719312799?via%3Dihub",
+    "venue": "Clinical Neurophysiology",
+    "citation_count": 2140,
+    "fields_of_study": [
+      "Transcranial Magnetic Stimulation Studies",
+      "Stroke Rehabilitation and Recovery",
+      "Pain Management and Treatment"
+    ],
+    "paper_id": "https://openalex.org/W2997901555",
+    "keywords": [
+      "Transcranial magnetic stimulation",
+      "Dorsolateral prefrontal cortex",
+      "Deep transcranial magnetic stimulation",
+      "Stroke (engine)",
+      "Physical medicine and rehabilitation",
+      "Psychology",
+      "Primary motor cortex",
+      "Motor cortex",
+      "Supplementary motor area",
+      "Depression (economics)"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Harnessing neuroplasticity for clinical applications",
+    "authors": "Steven C. Cramer, Mriganka Sur, Bruce H. Dobkin, Charles P. O’Brien, Terence D. Sanger, John Q. Trojanowski, Judith M. Rumsey, Ramona Hicks, Judy L. Cameron, David Chen, Wen Chen, Leonardo G. Cohen, C. deCharms, C. J. Duffy, Guinevere F. Eden, E. E. Fetz, Rosemarie Filart, M C Freund, Steven Grant, Suzanne N. Haber, Peter W. Kalivas, Bryan Kolb, Arthur F. Kramer, Michael P. Lynch, Helen S. Mayberg, Patrick S. McQuillen, Ralph Nitkin, A. Pascual–Leone, Patricia A. Reuter‐Lorenz, Nicholas D. Schiff, Anu Sharma, L. Shekim, Michael P. Stryker, Edith V. Sullivan, Sophia Vinogradov",
+    "abstract": "Neuroplasticity can be defined as the ability of the nervous system to respond to intrinsic or extrinsic stimuli by reorganizing its structure, function and connections. Major advances in the understanding of neuroplasticity have to date yielded few established interventions. To advance the translation of neuroplasticity research towards clinical applications, the National Institutes of Health Blueprint for Neuroscience Research sponsored a workshop in 2009. Basic and clinical researchers in disciplines from central nervous system injury/stroke, mental/addictive disorders, paediatric/developmental disorders and neurodegeneration/ageing identified cardinal examples of neuroplasticity, underlying mechanisms, therapeutic implications and common denominators. Promising therapies that may enhance training-induced cognitive and motor learning, such as brain stimulation and neuropharmacological interventions, were identified, along with questions of how best to use this body of information to reduce human disability. Improved understanding of adaptive mechanisms at every level, from molecules to synapses, to networks, to behaviour, can be gained from iterative collaborations between basic and clinical researchers. Lessons can be gleaned from studying fields related to plasticity, such as development, critical periods, learning and response to disease. Improved means of assessing neuroplasticity in humans, including biomarkers for predicting and monitoring treatment response, are needed. Neuroplasticity occurs with many variations, in many forms, and in many contexts. However, common themes in plasticity that emerge across diverse central nervous system conditions include experience dependence, time sensitivity and the importance of motivation and attention. Integration of information across disciplines should enhance opportunities for the translation of neuroplasticity and circuit retraining research into effective clinical therapies.",
+    "year": 2011,
+    "doi": "10.1093/brain/awr039",
+    "url": "https://doi.org/10.1093/brain/awr039",
+    "download_url": "https://academic.oup.com/brain/article-pdf/134/6/1591/1052566/awr039.pdf",
+    "venue": "Brain",
+    "citation_count": 1197,
+    "fields_of_study": [
+      "Attention Deficit Hyperactivity Disorder",
+      "Transcranial Magnetic Stimulation Studies",
+      "EEG and Brain-Computer Interfaces"
+    ],
+    "paper_id": "https://openalex.org/W2107022859",
+    "keywords": [
+      "Neuroplasticity",
+      "Neuroscience",
+      "Psychology",
+      "Psychological intervention",
+      "Brain stimulation",
+      "Cognition",
+      "Medicine",
+      "Psychiatry",
+      "Stimulation"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Resting-state networks link invasive and noninvasive brain stimulation across diverse psychiatric and neurological diseases",
+    "authors": "Michael Fox, Randy L. Buckner, Hesheng Liu, M. Mallar Chakravarty, Andrés M. Lozano, Álvaro Pascual‐Leone",
+    "abstract": "Brain stimulation, a therapy increasingly used for neurological and psychiatric disease, traditionally is divided into invasive approaches, such as deep brain stimulation (DBS), and noninvasive approaches, such as transcranial magnetic stimulation. The relationship between these approaches is unknown, therapeutic mechanisms remain unclear, and the ideal stimulation site for a given technique is often ambiguous, limiting optimization of the stimulation and its application in further disorders. In this article, we identify diseases treated with both types of stimulation, list the stimulation sites thought to be most effective in each disease, and test the hypothesis that these sites are different nodes within the same brain network as defined by resting-state functional-connectivity MRI. Sites where DBS was effective were functionally connected to sites where noninvasive brain stimulation was effective across diseases including depression, Parkinson's disease, obsessive-compulsive disorder, essential tremor, addiction, pain, minimally conscious states, and Alzheimer's disease. A lack of functional connectivity identified sites where stimulation was ineffective, and the sign of the correlation related to whether excitatory or inhibitory noninvasive stimulation was found clinically effective. These results suggest that resting-state functional connectivity may be useful for translating therapy between stimulation modalities, optimizing treatment, and identifying new stimulation targets. More broadly, this work supports a network perspective toward understanding and treating neuropsychiatric disease, highlighting the therapeutic potential of targeted brain network modulation.",
+    "year": 2014,
+    "doi": "10.1073/pnas.1405003111",
+    "url": "https://doi.org/10.1073/pnas.1405003111",
+    "download_url": "https://www.pnas.org/content/pnas/111/41/E4367.full.pdf",
+    "venue": "Proceedings of the National Academy of Sciences",
+    "citation_count": 612,
+    "fields_of_study": [
+      "Functional Brain Connectivity Studies",
+      "Neurological disorders and treatments",
+      "Neural dynamics and brain function"
+    ],
+    "paper_id": "https://openalex.org/W2046558738",
+    "keywords": [
+      "Brain stimulation",
+      "Stimulation",
+      "Neuroscience",
+      "Deep brain stimulation",
+      "Resting state fMRI",
+      "Brain disease",
+      "Disease",
+      "Medicine",
+      "Brain activity and meditation",
+      "Psychology"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Cortico-Striatal-Thalamic Loop Circuits of the Salience Network: A Central Pathway in Psychiatric Disease and Treatment",
+    "authors": "Sarah K. Peters, Katharine Dunlop, Jonathan Downar",
+    "abstract": "The salience network (SN) plays a central role in cognitive control by integrating sensory input to guide attention, attend to motivationally salient stimuli and recruit appropriate functional brain-behavior networks to modulate behavior. Mounting evidence suggests that disturbances in SN function underlie abnormalities in cognitive control and may be a common etiology underlying many psychiatric disorders. Such functional and anatomical abnormalities have been recently apparent in studies and meta-analyses of psychiatric illness using functional magnetic resonance imaging (fMRI) and voxel-based morphometry (VBM). Of particular importance, abnormal structure and function in major cortical nodes of the SN, the dorsal anterior cingulate cortex (dACC) and anterior insula (AI), have been observed as a common neurobiological substrate across a broad spectrum of psychiatric disorders. In addition to cortical nodes of the SN, the network's associated subcortical structures, including the dorsal striatum, mediodorsal thalamus and dopaminergic brainstem nuclei, comprise a discrete regulatory loop circuit. The SN's cortico-striato-thalamo-cortical loop increasingly appears to be central to mechanisms of cognitive control, as well as to a broad spectrum of psychiatric illnesses and their available treatments. Functional imbalances within the SN loop appear to impair cognitive control, and specifically may impair self-regulation of cognition, behavior and emotion, thereby leading to symptoms of psychiatric illness. Furthermore, treating such psychiatric illnesses using invasive or non-invasive brain stimulation techniques appears to modulate SN cortical-subcortical loop integrity, and these effects may be central to the therapeutic mechanisms of brain stimulation treatments in many psychiatric illnesses. Here, we review clinical and experimental evidence for abnormalities in SN cortico-striatal-thalamic loop circuits in major depression, substance use disorders (SUD), anxiety disorders, schizophrenia and eating disorders (ED). We also review emergent therapeutic evidence that novel invasive and non-invasive brain stimulation treatments may exert therapeutic effects by normalizing abnormalities in the SN loop, thereby restoring the capacity for cognitive control. Finally, we consider a series of promising directions for future investigations on the role of SN cortico-striatal-thalamic loop circuits in the pathophysiology and treatment of psychiatric disorders.",
+    "year": 2016,
+    "doi": "10.3389/fnsys.2016.00104",
+    "url": "https://doi.org/10.3389/fnsys.2016.00104",
+    "download_url": "https://www.frontiersin.org/articles/10.3389/fnsys.2016.00104/pdf",
+    "venue": "Frontiers in Systems Neuroscience",
+    "citation_count": 605,
+    "fields_of_study": [
+      "Functional Brain Connectivity Studies",
+      "Transcranial Magnetic Stimulation Studies",
+      "Neural dynamics and brain function"
+    ],
+    "paper_id": "https://openalex.org/W2568027254",
+    "keywords": [
+      "Neuroscience",
+      "Deep brain stimulation",
+      "Psychology",
+      "Functional magnetic resonance imaging",
+      "Anterior cingulate cortex",
+      "Ventral striatum",
+      "Cognition",
+      "Thalamus",
+      "Dopaminergic",
+      "Schizophrenia (object-oriented programming)"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Canadian Network for Mood and Anxiety Treatments (CANMAT) 2016 Clinical Guidelines for the Management of Adults with Major Depressive Disorder",
+    "authors": "Roumen Milev, Peter Giacobbe, Sidney H. Kennedy, Daniel M. Blumberger, Zafiris J. Daskalakis, Jonathan Downar, Mandana Modirrousta, Simon Patry, Fidel Vila‐Rodriguez, Raymond W. Lam, Glenda MacQueen, Sagar V. Parikh, Arun Ravindran, the CANMAT Depression Work Group",
+    "abstract": "Background: The Canadian Network for Mood and Anxiety Treatments (CANMAT) conducted a revision of the 2009 guidelines by updating the evidence and recommendations. The scope of the 2016 guidelines remains the management of major depressive disorder (MDD) in adults, with a target audience of psychiatrists and other mental health professionals. Methods: Using the question-answer format, we conducted a systematic literature search focusing on systematic reviews and meta-analyses. Evidence was graded using CANMAT-defined criteria for level of evidence. Recommendations for lines of treatment were based on the quality of evidence and clinical expert consensus. “Neurostimulation Treatments” is the fourth of six sections of the 2016 guidelines. Results: Evidence-informed responses were developed for 31 questions for 6 neurostimulation modalities: 1) transcranial direct current stimulation (tDCS), 2) repetitive transcranial magnetic stimulation (rTMS), 3) electroconvulsive therapy (ECT), 4) magnetic seizure therapy (MST), 5) vagus nerve stimulation (VNS), and 6) deep brain stimulation (DBS). Most of the neurostimulation treatments have been investigated in patients with varying degrees of treatment resistance. Conclusions: There is increasing evidence for efficacy, tolerability, and safety of neurostimulation treatments. rTMS is now a first-line recommendation for patients with MDD who have failed at least 1 antidepressant. ECT remains a second-line treatment for patients with treatment-resistant depression, although in some situations, it may be considered first line. Third-line recommendations include tDCS and VNS. MST and DBS are still considered investigational treatments.",
+    "year": 2016,
+    "doi": "10.1177/0706743716660033",
+    "url": "https://doi.org/10.1177/0706743716660033",
+    "download_url": "https://journals.sagepub.com/doi/pdf/10.1177/0706743716660033",
+    "venue": "The Canadian Journal of Psychiatry",
+    "citation_count": 574,
+    "fields_of_study": [
+      "Transcranial Magnetic Stimulation Studies",
+      "Electroconvulsive Therapy Studies",
+      "Neurological disorders and treatments"
+    ],
+    "paper_id": "https://openalex.org/W4236675028",
+    "keywords": [
+      "Neurostimulation",
+      "Electroconvulsive therapy",
+      "Vagus nerve stimulation",
+      "Anxiety",
+      "Transcranial magnetic stimulation",
+      "Tolerability",
+      "Major depressive disorder",
+      "Mood",
+      "Psychiatry",
+      "Psychology"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "BCI for stroke rehabilitation: motor and beyond",
+    "authors": "Ravikiran Mane, Tushar Chouhan, Cuntai Guan",
+    "abstract": "Stroke is one of the leading causes of long-term disability among adults and contributes to major socio-economic burden globally. Stroke frequently results in multifaceted impairments including motor, cognitive and emotion deficits. In recent years, brain-computer interface (BCI)-based therapy has shown promising results for post-stroke motor rehabilitation. In spite of the success received by BCI-based interventions in the motor domain, non-motor impairments are yet to receive similar attention in research and clinical settings. Some preliminary encouraging results in post-stroke cognitive rehabilitation using BCI seem to suggest that it may also hold potential for treating non-motor deficits such as cognitive and emotion impairments. Moreover, past studies have shown an intricate relationship between motor, cognitive and emotion functions which might influence the overall post-stroke rehabilitation outcome. A number of studies highlight the inability of current treatment protocols to account for the implicit interplay between motor, cognitive and emotion functions. This indicates the necessity to explore an all-inclusive treatment plan targeting the synergistic influence of these standalone interventions. This approach may lead to better overall recovery than treating the individual deficits in isolation. In this paper, we review the recent advances in BCI-based post-stroke motor rehabilitation and highlight the potential for the use of BCI systems beyond the motor domain, in particular, in improving cognition and emotion of stroke patients. Building on the current results and findings of studies in individual domains, we next discuss the possibility of a holistic BCI system for motor, cognitive and affect rehabilitation which may synergistically promote restorative neuroplasticity. Such a system would provide an all-encompassing rehabilitation platform, leading to overarching clinical outcomes and transfer of these outcomes to a better quality of living. This is one of the first works to analyse the possibility of targeting cross-domain influence of post-stroke functional recovery enabled by BCI-based rehabilitation.",
+    "year": 2020,
+    "doi": "10.1088/1741-2552/aba162",
+    "url": "https://doi.org/10.1088/1741-2552/aba162",
+    "download_url": "https://iopscience.iop.org/article/10.1088/1741-2552/aba162/pdf",
+    "venue": "Journal of Neural Engineering",
+    "citation_count": 422,
+    "fields_of_study": [
+      "EEG and Brain-Computer Interfaces",
+      "Functional Brain Connectivity Studies",
+      "Neuroscience and Neural Engineering"
+    ],
+    "paper_id": "https://openalex.org/W3040552008",
+    "keywords": [
+      "Rehabilitation",
+      "Brain–computer interface",
+      "Cognition",
+      "Physical medicine and rehabilitation",
+      "Stroke (engine)",
+      "Psychological intervention",
+      "Psychology",
+      "Motor imagery",
+      "Cognitive psychology",
+      "Neuroscience"
+    ]
+  }
+]

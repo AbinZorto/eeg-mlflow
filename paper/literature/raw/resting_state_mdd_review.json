@@ -1,0 +1,192 @@
+[
+  {
+    "source": "OpenAlex",
+    "title": "Diagnosis and management of dementia with Lewy bodies",
+    "authors": "Ian G. McKeith, Bradley F. Boeve, Dennis W. Dickson, Glenda M. Halliday, John‐Paul Taylor, Daniel Weintraub, Dag Aarsland, James E. Galvin, Johannes Attems, Clive Ballard, Ashley Bayston, Thomas G. Beach, ‪Frederic Blanc‬, Nicolaas I. Bohnen, Laura Bonanni, José Brás, Patrik Brundin, David J. Burn, Alice Chen‐Plotkin, John E. Duda, Omar M. A. El‐Agnaf, Howard Feldman, Tanis J. Ferman, Dominic ffytche, Hiroshige Fujishiro, Douglas Galasko, Jennifer G. Goldman, Stephen N. Gomperts, Neill R. Graff‐Radford, Lawrence S. Honig, Álex Iranzo, Kejal Kantarci, Daniel Kaufer, Walter A. Kukull, Virginia M.‐Y. Lee, James B. Leverenz, Simon J.G. Lewis, Carol F. Lippa, Angela Lunde, Mario Masellis, Eliezer Masliah, Pamela J. McLean, Brit Mollenhauer, Thomas J. Montine, Emilio Moreno, Etsuro Mori, Melissa E. Murray, John T. O’Brien, Sotoshi Orimo, Ronald B. Postuma, Shankar Ramaswamy, Owen A. Ross, David P. Salmon, Andrew Singleton, Angela Taylor, Alan Thomas, Pietro Tiraboschi, Jon B. Toledo, John Q. Trojanowski, Debby W. Tsuang, Zuzana Walker, Masahito Yamada, Kenji Kosaka",
+    "abstract": "The Dementia with Lewy Bodies (DLB) Consortium has refined its recommendations about the clinical and pathologic diagnosis of DLB, updating the previous report, which has been in widespread use for the last decade. The revised DLB consensus criteria now distinguish clearly between clinical features and diagnostic biomarkers, and give guidance about optimal methods to establish and interpret these. Substantial new information has been incorporated about previously reported aspects of DLB, with increased diagnostic weighting given to REM sleep behavior disorder and <sup>123</sup>iodine-metaiodobenzylguanidine (MIBG) myocardial scintigraphy. The diagnostic role of other neuroimaging, electrophysiologic, and laboratory investigations is also described. Minor modifications to pathologic methods and criteria are recommended to take account of Alzheimer disease neuropathologic change, to add previously omitted Lewy-related pathology categories, and to include assessments for substantia nigra neuronal loss. Recommendations about clinical management are largely based upon expert opinion since randomized controlled trials in DLB are few. Substantial progress has been made since the previous report in the detection and recognition of DLB as a common and important clinical disorder. During that period it has been incorporated into DSM-5, as major neurocognitive disorder with Lewy bodies. There remains a pressing need to understand the underlying neurobiology and pathophysiology of DLB, to develop and deliver clinical trials with both symptomatic and disease-modifying agents, and to help patients and carers worldwide to inform themselves about the disease, its prognosis, best available treatments, ongoing research, and how to get adequate support.",
+    "year": 2017,
+    "doi": "10.1212/wnl.0000000000004058",
+    "url": "https://doi.org/10.1212/wnl.0000000000004058",
+    "download_url": "https://n.neurology.org/content/neurology/89/1/88.full.pdf",
+    "venue": "Neurology",
+    "citation_count": 4291,
+    "fields_of_study": [
+      "Parkinson's Disease Mechanisms and Treatments",
+      "Dementia and Cognitive Impairment Research",
+      "Alzheimer's disease research and treatments"
+    ],
+    "paper_id": "https://openalex.org/W2623521763",
+    "keywords": [
+      "Dementia with Lewy bodies",
+      "Neurocognitive",
+      "REM sleep behavior disorder",
+      "Medicine",
+      "Clinical trial",
+      "Neuroimaging",
+      "Dementia",
+      "Disease",
+      "Lewy body",
+      "Psychiatry"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Tracking Whole-Brain Connectivity Dynamics in the Resting State",
+    "authors": "Elena A. Allen, Eswar Damaraju, Sergey Plis, Erik B. Erhardt, Tom Eichele, Vince D. Calhoun",
+    "abstract": "Spontaneous fluctuations are a hallmark of recordings of neural signals, emergent over time scales spanning milliseconds and tens of minutes. However, investigations of intrinsic brain organization based on resting-state functional magnetic resonance imaging have largely not taken into account the presence and potential of temporal variability, as most current approaches to examine functional connectivity (FC) implicitly assume that relationships are constant throughout the length of the recording. In this work, we describe an approach to assess whole-brain FC dynamics based on spatial independent component analysis, sliding time window correlation, and k-means clustering of windowed correlation matrices. The method is applied to resting-state data from a large sample (n = 405) of young adults. Our analysis of FC variability highlights particularly flexible connections between regions in lateral parietal and cingulate cortex, and argues against a labeling scheme where such regions are treated as separate and antagonistic entities. Additionally, clustering analysis reveals unanticipated FC states that in part diverge strongly from stationary connectivity patterns and challenge current descriptions of interactions between large-scale networks. Temporal trends in the occurrence of different FC states motivate theories regarding their functional roles and relationships with vigilance/arousal. Overall, we suggest that the study of time-varying aspects of FC can unveil flexibility in the functional coordination between different neural systems, and that the exploitation of these dynamics in further investigations may improve our understanding of behavioral shifts and adaptive processes.",
+    "year": 2012,
+    "doi": "10.1093/cercor/bhs352",
+    "url": "https://doi.org/10.1093/cercor/bhs352",
+    "download_url": "https://academic.oup.com/cercor/article-pdf/24/3/663/14099596/bhs352.pdf",
+    "venue": "Cerebral Cortex",
+    "citation_count": 3159,
+    "fields_of_study": [
+      "Functional Brain Connectivity Studies",
+      "Neural dynamics and brain function",
+      "EEG and Brain-Computer Interfaces"
+    ],
+    "paper_id": "https://openalex.org/W2170702893",
+    "keywords": [
+      "Dynamic functional connectivity",
+      "Functional magnetic resonance imaging",
+      "Resting state fMRI",
+      "Functional connectivity",
+      "Neuroscience",
+      "Computer science",
+      "Cluster analysis",
+      "Flexibility (engineering)",
+      "Arousal",
+      "Psychology"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "The two‐process model of sleep regulation: a reappraisal",
+    "authors": "Alexander A. Borbély, Serge Daan, Anna Wirz‐Justice, Tom Deboer",
+    "abstract": "In the last three decades the two-process model of sleep regulation has served as a major conceptual framework in sleep research. It has been applied widely in studies on fatigue and performance and to dissect individual differences in sleep regulation. The model posits that a homeostatic process (Process S) interacts with a process controlled by the circadian pacemaker (Process C), with time-courses derived from physiological and behavioural variables. The model simulates successfully the timing and intensity of sleep in diverse experimental protocols. Electrophysiological recordings from the suprachiasmatic nuclei (SCN) suggest that S and C interact continuously. Oscillators outside the SCN that are linked to energy metabolism are evident in SCN-lesioned arrhythmic animals subjected to restricted feeding or methamphetamine administration, as well as in human subjects during internal desynchronization. In intact animals these peripheral oscillators may dissociate from the central pacemaker rhythm. A sleep/fast and wake/feed phase segregate antagonistic anabolic and catabolic metabolic processes in peripheral tissues. A deficiency of Process S was proposed to account for both depressive sleep disturbances and the antidepressant effect of sleep deprivation. The model supported the development of novel non-pharmacological treatment paradigms in psychiatry, based on manipulating circadian phase, sleep and light exposure. In conclusion, the model remains conceptually useful for promoting the integration of sleep and circadian rhythm research. Sleep appears to have not only a short-term, use-dependent function; it also serves to enforce rest and fasting, thereby supporting the optimization of metabolic processes at the appropriate phase of the 24-h cycle.",
+    "year": 2016,
+    "doi": "10.1111/jsr.12371",
+    "url": "https://doi.org/10.1111/jsr.12371",
+    "download_url": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1111/jsr.12371",
+    "venue": "Journal of Sleep Research",
+    "citation_count": 1521,
+    "fields_of_study": [
+      "Sleep and Wakefulness Research",
+      "Sleep and related disorders",
+      "Circadian rhythm and melatonin"
+    ],
+    "paper_id": "https://openalex.org/W2236052756",
+    "keywords": [
+      "Process (computing)",
+      "Psychology",
+      "Sleep (system call)",
+      "Cognitive psychology",
+      "Computer science"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Personalized Medicine: Review and Perspectives of Promising Baseline EEG Biomarkers in Major Depressive Disorder and Attention Deficit Hyperactivity Disorder",
+    "authors": "Sebastian Olbrich, Rik van Dinteren, Martijn Arns",
+    "abstract": "Personalized medicine in psychiatry is in need of biomarkers that resemble central nervous system function at the level of neuronal activity. Electroencephalography (EEG) during sleep or resting-state conditions and event-related potentials (ERPs) have not only been used to discriminate patients from healthy subjects, but also for the prediction of treatment outcome in various psychiatric diseases, yielding information about tailored therapy approaches for an individual. This review focuses on baseline EEG markers for two psychiatric conditions, namely major depressive disorder and attention deficit hyperactivity disorder. It covers potential biomarkers from EEG sleep research and vigilance regulation, paroxysmal EEG patterns and epileptiform discharges, quantitative EEG features within the EEG main frequency bands, connectivity markers and ERP components that might help to identify favourable treatment outcome. Further, the various markers are discussed in the context of their potential clinical value and as research domain criteria, before giving an outline for future studies that are needed to pave the way to an electrophysiological biomarker-based personalized medicine.",
+    "year": 2015,
+    "doi": "10.1159/000437435",
+    "url": "https://doi.org/10.1159/000437435",
+    "download_url": null,
+    "venue": "Neuropsychobiology",
+    "citation_count": 144,
+    "fields_of_study": [
+      "Functional Brain Connectivity Studies",
+      "EEG and Brain-Computer Interfaces",
+      "Attention Deficit Hyperactivity Disorder"
+    ],
+    "paper_id": "https://openalex.org/W2290011245",
+    "keywords": [
+      "Electroencephalography",
+      "Vigilance (psychology)",
+      "Quantitative electroencephalography",
+      "Context (archaeology)",
+      "Biomarker",
+      "Personalized medicine",
+      "Major depressive disorder",
+      "Psychology",
+      "Event-related potential",
+      "Attention deficit hyperactivity disorder"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Alterations of Intrinsic Brain Connectivity Patterns in Depression and Bipolar Disorders: A Critical Assessment of Magnetoencephalography-Based Evidence",
+    "authors": "Golnoush Alamian, Ana-Sofía Hincapié, Etienne Combrisson, Thomas Thiery, Véronique Martel, Dmitrii Althukov, Karim Jerbi",
+    "abstract": "Despite being the object of a thriving field of clinical research, the investigation of intrinsic brain network alterations in psychiatric illnesses is still in its early days. Because the pathological alterations are predominantly probed using functional magnetic resonance imaging (fMRI), many questions about the electrophysiological bases of resting-state alterations in psychiatric disorders, particularly among mood disorder patients, remain unanswered. Alongside important research using electroencephalography (EEG), the specific recent contributions and future promise of magnetoencephalography (MEG) in this field are not fully recognized and valued. Here, we provide a critical review of recent findings from MEG resting-state connectivity within major depressive disorder (MDD) and bipolar disorder (BD). The clinical MEG resting-state results are compared with those previously reported with fMRI and EEG. Taken together, MEG appears to be a promising but still critically underexploited technique to unravel the neurophysiological mechanisms that mediate abnormal (both hyper- and hypo-) connectivity patterns involved in MDD and BD. In particular, a major strength of MEG is its ability to provide source-space estimations of neuromagnetic long-range rhythmic synchronization at various frequencies (i.e., oscillatory coupling). The reviewed literature highlights the relevance of probing local and interregional rhythmic synchronization to explore the pathophysiological underpinnings of each disorder. However, before we can fully take advantage of MEG connectivity analyses in psychiatry, several limitations inherent to MEG connectivity analyses need to be understood and taken into account. Thus, we also discuss current methodological challenges and outline paths for future research. MEG resting-state studies provide an important window onto perturbed spontaneous oscillatory brain networks and hence supply an important complement to fMRI-based resting-state measurements in psychiatric populations.",
+    "year": 2017,
+    "doi": "10.3389/fpsyt.2017.00041",
+    "url": "https://doi.org/10.3389/fpsyt.2017.00041",
+    "download_url": "https://www.frontiersin.org/articles/10.3389/fpsyt.2017.00041/pdf",
+    "venue": "Frontiers in Psychiatry",
+    "citation_count": 51,
+    "fields_of_study": [
+      "Functional Brain Connectivity Studies",
+      "Bipolar Disorder and Treatment",
+      "Advanced MRI Techniques and Applications"
+    ],
+    "paper_id": "https://openalex.org/W2596270150",
+    "keywords": [
+      "Magnetoencephalography",
+      "Bipolar disorder",
+      "Depression (economics)",
+      "Psychology",
+      "Neuroscience",
+      "Neuroimaging",
+      "Psychiatry",
+      "Clinical psychology",
+      "Cognition",
+      "Electroencephalography"
+    ]
+  },
+  {
+    "source": "OpenAlex",
+    "title": "Alterations in resting-state EEG functional connectivity in patients with major depressive disorder receiving electroconvulsive therapy: A systematic review",
+    "authors": "Sarah Ulrich, Else Schneider, Gunnar Deuring, Saskia Erni, Maria de Ridder, Jan Sarlon, Annette Beatrix Brühl",
+    "abstract": "Electroconvulsive therapy (ECT) is highly efficacious for the treatment of major depressive disorder (MDD), but its mechanisms still require clarification. Even though depression is associated with alterations in functional connectivity (FC), EEG studies investigating effects of ECT on FC have not been systematically reviewed. Understanding these effects may help to identify the role of functional brain circuits in depression and its remission. This systematic review aimed to synthesize EEG studies investigating FC changes in ECT-treated patients with depression. A systematic literature search was conducted following PRISMA guidelines. Peer-reviewed studies on pre-to post-ECT resting-state EEG FC changes in adult patients with MDD were included. Three of 143 studies were included, of which two reported reduced FC in the alpha and beta frequency bands and increased theta band FC in patients with ECT-treated MDD. Changes in alpha band FC were associated with treatment outcomes. Patients with MDD exhibit increased electrophysiological resting-state alpha band FC, particularly frontally, compared with healthy subjects. Thus, ECT-induced decrease might indicate a trend toward normalization of oscillatory brain rhythms. As brain oscillations have been proposed to be involved in neuronal synchronization, which is important for communication between networks, the potential restoration in patients with depression and the association of FC changes with clinical improvement may indicate a potential mechanism of action of ECT. Understanding ECT's underlying mechanisms might ultimately enable treatment optimization, thus enhancing patient care. However, the number of studies is limited, with low-to-moderate EEG study quality, small sample sizes, and different electrophysiological FC measures.",
+    "year": 2025,
+    "doi": "10.1016/j.neubiorev.2025.106017",
+    "url": "https://doi.org/10.1016/j.neubiorev.2025.106017",
+    "download_url": null,
+    "venue": "Neuroscience & Biobehavioral Reviews",
+    "citation_count": 5,
+    "fields_of_study": [
+      "Electroconvulsive Therapy Studies",
+      "Functional Brain Connectivity Studies",
+      "Treatment of Major Depression"
+    ],
+    "paper_id": "https://openalex.org/W4406511495",
+    "keywords": [
+      "Electroconvulsive therapy",
+      "Electroencephalography",
+      "Resting state fMRI",
+      "Major depressive disorder",
+      "Functional connectivity",
+      "Psychology",
+      "Neuroscience",
+      "Medicine",
+      "Psychiatry",
+      "Cognition"
+    ]
+  },
+  {
+    "source": "CORE",
+    "title": "Guidelines for the recording and evaluation of pharmaco-EEG data in man: the International Pharmaco-EEG Society (IPEG)",
+    "authors": "BABILONI, CLAUDIO, Boeijinga PH, Brunovsky M, Drinkenburg WH, Ffytche DH, Freeman J, Hegerl U, Hirata K, IPEG Pharmaco EEG Guidelines C.o.m.m.i.t.t.e.e. Collaborators, Jobert M, Kinoshita T, Knott VJ, Lopes Da Silva FH, Matousek M, Mucci A, Nottage JF, Olbrich S, Prichep LS, Ruigt GS, Saletu B, Stancak A, Strik WK, van Gerven JM, Wilson FJ, Wise RG",
+    "abstract": "The International Pharmaco-EEG Society (IPEG) presents updated guidelines summarising the requirements for the recording and computerised evaluation of pharmaco-EEG data in man. Since the publication of the first pharmaco-EEG guidelines in 1982, technical and data processing methods have advanced steadily, thus enhancing data quality and expanding the palette of tools available to investigate the action of drugs on the central nervous system (CNS), determine the pharmacokinetic and pharmacodynamic properties of novel therapeutics and evaluate the CNS penetration or toxicity of compounds. However, a review of the literature reveals inconsistent operating procedures from one study to another. While this fact does not invalidate results per se, the lack of standardisation constitutes a regrettable shortcoming, especially in the context of drug development programmes. Moreover, this shortcoming hampers reliable comparisons between outcomes of studies from different laboratories and hence also prevents pooling of data which is a requirement for sufficiently powering the validation of novel analytical algorithms and EEG-based biomarkers. The present updated guidelines reflect the consensus of a global panel of EEG experts and are intended to assist investigators using pharmaco-EEG in clinical research, by providing clear and concise recommendations and thereby enabling standardisation of methodology and facilitating comparability of data across laboratories",
+    "year": 2012,
+    "doi": "10.1159/000343478",
+    "url": "https://iris.uniroma1.it/bitstream/11573/802874/1/Jobert_Guidelines_2012.pdf",
+    "download_url": "https://core.ac.uk/download/54522901.pdf",
+    "venue": null,
+    "citation_count": 0,
+    "fields_of_study": [],
+    "paper_id": "30330986",
+    "keywords": []
+  }
+]

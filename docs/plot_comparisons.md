@@ -476,3 +476,22 @@ Copy this block for each new request:
 - artifact_outputs:
   - `sweeps/paper_panels/<selection_slug>/biomarker_interpretation_composite.png`
 - notes: Supports best-overall, explicit MLflow run id, and explicit run-signature selection modes.
+
+### plot-0028
+- requested_on: 2026-03-25
+- requested_by: user
+- status: validated
+- validated_on: 2026-03-25
+- comparison_goal: Summarize sweep-level discrimination, stability, and sparsity for the manuscript with explicit hybrid-vs-SVM performance panels and shared feature-selection panels.
+- plot_type: 2x2 manuscript summary composite
+- grouping_dimensions: panels=`patient_roc_auc vs window_seconds`, `patient_roc_auc vs inner_k`, `feature_selection_mean_pairwise_jaccard vs inner_k`, `feature_selection_unique_feature_count vs inner_k`; grouped by `model` for performance panels and by the shared selector for feature-selection panels
+- required_inputs: deduplicated success rows from `sweeps/artifacts/*.results.jsonl` plus resolved best-run MLflow artifacts for the hybrid and SVM models
+- acceptance_criteria: Generate one manuscript-ready overview figure, export aggregated plotting data, and record the best-run manuscript facts in a machine-readable JSON file.
+- implementation_refs:
+  - script: `scripts/build_paper_summary_assets.py`
+  - notebook:
+- artifact_outputs:
+  - `paper/figures/figure1_sweep_overview.png`
+  - `paper/data/sweep_overview_aggregates.csv`
+  - `paper/data/manuscript_facts.json`
+- notes: Bottom-row feature-selection panels are intentionally model-agnostic because the same feature-selection layer feeds both models in this sweep. Figure was manually re-opened during manuscript drafting and confirmed to match the hybrid-sparse narrative used in the paper text.
