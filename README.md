@@ -166,6 +166,154 @@ Important interpretation details:
 
 Use [docs/metrics_reference.md](/home/abin/eeg-mlflow/docs/metrics_reference.md) for the full metric list, exact meanings, and report field names.
 
+## Sweep Plots
+
+Use the results ledgers under `sweeps/artifacts/` to generate trend plots across sweep settings for any flattened metric in `mlflow_metrics`:
+
+```bash
+uv run python3 scripts/plot_sweep_roc_auc.py \
+  --artifacts-dir sweeps/artifacts \
+  --output-dir sweeps/plots
+```
+
+Outputs:
+
+- `sweeps/plots/window_size_vs_patient_roc_auc.png`
+- `sweeps/plots/inner_k_vs_patient_roc_auc.png`
+- matching CSV exports of the deduplicated plotting tables
+
+Plot behavior:
+
+- dim lines show every individual sweep trajectory across the x-axis
+- the darker line is the mean metric value at each x value
+- only latest successful attempts are used from the append-only `*.results.jsonl` ledgers
+
+Examples:
+
+```bash
+uv run python3 scripts/plot_sweep_roc_auc.py \
+  --artifacts-dir sweeps/artifacts \
+  --output-dir sweeps/plots \
+  --metric patient_pr_auc
+```
+
+```bash
+uv run python3 scripts/plot_sweep_roc_auc.py \
+  --artifacts-dir sweeps/artifacts \
+  --output-dir sweeps/plots \
+  --metric patient_balanced_accuracy
+```
+
+```bash
+uv run python3 scripts/plot_sweep_roc_auc.py \
+  --artifacts-dir sweeps/artifacts \
+  --output-dir sweeps/plots \
+  --metric feature_selection_mean_pairwise_jaccard
+```
+
+Preset bundles:
+
+```bash
+uv run python3 scripts/plot_sweep_roc_auc.py \
+  --artifacts-dir sweeps/artifacts \
+  --output-dir sweeps/plots \
+  --preset performance_core
+```
+
+```bash
+uv run python3 scripts/plot_sweep_roc_auc.py \
+  --artifacts-dir sweeps/artifacts \
+  --output-dir sweeps/plots \
+  --preset biomarker_core
+```
+
+```bash
+uv run python3 scripts/plot_sweep_roc_auc.py \
+  --artifacts-dir sweeps/artifacts \
+  --output-dir sweeps/plots \
+  --preset paper_main
+```
+
+```bash
+uv run python3 scripts/plot_sweep_roc_auc.py --list-presets
+```
+
+Useful biomarker summary sweep metrics already available in `mlflow_metrics` include:
+
+- `feature_selection_mean_pairwise_jaccard`
+- `feature_selection_kuncheva_index_mean`
+- `feature_selection_mean_top_k_overlap`
+- `feature_selection_effect_mean_sign_consistency`
+
+Recommended presets:
+
+- `performance_core`: ROC-AUC, PR-AUC, balanced accuracy, F1, and MCC.
+- `biomarker_core`: mean pairwise Jaccard, mean Kuncheva, mean top-k overlap, and mean effect sign consistency.
+- `paper_main`: one mixed bundle for the main predictive and biomarker sweep summaries.
+
+## Paper Figures
+
+Generate publication-style single-run figures from a resolved MLflow training run:
+
+```bash
+uv run python3 scripts/plot_paper_figures.py \
+  --artifacts-dir sweeps/artifacts \
+  --mlruns-root mlruns \
+  --output-dir sweeps/paper_figures \
+  --model advanced_hybrid_1dcnn_lstm \
+  --window-size 2 \
+  --inner-k 10 \
+  --outer-k 10 \
+  --fs-method select_k_best_f_classif \
+  --n-features 10 \
+  --equalize-lopo-groups false \
+  --use-smote false
+```
+
+Outputs are written under `sweeps/paper_figures/<selection_slug>/` and grouped into:
+
+- `performance/`
+- `fold_behavior/`
+- `biomarker_stability/`
+- `biomarker_interpretation/`
+
+The script resolves one successful MLflow run from `sweeps/artifacts/*.results.jsonl`, then uses the corresponding MLflow artifacts such as:
+
+- `clinical_metrics_summary.json`
+- `feature_selection_stability.json`
+- `*_patient_predictions.csv`
+- `*_window_predictions.csv`
+- nested fold artifacts for selected features and held-out predictions
+
+It also writes `figure_manifest.json` so you can see which figures were generated versus skipped for missing data.
+
+## Paper Multi-Panels
+
+Compose the single-panel paper figures into submission-style multi-panel composites:
+
+```bash
+uv run python3 scripts/compose_paper_panels.py \
+  --artifacts-dir sweeps/artifacts \
+  --mlruns-root mlruns \
+  --paper-figures-dir sweeps/paper_figures \
+  --output-dir sweeps/paper_panels \
+  --select best-overall
+```
+
+Supported selection modes:
+
+- `--select best-overall`: choose the best successful run by `patient_roc_auc` after filters.
+- `--select mlflow-run-id --mlflow-run-id <run_id>`: compose for one exact MLflow run.
+- `--select run-signature --run-signature <sig>`: compose for the best successful run within one sweep/checkpoint signature. Accepts the full stored signature or a unique leading prefix such as the 12-character suffix used in artifact filenames.
+
+Generated composites:
+
+- `main_results_composite`
+- `biomarker_stability_composite`
+- `biomarker_interpretation_composite`
+
+Outputs are written under `sweeps/paper_panels/<selection_slug>/` together with `panel_manifest.json`.
+
 ## Feature Selection and Feature Filtering
 
 ### Feature selection flags (training CLI)
