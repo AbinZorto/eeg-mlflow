@@ -13,7 +13,7 @@ The lower half of Figure~\ref{fig:sweep-overview} highlights a second, and more 
 
 \subsection{Best-run patient-level performance}
 
-The best hybrid configuration achieved patient-level ROC-AUC 0.816, PR-AUC 0.579, balanced accuracy 0.786, accuracy 0.810, F1 0.714, and MCC 0.571 over 21 held-out participants (Figure~\ref{fig:main-results}; Table~\ref{tab:best-run-comparison}). Its ROC-AUC bootstrap interval ranged from 0.600 to 0.990, and the permutation test remained significant ($p=0.008$), which is notable given the small cohort. The corresponding confusion matrix contained 12 true negatives, 5 true positives, 2 false positives, and 2 false negatives.
+The best hybrid configuration achieved patient-level ROC-AUC 0.816, PR-AUC 0.579, balanced accuracy 0.786, accuracy 0.810, F1 0.714, and MCC 0.571 over 21 held-out participants (Figure~\ref{fig:main-results}; Table~\ref{tab:best-run-comparison}). Its ROC-AUC bootstrap interval ranged from 0.600 to 0.990, and the permutation test remained significant ($p=0.008$), which is notable given the relatively small cohort. The corresponding confusion matrix contained 12 true negatives, 5 true positives, 2 false positives, and 2 false negatives.
 
 The best SVM baseline reached balanced accuracy 0.643 and ROC-AUC 0.510, with a non-significant permutation result ($p=0.469$). This weaker performance came with a much larger per-fold feature budget (\texttt{inner-k=30}) and a far larger overall candidate set. The contrast indicates that the sparse hybrid pipeline extracted stronger patient-level discrimination from a much smaller subset.
 
@@ -33,14 +33,14 @@ The best SVM baseline reached balanced accuracy 0.643 and ROC-AUC 0.510, with a 
 
 \subsection{Sparse biomarker set with modest hard-set overlap}
 
-The winning hybrid run selected an average of 1 feature per fold and yielded only 7 unique recurrent features across the entire outer-validation process (Table~\ref{tab:hybrid-biomarkers}). That degree of sparsity is one of the most distinctive findings in the sweep. Hard-set overlap was modest: mean pairwise Jaccard 0.190 and mean Kuncheva index 0.187. Figure~\ref{fig:biomarker-stability} shows a small recurrent pool with clear fold-to-fold variation in feature identity.
+The winning hybrid run selected an average of 1 feature per fold and yielded only 7 unique recurrent features across the entire outer-validation process (Table~\ref{tab:hybrid-biomarkers}). That degree of sparsity is one of the most distinctive findings in the sweep. Hard-set overlap was modest: mean pairwise Jaccard 0.190 and mean Kuncheva index 0.187. Figure~\ref{fig:biomarker-stability} summarizes the small recurrent pool together with the modest chance-adjusted stability summary.
 
 A small recurring feature set emerged repeatedly, though not in every fold, and the selected set was dominated by temporal and frontal-temporal descriptors. The most recurrent feature was \texttt{tp10\_spectral\_entropy}, selected in 8 of 21 folds. The next most recurrent features were \texttt{left\_frontal\_temporal\_diff\_gamma}, \texttt{left\_frontal\_temporal\_diff\_beta}, and \texttt{af7\_zero\_crossings}.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{figure3_biomarker_stability.png}
-  \caption{Biomarker-stability composite for the best hybrid run. The hard-set overlap metrics are modest. The selected feature pool remains small and interpretable.}
+  \caption{Biomarker-stability composite for the best hybrid run. Panel A ranks the recurrent features by selection frequency. Panel D reports the modest Kuncheva stability summary.}
   \label{fig:biomarker-stability}
 \end{figure}
 

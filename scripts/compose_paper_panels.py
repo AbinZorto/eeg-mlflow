@@ -53,8 +53,6 @@ COMPOSITE_SPECS = {
         "title": "Biomarker Stability",
         "panels": [
             ("A", "selection_frequency", "Selection Frequency"),
-            ("B", "jaccard_heatmap", "Pairwise Jaccard Heatmap"),
-            ("C", "jaccard_distribution", "Jaccard Distribution"),
             ("D", "kuncheva_summary", "Kuncheva Summary"),
         ],
     },

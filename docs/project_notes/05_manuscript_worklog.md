@@ -25,7 +25,7 @@ Persistent log for the LaTeX manuscript and supporting paper assets.
   - curated_bibtex_paths: `paper/references.bib`, `paper/references_analysis_subset.bib`
   - raw_search_dir: `paper/literature/raw`
   - current_entry_count: `55`
-  - total_entries_across_curated_sources: `79`
+  - total_entries_across_curated_sources: `80`
   - cited_entry_count_in_manuscript: `51`
   - note: `Continue searching during drafting; do not treat the current bibliography pool as final or complete. Curated manuscript builds should cite explicit sources rather than relying on nocite-all behavior.`
 
@@ -89,6 +89,7 @@ Persistent log for the LaTeX manuscript and supporting paper assets.
 - Treat `/Users/abin/Paper/paper2-body.tex` as an outdated cross-check on the same data, not as an authoritative methodology source.
 - Use acquisition details from legacy materials only when corroborated by the current repo configs or artifacts, or when the user explicitly requests that they be carried into the manuscript as acquisition context.
 - Keep legacy acquisition descriptors separate from the current sweep preprocessing description.
+- Use colleague papers from the same data program as corroborative context and regional plausibility support, not as direct performance benchmarks.
 
 ## Ongoing Search Backlog
 
@@ -117,3 +118,8 @@ Persistent log for the LaTeX manuscript and supporting paper assets.
 - expanded the manuscript to `51` explicit citations across `paper/references.bib` and `paper/references_analysis_subset.bib`
 - switched the draft away from `\nocite{*}` and verified that the curated LaTeX build succeeds at `paper/build_curated/main.pdf`
 - imported the user-requested acquisition details from `/Users/abin/Paper/paper2-body.tex` into the methods section and regenerated `paper/tables/cohort_summary.tex` so the cohort table now includes demographics, recording structure, export length, and window counts with an explicit `woodham2025home` source row
+- validated that the best-hybrid Jaccard heatmap and histogram in the stability figure are reconstructed from nested MLflow fold selections rather than stale image assets; for `inner_k=1`, the fold-pair Jaccard values are expected to be binary because each fold selects one feature
+- decluttered `paper/figures/figure1_sweep_overview.png` and updated the shared feature-selection aggregation so matched model duplicates no longer double-count the bottom-row confidence bands
+- reduced the biomarker-stability composite to panels A and D for the manuscript because the verified Jaccard heatmap and histogram are visually unhelpful in the sparse best-run setting
+- re-read the same-data colleague papers from the local Zotero store and revised the introduction/discussion so the manuscript now connects its TP10 and frontal-temporal recurrent candidates to prior PSD-based and PLV-based findings from the same home-based 4-channel program without direct metric benchmarking
+- added `Moncy2025BD` to `paper/references_analysis_subset.bib` as supportive adjacent-context evidence for low-montage AF7 and TP10 signal relevance in bipolar depression

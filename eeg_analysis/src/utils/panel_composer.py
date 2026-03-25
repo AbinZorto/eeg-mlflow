@@ -87,10 +87,31 @@ def compose_composite_figure(
     panels: Sequence[CompositePanel],
     output_path: Path,
     dpi: int,
-    figsize: tuple[float, float] = (14.0, 11.0),
+    figsize: Optional[tuple[float, float]] = None,
 ) -> None:
-    fig, axes = plt.subplots(2, 2, figsize=figsize, facecolor=PALETTE["figure_face"])
-    axes_flat = list(axes.flat)
+    panel_count = max(1, len(panels))
+    if panel_count <= 2:
+        nrows = 1
+        ncols = panel_count
+        resolved_figsize = figsize or ((14.0, 6.2) if panel_count == 2 else (7.2, 6.2))
+        title_y = 0.97
+        subtitle_y = 0.935
+        top = 0.84
+        bottom = 0.08
+    else:
+        nrows = 2
+        ncols = 2
+        resolved_figsize = figsize or (14.0, 11.0)
+        title_y = 0.985
+        subtitle_y = 0.955
+        top = 0.91
+        bottom = 0.03
+
+    fig, axes = plt.subplots(nrows, ncols, figsize=resolved_figsize, facecolor=PALETTE["figure_face"])
+    if hasattr(axes, "flat"):
+        axes_flat = list(axes.flat)
+    else:
+        axes_flat = [axes]
 
     for ax, panel in zip(axes_flat, panels):
         if panel.path.exists() and panel.reason is None:
@@ -104,7 +125,7 @@ def compose_composite_figure(
     fig.suptitle(
         title,
         x=0.02,
-        y=0.985,
+        y=title_y,
         ha="left",
         va="top",
         fontsize=19,
@@ -113,12 +134,12 @@ def compose_composite_figure(
     )
     fig.text(
         0.02,
-        0.955,
+        subtitle_y,
         subtitle,
         ha="left",
         va="top",
         fontsize=10,
         color=PALETTE["neutral_dark"],
     )
-    fig.subplots_adjust(left=0.03, right=0.99, top=0.91, bottom=0.03, wspace=0.08, hspace=0.08)
+    fig.subplots_adjust(left=0.03, right=0.99, top=top, bottom=bottom, wspace=0.08, hspace=0.08)
     save_figure(fig, output_path, dpi)

@@ -1,34 +1,24 @@
 {
   "filters": {
-    "equalize_lopo_groups": "true",
-    "fs_method": "select_k_best_f_classif",
-    "inner_k": 1,
-    "model": "advanced_hybrid_1dcnn_lstm",
-    "n_features": 10,
-    "ordering": "sequential",
-    "outer_k": 10,
-    "use_smote": "true",
-    "window_size": 6
+    "equalize_lopo_groups": null,
+    "fs_method": null,
+    "inner_k": null,
+    "model": null,
+    "n_features": null,
+    "ordering": null,
+    "outer_k": null,
+    "use_smote": null,
+    "window_size": null
   },
   "generated_composites": [
     {
-      "composite_id": "main_results",
-      "path": "paper/assets/paper_panels/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/main_results_composite.png"
-    },
-    {
       "composite_id": "biomarker_stability",
       "path": "paper/assets/paper_panels/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/biomarker_stability_composite.png"
-    },
-    {
-      "composite_id": "biomarker_interpretation",
-      "path": "paper/assets/paper_panels/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/biomarker_interpretation_composite.png"
     }
   ],
   "missing_panels": [],
   "requested_composites": [
-    "main_results",
-    "biomarker_stability",
-    "biomarker_interpretation"
+    "biomarker_stability"
   ],
   "resolved_run": {
     "mlflow_experiment_id": "398165227830907321",
@@ -42,18 +32,8 @@
     "missing_before_regeneration": [],
     "regenerated": false,
     "requested_figure_ids": [
-      "roc",
-      "pr",
-      "confusion",
-      "metric_summary",
       "selection_frequency",
-      "jaccard_heatmap",
-      "jaccard_distribution",
-      "kuncheva_summary",
-      "delta_scatter",
-      "effect_size",
-      "sign_consistency",
-      "class_conditional_bars"
+      "kuncheva_summary"
     ]
   }
 }

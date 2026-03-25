@@ -272,7 +272,8 @@ Copy this block for each new request:
 ### plot-0010
 - requested_on: 2026-03-24
 - requested_by: user
-- status: implemented
+- status: validated
+- validated_on: 2026-03-25
 - comparison_goal: Visualize pairwise Jaccard overlap across fold feature sets.
 - plot_type: heatmap
 - grouping_dimensions: x=`fold`; y=`fold`
@@ -283,12 +284,13 @@ Copy this block for each new request:
   - notebook:
 - artifact_outputs:
   - `sweeps/paper_figures/<selection_slug>/biomarker_stability/pairwise_jaccard_heatmap.png`
-- notes: Skipped automatically if there are fewer than two usable fold feature sets.
+- notes: Skipped automatically if there are fewer than two usable fold feature sets. Validated against the nested MLflow fold runs for the best hybrid run; the unusual block pattern is expected there because `inner_k=1` yields one selected feature per fold, so pairwise Jaccard values collapse to `0` or `1`.
 
 ### plot-0011
 - requested_on: 2026-03-24
 - requested_by: user
-- status: implemented
+- status: validated
+- validated_on: 2026-03-25
 - comparison_goal: Summarize the distribution of pairwise Jaccard similarities across folds.
 - plot_type: histogram
 - grouping_dimensions: x=`pairwise_jaccard`; y=`pair_count`
@@ -299,7 +301,7 @@ Copy this block for each new request:
   - notebook:
 - artifact_outputs:
   - `sweeps/paper_figures/<selection_slug>/biomarker_stability/pairwise_jaccard_distribution.png`
-- notes: Skipped automatically if there are not enough fold feature sets.
+- notes: Skipped automatically if there are not enough fold feature sets. Validated against the nested MLflow fold runs for the best hybrid run; the binary-looking histogram is expected there because the 21-fold `inner_k=1` run produces 210 fold pairs with only `0.0` or `1.0` Jaccard scores.
 
 ### plot-0012
 - requested_on: 2026-03-24
@@ -448,10 +450,11 @@ Copy this block for each new request:
 ### plot-0021
 - requested_on: 2026-03-24
 - requested_by: user
-- status: implemented
+- status: validated
+- validated_on: 2026-03-25
 - comparison_goal: Package the stability figures into one manuscript-ready biomarker-stability composite.
-- plot_type: 2x2 multi-panel composite
-- grouping_dimensions: panels=`selection_frequency`, `jaccard_heatmap`, `jaccard_distribution`, `kuncheva_summary`
+- plot_type: 1x2 multi-panel composite
+- grouping_dimensions: panels=`selection_frequency`, `kuncheva_summary`
 - required_inputs: resolved run selection from `sweeps/artifacts/*.results.jsonl` plus single-panel paper figures under `sweeps/paper_figures/<selection_slug>/`
 - acceptance_criteria: Generate a biomarker-stability composite figure with placeholders when a source panel is unavailable and record missing inputs in the manifest.
 - implementation_refs:
@@ -459,7 +462,7 @@ Copy this block for each new request:
   - notebook:
 - artifact_outputs:
   - `sweeps/paper_panels/<selection_slug>/biomarker_stability_composite.png`
-- notes: Supports best-overall, explicit MLflow run id, and explicit run-signature selection modes.
+- notes: Supports best-overall, explicit MLflow run id, and explicit run-signature selection modes. Updated for the manuscript after validating that the Jaccard heatmap and histogram were correct but visually unhelpful for the sparse `inner_k=1` best hybrid run.
 
 ### plot-0022
 - requested_on: 2026-03-24
@@ -494,4 +497,4 @@ Copy this block for each new request:
   - `paper/figures/figure1_sweep_overview.png`
   - `paper/data/sweep_overview_aggregates.csv`
   - `paper/data/manuscript_facts.json`
-- notes: Bottom-row feature-selection panels are intentionally model-agnostic because the same feature-selection layer feeds both models in this sweep. Figure was manually re-opened during manuscript drafting and confirmed to match the hybrid-sparse narrative used in the paper text.
+- notes: Bottom-row feature-selection panels are intentionally model-agnostic because the same feature-selection layer feeds both models in this sweep. The shared aggregation now collapses duplicate matched settings before computing confidence bands, so the bottom-row `n` reflects unique sweep settings rather than both classifier copies. Figure titles and legend spacing were simplified to reduce overlap in the manuscript version.

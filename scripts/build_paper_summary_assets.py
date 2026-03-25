@@ -31,7 +31,7 @@ assert PLOT_SWEEP_SCRIPT_SPEC is not None and PLOT_SWEEP_SCRIPT_SPEC.loader is n
 sys.modules[PLOT_SWEEP_SCRIPT_SPEC.name] = sweep_plots
 PLOT_SWEEP_SCRIPT_SPEC.loader.exec_module(sweep_plots)
 
-from src.utils.paper_plot_style import PALETTE, add_subtitle, apply_paper_style, save_figure, style_axes  # noqa: E402
+from src.utils.paper_plot_style import PALETTE, apply_paper_style, save_figure, style_axes  # noqa: E402
 from src.utils.plot_data_loader import (  # noqa: E402
     SweepResultRow,
     deduplicate_results_rows,
@@ -52,30 +52,30 @@ MODEL_COLORS = {
 }
 METRIC_PANELS = (
     {
+        "panel_label": "A",
         "metric_key": "patient_roc_auc",
         "x_field": "window_seconds",
-        "title": "Patient ROC-AUC vs Window Size",
-        "subtitle": "Mean and 95% CI across inner-k settings",
+        "title": "ROC-AUC vs Window Size",
         "y_label": "Patient ROC-AUC",
         "clamp_min": 0.0,
         "clamp_max": 1.0,
         "highlight_best": True,
     },
     {
+        "panel_label": "B",
         "metric_key": "patient_roc_auc",
         "x_field": "inner_k",
-        "title": "Patient ROC-AUC vs Inner-k",
-        "subtitle": "Mean and 95% CI across window sizes",
+        "title": "ROC-AUC vs Inner-k",
         "y_label": "Patient ROC-AUC",
         "clamp_min": 0.0,
         "clamp_max": 1.0,
         "highlight_best": True,
     },
     {
+        "panel_label": "C",
         "metric_key": "feature_selection_mean_pairwise_jaccard",
         "x_field": "inner_k",
         "title": "Mean Pairwise Jaccard vs Inner-k",
-        "subtitle": "Shared feature-selection behavior across both models",
         "y_label": "Mean pairwise Jaccard",
         "clamp_min": 0.0,
         "clamp_max": 1.0,
@@ -83,10 +83,10 @@ METRIC_PANELS = (
         "group_mode": "shared",
     },
     {
+        "panel_label": "D",
         "metric_key": "feature_selection_unique_feature_count",
         "x_field": "inner_k",
         "title": "Unique Selected Features vs Inner-k",
-        "subtitle": "Shared feature-selection behavior across both models",
         "y_label": "Unique selected features",
         "clamp_min": 0.0,
         "clamp_max": None,
@@ -209,12 +209,32 @@ def _compute_shared_envelope(
     clamp_min: Optional[float],
     clamp_max: Optional[float],
 ) -> List[Dict[str, Any]]:
+    per_setting: Dict[tuple[Any, ...], List[float]] = defaultdict(list)
     grouped: Dict[int, List[float]] = defaultdict(list)
     for row in rows:
         x_value = getattr(row, x_field)
         if x_value is None:
             continue
-        grouped[int(x_value)].append(float(row.metric_value))
+        setting_key = (
+            row.metric_key,
+            row.window_seconds,
+            row.inner_k,
+            row.outer_k,
+            row.fs_enabled,
+            row.fs_method,
+            row.n_features,
+            row.ordering,
+            row.dataset_run_id,
+            row.equalize_lopo_groups,
+            row.use_smote,
+        )
+        per_setting[setting_key].append(float(row.metric_value))
+
+    for setting_key, values in per_setting.items():
+        x_value = setting_key[1] if x_field == "window_seconds" else setting_key[2]
+        if x_value is None:
+            continue
+        grouped[int(x_value)].append(sum(values) / len(values))
 
     envelope: List[Dict[str, Any]] = []
     for x_value, values in sorted(grouped.items()):
@@ -516,7 +536,7 @@ def _plot_summary_figure(
     dpi: int,
 ) -> None:
     apply_paper_style()
-    fig, axes = plt.subplots(2, 2, figsize=(14.0, 10.5), facecolor=PALETTE["figure_face"])
+    fig, axes = plt.subplots(2, 2, figsize=(13.8, 10.2), facecolor=PALETTE["figure_face"])
     aggregated_rows: List[Dict[str, Any]] = []
 
     for ax, panel in zip(axes.flat, METRIC_PANELS):
@@ -609,12 +629,11 @@ def _plot_summary_figure(
                             edgecolors="#ffffff",
                             linewidths=1.0,
                             marker="*",
-                            s=180,
+                            s=150,
                             zorder=5,
                         )
 
-        ax.set_title(panel["title"])
-        add_subtitle(ax, panel["subtitle"])
+        ax.set_title(f"{panel['panel_label']}. {panel['title']}", loc="left", pad=10)
         ax.set_xlabel("Window size (s)" if panel["x_field"] == "window_seconds" else "Inner-k")
         ax.set_ylabel(panel["y_label"])
         style_axes(ax, ygrid=True, xgrid=False)
@@ -627,18 +646,9 @@ def _plot_summary_figure(
 
     handles, labels = axes.flat[0].get_legend_handles_labels()
     if handles:
-        fig.legend(handles, labels, loc="upper center", ncol=len(handles), frameon=True, bbox_to_anchor=(0.5, 0.98))
-    fig.suptitle("Sweep Overview: Discrimination, Stability, and Parsimony", x=0.03, y=0.995, ha="left", va="top", fontsize=18)
-    fig.text(
-        0.03,
-        0.968,
-        "Top-row panels compare model performance. Bottom-row panels summarize the shared feature-selection layer used by both models. Stars mark the best individual run for each model.",
-        ha="left",
-        va="top",
-        fontsize=10,
-        color=PALETTE["neutral_dark"],
-    )
-    fig.subplots_adjust(left=0.08, right=0.98, top=0.90, bottom=0.08, hspace=0.30, wspace=0.20)
+        fig.legend(handles, labels, loc="upper center", ncol=len(handles), frameon=True, bbox_to_anchor=(0.5, 0.93))
+    fig.suptitle("Sweep Overview: Discrimination, Stability, and Parsimony", x=0.03, y=0.975, ha="left", va="top", fontsize=17)
+    fig.subplots_adjust(left=0.08, right=0.98, top=0.86, bottom=0.08, hspace=0.32, wspace=0.20)
     save_figure(fig, figure_path, dpi)
     _write_csv(aggregated_csv_path, aggregated_rows)
 
