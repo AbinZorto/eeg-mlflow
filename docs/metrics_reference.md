@@ -7,6 +7,7 @@ This document describes the metrics currently produced by the traditional and de
 - `clinical_metrics_summary.json`: full structured report for patient-level, window-level, fold-level, statistical, and feature-selection metrics.
 - `feature_selection_stability.json`: feature-selection and biomarker-stability subset of the report.
 - MLflow scalar metrics: overall metrics and summary-safe aggregates flattened from the structured report.
+- `sweeps/artifacts/*.results.jsonl`: append-only experiment runner ledgers that snapshot flattened MLflow metrics such as `patient_roc_auc`, which are used by sweep comparison plots.
 - Nested fold artifacts:
   - `fold_patient_predictions.json`
   - `fold_window_predictions.json`
@@ -40,6 +41,7 @@ Important detail:
 
 - `roc_auc` and `pr_auc` use aggregated participant probabilities.
 - Hard-label metrics use the participant-level predicted label.
+- Sweep comparison plots use `patient_roc_auc` from the results ledger / flattened MLflow metrics by default.
 
 ## Window-Level Metrics
 
@@ -433,3 +435,33 @@ MLflow scalar metrics contain a summary-safe subset of the report. Important exa
 - `feature_selection_non_remission_fold_count`
 
 Detailed per-feature and per-fold rows stay in JSON artifacts rather than being expanded into one MLflow scalar per row.
+
+## Figure Inputs
+
+The paper-figure script `scripts/plot_paper_figures.py` consumes a mix of sweep-ledger rows and MLflow artifacts:
+
+- `sweeps/artifacts/*.results.jsonl`:
+  - used to resolve one successful training run from sweep context such as `model`, `window_seconds`, `inner_k`, `outer_k`, `equalize_lopo_groups`, and `use_smote`
+- `clinical_metrics_summary.json`:
+  - patient/window metrics
+  - confidence intervals
+  - fold metric tables
+- `feature_selection_stability.json`:
+  - feature-selection stability
+  - class-conditional biomarker metrics
+  - effect-size and importance-stability summaries
+- top-level prediction CSV artifacts:
+  - `*_patient_predictions.csv`
+  - `*_window_predictions.csv`
+- nested fold artifacts:
+  - `params/selected_features_list`
+  - `fold_patient_predictions.json`
+  - `fold_window_predictions.json`
+
+This split matters:
+
+- sweep trend plots such as `scripts/plot_sweep_roc_auc.py` work from the results ledgers alone
+- the generalized sweep plotter `scripts/plot_sweep_roc_auc.py` reads flattened `mlflow_metrics` from `sweeps/artifacts/*.results.jsonl` and can visualize both performance metrics and biomarker summary metrics via `--metric`
+- the same script also supports named preset bundles via `--preset`, including `performance_core`, `biomarker_core`, and `paper_main`
+- paper-ready biomarker and fold-behavior figures require the MLflow artifact payloads from one resolved run
+- manuscript-style multi-panel composites from `scripts/compose_paper_panels.py` are assembled from the generated single-panel paper figures, which in turn are derived from those same MLflow artifacts

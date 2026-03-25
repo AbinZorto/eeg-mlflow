@@ -192,3 +192,130 @@ Results ledger (`*.results.jsonl`) schema notes:
 - Includes status, command context, dataset/model/FS metadata, and return code
 - Includes MLflow linkage/snapshot when a train run id is available:
   `mlflow_run_id`, `mlflow_experiment_id`, `mlflow_params`, `mlflow_metrics`, `mlflow_tags`
+
+## 8) Plot Sweep Metrics From Results Ledgers
+
+Generate:
+- `window_size` vs a selected metric
+- `inner_k` vs a selected metric
+
+```bash
+uv run python3 scripts/plot_sweep_roc_auc.py \
+  --artifacts-dir sweeps/artifacts \
+  --output-dir sweeps/plots
+```
+
+Behavior:
+- dim lines represent individual sweep trajectories
+- the darker line is the mean metric value at each x value
+- only successful job attempts are considered
+- append-only retries are deduplicated so the latest successful point is used per logical sweep setting
+
+Optional filtering example:
+
+```bash
+uv run python3 scripts/plot_sweep_roc_auc.py \
+  --artifacts-dir sweeps/artifacts \
+  --output-dir sweeps/plots \
+  --model advanced_hybrid_1dcnn_lstm \
+  --fs-method select_k_best_f_classif \
+  --n-features 10
+```
+
+Metric examples:
+
+```bash
+uv run python3 scripts/plot_sweep_roc_auc.py \
+  --artifacts-dir sweeps/artifacts \
+  --output-dir sweeps/plots \
+  --metric patient_pr_auc
+```
+
+```bash
+uv run python3 scripts/plot_sweep_roc_auc.py \
+  --artifacts-dir sweeps/artifacts \
+  --output-dir sweeps/plots \
+  --metric patient_balanced_accuracy
+```
+
+```bash
+uv run python3 scripts/plot_sweep_roc_auc.py \
+  --artifacts-dir sweeps/artifacts \
+  --output-dir sweeps/plots \
+  --metric feature_selection_mean_pairwise_jaccard
+```
+
+Preset bundles:
+
+```bash
+uv run python3 scripts/plot_sweep_roc_auc.py \
+  --artifacts-dir sweeps/artifacts \
+  --output-dir sweeps/plots \
+  --preset performance_core
+```
+
+```bash
+uv run python3 scripts/plot_sweep_roc_auc.py \
+  --artifacts-dir sweeps/artifacts \
+  --output-dir sweeps/plots \
+  --preset biomarker_core
+```
+
+```bash
+uv run python3 scripts/plot_sweep_roc_auc.py \
+  --artifacts-dir sweeps/artifacts \
+  --output-dir sweeps/plots \
+  --preset paper_main
+```
+
+```bash
+uv run python3 scripts/plot_sweep_roc_auc.py --list-presets
+```
+
+Recommended preset usage:
+- `performance_core`: ROC-AUC, PR-AUC, balanced accuracy, F1, MCC
+- `biomarker_core`: Jaccard, Kuncheva, top-k overlap, effect sign consistency
+- `paper_main`: one mixed predictive + biomarker bundle for manuscript sweep summaries
+
+## 9) Generate Single-Run Paper Figures
+
+Once a sweep has produced successful MLflow runs, generate publication-style standalone figures for one resolved run:
+
+```bash
+uv run python3 scripts/plot_paper_figures.py \
+  --artifacts-dir sweeps/artifacts \
+  --mlruns-root mlruns \
+  --output-dir sweeps/paper_figures \
+  --model advanced_hybrid_1dcnn_lstm \
+  --window-size 2 \
+  --inner-k 10 \
+  --outer-k 10 \
+  --fs-method select_k_best_f_classif \
+  --n-features 10 \
+  --equalize-lopo-groups false \
+  --use-smote false
+```
+
+This script:
+
+- resolves one successful run from the results ledger after applying the filters
+- loads the corresponding MLflow artifacts for predictions, fold metrics, and feature-stability reporting
+- writes figures into `sweeps/paper_figures/<selection_slug>/`
+- records generated and skipped outputs in `figure_manifest.json`
+
+Compose those single-run figures into manuscript-style multi-panel composites:
+
+```bash
+uv run python3 scripts/compose_paper_panels.py \
+  --artifacts-dir sweeps/artifacts \
+  --mlruns-root mlruns \
+  --paper-figures-dir sweeps/paper_figures \
+  --output-dir sweeps/paper_panels \
+  --select best-overall
+```
+
+Selection modes:
+
+- `best-overall`: best successful run by `patient_roc_auc` after filters
+- `mlflow-run-id`: exact MLflow run
+- `run-signature`: best successful run within one sweep/checkpoint signature; accepts the full signature or a unique leading prefix
