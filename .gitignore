@@ -81,3 +81,4 @@ mlflow.pid
 backups/mlruns_backup_20260305_145935.zip
 sweeps/artifacts
 sweeps/plots
+paper/build_curated
