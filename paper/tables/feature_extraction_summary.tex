@@ -1,0 +1,14 @@
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.20\textwidth}>{\raggedright\arraybackslash}X>{\raggedleft\arraybackslash}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.24\textwidth}}
+\toprule
+Feature family & Measures & Count & Why included \\
+\midrule
+Channel-local spectral & Absolute and relative delta, theta, alpha, beta, and gamma power; total power; frequency-weighted power; SEF90 and SEF95; PSD mean, standard deviation, maximum, minimum, median, skewness, and kurtosis & 21/channel (84 total) & Canonical resting-state EEG descriptors with clear band-level interpretation and strong precedent in depression EEG \\
+Channel-local time domain and Hjorth & Mean, standard deviation, variance, skewness, kurtosis, root-mean-square amplitude, peak-to-peak range, zero crossings, mean absolute deviation, Hjorth activity, mobility, and complexity & 12/channel (48 total) & Captures amplitude dispersion, oscillatory rate, roughness, and short-window morphology with low computational cost \\
+Channel-local entropy and nonlinear complexity & Sample entropy, spectral entropy, correlation dimension, Hurst exponent, Lyapunov exponent, and detrended fluctuation analysis & 6/channel (24 total) & Captures irregularity and complexity beyond band-power summaries \\
+Band-power asymmetry and frontal-temporal interactions & Frontal and temporal asymmetry, hemispheric asymmetry, ipsilateral frontal-temporal ratios and normalized differences, and diagonal AF7-TP10 and AF8-TP9 interactions across frequency bands & 70 total & Tests laterality and frontal-temporal balance within the four-channel montage \\
+Synchrony and coupling & Pearson correlation and maximum normalized cross-correlation over six anatomical channel pairs, plus legacy cross-correlation summaries & 18 total & Summarizes short-window coupling and cross-channel coordination \\
+TP10-specific derived descriptors & Peak prominence, peak concentration ratio, and an asymmetry-weighted peak-prominence term & 3 total & Targets concentrated temporal spectral structure with straightforward interpretation \\
+\midrule
+Total EEG-derived features & Combined feature space per window & 247 total & Broad hypothesis space for leakage-safe sparse selection \\
+\bottomrule
+\end{tabularx}

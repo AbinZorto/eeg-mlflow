@@ -1,4 +1,4 @@
-\subsection{Dataset and signal representation}
+\subsection{Dataset and preprocessing}
 
 The analysis used pretreatment EEG from 21 adults with treatment-resistant depression enrolled in a fully remote, multisite, double-blind, randomized sham-controlled home-based tDCS trial for major depressive disorder \citep{woodham2025home}. The analyzed cohort contained 7 remission cases and 14 non-remission cases in the patient-level outcome labels, with 18 female participants and a mean age of 37.1 $\pm$ 9.7 years. Table~\ref{tab:cohort-summary} summarizes the cohort, acquisition, and sweep configuration.
 
@@ -12,17 +12,72 @@ The analysis used pretreatment EEG from 21 adults with treatment-resistant depre
 
 Baseline recordings were collected during eyes-closed rest with a 4-channel montage (\texttt{AF7}, \texttt{AF8}, \texttt{TP9}, \texttt{TP10}) sampled at 256 Hz. The available study exports comprised 10 s segments with 2,560 samples per channel, and the underlying recording sessions were stored either as a single 10 min file or as two 5 min files depending on participant. Across the cohort, the export set contained 1,203 windows, including 393 remission-labeled and 810 non-remission-labeled windows. This acquisition setup uses a limited frontal-temporal montage with clear portable-deployment relevance \citep{Casson2010,stoyell2021high}. The montage also constrained the downstream feature space toward frontal, temporal, cross-hemispheric, and frontal-temporal interaction measures.
 
-For the present sweep, the processing configuration applied participant-level per-channel demeaning before upsampling, followed by a fourth-order Butterworth low-pass filter at 60 Hz, a downsampling step back to 256 Hz, and zero-overlap window slicing. The sweep then compared non-overlapping analysis windows of 2, 4, 6, 8, and 10 s, so the model inputs included both the native 10 s exports and shorter subdivisions derived from the same recordings. These choices materially affect downstream EEG feature distributions, especially in low-density or portable pipelines \citep{Siuly2017,Miranda2019,Mahato2020,babiloni2012_guidelines,simmatis2023_technical}. The feature extractor enabled spectral, temporal, entropy, complexity, connectivity, coherence, asymmetry, and cross-hemispheric descriptors, including frontal/temporal asymmetry, cross-regional ratios, and inter-channel coupling measures. This broad handcrafted feature pool was intended to preserve interpretability while allowing sparse downstream selection.
+For the present sweep, the processing configuration applied participant-level per-channel demeaning before upsampling, followed by a fourth-order Butterworth low-pass filter at 60 Hz, a downsampling step back to 256 Hz, and zero-overlap window slicing. The sweep then compared non-overlapping analysis windows of 2, 4, 6, 8, and 10 s, so the model inputs included both the native 10 s exports and shorter subdivisions derived from the same recordings. These choices materially affect downstream EEG feature distributions, especially in low-density or portable pipelines \citep{Siuly2017,Miranda2019,Mahato2020,babiloni2012_guidelines,simmatis2023_technical}. The methodological contribution of the present sweep lies in combining this broad handcrafted pool with participant-level outer validation, fold-internal feature selection, fold-internal class rebalancing, and post hoc recurrence summaries, rather than in introducing a single novel preprocessing transform \citep{Widge2019,Shim2021,Shen2025}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{figure0_processing_pipeline.png}
+  \caption{End-to-end analysis flow used in the manuscript. Participant separation, rebalancing, and feature selection were all applied inside the training folds before held-out participant scoring and biomarker summarization.}
+  \label{fig:processing-flowchart}
+\end{figure}
+
+\subsection{Feature extraction}
+
+Feature extraction was performed on each preprocessed window. With all four channels available, the extractor generated 247 EEG-derived measures per window spanning channel-local descriptors, regional asymmetry terms, frontal-temporal interaction terms, synchrony summaries, and a small set of TP10-specific derived measures. Each channel contributed 39 local measures, comprising 21 spectral descriptors, 12 time-domain and Hjorth descriptors, and 6 entropy or nonlinear complexity descriptors, for 156 channel-local measures overall. The remaining 91 measures summarized asymmetry, frontal-temporal balance, cross-channel synchrony, and TP10-focused derived descriptors. This broad feature basis was deliberate. The goal of the study was to compare feature families under a leakage-safe sparse-selection regime rather than to pre-commit the analysis to a single biomarker hypothesis \citep{Zhang2023EEGMethods,Shen2025}. Table~\ref{tab:feature-summary} summarizes the extracted feature families and their computational rationale.
+
+\begin{table}[H]
+  \centering
+  \caption{Summary of extracted EEG feature families per analysis window.}
+  \label{tab:feature-summary}
+  \footnotesize
+  \input{tables/feature_extraction_summary.tex}
+\end{table}
+
+For each of \texttt{AF7}, \texttt{AF8}, \texttt{TP9}, and \texttt{TP10}, we computed 39 channel-local features. Spectral features were estimated from Welch power spectral densities \citep{Welch1967} and included absolute band power in the delta, theta, alpha, beta, and gamma ranges, total power, relative band power normalized by total power, frequency-weighted power, spectral edge frequencies at 90\% and 95\%, and PSD summary statistics (mean, standard deviation, maximum, minimum, median, skewness, kurtosis). These measures were included because spectral content remains one of the most widely used and interpretable feature families in depression EEG work, and temporal-channel spectral content has repeatedly appeared in pretreatment response studies \citep{olbrich2013_eeg,Mumtaz2017,Mahato2020,Jaworska2018}.
+
+Time-domain descriptors were also computed for each channel. These included mean, standard deviation, variance, skewness, kurtosis, root-mean-square amplitude, peak-to-peak range, zero crossings, and mean absolute deviation, together with Hjorth activity, mobility, and complexity \citep{Hjorth1970,Zhang2023EEGMethods}. These features summarize amplitude dispersion, local oscillatory rate, signal roughness, and short-window morphology. They are computationally light and well suited to low-montage resting-state EEG, where clinically useful features must remain interpretable and robust under short windows.
+
+Entropy and nonlinear complexity measures were computed per channel to capture irregularity beyond simple power summaries. The extractor included sample entropy, spectral entropy, correlation dimension, Hurst exponent, Lyapunov exponent, and detrended fluctuation analysis. Complexity measures were calculated on a demeaned, standardized version of each signal, with long windows subsampled for numerical stability. These descriptors were retained because depression EEG studies have repeatedly implicated entropy, variability, and broader complexity structure, even when the exact direction of effect depends on cohort, montage, and temporal scale \citep{Puthankattil2012,Faust2014,Acharya2015,Jaworska2018,Zhao2022,Lord2023}.
+
+The four-channel montage also supports a range of regional interaction features derived from cached band-power estimates. Traditional frontal asymmetry (\texttt{AF7}/\texttt{AF8}) and temporal asymmetry (\texttt{TP9}/\texttt{TP10}) were computed for each frequency band in two forms: a log-ratio index,
+\[
+\mathrm{AI}=\log\!\left(\frac{P_R}{P_L}\right),
+\]
+and a normalized difference,
+\[
+\mathrm{ND}=\frac{P_R-P_L}{P_R+P_L}.
+\]
+Using the same band-power cache, we also computed hemispheric asymmetry by averaging \texttt{AF7}+\texttt{TP9} and \texttt{AF8}+\texttt{TP10} within each hemisphere, ipsilateral frontal-temporal ratios and normalized differences on the left and right hemispheres, and diagonal frontal-temporal interactions for \texttt{AF7}-\texttt{TP10} and \texttt{AF8}-\texttt{TP9}. These measures were included because reduced-channel depression EEG studies repeatedly point to laterality, temporal involvement, and frontal-temporal balance rather than to a single isolated electrode \citep{Mahato2020,Ghiasi2021,Monni2022}.
+
+Pairwise synchrony features were added for six anatomically meaningful channel pairs: \texttt{AF7}-\texttt{AF8}, \texttt{TP9}-\texttt{TP10}, \texttt{AF7}-\texttt{TP9}, \texttt{AF8}-\texttt{TP10}, \texttt{AF7}-\texttt{TP10}, and \texttt{AF8}-\texttt{TP9}. For each pair we computed maximum normalized cross-correlation and Pearson correlation, and the extractor also retained a legacy set of raw cross-correlation summaries across all channel pairs. These features were intended to capture short-window synchrony and coupling patterns that have been emphasized in resting-state depression EEG and neuromodulation response work \citep{Ghiasi2021,Zhao2022,ulrich2025_alterations}.
+
+Finally, the extractor included three exploratory TP10-specific derived descriptors: peak prominence, peak concentration ratio, and an asymmetry-weighted peak-prominence term. These summarize whether the \texttt{TP10} spectrum contains a sharp dominant peak, how concentrated that peak is relative to total power, and whether that concentration covaries with ipsilateral frontal-temporal beta balance. They were included because temporal-channel spectral content has recurrently appeared in low-montage depression EEG analyses, while still remaining interpretable enough to survive foldwise sparse selection if informative \citep{Mumtaz2017,Mahato2020}.
 
 \subsection{Sweep design and validation}
 
-The experiment runner launched two model families over the same feature-selection sweep: an advanced hybrid 1D CNN-LSTM and a linear SVM. All runs used sequential window ordering, SelectKBest with ANOVA $F$ statistics (\texttt{select\_k\_best\_f\_classif}), a fixed consensus feature budget of \texttt{outer-k=10}, leave-one-participant-out outer evaluation, leave-one-participant-out training-group equalization, and SMOTE within training folds. The sweep varied the per-fold feature-selection budget (\texttt{inner-k}) across 15 values from 1 to 70 and repeated the search across 5 window sizes, yielding 150 successful runs in total (75 per model).
+The experiment sweep compared two model families over the same feature-selection protocol: an advanced hybrid 1D CNN-LSTM and a linear SVM. All runs used sequential window ordering, SelectKBest with ANOVA $F$ statistics, leave-one-participant-out outer evaluation, leave-one-participant-out training-group equalization, and SMOTE within training folds \citep{Chawla2002}. The sweep varied the per-fold feature-selection budget (\texttt{inner-k}) across 15 values from 1 to 70 and repeated the search across 5 window sizes, yielding 150 successful runs in total (75 per model).
 
-This design matters for interpretation. The outer evaluation remained subject independent throughout, so no participant contributed both training and test windows to the same outer fold. The \texttt{inner-k} parameter controlled how many features were selected inside each outer training fold, whereas \texttt{outer-k} controlled only the final consensus feature budget after cross-validation. The feature-selection stability panels in the manuscript describe shared pipeline behavior because both classifiers consumed the same selected features for matched sweep settings.
+This design matters for interpretation. The outer evaluation remained subject independent throughout, so no participant contributed both training and test windows to the same outer fold. Feature selection, participant-group equalization, and synthetic oversampling were all restricted to the outer training folds, which is important because leakage at these steps can materially inflate reported biomarker performance \citep{Shim2021}. The \texttt{inner-k} parameter controlled how many features were selected inside each outer training fold. The feature-selection stability panels in the manuscript describe shared pipeline behavior because both classifiers consumed the same selected features for matched sweep settings.
 
 \subsection{Models}
 
-The SVM baseline used a linear kernel with class-balanced weighting and probability output enabled. The hybrid model used a substantially richer architecture defined in the project model configuration: stacked convolutional blocks, bidirectional LSTM layers, multi-head attention with positional encoding, feature-pyramid fusion, and GELU-activated dense layers with dropout and batch normalization. The manuscript treats this architecture as a test case for whether a more expressive learner can exploit a small selected feature set more effectively than a linear baseline.
+Both classifiers operated on the fold-selected handcrafted feature vectors produced by the current \texttt{inner-k} setting. Patient-level outputs were derived by averaging held-out window probabilities within each participant before computing ROC-AUC and the other clinical metrics. Table~\ref{tab:model-summary} summarizes the model architecture and training setup used in the sweep.
+
+\begin{table}[H]
+  \centering
+  \caption{Model architecture and training summary for the two evaluated classifier families.}
+  \label{tab:model-summary}
+  \footnotesize
+  \input{tables/model_configuration_summary.tex}
+\end{table}
+
+The SVM baseline used a linear kernel with \texttt{C=1.0} and probability output enabled. When SMOTE was active inside the training folds, class weighting was not applied in parallel, so synthetic oversampling and explicit class weighting were not used simultaneously.
+
+The hybrid model treated the selected feature vector as a learned one-dimensional signal before recurrent modeling. In the best-performing 6 s, \texttt{inner-k=1} run, the input features were first projected to a 128-dimensional embedding with normalization and dropout, then mapped into a 64-step latent sequence for three convolutional blocks. These blocks used channel progressions of \texttt{[64,64]}, \texttt{[128,128]}, and \texttt{[256,128]} with kernel sizes \texttt{[5,3]}, \texttt{[3,3]}, and \texttt{[3,1]}, together with batch normalization, max pooling, and dropout after each stage. The resulting convolutional sequence was passed directly to the recurrent stage rather than being averaged beforehand, so sequence structure remained available to the LSTM layers.
+
+Sequence modeling then used two bidirectional LSTM layers with 128 and 64 hidden units, followed by eight-head self-attention with residual layer normalization and dropout. The recurrent summary was globally pooled and concatenated with pooled multi-scale CNN outputs through feature-pyramid fusion before two dense blocks of 256 and 128 units and a final two-logit output layer. Training used AdamW, cosine warm restarts, label smoothing, gradient clipping, mixed precision, and early stopping with best-state restore.
+
+The architectural choices were intended to distribute the modeling burden across complementary stages. The projection layer compressed the sparse selected features into a stable latent representation before deeper processing. The convolutional front end summarized short-range interactions and produced progressively richer multi-scale feature maps. The bidirectional LSTM layers then modeled ordered dependencies across that latent sequence, while self-attention allowed the model to reweight informative positions after recurrent encoding. Feature-pyramid fusion retained both shallower and deeper convolutional summaries, which is useful when the most discriminative structure may not reside at a single representational depth. The dense head provided a final nonlinear compression stage before binary classification. Batch normalization, dropout, label smoothing, gradient clipping, and early stopping were included to stabilize optimization and limit overfitting in a relatively small cohort.
 
 \subsection{Outcome metrics and biomarker summaries}
 

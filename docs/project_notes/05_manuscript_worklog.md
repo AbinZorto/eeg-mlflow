@@ -25,8 +25,8 @@ Persistent log for the LaTeX manuscript and supporting paper assets.
   - curated_bibtex_paths: `paper/references.bib`, `paper/references_analysis_subset.bib`
   - raw_search_dir: `paper/literature/raw`
   - current_entry_count: `55`
-  - total_entries_across_curated_sources: `80`
-  - cited_entry_count_in_manuscript: `51`
+  - total_entries_across_curated_sources: `90`
+  - cited_entry_count_in_manuscript: `61`
   - note: `Continue searching during drafting; do not treat the current bibliography pool as final or complete. Curated manuscript builds should cite explicit sources rather than relying on nocite-all behavior.`
 
 ## Evidence Lock
@@ -82,7 +82,7 @@ Persistent log for the LaTeX manuscript and supporting paper assets.
 ## Claim Guardrails
 
 - Do not claim definitive clinical prediction or clinical readiness.
-- Do not describe the biomarkers as highly stable across folds; use `candidate`, `recurrent`, or `consistent effect direction`.
+- Do not describe the biomarkers as highly stable across folds or as definitive clinical markers; `recurrent`, `plausible`, `credible in this cohort`, and `consistent effect direction` are acceptable framings.
 - Use class-conditional deltas more heavily than ratios when zero counts inflate ratios.
 - Re-open sweep plots, MLflow metrics, and composite figures whenever the narrative changes.
 - Treat the bottom-row feature-selection trends in Figure 1 as shared pipeline behavior, not classifier-specific behavior.
@@ -123,3 +123,37 @@ Persistent log for the LaTeX manuscript and supporting paper assets.
 - reduced the biomarker-stability composite to panels A and D for the manuscript because the verified Jaccard heatmap and histogram are visually unhelpful in the sparse best-run setting
 - re-read the same-data colleague papers from the local Zotero store and revised the introduction/discussion so the manuscript now connects its TP10 and frontal-temporal recurrent candidates to prior PSD-based and PLV-based findings from the same home-based 4-channel program without direct metric benchmarking
 - added `Moncy2025BD` to `paper/references_analysis_subset.bib` as supportive adjacent-context evidence for low-montage AF7 and TP10 signal relevance in bipolar depression
+
+### 2026-03-27
+
+- added a new citation cluster to support the manuscript's methods-rigor framing:
+  - `Widge2019` for treatment-response biomarker reproducibility limits and publication bias
+  - `Shim2021` for leakage from feature selection
+  - `Chawla2002` for SMOTE
+  - `Shen2025` for data-centric and interpretable EEG modeling
+- revised the introduction and methods so the methodological novelty is now framed as the integrated pipeline:
+  - participant-level outer validation
+  - fold-internal selection and rebalancing
+  - sparse `inner-k` sweep
+  - recurrence and effect-direction summaries
+- expanded the biomarker discussion with explicit source-backed interpretation of the main recurrent features:
+  - `tp10_spectral_entropy` now linked to broader entropy and complexity work, with mixed directionality noted via `Jaworska2018` and `Lord2023`
+  - frontal-temporal beta and gamma difference features now linked to temporal-region and higher-frequency asymmetry literature via `Mahato2020` and `Mumtaz2017`
+  - `af7_zero_crossings` now treated explicitly as an exploratory frontal marker with only indirect support from adjacent AF7 and frontal-asymmetry literature
+- added verified BibTeX entries for:
+  - `Widge2019`, `Shim2021`, `Chawla2002`, `Mumtaz2017`, `Shen2025`, `Jaworska2018`, `Lord2023`, `Monni2022`, `Acharya2015`, `Faust2014`
+- rebuilt the curated manuscript successfully at `paper/build_curated/main.pdf`
+- added implementation-grounded feature-extraction detail to the methods section:
+  - stated the full `247` EEG-derived measures per window
+  - broke the extractor down into `156` channel-local measures and `91` regional or synchrony-derived measures
+  - described the per-channel composition as `21` spectral, `12` time-domain or Hjorth, and `6` entropy or nonlinear complexity measures
+- added a manuscript table summarizing the extracted feature families, counts, and computational rationale so the feature space is easier to parse without relying on prose alone
+- removed `outer-k` and `consensus feature budget` wording from the manuscript narrative and cohort summary, since those settings are not part of the interpreted results
+- added a generated end-to-end processing flowchart to the methods section and saved the source generator at `scripts/generate_processing_flowchart.py`
+- expanded the model description with implementation-grounded detail:
+  - clarified that the hybrid path begins with a 128-unit feature embedding, then reshapes into a learned one-dimensional sequence
+  - described the three CNN blocks, two bidirectional LSTM layers, multi-head attention, feature-pyramid fusion, and dense head from the actual trainer code
+  - added a compact model-configuration table so the operative SVM and hybrid settings are visible without relying on config-file inspection
+- reduced repeated same-program citation pairings so the manuscript now uses the PSD-based and PLV-based same-program studies more selectively
+- shifted the biomarker wording slightly upward from `candidate` language toward `plausible` and `credible in this cohort`, while still preserving the no-definitive-biomarker guardrail
+- corrected the lingering `Ulrich2025` citation-key mismatch and revalidated the curated LaTeX build; only the pre-existing underfull-box warnings and the empty-journal warning for `babiloni2012_guidelines` remain

@@ -20,7 +20,7 @@ The best SVM baseline reached balanced accuracy 0.643 and ROC-AUC 0.510, with a 
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{figure2_main_results.png}
-  \caption{Best-run main-results composite for the hybrid model (\texttt{mlflow\_run\_id=561eb29a046946818320bea18f21bed6}). The figure summarizes the patient-level ROC curve, PR curve, confusion matrix, and metric summary for the highest-performing sweep configuration.}
+  \caption{Best-run main-results composite for the hybrid model. The figure summarizes the patient-level ROC curve, PR curve, confusion matrix, and metric summary for the highest-performing sweep setting.}
   \label{fig:main-results}
 \end{figure}
 
@@ -46,16 +46,16 @@ A small recurring feature set emerged repeatedly, though not in every fold, and 
 
 \begin{table}[H]
   \centering
-  \caption{Recurrent candidate biomarkers from the best hybrid run. $\Delta$ selection is remission minus non-remission selection share.}
+  \caption{Recurrent biomarkers from the best hybrid run. $\Delta$ selection is remission minus non-remission selection share.}
   \label{tab:hybrid-biomarkers}
   \resizebox{\textwidth}{!}{\input{tables/hybrid_recurrent_biomarkers.tex}}
 \end{table}
 
 \subsection{Effect-direction consistency and class-conditional patterns}
 
-The recurrent hybrid biomarkers showed perfect mean sign consistency across the effect-stability summary. This supports treating them as candidate biomarkers with stable directionality across the folds in which they were selected. \texttt{tp10\_spectral\_entropy} and the frontal-temporal gamma and beta difference terms were repeatedly associated with the non-remission group, whereas \texttt{af7\_zero\_crossings} was more frequently selected in remission folds and retained a positive mean effect size (Figure~\ref{fig:biomarker-interpretation}).
+The recurrent hybrid biomarkers showed perfect mean sign consistency across the effect-stability summary. This supports treating them as promising biomarkers with stable directionality across the folds in which they were selected. \texttt{tp10\_spectral\_entropy} and the frontal-temporal gamma and beta difference terms were repeatedly associated with the non-remission group, whereas \texttt{af7\_zero\_crossings} was more frequently selected in remission folds and retained a positive mean effect size (Figure~\ref{fig:biomarker-interpretation}).
 
-This distinction matters clinically. The selection-frequency deltas do not justify definitive mechanistic claims. They provide a concrete interpretation target for follow-up validation. The best hybrid pipeline contributes two linked observations: useful patient-level discrimination can be achieved with an extremely sparse feature budget, and the resulting recurrent candidates show interpretable directionality even when fold-to-fold set overlap remains modest.
+This distinction matters clinically. The selection-frequency deltas do not justify definitive mechanistic claims. They provide a concrete interpretation target for follow-up validation. The best hybrid pipeline contributes two linked observations: useful patient-level discrimination can be achieved with an extremely sparse feature budget, and the resulting recurrent biomarkers show interpretable directionality even when fold-to-fold set overlap remains modest.
 
 \begin{figure}[H]
   \centering
