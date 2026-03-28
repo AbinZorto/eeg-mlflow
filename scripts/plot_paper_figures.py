@@ -835,7 +835,7 @@ def plot_effect_vs_frequency(bundle: RunArtifactBundle, output_path: Path, dpi: 
     ax.set_xlabel("Selection frequency")
     ax.set_ylabel("Mean Cohen's d")
     ax.set_title("Effect Size vs Biomarker Stability", loc="left", pad=18)
-    add_subtitle(ax, "Blue = positive effect, rust = negative effect")
+    add_subtitle(ax, "Red = positive effect, blue = negative effect")
     style_axes(ax)
     fig.tight_layout()
     save_figure(fig, output_path, dpi)

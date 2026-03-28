@@ -53,7 +53,7 @@ COMPOSITE_SPECS = {
         "title": "Biomarker Stability",
         "panels": [
             ("A", "selection_frequency", "Selection Frequency"),
-            ("D", "kuncheva_summary", "Kuncheva Summary"),
+            ("B", "kuncheva_summary", "Kuncheva Summary"),
         ],
     },
     "biomarker_interpretation": {
@@ -191,18 +191,20 @@ def resolve_selection(args: argparse.Namespace) -> ResolvedSelection:
 
 def build_subtitle(selection: ResolvedSelection) -> str:
     row = selection.selected_row
-    parts = [f"Selection mode: {selection.mode}", f"Run: {selection.run_id[:12]}"]
+    parts: List[str] = []
     if row is not None:
         if row.model:
-            parts.append(f"Model: {row.model}")
+            model_label = {
+                "advanced_hybrid_1dcnn_lstm": "Hybrid CNN-LSTM",
+                "svm_linear": "Linear SVM",
+            }.get(row.model, row.model.replace("_", " "))
+            parts.append(model_label)
         if row.window_seconds is not None:
             parts.append(f"Window: {row.window_seconds}s")
         if row.inner_k is not None:
             parts.append(f"Inner-k: {row.inner_k}")
-        if row.outer_k is not None:
-            parts.append(f"Outer-k: {row.outer_k}")
         if row.patient_roc_auc is not None:
-            parts.append(f"Patient ROC-AUC: {row.patient_roc_auc:.3f}")
+            parts.append(f"ROC-AUC: {row.patient_roc_auc:.3f}")
     return " | ".join(parts)
 
 

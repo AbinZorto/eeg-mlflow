@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 
 
 PALETTE = {
-    "remission": "#1d5f8b",
-    "non_remission": "#a64d3d",
+    "remission": "#a64d3d",
+    "non_remission": "#1d5f8b",
     "summary": "#153b63",
     "summary_band": "#88a9c7",
     "neutral": "#8ea0b2",

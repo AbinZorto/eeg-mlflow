@@ -462,12 +462,13 @@ Copy this block for each new request:
   - notebook:
 - artifact_outputs:
   - `sweeps/paper_panels/<selection_slug>/biomarker_stability_composite.png`
-- notes: Supports best-overall, explicit MLflow run id, and explicit run-signature selection modes. Updated for the manuscript after validating that the Jaccard heatmap and histogram were correct but visually unhelpful for the sparse `inner_k=1` best hybrid run.
+- notes: Supports best-overall, explicit MLflow run id, and explicit run-signature selection modes. Updated for the manuscript after validating that the Jaccard heatmap and histogram were correct but visually unhelpful for the sparse `inner_k=1` best hybrid run. The final manuscript version uses only two panels and relabels them sequentially as A and B.
 
 ### plot-0022
 - requested_on: 2026-03-24
 - requested_by: user
-- status: implemented
+- status: validated
+- validated_on: 2026-03-27
 - comparison_goal: Package the class-conditional biomarker interpretation figures into one manuscript-ready composite.
 - plot_type: 2x2 multi-panel composite
 - grouping_dimensions: panels=`delta_scatter`, `effect_size`, `sign_consistency`, `class_conditional_bars`
@@ -478,7 +479,7 @@ Copy this block for each new request:
   - notebook:
 - artifact_outputs:
   - `sweeps/paper_panels/<selection_slug>/biomarker_interpretation_composite.png`
-- notes: Supports best-overall, explicit MLflow run id, and explicit run-signature selection modes.
+- notes: Supports best-overall, explicit MLflow run id, and explicit run-signature selection modes. Updated for the manuscript so remission uses red and non-remission uses blue consistently across the class-conditional panels.
 
 ### plot-0028
 - requested_on: 2026-03-25
@@ -498,3 +499,43 @@ Copy this block for each new request:
   - `paper/data/sweep_overview_aggregates.csv`
   - `paper/data/manuscript_facts.json`
 - notes: Bottom-row feature-selection panels are intentionally model-agnostic because the same feature-selection layer feeds both models in this sweep. The shared aggregation now collapses duplicate matched settings before computing confidence bands, so the bottom-row `n` reflects unique sweep settings rather than both classifier copies. Figure titles and legend spacing were simplified to reduce overlap in the manuscript version.
+
+### plot-0029
+- requested_on: 2026-03-27
+- requested_by: user
+- status: implemented
+- comparison_goal: Export the sweep-overview manuscript figure as four standalone panels so each relationship can be placed inline with the surrounding text.
+- plot_type: single-panel manuscript sweep figures
+- grouping_dimensions: panel A=`patient_roc_auc` vs `window_seconds`; panel B=`patient_roc_auc` vs `inner_k`; panel C=`feature_selection_mean_pairwise_jaccard` vs `inner_k`; panel D=`feature_selection_unique_feature_count` vs `inner_k`
+- required_inputs: deduplicated success rows from `sweeps/artifacts/*.results.jsonl` used by the manuscript summary builder
+- acceptance_criteria: Generate four standalone sweep panels with the same styling and best-run highlighting used in the composite summary figure.
+- implementation_refs:
+  - script: `scripts/build_paper_summary_assets.py`
+  - notebook:
+- artifact_outputs:
+  - `paper/figures/sweep_window_roc_auc.png`
+  - `paper/figures/sweep_inner_k_roc_auc.png`
+  - `paper/figures/sweep_jaccard_inner_k.png`
+  - `paper/figures/sweep_unique_features_inner_k.png`
+- notes: Implemented by refactoring the manuscript summary-figure builder so the same plotting code emits both the legacy composite and inline-ready standalone panels.
+
+### plot-0030
+- requested_on: 2026-03-27
+- requested_by: user
+- status: implemented
+- comparison_goal: Replace the remaining manuscript composites for best-run performance and biomarker stability with inline single-panel figures.
+- plot_type: manuscript inline figure set
+- grouping_dimensions: performance panels=`roc`, `pr`, `confusion`, `metric_summary`; stability panels=`selection_frequency`, `kuncheva_summary`
+- required_inputs: resolved best-run single-panel figures under `paper/assets/paper_figures/<selection_slug>/`
+- acceptance_criteria: Manuscript results section uses standalone inline figures instead of performance and stability composites.
+- implementation_refs:
+  - script: `scripts/plot_paper_figures.py`
+  - notebook:
+- artifact_outputs:
+  - `paper/figures/main_patient_roc_curve.png`
+  - `paper/figures/main_patient_pr_curve.png`
+  - `paper/figures/main_patient_confusion_matrix.png`
+  - `paper/figures/main_patient_metric_summary.png`
+  - `paper/figures/biomarker_selection_frequency.png`
+  - `paper/figures/biomarker_kuncheva_summary.png`
+- notes: Implemented in the shared manuscript section files so the same inline layout carries through to the neutral and Elsevier wrappers.

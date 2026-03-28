@@ -1,0 +1,73 @@
+\documentclass[fleqn,10pt]{wlscirep}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage[none]{hyphenat}
+
+\graphicspath{{../figures/}{../}}
+\makeatletter
+\def\input@path{{../}}
+\makeatother
+\setlength{\emergencystretch}{5em}
+
+\newenvironment{paperwidefigure}{\begin{figure}[htbp]}{\end{figure}}
+\newenvironment{paperinlinefigure}{\begin{figure}[htbp]}{\end{figure}}
+\newenvironment{paperwidetable}{\begin{table}[htbp]}{\end{table}}
+
+% Shared sections use natbib-style citation commands; Scientific Reports uses cite.
+\providecommand{\citep}[1]{\cite{#1}}
+
+\title{Sparse Biomarker Discovery from Low-Montage Resting-State EEG for tDCS Treatment Response in Adults with Treatment-Resistant Depression}
+
+\author[1,*]{Abin Daniel Zorto}
+\author[2]{Jijomon C. Moncy}
+\author[1]{Mhd Saeed Sharif}
+\author[2]{Cynthia H.Y. Fu}
+
+\affil[1]{Intelligent Technologies Research Group, University of East London, London, E16 2RD, UK}
+\affil[2]{School of Psychology, University of East London, London, E16 2RD, UK}
+\affil[*]{u2091940@uel.ac.uk}
+
+\keywords{resting-state EEG, transcranial direct current stimulation, major depressive disorder, treatment-resistant depression, biomarker discovery, low-montage EEG}
+
+\begin{abstract}
+\input{../sections/abstract}
+\end{abstract}
+
+\begin{document}
+
+\flushbottom
+\maketitle
+\thispagestyle{empty}
+
+\section*{Introduction}
+\input{../sections/introduction}
+
+\section*{Methods}
+\input{../sections/methods}
+
+\section*{Results}
+\input{../sections/results}
+
+\section*{Discussion}
+\input{../sections/discussion}
+
+\section*{Conclusion}
+\input{../sections/conclusion}
+
+\bibliography{../references,../references_analysis_subset}
+
+\section*{Acknowledgements}
+\input{../sections/acknowledgements}
+
+\section*{Author contributions}
+\input{../sections/scirep_author_contributions}
+
+\section*{Additional information}
+\input{../sections/scirep_additional_information}
+
+\end{document}

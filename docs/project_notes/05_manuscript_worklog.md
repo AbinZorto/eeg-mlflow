@@ -4,7 +4,7 @@ Persistent log for the LaTeX manuscript and supporting paper assets.
 
 ## Manuscript State
 
-- working_title: `Low Montage Resting-State EEG Biomarker Discovery of tDCS Treatment Response in Adults with Treatment-Resistant Depression`
+- working_title: `Sparse Biomarker Discovery from Low-Montage Resting-State EEG for tDCS Treatment Response in Adults with Treatment-Resistant Depression`
 - status: `drafting`
 - started_on_utc: `2026-03-25`
 - primary_story: `Sparse, interpretable short-timescale EEG biomarker discovery under strict patient-level validation`
@@ -85,6 +85,7 @@ Persistent log for the LaTeX manuscript and supporting paper assets.
 - Do not describe the biomarkers as highly stable across folds or as definitive clinical markers; `recurrent`, `plausible`, `credible in this cohort`, and `consistent effect direction` are acceptable framings.
 - Use class-conditional deltas more heavily than ratios when zero counts inflate ratios.
 - Re-open sweep plots, MLflow metrics, and composite figures whenever the narrative changes.
+- Do not treat LaTeX compilation as a default step after each edit; compile only when the user asks for it or when a milestone verification build is needed.
 - Treat the bottom-row feature-selection trends in Figure 1 as shared pipeline behavior, not classifier-specific behavior.
 - Treat `/Users/abin/Paper/paper2-body.tex` as an outdated cross-check on the same data, not as an authoritative methodology source.
 - Use acquisition details from legacy materials only when corroborated by the current repo configs or artifacts, or when the user explicitly requests that they be carried into the manuscript as acquisition context.

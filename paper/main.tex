@@ -9,14 +9,19 @@
 \usepackage{tabularx}
 \usepackage{float}
 \usepackage{amsmath}
-\usepackage[round,authoryear]{natbib}
+\usepackage[none]{hyphenat}
+\usepackage[numbers,sort&compress]{natbib}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 \usepackage{caption}
 
 \graphicspath{{figures/}}
-\setlength{\emergencystretch}{3em}
+\setlength{\emergencystretch}{5em}
 
-\title{Sparse Biomarker Discovery of tDCS Treatment Response in Adults with Treatment-Resistant Depression via Low Montage Resting-State EEG Analysis}
+\newenvironment{paperwidefigure}{\begin{figure}[H]}{\end{figure}}
+\newenvironment{paperinlinefigure}{\begin{figure}[H]}{\end{figure}}
+\newenvironment{paperwidetable}{\begin{table}[H]}{\end{table}}
+
+\title{Sparse Biomarker Discovery from Low-Montage Resting-State EEG for tDCS Treatment Response in Adults with Treatment-Resistant Depression}
 \author{
 \begin{tabular}{>{\centering\arraybackslash}p{0.88\textwidth}}
 Abin Daniel Zorto$^{1}$\thanks{Corresponding author: Abin Daniel Zorto, \texttt{u2091940@uel.ac.uk}}, Jijomon C. Moncy$^{2}$, \\ 
@@ -52,11 +57,17 @@ Mhd Saeed Sharif$^{1}$, Cynthia H.Y. Fu$^{2}$ \\[0.75em]
 \section{Conclusion}
 \input{sections/conclusion}
 
+\section*{CRediT authorship contribution statement}
+\input{sections/author_contributions}
+
+\section*{Acknowledgements}
+\input{sections/acknowledgements}
+
 % Curated bibliography policy:
 % keep the working bibliography broader in references.bib, but only emit
-% sources that are explicitly cited in the manuscript text.
+% sources that are explicitly cited in the study text.
 
-\bibliographystyle{plainnat}
+\bibliographystyle{unsrtnat}
 \bibliography{references,references_analysis_subset}
 
 \end{document}

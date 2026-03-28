@@ -48,7 +48,7 @@ MODEL_LABELS = {
 }
 MODEL_COLORS = {
     "advanced_hybrid_1dcnn_lstm": PALETTE["summary"],
-    "svm_linear": PALETTE["non_remission"],
+    "svm_linear": "#a64d3d",
 }
 METRIC_PANELS = (
     {
@@ -538,109 +538,7 @@ def _plot_summary_figure(
     aggregated_rows: List[Dict[str, Any]] = []
 
     for ax, panel in zip(axes.flat, METRIC_PANELS):
-        metric_rows = _load_metric_rows(results_paths, panel["metric_key"])
-        if panel.get("group_mode") == "shared":
-            shared_series = _compute_shared_envelope(
-                metric_rows,
-                panel["x_field"],
-                clamp_min=panel["clamp_min"],
-                clamp_max=panel["clamp_max"],
-            )
-            if shared_series:
-                x_values = [row["x_value"] for row in shared_series]
-                means = [row["mean_value"] for row in shared_series]
-                lowers = [row["ci_low"] for row in shared_series]
-                uppers = [row["ci_high"] for row in shared_series]
-                ax.fill_between(x_values, lowers, uppers, color=PALETTE["neutral_dark"], alpha=0.12)
-                ax.plot(
-                    x_values,
-                    means,
-                    color=PALETTE["neutral_dark"],
-                    linewidth=2.6,
-                    marker="o",
-                    markersize=5.6,
-                )
-                for row in shared_series:
-                    aggregated_rows.append(
-                        {
-                            "metric_key": panel["metric_key"],
-                            "x_field": panel["x_field"],
-                            "model": row["model"],
-                            "model_label": "Shared feature selection",
-                            "x_value": row["x_value"],
-                            "mean_value": row["mean_value"],
-                            "ci_low": row["ci_low"],
-                            "ci_high": row["ci_high"],
-                            "n": row["n"],
-                        }
-                    )
-        else:
-            envelopes = _compute_model_envelopes(
-                metric_rows,
-                panel["x_field"],
-                clamp_min=panel["clamp_min"],
-                clamp_max=panel["clamp_max"],
-            )
-            for model in MODEL_ORDER:
-                series = envelopes.get(model) or []
-                if not series:
-                    continue
-                x_values = [row["x_value"] for row in series]
-                means = [row["mean_value"] for row in series]
-                lowers = [row["ci_low"] for row in series]
-                uppers = [row["ci_high"] for row in series]
-                color = MODEL_COLORS[model]
-                ax.fill_between(x_values, lowers, uppers, color=color, alpha=0.12)
-                ax.plot(
-                    x_values,
-                    means,
-                    color=color,
-                    linewidth=2.6,
-                    marker="o",
-                    markersize=5.6,
-                    label=MODEL_LABELS[model],
-                )
-                for row in series:
-                    aggregated_rows.append(
-                        {
-                            "metric_key": panel["metric_key"],
-                            "x_field": panel["x_field"],
-                            "model": model,
-                            "model_label": MODEL_LABELS[model],
-                            "x_value": row["x_value"],
-                            "mean_value": row["mean_value"],
-                            "ci_low": row["ci_low"],
-                            "ci_high": row["ci_high"],
-                            "n": row["n"],
-                        }
-                    )
-
-                if panel["highlight_best"]:
-                    best_row = best_rows[model]
-                    x_value = getattr(best_row, panel["x_field"])
-                    y_value = best_row.patient_roc_auc
-                    if x_value is not None and y_value is not None:
-                        ax.scatter(
-                            [x_value],
-                            [y_value],
-                            color=color,
-                            edgecolors="#ffffff",
-                            linewidths=1.0,
-                            marker="*",
-                            s=150,
-                            zorder=5,
-                        )
-
-        ax.set_title(f"{panel['panel_label']}. {panel['title']}", loc="left", pad=10)
-        ax.set_xlabel("Window size (s)" if panel["x_field"] == "window_seconds" else "Inner-k")
-        ax.set_ylabel(panel["y_label"])
-        style_axes(ax, ygrid=True, xgrid=False)
-        if panel["clamp_min"] is not None:
-            ymin, ymax = ax.get_ylim()
-            ax.set_ylim(bottom=panel["clamp_min"], top=ymax)
-        if panel["clamp_max"] is not None:
-            ymin, _ = ax.get_ylim()
-            ax.set_ylim(bottom=ymin, top=panel["clamp_max"])
+        aggregated_rows.extend(_draw_summary_panel(ax, panel, results_paths, best_rows, include_panel_label=True))
 
     handles, labels = axes.flat[0].get_legend_handles_labels()
     if handles:
@@ -649,6 +547,141 @@ def _plot_summary_figure(
     fig.subplots_adjust(left=0.08, right=0.98, top=0.86, bottom=0.08, hspace=0.32, wspace=0.20)
     save_figure(fig, figure_path, dpi)
     _write_csv(aggregated_csv_path, aggregated_rows)
+
+
+def _draw_summary_panel(
+    ax: Any,
+    panel: Dict[str, Any],
+    results_paths: Sequence[Path],
+    best_rows: Dict[str, SweepResultRow],
+    *,
+    include_panel_label: bool,
+) -> List[Dict[str, Any]]:
+    aggregated_rows: List[Dict[str, Any]] = []
+    metric_rows = _load_metric_rows(results_paths, panel["metric_key"])
+    if panel.get("group_mode") == "shared":
+        shared_series = _compute_shared_envelope(
+            metric_rows,
+            panel["x_field"],
+            clamp_min=panel["clamp_min"],
+            clamp_max=panel["clamp_max"],
+        )
+        if shared_series:
+            x_values = [row["x_value"] for row in shared_series]
+            means = [row["mean_value"] for row in shared_series]
+            lowers = [row["ci_low"] for row in shared_series]
+            uppers = [row["ci_high"] for row in shared_series]
+            ax.fill_between(x_values, lowers, uppers, color=PALETTE["neutral_dark"], alpha=0.12)
+            ax.plot(
+                x_values,
+                means,
+                color=PALETTE["neutral_dark"],
+                linewidth=2.6,
+                marker="o",
+                markersize=5.6,
+            )
+            for row in shared_series:
+                aggregated_rows.append(
+                    {
+                        "metric_key": panel["metric_key"],
+                        "x_field": panel["x_field"],
+                        "model": row["model"],
+                        "model_label": "Shared feature selection",
+                        "x_value": row["x_value"],
+                        "mean_value": row["mean_value"],
+                        "ci_low": row["ci_low"],
+                        "ci_high": row["ci_high"],
+                        "n": row["n"],
+                    }
+                )
+    else:
+        envelopes = _compute_model_envelopes(
+            metric_rows,
+            panel["x_field"],
+            clamp_min=panel["clamp_min"],
+            clamp_max=panel["clamp_max"],
+        )
+        for model in MODEL_ORDER:
+            series = envelopes.get(model) or []
+            if not series:
+                continue
+            x_values = [row["x_value"] for row in series]
+            means = [row["mean_value"] for row in series]
+            lowers = [row["ci_low"] for row in series]
+            uppers = [row["ci_high"] for row in series]
+            color = MODEL_COLORS[model]
+            ax.fill_between(x_values, lowers, uppers, color=color, alpha=0.12)
+            ax.plot(
+                x_values,
+                means,
+                color=color,
+                linewidth=2.6,
+                marker="o",
+                markersize=5.6,
+                label=MODEL_LABELS[model],
+            )
+            for row in series:
+                aggregated_rows.append(
+                    {
+                        "metric_key": panel["metric_key"],
+                        "x_field": panel["x_field"],
+                        "model": model,
+                        "model_label": MODEL_LABELS[model],
+                        "x_value": row["x_value"],
+                        "mean_value": row["mean_value"],
+                        "ci_low": row["ci_low"],
+                        "ci_high": row["ci_high"],
+                        "n": row["n"],
+                    }
+                )
+
+            if panel["highlight_best"]:
+                best_row = best_rows[model]
+                x_value = getattr(best_row, panel["x_field"])
+                y_value = best_row.patient_roc_auc
+                if x_value is not None and y_value is not None:
+                    ax.scatter(
+                        [x_value],
+                        [y_value],
+                        color=color,
+                        edgecolors="#ffffff",
+                        linewidths=1.0,
+                        marker="*",
+                        s=150,
+                        zorder=5,
+                    )
+
+    title_prefix = f"{panel['panel_label']}. " if include_panel_label else ""
+    ax.set_title(f"{title_prefix}{panel['title']}", loc="left", pad=10)
+    ax.set_xlabel("Window size (s)" if panel["x_field"] == "window_seconds" else "Inner-k")
+    ax.set_ylabel(panel["y_label"])
+    style_axes(ax, ygrid=True, xgrid=False)
+    if panel["clamp_min"] is not None:
+        ymin, ymax = ax.get_ylim()
+        ax.set_ylim(bottom=panel["clamp_min"], top=ymax)
+    if panel["clamp_max"] is not None:
+        ymin, _ = ax.get_ylim()
+        ax.set_ylim(bottom=ymin, top=panel["clamp_max"])
+    return aggregated_rows
+
+
+def _plot_single_summary_panels(
+    output_paths: Dict[str, Path],
+    results_paths: Sequence[Path],
+    best_rows: Dict[str, SweepResultRow],
+    *,
+    dpi: int,
+) -> None:
+    apply_paper_style()
+    for panel in METRIC_PANELS:
+        output_path = output_paths[panel["panel_label"]]
+        fig, ax = plt.subplots(figsize=(7.0, 5.2), facecolor=PALETTE["figure_face"])
+        _draw_summary_panel(ax, panel, results_paths, best_rows, include_panel_label=False)
+        handles, labels = ax.get_legend_handles_labels()
+        if handles:
+            ax.legend(handles, labels, loc="upper center", ncol=len(handles), frameon=True)
+        fig.subplots_adjust(left=0.13, right=0.97, top=0.90, bottom=0.14)
+        save_figure(fig, output_path, dpi)
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -684,8 +717,15 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     data_dir.mkdir(parents=True, exist_ok=True)
 
     summary_figure_path = figures_dir / "figure1_sweep_overview.png"
+    summary_panel_paths = {
+        "A": figures_dir / "sweep_window_roc_auc.png",
+        "B": figures_dir / "sweep_inner_k_roc_auc.png",
+        "C": figures_dir / "sweep_jaccard_inner_k.png",
+        "D": figures_dir / "sweep_unique_features_inner_k.png",
+    }
     aggregated_csv_path = data_dir / "sweep_overview_aggregates.csv"
     _plot_summary_figure(summary_figure_path, aggregated_csv_path, results_paths, best_rows, dpi=args.dpi)
+    _plot_single_summary_panels(summary_panel_paths, results_paths, best_rows, dpi=args.dpi)
 
     comparison_rows = _build_best_run_comparison_rows(best_run_facts)
     _write_csv(data_dir / "best_run_comparison.csv", comparison_rows)
@@ -708,6 +748,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         "cohort_summary": cohort_summary,
         "generated_files": {
             "summary_figure": str(summary_figure_path),
+            "summary_panel_figures": {panel: str(path) for panel, path in summary_panel_paths.items()},
             "aggregated_csv": str(aggregated_csv_path),
             "best_run_comparison_csv": str(data_dir / "best_run_comparison.csv"),
             "best_run_comparison_tex": str(tables_dir / "best_run_comparison.tex"),

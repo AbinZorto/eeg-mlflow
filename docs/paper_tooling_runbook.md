@@ -143,6 +143,9 @@ uv run python3 scripts/plot_sweep_roc_auc.py \
 - working bibliography files used by the draft:
   - `paper/references.bib`
   - `paper/references_analysis_subset.bib`
+- default rule:
+  - do not compile after routine manuscript edits
+  - compile only when the user explicitly asks for it or when a milestone build is needed to verify figure paths, citations, or layout
 - build command:
 
 ```bash
@@ -165,4 +168,4 @@ latexmk -c -output-directory=build_curated main.tex
 4. Refresh `paper/references.bib` from the curated working file.
 5. Rebuild `scripts/build_paper_summary_assets.py` outputs if manuscript claims change.
 6. Re-open the figures before changing captions or result statements.
-7. Compile with `latexmk` and fix missing references immediately.
+7. Compile with `latexmk` only on explicit request or at a milestone check.

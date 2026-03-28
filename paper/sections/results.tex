@@ -1,65 +1,106 @@
 \subsection{Sweep-level comparison}
 
-Across the 150 successful runs, the hybrid model outperformed the SVM baseline on the main patient-level discrimination metrics over most of the sweep landscape (Figure~\ref{fig:sweep-overview}). The performance advantage was visible both when averaging over window sizes and when averaging over \texttt{inner-k} settings. The best individual hybrid run occurred at 6 s windows with \texttt{inner-k=1}, whereas the best SVM run occurred at 8 s windows with \texttt{inner-k=30}.
+Across the 150 successful runs, the hybrid model outperformed the SVM baseline on the main patient-level discrimination metrics over most of the sweep landscape. The performance advantage was visible when averaging over window sizes (Figure~\ref{fig:sweep-window-roc}) and when averaging over \texttt{inner-k} settings (Figure~\ref{fig:sweep-innerk-roc}). The best individual hybrid run occurred at 6 s windows with \texttt{inner-k=1}, whereas the best SVM run occurred at 8 s windows with \texttt{inner-k=30}.
 
-The lower half of Figure~\ref{fig:sweep-overview} highlights a second, and more important, pattern. Increasing \texttt{inner-k} increased both hard-set overlap and the total number of unique selected features. Larger feature budgets did not produce the strongest patient-level discrimination. The sweep concentrated its best performance at the sparsest end of the per-fold selection range. This empirical pattern motivates the paper's focus on sparse biomarker discovery.
-
-\begin{figure}[H]
+\begin{paperinlinefigure}
   \centering
-  \includegraphics[width=\textwidth]{figure1_sweep_overview.png}
-  \caption{Sweep-level overview across 150 successful runs. The top row compares patient-level ROC-AUC by model as window size and \texttt{inner-k} vary. The bottom row shows the shared feature-selection behavior of the pipeline because both classifiers use the same selected feature subsets for matched sweep settings. Stars mark the best individual hybrid and SVM runs.}
-  \label{fig:sweep-overview}
-\end{figure}
+  \includegraphics[width=0.94\linewidth]{sweep_window_roc_auc.png}
+  \caption{Patient-level ROC-AUC by window size across the sweep. Stars mark the best individual hybrid and SVM runs.}
+  \label{fig:sweep-window-roc}
+\end{paperinlinefigure}
+
+Figure~\ref{fig:sweep-innerk-roc} shows that the relationship between ROC-AUC and \texttt{inner-k} differed across the two model families in the low-budget region. The hybrid model retained clearly stronger ROC-AUC across the sparsest budgets and achieved the highest individual ROC-AUC in the entire sweep at \texttt{inner-k=1}. The linear SVM did not show the same pattern and reached its best ROC-AUC only at the broader \texttt{inner-k=30} setting. Sparse per-fold selection therefore aligned with peak discrimination only for the more expressive model.
+
+\begin{paperinlinefigure}
+  \centering
+  \includegraphics[width=0.94\linewidth]{sweep_inner_k_roc_auc.png}
+  \caption{Patient-level ROC-AUC by \texttt{inner-k} across the sweep. The hybrid model retained the strongest discrimination in the sparsest budget region.}
+  \label{fig:sweep-innerk-roc}
+\end{paperinlinefigure}
+
+Figures~\ref{fig:sweep-jaccard} and \ref{fig:sweep-unique-features} show a second related pattern. Increasing \texttt{inner-k} increased both hard-set overlap and the total number of unique selected features. Larger feature budgets did not produce the strongest patient-level discrimination. The sweep concentrated its best hybrid performance at the sparsest end of the per-fold selection range. This pattern motivates the paper's focus on sparse biomarker discovery and suggests that model capacity and per-fold sparsity mattered together rather than independently.
+
+\begin{paperinlinefigure}
+  \centering
+  \includegraphics[width=0.94\linewidth]{sweep_jaccard_inner_k.png}
+  \caption{Mean pairwise Jaccard overlap by \texttt{inner-k}. Hard-set overlap increased with larger per-fold feature budgets.}
+  \label{fig:sweep-jaccard}
+\end{paperinlinefigure}
+
+\begin{paperinlinefigure}
+  \centering
+  \includegraphics[width=0.94\linewidth]{sweep_unique_features_inner_k.png}
+  \caption{Unique selected features by \texttt{inner-k}. Larger per-fold budgets produced markedly larger discovered feature pools.}
+  \label{fig:sweep-unique-features}
+\end{paperinlinefigure}
 
 \subsection{Best-run patient-level performance}
 
-The best hybrid configuration achieved patient-level ROC-AUC 0.816, PR-AUC 0.579, balanced accuracy 0.786, accuracy 0.810, F1 0.714, and MCC 0.571 over 21 held-out participants (Figure~\ref{fig:main-results}; Table~\ref{tab:best-run-comparison}). Its ROC-AUC bootstrap interval ranged from 0.600 to 0.990, and the permutation test remained significant ($p=0.008$), which is notable given the relatively small cohort. The corresponding confusion matrix contained 12 true negatives, 5 true positives, 2 false positives, and 2 false negatives.
+The best hybrid configuration achieved patient-level ROC-AUC 0.816, PR-AUC 0.579, balanced accuracy 0.786, accuracy 0.810, F1 0.714, and MCC 0.571 over 21 held-out participants (Figure~\ref{fig:main-roc}; Table~\ref{tab:best-run-comparison}). Its ROC-AUC bootstrap interval ranged from 0.600 to 0.990, and the permutation test remained significant ($p=0.008$), which is notable given the relatively small cohort. The PR-AUC of 0.579 indicates that the model retained useful precision-recall behavior despite the remission minority at the participant level.
+
+\begin{paperinlinefigure}
+  \centering
+  \includegraphics[width=0.94\linewidth]{main_patient_roc_curve.png}
+  \caption{Patient-level ROC curve for the best hybrid run.}
+  \label{fig:main-roc}
+\end{paperinlinefigure}
+
+The corresponding participant-level confusion counts were 12 true negatives, 5 true positives, 2 false positives, and 2 false negatives. This error profile is consistent with the balanced-accuracy summary and shows that the strongest run retained useful sensitivity without giving up specificity. Figure~\ref{fig:main-metrics} shows the same run in condensed metric form.
 
 The best SVM baseline reached balanced accuracy 0.643 and ROC-AUC 0.510, with a non-significant permutation result ($p=0.469$). This weaker performance came with a much larger per-fold feature budget (\texttt{inner-k=30}) and a far larger overall candidate set. The contrast indicates that the sparse hybrid pipeline extracted stronger patient-level discrimination from a much smaller subset.
 
-\begin{figure}[H]
+\begin{paperinlinefigure}
   \centering
-  \includegraphics[width=\textwidth]{figure2_main_results.png}
-  \caption{Best-run main-results composite for the hybrid model. The figure summarizes the patient-level ROC curve, PR curve, confusion matrix, and metric summary for the highest-performing sweep setting.}
-  \label{fig:main-results}
-\end{figure}
+  \includegraphics[width=0.94\linewidth]{main_patient_metric_summary.png}
+  \caption{Patient-level metric summary for the best hybrid run.}
+  \label{fig:main-metrics}
+\end{paperinlinefigure}
 
-\begin{table}[H]
+\begin{paperwidetable}
   \centering
   \caption{Best-performing configuration for each model family.}
   \label{tab:best-run-comparison}
-  \resizebox{\textwidth}{!}{\input{tables/best_run_comparison.tex}}
-\end{table}
+  \resizebox{\linewidth}{!}{\input{tables/best_run_comparison.tex}}
+\end{paperwidetable}
 
 \subsection{Sparse biomarker set with modest hard-set overlap}
 
-The winning hybrid run selected an average of 1 feature per fold and yielded only 7 unique recurrent features across the entire outer-validation process (Table~\ref{tab:hybrid-biomarkers}). That degree of sparsity is one of the most distinctive findings in the sweep. Hard-set overlap was modest: mean pairwise Jaccard 0.190 and mean Kuncheva index 0.187. Figure~\ref{fig:biomarker-stability} summarizes the small recurrent pool together with the modest chance-adjusted stability summary.
+The winning hybrid run selected an average of 1 feature per fold and yielded only 7 unique recurrent features across the entire participant-level validation process (Table~\ref{tab:hybrid-biomarkers}). That degree of sparsity is one of the most distinctive findings in the sweep. Hard-set overlap was modest, with a mean pairwise Jaccard value of 0.190 and a mean Kuncheva index of 0.187. Figure~\ref{fig:biomarker-frequency} shows the small recurrent pool, while the overlap statistics indicate that recurrence was concentrated in a few repeatedly reappearing features rather than in a broadly shared foldwise set.
 
 A small recurring feature set emerged repeatedly, though not in every fold, and the selected set was dominated by temporal and frontal-temporal descriptors. The most recurrent feature was \texttt{tp10\_spectral\_entropy}, selected in 8 of 21 folds. The next most recurrent features were \texttt{left\_frontal\_temporal\_diff\_gamma}, \texttt{left\_frontal\_temporal\_diff\_beta}, and \texttt{af7\_zero\_crossings}.
 
-\begin{figure}[H]
+\begin{paperinlinefigure}
   \centering
-  \includegraphics[width=\textwidth]{figure3_biomarker_stability.png}
-  \caption{Biomarker-stability composite for the best hybrid run. Panel A ranks the recurrent features by selection frequency. Panel D reports the modest Kuncheva stability summary.}
-  \label{fig:biomarker-stability}
-\end{figure}
+  \includegraphics[width=0.94\linewidth]{biomarker_selection_frequency.png}
+  \caption{Selection-frequency ranking for the recurrent biomarkers from the best hybrid run.}
+  \label{fig:biomarker-frequency}
+\end{paperinlinefigure}
 
-\begin{table}[H]
+\begin{paperwidetable}
   \centering
   \caption{Recurrent biomarkers from the best hybrid run. $\Delta$ selection is remission minus non-remission selection share.}
   \label{tab:hybrid-biomarkers}
-  \resizebox{\textwidth}{!}{\input{tables/hybrid_recurrent_biomarkers.tex}}
-\end{table}
+  \resizebox{\linewidth}{!}{\input{tables/hybrid_recurrent_biomarkers.tex}}
+\end{paperwidetable}
 
 \subsection{Effect-direction consistency and class-conditional patterns}
 
-The recurrent hybrid biomarkers showed perfect mean sign consistency across the effect-stability summary. This supports treating them as promising biomarkers with stable directionality across the folds in which they were selected. \texttt{tp10\_spectral\_entropy} and the frontal-temporal gamma and beta difference terms were repeatedly associated with the non-remission group, whereas \texttt{af7\_zero\_crossings} was more frequently selected in remission folds and retained a positive mean effect size (Figure~\ref{fig:biomarker-interpretation}).
+The recurrent hybrid biomarkers showed perfect mean sign consistency across the effect-stability summary. All recurrent features retained the same effect direction across the folds in which they were selected, which supports treating them as promising biomarkers with stable directionality even when hard-set overlap remained modest.
 
-This distinction matters clinically. The selection-frequency deltas do not justify definitive mechanistic claims. They provide a concrete interpretation target for follow-up validation. The best hybrid pipeline contributes two linked observations: useful patient-level discrimination can be achieved with an extremely sparse feature budget, and the resulting recurrent biomarkers show interpretable directionality even when fold-to-fold set overlap remains modest.
+\texttt{tp10\_spectral\_entropy} and the frontal-temporal gamma and beta difference terms were repeatedly associated with the non-remission group, whereas \texttt{af7\_zero\_crossings} was more frequently selected in remission folds. The class-conditional selection frequencies make that separation visible at the level of foldwise recurrence (Figure~\ref{fig:biomarker-class-conditional}).
 
-\begin{figure}[H]
+\begin{paperinlinefigure}
   \centering
-  \includegraphics[width=\textwidth]{figure4_biomarker_interpretation.png}
-  \caption{Biomarker-interpretation composite for the best hybrid run. The recurring features show consistent effect direction, with \texttt{tp10\_spectral\_entropy} skewing toward non-remission-associated selections and \texttt{af7\_zero\_crossings} skewing toward remission-associated selections.}
-  \label{fig:biomarker-interpretation}
-\end{figure}
+  \includegraphics[width=0.94\linewidth]{figure6_class_conditional_selection.png}
+  \caption{Class-conditional selection frequencies for the recurrent biomarkers from the best hybrid run. Remission is shown in red and non-remission in blue.}
+  \label{fig:biomarker-class-conditional}
+\end{paperinlinefigure}
+
+The effect-size summaries followed the same broad pattern, with \texttt{af7\_zero\_crossings} retaining a positive mean effect size and the main TP10 and frontal-temporal features retaining negative mean effects (Figure~\ref{fig:biomarker-effect-size}). This distinction matters clinically. The selection-frequency deltas do not justify definitive mechanistic claims. They provide a concrete interpretation target for follow-up validation. Taken together, these results indicate that useful patient-level discrimination can be achieved with an extremely sparse feature budget, while the recurrent biomarkers retain interpretable directionality even when fold-to-fold set overlap remains modest.
+
+\begin{paperinlinefigure}
+  \centering
+  \includegraphics[width=0.94\linewidth]{figure7_effect_size.png}
+  \caption{Effect-size stability for the recurrent biomarkers from the best hybrid run. Positive values indicate remission-skewed effects and negative values indicate non-remission-skewed effects.}
+  \label{fig:biomarker-effect-size}
+\end{paperinlinefigure}
