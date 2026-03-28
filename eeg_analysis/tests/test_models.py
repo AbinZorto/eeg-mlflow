@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 from src.models.model_utils import create_classifier
 import src.models.trainer as trainer_module
+import src.models.deep_learning_trainer as deep_learning_trainer_module
 from src.models.trainer import Trainer
 from src.models.evaluation import ModelEvaluator
 from src.models.deep_learning_trainer import DeepLearningTrainer, PyTorchMLPClassifier, _resolve_training_batch_config
@@ -303,6 +304,29 @@ class TestDeepLearningBatching:
         config = _resolve_training_batch_config(dataset_size=4050, batch_size=128, num_devices=2)
 
         assert config["drop_last"] is False
+
+    def test_pytorch_mlp_fit_handles_smote_requested_when_imbalanced_learn_is_unavailable(self, monkeypatch):
+        monkeypatch.setattr(deep_learning_trainer_module, "IMBALANCE_AVAILABLE", False)
+
+        classifier = PyTorchMLPClassifier(
+            hidden_layers=[8],
+            dropout_rate=0.0,
+            weight_decay=0.0,
+            learning_rate=0.001,
+            batch_size=8,
+            epochs=1,
+            early_stopping_patience=1,
+            batch_norm=False,
+            use_smote=True,
+            use_multi_gpu=False,
+        )
+
+        X = pd.DataFrame(np.random.randn(8, 4), columns=[f"feature_{i}" for i in range(4)])
+        y = pd.Series([0, 0, 0, 0, 1, 1, 1, 1])
+
+        classifier.fit(X, y)
+
+        assert classifier.use_smote is False
 
 
 class TestDeepLearningTrainer:

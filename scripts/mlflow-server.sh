@@ -9,7 +9,7 @@ cd "$REPO_ROOT"
 source .venv/bin/activate
 if [ "$1" == "start" ]; then
     echo "Starting MLflow UI on port $PORT..."
-    mlflow ui --port $PORT &
+    mlflow ui --host 0.0.0.0 --port $PORT --allowed-hosts mlflow.coalmine.ai &
     echo $! > mlflow.pid
     echo "MLflow started with PID $(cat mlflow.pid)"
 elif [ "$1" == "stop" ]; then

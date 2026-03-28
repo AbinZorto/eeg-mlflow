@@ -597,7 +597,7 @@ class PyTorchMLPClassifier(BaseEstimator, ClassifierMixin):
             self.feature_names_in_ = X.columns.tolist()
         
         # Apply SMOTE for class balance if enabled
-        if self.use_smote and SMOTE_AVAILABLE:
+        if self.use_smote and IMBALANCE_AVAILABLE:
             print(f"   🔄 SMOTE ENABLED: Balancing classes for better remission detection...")
             print(f"   Original class distribution: {np.bincount(y)}")
             
@@ -622,7 +622,7 @@ class PyTorchMLPClassifier(BaseEstimator, ClassifierMixin):
             except Exception as e:
                 print(f"   ⚠️  SMOTE failed: {e}. Continuing without SMOTE...")
                 self.use_smote = False
-        elif self.use_smote and not SMOTE_AVAILABLE:
+        elif self.use_smote and not IMBALANCE_AVAILABLE:
             print(f"   ⚠️  SMOTE requested but not available. Install imbalanced-learn package.")
             self.use_smote = False
         else:
