@@ -18,7 +18,7 @@ Figure~\ref{fig:sweep-innerk-roc} shows that the relationship between ROC-AUC an
   \label{fig:sweep-innerk-roc}
 \end{paperinlinefigure}
 
-Figures~\ref{fig:sweep-jaccard} and \ref{fig:sweep-unique-features} show a second related pattern. Increasing \texttt{inner-k} increased both hard-set overlap and the total number of unique selected features. Larger feature budgets did not produce the strongest patient-level discrimination. The sweep concentrated its best hybrid performance at the sparsest end of the per-fold selection range. This pattern motivates the paper's focus on sparse biomarker discovery and suggests that model capacity and per-fold sparsity mattered together rather than independently.
+Figures~\ref{fig:sweep-jaccard} and \ref{fig:sweep-unique-features} show a second related pattern. Increasing \texttt{inner-k} increased hard-set overlap and the total number of unique selected features. Larger feature budgets did not produce the strongest patient-level discrimination. The sweep concentrated its best hybrid performance at the sparsest end of the per-fold selection range. This pattern motivates the study's focus on sparse biomarker discovery and suggests that model capacity and per-fold sparsity mattered together rather than independently.
 
 \begin{paperinlinefigure}
   \centering
@@ -36,7 +36,7 @@ Figures~\ref{fig:sweep-jaccard} and \ref{fig:sweep-unique-features} show a secon
 
 \subsection{Best-run patient-level performance}
 
-The best hybrid configuration achieved patient-level ROC-AUC 0.816, PR-AUC 0.579, balanced accuracy 0.786, accuracy 0.810, F1 0.714, and MCC 0.571 over 21 held-out participants (Figure~\ref{fig:main-roc}; Table~\ref{tab:best-run-comparison}). Its ROC-AUC bootstrap interval ranged from 0.600 to 0.990, and the permutation test remained significant ($p=0.008$), which is notable given the relatively small cohort. The PR-AUC of 0.579 indicates that the model retained useful precision-recall behavior despite the remission minority at the participant level.
+The best hybrid configuration achieved patient-level ROC-AUC 0.816, PR-AUC 0.579, balanced accuracy 0.786, accuracy 0.810, F1 0.714, and MCC 0.571 over 21 held-out participants (Figure~\ref{fig:main-roc}; Table~\ref{tab:best-run-comparison}). Its ROC-AUC bootstrap interval ranged from 0.600 to 0.990, and the permutation test remained significant ($p=0.008$), which is notable given the relatively small cohort. The PR-AUC of 0.579 indicates that the model retained useful precision-recall behavior.
 
 \begin{paperinlinefigure}
   \centering
@@ -85,9 +85,7 @@ A small recurring feature set emerged repeatedly, though not in every fold, and 
 
 \subsection{Effect-direction consistency and class-conditional patterns}
 
-The recurrent hybrid biomarkers showed perfect mean sign consistency across the effect-stability summary. All recurrent features retained the same effect direction across the folds in which they were selected, which supports treating them as promising biomarkers with stable directionality even when hard-set overlap remained modest.
-
-\texttt{tp10\_spectral\_entropy} and the frontal-temporal gamma and beta difference terms were repeatedly associated with the non-remission group, whereas \texttt{af7\_zero\_crossings} was more frequently selected in remission folds. The class-conditional selection frequencies make that separation visible at the level of foldwise recurrence (Figure~\ref{fig:biomarker-class-conditional}).
+The recurrent hybrid biomarkers showed perfect mean sign consistency, with all recurrent features retaining the same effect direction across the folds in which they were selected. \texttt{tp10\_spectral\_entropy} and the frontal-temporal gamma and beta difference terms were repeatedly associated with the non-remission group, whereas \texttt{af7\_zero\_crossings} was more frequently selected in remission folds. The class-conditional selection frequencies make that separation visible at the level of foldwise recurrence (Figure~\ref{fig:biomarker-class-conditional}).
 
 \begin{paperinlinefigure}
   \centering
