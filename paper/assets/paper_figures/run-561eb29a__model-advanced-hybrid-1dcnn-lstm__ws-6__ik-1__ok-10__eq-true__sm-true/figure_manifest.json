@@ -1,0 +1,65 @@
+{
+  "data_sources": {
+    "mlruns_root": "mlruns",
+    "nested_fold_runs": 21,
+    "patient_prediction_rows": 21,
+    "results_artifacts_dir": "sweeps/artifacts",
+    "results_glob": "*.results.jsonl",
+    "window_prediction_rows": 2406
+  },
+  "filters": {
+    "equalize_lopo_groups": null,
+    "fs_method": null,
+    "inner_k": null,
+    "mlflow_run_id": "561eb29a046946818320bea18f21bed6",
+    "model": null,
+    "n_features": null,
+    "ordering": null,
+    "outer_k": null,
+    "run_signature": null,
+    "use_smote": null,
+    "window_size": null
+  },
+  "generated_figures": [
+    {
+      "figure_id": "selection_frequency",
+      "path": "paper/assets/paper_figures/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/biomarker_stability/selection_frequency_top_features.png"
+    },
+    {
+      "figure_id": "kuncheva_summary",
+      "path": "paper/assets/paper_figures/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/biomarker_stability/kuncheva_summary.png"
+    },
+    {
+      "figure_id": "delta_scatter",
+      "path": "paper/assets/paper_figures/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/biomarker_interpretation/delta_vs_frequency_scatter.png"
+    },
+    {
+      "figure_id": "effect_size",
+      "path": "paper/assets/paper_figures/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/biomarker_interpretation/effect_size_top_features.png"
+    },
+    {
+      "figure_id": "sign_consistency",
+      "path": "paper/assets/paper_figures/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/biomarker_interpretation/sign_consistency_top_features.png"
+    },
+    {
+      "figure_id": "class_conditional_bars",
+      "path": "paper/assets/paper_figures/run-561eb29a__model-advanced-hybrid-1dcnn-lstm__ws-6__ik-1__ok-10__eq-true__sm-true/biomarker_interpretation/class_conditional_selection_bars.png"
+    }
+  ],
+  "requested_figures": [
+    "selection_frequency",
+    "kuncheva_summary",
+    "delta_scatter",
+    "effect_size",
+    "sign_consistency",
+    "class_conditional_bars"
+  ],
+  "selected_run": {
+    "artifacts_dir": "mlruns/398165227830907321/561eb29a046946818320bea18f21bed6/artifacts",
+    "mlflow_experiment_id": "398165227830907321",
+    "mlflow_run_id": "561eb29a046946818320bea18f21bed6",
+    "resolved_from_results_row": "sweeps/artifacts/runexp-mode-fs-sets-none-models-advanced_hybrid_1dcnn_ls-ws-6-ord-sequential-ik-1-ok-10-eq-true-sm-true-ds-auto-fsm-select_k_best_f_classif-fn-10__c25fbcf98eff.results.jsonl",
+    "run_dir": "mlruns/398165227830907321/561eb29a046946818320bea18f21bed6"
+  },
+  "skipped_figures": []
+}

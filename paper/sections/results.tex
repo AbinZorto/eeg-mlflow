@@ -1,6 +1,8 @@
 \subsection{Sweep-level comparison}
 
-Across the 150 successful runs, the hybrid model outperformed the SVM baseline on the main patient-level discrimination metrics over most of the sweep landscape. The performance advantage was visible when averaging over window sizes (Figure~\ref{fig:sweep-window-roc}) and when averaging over \texttt{inner-k} settings (Figure~\ref{fig:sweep-innerk-roc}). The best individual hybrid run occurred at 6 s windows with \texttt{inner-k=1}, whereas the best SVM run occurred at 8 s windows with \texttt{inner-k=30}.
+Across the 150 successful runs (75 hybrid, 75 SVM), the hybrid model outperformed the SVM baseline on patient-level discrimination metrics over most of the sweep landscape. The performance advantage was visible when averaging over window sizes (Figure~\ref{fig:sweep-window-roc}) and when averaging over \texttt{inner-k} settings (Figure~\ref{fig:sweep-innerk-roc}). The best individual hybrid run occurred at 6 s windows with \texttt{inner-k=1}, whereas the best SVM run occurred at 8 s windows with \texttt{inner-k=30}.
+
+To assess statistical robustness across the structured sweep, we applied three correction tiers to the permutation p-values. Treating the sweep as two model-family comparisons (the primary independent factor) yields Bonferroni-corrected $p_\text{corr}=0.016$, confirming that the result survives at $\alpha=0.05$. A max-T permutation correction (10,000 iterations with shared label permutations across all 150 configurations, accounting for inter-configuration correlations) yields $p_\text{corr}=0.302$; the null maximum distribution has mean 0.768 and 95th percentile 0.908, placing the observed maximum of 0.816 within the range expected under random label permutations. The full-sweep Bonferroni ($p_\text{corr}=1.00$) is mechanically uninformative given the 150-test multiplier and is reported for completeness. We adopt the structured 2-family correction as the primary corrected p-value because the window-size and inner-k factors represent exploratory levels of a single hypothesis rather than independent comparisons. Across the sweep, 2 of 150 runs (1.3\%) yielded raw $p<0.05$, and 88\% of runs had $p\ge 0.50$, consistent with a null-dominated landscape from which the best hybrid configuration meaningfully separates.
 
 \begin{paperinlinefigure}
   \centering
@@ -18,7 +20,7 @@ Figure~\ref{fig:sweep-innerk-roc} shows that the relationship between ROC-AUC an
   \label{fig:sweep-innerk-roc}
 \end{paperinlinefigure}
 
-Figures~\ref{fig:sweep-jaccard} and \ref{fig:sweep-unique-features} show a second related pattern. Increasing \texttt{inner-k} increased hard-set overlap and the total number of unique selected features. Larger feature budgets did not produce the strongest patient-level discrimination. The sweep concentrated its best hybrid performance at the sparsest end of the per-fold selection range. This pattern motivates the study's focus on sparse biomarker discovery and suggests that model capacity and per-fold sparsity mattered together rather than independently.
+Figures~\ref{fig:sweep-jaccard} and \ref{fig:sweep-unique-features} show a second related pattern. Increasing \texttt{inner-k} increased hard-set overlap and the total number of unique selected features. Larger feature budgets did not produce the strongest patient-level discrimination. The sweep concentrated its best hybrid performance at the sparsest end of the per-fold selection range. This pattern suggests that model capacity and per-fold sparsity mattered together rather than independently.
 
 \begin{paperinlinefigure}
   \centering
@@ -36,49 +38,62 @@ Figures~\ref{fig:sweep-jaccard} and \ref{fig:sweep-unique-features} show a secon
 
 \subsection{Best-run patient-level performance}
 
-The best hybrid configuration achieved patient-level ROC-AUC 0.816, PR-AUC 0.579, balanced accuracy 0.786, accuracy 0.810, F1 0.714, and MCC 0.571 over 21 held-out participants (Figure~\ref{fig:main-roc}; Table~\ref{tab:best-run-comparison}). Its ROC-AUC bootstrap interval ranged from 0.600 to 0.990, and the permutation test remained significant ($p=0.008$), which is notable given the relatively small cohort. The PR-AUC of 0.579 indicates that the model retained useful precision-recall behavior.
+The best hybrid configuration achieved patient-level ROC-AUC 0.816 [95\% CI: 0.600--0.990], PR-AUC 0.579, balanced accuracy 0.786 [95\% CI: 0.571--0.967], accuracy 0.810 [95\% CI: 0.619--0.952], F1 0.714 [95\% CI: 0.364--0.941], and MCC 0.571 over 21 held-out participants (Figure~\ref{fig:main-roc}; Table~\ref{tab:best-run-comparison}). The permutation test yielded a nominal raw $p=0.008$ based on 500 iterations. Correcting for the structured sweep (2 model families) gives $p_\text{corr}=0.016$, which survives at $\alpha=0.05$; under the more conservative max-T correction across all 150 configurations, $p_\text{corr}=0.302$ (Table~\ref{tab:best-run-comparison} footnote). Bootstrap confidence intervals are wide, reflecting the small sample size of 21 participants. The PR-AUC of 0.579 indicates that the model retained useful precision-recall behavior in this cohort.
 
 \begin{paperinlinefigure}
   \centering
   \includegraphics[width=0.94\linewidth]{main_patient_roc_curve.png}
-  \caption{Patient-level ROC curve for the best hybrid run.}
+  \caption{Patient-level ROC curve for the best hybrid run. The shaded region shows the 95\% bootstrap confidence band.}
   \label{fig:main-roc}
 \end{paperinlinefigure}
 
-The corresponding participant-level confusion counts were 12 true negatives, 5 true positives, 2 false positives, and 2 false negatives. This error profile is consistent with the balanced-accuracy summary and shows that the strongest run retained useful sensitivity without giving up specificity. Figure~\ref{fig:main-metrics} shows the same run in condensed metric form.
+The corresponding participant-level confusion counts were 12 true negatives, 5 true positives, 2 false positives, and 2 false negatives. This error profile is consistent with the balanced-accuracy summary and shows that the strongest run retained useful sensitivity without sacrificing specificity. Figure~\ref{fig:main-metrics} shows the same run in condensed metric form with 95\% bootstrap confidence intervals.
 
-The best SVM baseline reached balanced accuracy 0.643 and ROC-AUC 0.510, with a non-significant permutation result ($p=0.469$). This weaker performance came with a much larger per-fold feature budget (\texttt{inner-k=30}) and a far larger overall candidate set. The contrast indicates that the sparse hybrid pipeline extracted stronger patient-level discrimination from a much smaller subset.
+The best SVM baseline reached balanced accuracy 0.643 and ROC-AUC 0.510 [95\% CI: 0.119--0.881], with a non-significant permutation result (raw $p=0.469$, uncorrected). This weaker performance came with a much larger per-fold feature budget (\texttt{inner-k=30}) and a far larger overall candidate set. The contrast indicates that the sparse hybrid pipeline extracted stronger patient-level discrimination from a much smaller subset of features.
 
 \begin{paperinlinefigure}
   \centering
   \includegraphics[width=0.94\linewidth]{main_patient_metric_summary.png}
-  \caption{Patient-level metric summary for the best hybrid run.}
+  \caption{Patient-level metric summary for the best hybrid run. Error bars show 95\% bootstrap confidence intervals.}
   \label{fig:main-metrics}
 \end{paperinlinefigure}
 
 \begin{paperwidetable}
   \centering
-  \caption{Best-performing configuration for each model family.}
+  \caption{Best-performing configuration for each model family. Bootstrap confidence intervals are from 1,000 resamples at the 95\% level.}
   \label{tab:best-run-comparison}
   \resizebox{\linewidth}{!}{\input{tables/best_run_comparison.tex}}
+
+  \smallskip
+  \footnotesize Bootstrap 95\% CIs from 1,000 resamples. Hybrid permutation test: raw $p=0.008$; primary correction (2 model families) $p_\text{corr}=0.016$; robustness checks: max-T across 150 configurations $p_\text{corr}=0.302$, full-sweep Bonferroni $p_\text{corr}=1.00$.
 \end{paperwidetable}
 
-\subsection{Sparse biomarker set with modest hard-set overlap}
+\subsection{Intermediate baselines at the sparsest budget}
 
-The winning hybrid run selected an average of 1 feature per fold and yielded only 7 unique recurrent features across the entire participant-level validation process (Table~\ref{tab:hybrid-biomarkers}). That degree of sparsity is one of the most distinctive findings in the sweep. Hard-set overlap was modest, with a mean pairwise Jaccard value of 0.190 and a mean Kuncheva index of 0.187. Figure~\ref{fig:biomarker-frequency} shows the small recurrent pool, while the overlap statistics indicate that recurrence was concentrated in a few repeatedly reappearing features rather than in a broadly shared foldwise set.
+To determine whether the hybrid architecture's advantage at \texttt{inner-k=1} reflected generic benefits of non-linearity or specific architectural properties, we evaluated eight classical classifiers at the identical configuration (6 s windows, \texttt{inner-k=1}, SMOTE, LOPO equalization, same dataset and folds). All eight performed at or below chance (Table~\ref{tab:intermediate-baselines}). The best classical model (Random Forest) reached ROC-AUC 0.296, compared with 0.816 for the hybrid. No classical model achieved a significant permutation p-value (all $p > 0.9$). This indicates that the hybrid CNN-LSTM's performance at extreme sparsity is not attributable to non-linearity alone; the convolutional, recurrent, and attention stages appear necessary to extract discriminatory signal from a single feature per fold.
 
-A small recurring feature set emerged repeatedly, though not in every fold, and the selected set was dominated by temporal and frontal-temporal descriptors. The most recurrent feature was \texttt{tp10\_spectral\_entropy}, selected in 8 of 21 folds. The next most recurrent features were \texttt{left\_frontal\_temporal\_diff\_gamma}, \texttt{left\_frontal\_temporal\_diff\_beta}, and \texttt{af7\_zero\_crossings}.
+\begin{paperwidetable}
+  \centering
+  \caption{Intermediate baseline classifiers evaluated at the best hybrid configuration (6 s, \texttt{inner-k=1}). All models used identical data, feature selection, and validation splits.}
+  \label{tab:intermediate-baselines}
+  \footnotesize
+  \input{tables/intermediate_baselines.tex}
+\end{paperwidetable}}
+
+The winning hybrid run selected an average of 1 feature per fold and yielded only 7 unique features that appeared in at least one fold across the entire participant-level validation process (Table~\ref{tab:hybrid-biomarkers}). That degree of sparsity is one of the most distinctive findings in the sweep. Hard-set overlap was modest, with a mean pairwise Jaccard value of 0.190 and a mean Kuncheva index of 0.187. Figure~\ref{fig:biomarker-frequency} shows the small candidate pool, while the overlap statistics indicate that recurrence was concentrated in a few repeatedly reappearing features rather than in a broadly shared foldwise set.
+
+A small set of features emerged repeatedly, though not in every fold, and the selected features were dominated by temporal and frontal-temporal descriptors. The most frequently selected feature was \texttt{tp10\_spectral\_entropy}, selected in 8 of 21 folds. The next most frequent were \texttt{left\_frontal\_temporal\_diff\_gamma}, \texttt{left\_frontal\_temporal\_diff\_beta}, and \texttt{af7\_zero\_crossings}. We note that three of the seven features listed in Table~\ref{tab:hybrid-biomarkers} appear in only 1 of 21 folds; the term ``recurrent'' should be interpreted with this sparsity in mind, and the sign-consistency values for these single-fold features carry limited interpretive weight.
 
 \begin{paperinlinefigure}
   \centering
   \includegraphics[width=0.94\linewidth]{biomarker_selection_frequency.png}
-  \caption{Selection-frequency ranking for the recurrent biomarkers from the best hybrid run.}
+  \caption{Selection-frequency ranking for the features identified from the best hybrid run.}
   \label{fig:biomarker-frequency}
 \end{paperinlinefigure}
 
 \begin{paperwidetable}
   \centering
-  \caption{Recurrent biomarkers from the best hybrid run. $\Delta$ selection is remission minus non-remission selection share.}
+  \caption{Features from the best hybrid run that appeared in at least one fold. $\Delta$ selection is remission minus non-remission selection share. Sign consistency is 1.000 for features appearing in multiple folds; single-fold entries should be interpreted with caution.}
   \label{tab:hybrid-biomarkers}
   \resizebox{\linewidth}{!}{\input{tables/hybrid_recurrent_biomarkers.tex}}
 \end{paperwidetable}
@@ -95,6 +110,10 @@ The recurrent hybrid biomarkers showed perfect mean sign consistency, with all r
 \end{paperinlinefigure}
 
 The effect-size summaries followed the same broad pattern, with \texttt{af7\_zero\_crossings} retaining a positive mean effect size and the main TP10 and frontal-temporal features retaining negative mean effects (Figure~\ref{fig:biomarker-effect-size}). This distinction matters clinically. The selection-frequency deltas do not justify definitive mechanistic claims. They provide a concrete interpretation target for follow-up validation. Taken together, these results indicate that useful patient-level discrimination can be achieved with an extremely sparse feature budget, while the recurrent biomarkers retain interpretable directionality even when fold-to-fold set overlap remains modest.
+
+\subsection{Aggregation robustness}
+
+Patient-level metrics in the main analysis were derived by averaging window probabilities within each participant. To assess sensitivity to outlier windows, we recomputed the best hybrid run's patient-level metrics using median aggregation and 25\% trimmed-mean aggregation. Median aggregation yielded ROC-AUC 0.857, PR-AUC 0.620, and MCC 0.571; trimmed-mean aggregation yielded ROC-AUC 0.837 and MCC 0.571. Both alternative aggregation methods matched or exceeded the original mean-aggregated performance (ROC-AUC 0.816), confirming that the main results are not driven by outlier windows and that the reported mean-based metrics are conservative rather than inflated.
 
 \begin{paperinlinefigure}
   \centering

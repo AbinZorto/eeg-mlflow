@@ -1,0 +1,8 @@
+feature,fold_count,selection_share,delta_remission_minus_non_remission,sign_consistency,cohens_d_mean,direction
+tp10_spectral_entropy,8,0.38095238095238093,-0.5714285714285714,1.0,-0.9349686682310783,Non-remission > remission
+left_frontal_temporal_diff_gamma,4,0.19047619047619047,-0.07142857142857142,1.0,-1.0589230062560797,Non-remission > remission
+left_frontal_temporal_diff_beta,3,0.14285714285714285,0.0,1.0,-0.9147922455641161,Non-remission > remission
+af7_zero_crossings,3,0.14285714285714285,0.42857142857142855,1.0,0.8136215128374374,Remission > non-remission
+tp10_hurst,1,0.047619047619047616,0.14285714285714285,1.0,-1.010199885573305,Non-remission > remission
+af7_tp10_diff_gamma,1,0.047619047619047616,0.14285714285714285,1.0,-1.2027832670710206,Non-remission > remission
+frontal_asymmetry_ratio_delta,1,0.047619047619047616,-0.07142857142857142,1.0,0.7937734092018861,Remission > non-remission

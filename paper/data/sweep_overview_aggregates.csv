@@ -1,0 +1,71 @@
+metric_key,x_field,model,model_label,x_value,mean_value,ci_low,ci_high,n
+patient_roc_auc,window_seconds,advanced_hybrid_1dcnn_lstm,Hybrid CNN-LSTM,2,0.4006802721088435,0.3419086488225695,0.4594518953951175,15
+patient_roc_auc,window_seconds,advanced_hybrid_1dcnn_lstm,Hybrid CNN-LSTM,4,0.3523809523809524,0.28603863026524934,0.4187232744966555,15
+patient_roc_auc,window_seconds,advanced_hybrid_1dcnn_lstm,Hybrid CNN-LSTM,6,0.39047619047619037,0.2957538281432865,0.48519855280909424,15
+patient_roc_auc,window_seconds,advanced_hybrid_1dcnn_lstm,Hybrid CNN-LSTM,8,0.4598639455782313,0.39980570224234446,0.5199221889141181,15
+patient_roc_auc,window_seconds,advanced_hybrid_1dcnn_lstm,Hybrid CNN-LSTM,10,0.4394557823129252,0.3871841272221791,0.4917274374036713,15
+patient_roc_auc,window_seconds,svm_linear,Linear SVM,2,0.31496598639455775,0.28264170358334506,0.34729026920577044,15
+patient_roc_auc,window_seconds,svm_linear,Linear SVM,4,0.25510204081632654,0.22007823938549,0.2901258422471631,15
+patient_roc_auc,window_seconds,svm_linear,Linear SVM,6,0.2741496598639455,0.23759265212514372,0.31070666760274734,15
+patient_roc_auc,window_seconds,svm_linear,Linear SVM,8,0.3469387755102041,0.30494406684880776,0.3889334841716004,15
+patient_roc_auc,window_seconds,svm_linear,Linear SVM,10,0.3476190476190476,0.31262232819607355,0.38261576704202166,15
+patient_roc_auc,inner_k,advanced_hybrid_1dcnn_lstm,Hybrid CNN-LSTM,1,0.48775510204081635,0.2883640290209843,0.6871461750606485,5
+patient_roc_auc,inner_k,advanced_hybrid_1dcnn_lstm,Hybrid CNN-LSTM,5,0.5551020408163265,0.49669656162130577,0.6135075200113472,5
+patient_roc_auc,inner_k,advanced_hybrid_1dcnn_lstm,Hybrid CNN-LSTM,10,0.6040816326530611,0.5569562679329871,0.6512069973731351,5
+patient_roc_auc,inner_k,advanced_hybrid_1dcnn_lstm,Hybrid CNN-LSTM,15,0.28979591836734697,0.2266516391331994,0.35294019760149453,5
+patient_roc_auc,inner_k,advanced_hybrid_1dcnn_lstm,Hybrid CNN-LSTM,20,0.33877551020408164,0.25889560033933534,0.41865542006882794,5
+patient_roc_auc,inner_k,advanced_hybrid_1dcnn_lstm,Hybrid CNN-LSTM,25,0.3673469387755102,0.27666066638547315,0.4580332111655473,5
+patient_roc_auc,inner_k,advanced_hybrid_1dcnn_lstm,Hybrid CNN-LSTM,30,0.4836734693877551,0.31976129778356943,0.6475856409919407,5
+patient_roc_auc,inner_k,advanced_hybrid_1dcnn_lstm,Hybrid CNN-LSTM,35,0.4040816326530612,0.31670200115921704,0.49146126414690533,5
+patient_roc_auc,inner_k,advanced_hybrid_1dcnn_lstm,Hybrid CNN-LSTM,40,0.30204081632653057,0.19255474415294313,0.411526888500118,5
+patient_roc_auc,inner_k,advanced_hybrid_1dcnn_lstm,Hybrid CNN-LSTM,45,0.32448979591836735,0.2740834471118926,0.3748961447248421,5
+patient_roc_auc,inner_k,advanced_hybrid_1dcnn_lstm,Hybrid CNN-LSTM,50,0.32857142857142857,0.2807718469833017,0.37637101015955543,5
+patient_roc_auc,inner_k,advanced_hybrid_1dcnn_lstm,Hybrid CNN-LSTM,55,0.3836734693877551,0.30619314930581426,0.46115378946969593,5
+patient_roc_auc,inner_k,advanced_hybrid_1dcnn_lstm,Hybrid CNN-LSTM,60,0.39183673469387753,0.3166622709445431,0.467011198443212,5
+patient_roc_auc,inner_k,advanced_hybrid_1dcnn_lstm,Hybrid CNN-LSTM,65,0.3979591836734694,0.3617376431209197,0.43418072422601905,5
+patient_roc_auc,inner_k,advanced_hybrid_1dcnn_lstm,Hybrid CNN-LSTM,70,0.4693877551020408,0.4139621292598367,0.5248133809442448,5
+patient_roc_auc,inner_k,svm_linear,Linear SVM,1,0.2510204081632653,0.19600041179830724,0.3060404045282234,5
+patient_roc_auc,inner_k,svm_linear,Linear SVM,5,0.2795918367346938,0.21299453949223812,0.34618913397714945,5
+patient_roc_auc,inner_k,svm_linear,Linear SVM,10,0.31020408163265306,0.2759812822147212,0.34442688105058494,5
+patient_roc_auc,inner_k,svm_linear,Linear SVM,15,0.3142857142857142,0.22935750931233687,0.39921391925909155,5
+patient_roc_auc,inner_k,svm_linear,Linear SVM,20,0.363265306122449,0.33637292802009444,0.39015768422480357,5
+patient_roc_auc,inner_k,svm_linear,Linear SVM,25,0.36122448979591837,0.31075469685003837,0.41169428274179837,5
+patient_roc_auc,inner_k,svm_linear,Linear SVM,30,0.4,0.33870725980999056,0.4612927401900095,5
+patient_roc_auc,inner_k,svm_linear,Linear SVM,35,0.35102040816326535,0.31409886973377954,0.38794194659275116,5
+patient_roc_auc,inner_k,svm_linear,Linear SVM,40,0.37142857142857144,0.3135735802869249,0.429283562570218,5
+patient_roc_auc,inner_k,svm_linear,Linear SVM,45,0.34285714285714286,0.27625984561468714,0.4094544400995986,5
+patient_roc_auc,inner_k,svm_linear,Linear SVM,50,0.2857142857142857,0.24414506633263267,0.32728350509593873,5
+patient_roc_auc,inner_k,svm_linear,Linear SVM,55,0.28775510204081634,0.25506259525409225,0.3204476088275404,5
+patient_roc_auc,inner_k,svm_linear,Linear SVM,60,0.25918367346938775,0.21336664606690342,0.3050007008718721,5
+patient_roc_auc,inner_k,svm_linear,Linear SVM,65,0.22448979591836732,0.1751744838946155,0.2738051079421191,5
+patient_roc_auc,inner_k,svm_linear,Linear SVM,70,0.21428571428571427,0.16867869728174875,0.25989273128967977,5
+feature_selection_mean_pairwise_jaccard,inner_k,shared_feature_selection,Shared feature selection,1,0.3019047619047619,0.16187738680339905,0.44193213700612477,5
+feature_selection_mean_pairwise_jaccard,inner_k,shared_feature_selection,Shared feature selection,5,0.25159486016628874,0.24459980724067776,0.2585899130918997,5
+feature_selection_mean_pairwise_jaccard,inner_k,shared_feature_selection,Shared feature selection,10,0.22764082813839556,0.21754328766128242,0.2377383686155087,5
+feature_selection_mean_pairwise_jaccard,inner_k,shared_feature_selection,Shared feature selection,15,0.2541836109624619,0.25044644154107615,0.25792078038384764,5
+feature_selection_mean_pairwise_jaccard,inner_k,shared_feature_selection,Shared feature selection,20,0.2966843499063582,0.2828985006865547,0.31047019912616175,5
+feature_selection_mean_pairwise_jaccard,inner_k,shared_feature_selection,Shared feature selection,25,0.33684169367487055,0.32798005849666706,0.34570332885307403,5
+feature_selection_mean_pairwise_jaccard,inner_k,shared_feature_selection,Shared feature selection,30,0.3626023019331856,0.35634689954627874,0.36885770432009246,5
+feature_selection_mean_pairwise_jaccard,inner_k,shared_feature_selection,Shared feature selection,35,0.3838916193758619,0.3750021668510141,0.3927810719007097,5
+feature_selection_mean_pairwise_jaccard,inner_k,shared_feature_selection,Shared feature selection,40,0.40773042183223956,0.3969828636119858,0.4184779800524933,5
+feature_selection_mean_pairwise_jaccard,inner_k,shared_feature_selection,Shared feature selection,45,0.42292497151039843,0.41204934680987965,0.4338005962109172,5
+feature_selection_mean_pairwise_jaccard,inner_k,shared_feature_selection,Shared feature selection,50,0.438135220342159,0.42524831857517664,0.4510221221091414,5
+feature_selection_mean_pairwise_jaccard,inner_k,shared_feature_selection,Shared feature selection,55,0.4545112570635915,0.44538082799255346,0.4636416861346296,5
+feature_selection_mean_pairwise_jaccard,inner_k,shared_feature_selection,Shared feature selection,60,0.4732203244725576,0.46436694032097225,0.4820737086241429,5
+feature_selection_mean_pairwise_jaccard,inner_k,shared_feature_selection,Shared feature selection,65,0.4894153190471345,0.4831296310525997,0.49570100704166925,5
+feature_selection_mean_pairwise_jaccard,inner_k,shared_feature_selection,Shared feature selection,70,0.5063221992498803,0.4984192417150368,0.5142251567847238,5
+feature_selection_unique_feature_count,inner_k,shared_feature_selection,Shared feature selection,1,7.2,6.177789062864225,8.222210937135776,5
+feature_selection_unique_feature_count,inner_k,shared_feature_selection,Shared feature selection,5,31.8,30.6371400772234,32.9628599227766,5
+feature_selection_unique_feature_count,inner_k,shared_feature_selection,Shared feature selection,10,53.8,51.176234156789135,56.42376584321086,5
+feature_selection_unique_feature_count,inner_k,shared_feature_selection,Shared feature selection,15,68.2,65.69610479452514,70.70389520547486,5
+feature_selection_unique_feature_count,inner_k,shared_feature_selection,Shared feature selection,20,77.4,76.08811707839457,78.71188292160544,5
+feature_selection_unique_feature_count,inner_k,shared_feature_selection,Shared feature selection,25,91.0,89.16135702214922,92.83864297785078,5
+feature_selection_unique_feature_count,inner_k,shared_feature_selection,Shared feature selection,30,102.6,101.17579327343253,104.02420672656746,5
+feature_selection_unique_feature_count,inner_k,shared_feature_selection,Shared feature selection,35,113.2,111.69194588956496,114.70805411043504,5
+feature_selection_unique_feature_count,inner_k,shared_feature_selection,Shared feature selection,40,121.8,120.51175654474784,123.08824345525215,5
+feature_selection_unique_feature_count,inner_k,shared_feature_selection,Shared feature selection,45,130.0,129.039800020829,130.960199979171,5
+feature_selection_unique_feature_count,inner_k,shared_feature_selection,Shared feature selection,50,136.2,135.54405853919727,136.8559414608027,5
+feature_selection_unique_feature_count,inner_k,shared_feature_selection,Shared feature selection,55,143.6,141.55557812572843,145.64442187427156,5
+feature_selection_unique_feature_count,inner_k,shared_feature_selection,Shared feature selection,60,151.4,149.43217561759187,153.36782438240814,5
+feature_selection_unique_feature_count,inner_k,shared_feature_selection,Shared feature selection,65,159.8,158.10032850232759,161.49967149767244,5
+feature_selection_unique_feature_count,inner_k,shared_feature_selection,Shared feature selection,70,167.0,165.76038715721398,168.23961284278602,5

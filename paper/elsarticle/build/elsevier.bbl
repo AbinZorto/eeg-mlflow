@@ -1,0 +1,815 @@
+\begin{thebibliography}{64}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\href}[2]{#2}
+\providecommand{\path}[1]{#1}
+\providecommand{\DOIprefix}{doi:}
+\providecommand{\ArXivprefix}{arXiv:}
+\providecommand{\URLprefix}{URL: }
+\providecommand{\Pubmedprefix}{pmid:}
+\providecommand{\doi}[1]{\href{http://dx.doi.org/#1}{\path{#1}}}
+\providecommand{\Pubmed}[1]{\href{pmid:#1}{\path{#1}}}
+\providecommand{\bibinfo}[2]{#2}
+\ifx\xfnm\relax \def\xfnm[#1]{\unskip,\space#1}\fi
+%Type = Article
+\bibitem[{Acharya et~al.(2015)Acharya, Sudarshan, Adeli, Santhosh, Koh,
+  Puthankatti and Adeli}]{Acharya2015}
+\bibinfo{author}{Acharya, U.R.}, \bibinfo{author}{Sudarshan, V.K.},
+  \bibinfo{author}{Adeli, H.}, \bibinfo{author}{Santhosh, J.},
+  \bibinfo{author}{Koh, J.E.W.}, \bibinfo{author}{Puthankatti, S.D.},
+  \bibinfo{author}{Adeli, A.}, \bibinfo{year}{2015}.
+\newblock \bibinfo{title}{A novel depression diagnosis index using nonlinear
+  features in eeg signals}.
+\newblock \bibinfo{journal}{European Neurology} \bibinfo{volume}{74},
+  \bibinfo{pages}{79--83}.
+\newblock \DOIprefix\doi{10.1159/000438457}.
+%Type = Article
+\bibitem[{Al-Kaysi et~al.(2017)Al-Kaysi, Al-Ani, Loo, Powell, Martin,
+  Breakspear and Boonstra}]{AlKaysi2017}
+\bibinfo{author}{Al-Kaysi, A.M.}, \bibinfo{author}{Al-Ani, A.},
+  \bibinfo{author}{Loo, C.K.}, \bibinfo{author}{Powell, T.Y.},
+  \bibinfo{author}{Martin, D.M.}, \bibinfo{author}{Breakspear, M.},
+  \bibinfo{author}{Boonstra, T.W.}, \bibinfo{year}{2017}.
+\newblock \bibinfo{title}{Predicting tdcs treatment outcomes of patients with
+  major depressive disorder using automated eeg classification}.
+\newblock \bibinfo{journal}{Journal of affective disorders}
+  \bibinfo{volume}{208}, \bibinfo{pages}{597--603}.
+%Type = Article
+\bibitem[{Alonso et~al.(2017)Alonso, Esther, Arnott, R., Atluri, Sravya,
+  Blumberger, Daniel, Brenner, A., Daskalakis, J., Dhami, Prabhjot, Dharsee,
+  Moyez, Evans, R., Farzan, Faranak, Frehlich, Matthew, Frey, N., Kennedy, H.,
+  Kleffner, Killian, Lam, W., Liotti, Mario, Mcandrews, Pat, Milev, Roumen,
+  Price, Rae, Ravindran, Arun, Rotzinger, Susan, Vila-Rodriguez, Fidel, Wong
+  and Willy}]{alonso2017_standardization}
+\bibinfo{author}{Alonso}, \bibinfo{author}{Esther}, \bibinfo{author}{Arnott},
+  \bibinfo{author}{R., S.}, \bibinfo{author}{Atluri}, \bibinfo{author}{Sravya},
+  \bibinfo{author}{Blumberger}, \bibinfo{author}{Daniel},
+  \bibinfo{author}{Brenner}, \bibinfo{author}{A., C.},
+  \bibinfo{author}{Daskalakis}, \bibinfo{author}{J., Z.},
+  \bibinfo{author}{Dhami}, \bibinfo{author}{Prabhjot},
+  \bibinfo{author}{Dharsee}, \bibinfo{author}{Moyez}, \bibinfo{author}{Evans},
+  \bibinfo{author}{R., K.}, \bibinfo{author}{Farzan},
+  \bibinfo{author}{Faranak}, \bibinfo{author}{Frehlich},
+  \bibinfo{author}{Matthew}, \bibinfo{author}{Frey}, \bibinfo{author}{N., B.},
+  \bibinfo{author}{Kennedy}, \bibinfo{author}{H., S.},
+  \bibinfo{author}{Kleffner}, \bibinfo{author}{Killian}, \bibinfo{author}{Lam},
+  \bibinfo{author}{W., R.}, \bibinfo{author}{Liotti}, \bibinfo{author}{Mario},
+  \bibinfo{author}{Mcandrews}, \bibinfo{author}{Pat, M.},
+  \bibinfo{author}{Milev}, \bibinfo{author}{Roumen}, \bibinfo{author}{Price},
+  \bibinfo{author}{Rae}, \bibinfo{author}{Ravindran}, \bibinfo{author}{Arun},
+  \bibinfo{author}{Rotzinger}, \bibinfo{author}{Susan},
+  \bibinfo{author}{Vila-Rodriguez}, \bibinfo{author}{Fidel},
+  \bibinfo{author}{Wong}, \bibinfo{author}{Willy}, \bibinfo{year}{2017}.
+\newblock \bibinfo{title}{Standardization of electroencephalography for
+  multi-site, multi-platform and multi-investigator studies: Insights from the
+  canadian biomarker integration network in depression}.
+\newblock \bibinfo{journal}{Scientific Reports} \URLprefix
+  \url{https://www.research.unipd.it/bitstream/11577/3260320/1/Liotti_SciRep2017.pdf},
+  \DOIprefix\doi{10.1038/s41598-017-07613-x}.
+%Type = Article
+\bibitem[{BABILONI et~al.(2012)BABILONI, CLAUDIO, PH, M, WH, DH, J, U, K,
+  Collaborators, M, T, VJ, FH, M, A, JF, S, LS, GS, B, A, WK, JM, FJ and
+  RG}]{babiloni2012_guidelines}
+\bibinfo{author}{BABILONI}, \bibinfo{author}{CLAUDIO}, \bibinfo{author}{PH,
+  B.}, \bibinfo{author}{M, B.}, \bibinfo{author}{WH, D.}, \bibinfo{author}{DH,
+  F.}, \bibinfo{author}{J, F.}, \bibinfo{author}{U, H.}, \bibinfo{author}{K,
+  H.}, \bibinfo{author}{Collaborators, I.P.E.G.C.}, \bibinfo{author}{M, J.},
+  \bibinfo{author}{T, K.}, \bibinfo{author}{VJ, K.}, \bibinfo{author}{FH,
+  L.D.S.}, \bibinfo{author}{M, M.}, \bibinfo{author}{A, M.},
+  \bibinfo{author}{JF, N.}, \bibinfo{author}{S, O.}, \bibinfo{author}{LS, P.},
+  \bibinfo{author}{GS, R.}, \bibinfo{author}{B, S.}, \bibinfo{author}{A, S.},
+  \bibinfo{author}{WK, S.}, \bibinfo{author}{JM, v.G.}, \bibinfo{author}{FJ,
+  W.}, \bibinfo{author}{RG, W.}, \bibinfo{year}{2012}.
+\newblock \bibinfo{title}{Guidelines for the recording and evaluation of
+  pharmaco-eeg data in man: the international pharmaco-eeg society (ipeg)}
+  \URLprefix
+  \url{https://iris.uniroma1.it/bitstream/11573/802874/1/Jobert_Guidelines_2012.pdf},
+  \DOIprefix\doi{10.1159/000343478}.
+%Type = Article
+\bibitem[{Bailey et~al.(2023)Bailey, Hoy, Sullivan, Allman, Rogasch, Daskalakis
+  and Fitzgerald}]{bailey2023_concurrent}
+\bibinfo{author}{Bailey, N.}, \bibinfo{author}{Hoy, K.},
+  \bibinfo{author}{Sullivan, C.}, \bibinfo{author}{Allman, B.},
+  \bibinfo{author}{Rogasch, N.}, \bibinfo{author}{Daskalakis, Z.},
+  \bibinfo{author}{Fitzgerald, P.}, \bibinfo{year}{2023}.
+\newblock \bibinfo{title}{Concurrent transcranial magnetic stimulation and
+  electroencephalography measures are associated with antidepressant response
+  from rtms treatment for depression}.
+\newblock \bibinfo{journal}{medRxiv} \URLprefix
+  \url{https://www.semanticscholar.org/paper/8278c0b8d2b48ae5ed473c09d6c3f9ba34f53391},
+  \DOIprefix\doi{10.1101/2023.02.10.23285794}.
+%Type = Article
+\bibitem[{Boggio et~al.(2007)Boggio, Rigonatti, Ribeiro, Myczkowski, Nitsche,
+  Pascual~Leone and Fregni}]{boggio2007_randomized}
+\bibinfo{author}{Boggio, P.S.}, \bibinfo{author}{Rigonatti, S.P.},
+  \bibinfo{author}{Ribeiro, R.B.}, \bibinfo{author}{Myczkowski, M.L.},
+  \bibinfo{author}{Nitsche, M.A.}, \bibinfo{author}{Pascual~Leone, A.},
+  \bibinfo{author}{Fregni, F.}, \bibinfo{year}{2007}.
+\newblock \bibinfo{title}{A randomized, double-blind clinical trial on the
+  efficacy of cortical direct current stimulation for the treatment of major
+  depression}.
+\newblock \bibinfo{journal}{The International Journal of
+  Neuropsychopharmacology} \URLprefix
+  \url{https://doi.org/10.1017/s1461145707007833},
+  \DOIprefix\doi{10.1017/s1461145707007833}.
+%Type = Article
+\bibitem[{Brunoni et~al.(2016)Brunoni, Moffa, Fregni, Palm, Padberg,
+  Blumberger, Daskalakis, Bennabi, Haffen, Alonzo et~al.}]{Brunoni2016}
+\bibinfo{author}{Brunoni, A.R.}, \bibinfo{author}{Moffa, A.H.},
+  \bibinfo{author}{Fregni, F.}, \bibinfo{author}{Palm, U.},
+  \bibinfo{author}{Padberg, F.}, \bibinfo{author}{Blumberger, D.M.},
+  \bibinfo{author}{Daskalakis, Z.J.}, \bibinfo{author}{Bennabi, D.},
+  \bibinfo{author}{Haffen, E.}, \bibinfo{author}{Alonzo, A.}, et~al.,
+  \bibinfo{year}{2016}.
+\newblock \bibinfo{title}{Transcranial direct current stimulation for acute
+  major depressive episodes: meta-analysis of individual patient data}.
+\newblock \bibinfo{journal}{The British Journal of Psychiatry}
+  \bibinfo{volume}{208}, \bibinfo{pages}{522--531}.
+%Type = Article
+\bibitem[{Casson et~al.(2010)Casson, Yates, Smith, Duncan and
+  Rodriguez-Villegas}]{Casson2010}
+\bibinfo{author}{Casson, A.J.}, \bibinfo{author}{Yates, D.C.},
+  \bibinfo{author}{Smith, S.J.}, \bibinfo{author}{Duncan, J.S.},
+  \bibinfo{author}{Rodriguez-Villegas, E.}, \bibinfo{year}{2010}.
+\newblock \bibinfo{title}{Wearable electroencephalography}.
+\newblock \bibinfo{journal}{IEEE engineering in medicine and biology magazine}
+  \bibinfo{volume}{29}, \bibinfo{pages}{44--56}.
+%Type = Article
+\bibitem[{Chawla et~al.(2002)Chawla, Bowyer, Hall and Kegelmeyer}]{Chawla2002}
+\bibinfo{author}{Chawla, N.V.}, \bibinfo{author}{Bowyer, K.W.},
+  \bibinfo{author}{Hall, L.O.}, \bibinfo{author}{Kegelmeyer, W.P.},
+  \bibinfo{year}{2002}.
+\newblock \bibinfo{title}{Smote: Synthetic minority over-sampling technique}.
+\newblock \bibinfo{journal}{Journal of Artificial Intelligence Research}
+  \bibinfo{volume}{16}, \bibinfo{pages}{321--357}.
+\newblock \DOIprefix\doi{10.1613/jair.953}.
+%Type = Article
+\bibitem[{Cohen et~al.(2023)Cohen, Zantvoord, Wezenberg, Daams, Bockting, Denys
+  and van Wingen}]{cohen2023electroencephalography}
+\bibinfo{author}{Cohen, S.}, \bibinfo{author}{Zantvoord, J.},
+  \bibinfo{author}{Wezenberg, B.}, \bibinfo{author}{Daams, J.},
+  \bibinfo{author}{Bockting, C.}, \bibinfo{author}{Denys, D.},
+  \bibinfo{author}{van Wingen, G.}, \bibinfo{year}{2023}.
+\newblock \bibinfo{title}{Electroencephalography for predicting antidepressant
+  treatment success: a systematic review and meta-analysis}.
+\newblock \bibinfo{journal}{Journal of Affective Disorders}
+  \bibinfo{volume}{321}, \bibinfo{pages}{201--207}.
+%Type = Article
+\bibitem[{Cramer et~al.(2011)Cramer, Sur, Dobkin, OBrien, Sanger, Trojanowski,
+  Rumsey, Hicks, Cameron, Chen, Chen, Cohen, deCharms, Duffy, Eden, Fetz,
+  Filart, Freund, Grant, Haber, Kalivas, Kolb, Kramer, Lynch, Mayberg,
+  McQuillen, Nitkin, Pascual~Leone, Reuter~Lorenz, Schiff, Sharma, Shekim,
+  Stryker, Sullivan and Vinogradov}]{cramer2011_harnessing}
+\bibinfo{author}{Cramer, S.C.}, \bibinfo{author}{Sur, M.},
+  \bibinfo{author}{Dobkin, B.H.}, \bibinfo{author}{OBrien, C.P.},
+  \bibinfo{author}{Sanger, T.D.}, \bibinfo{author}{Trojanowski, J.Q.},
+  \bibinfo{author}{Rumsey, J.M.}, \bibinfo{author}{Hicks, R.},
+  \bibinfo{author}{Cameron, J.L.}, \bibinfo{author}{Chen, D.},
+  \bibinfo{author}{Chen, W.}, \bibinfo{author}{Cohen, L.G.},
+  \bibinfo{author}{deCharms, C.}, \bibinfo{author}{Duffy, C.J.},
+  \bibinfo{author}{Eden, G.F.}, \bibinfo{author}{Fetz, E.E.},
+  \bibinfo{author}{Filart, R.}, \bibinfo{author}{Freund, M.C.},
+  \bibinfo{author}{Grant, S.}, \bibinfo{author}{Haber, S.N.},
+  \bibinfo{author}{Kalivas, P.W.}, \bibinfo{author}{Kolb, B.},
+  \bibinfo{author}{Kramer, A.F.}, \bibinfo{author}{Lynch, M.P.},
+  \bibinfo{author}{Mayberg, H.S.}, \bibinfo{author}{McQuillen, P.S.},
+  \bibinfo{author}{Nitkin, R.}, \bibinfo{author}{Pascual~Leone, A.},
+  \bibinfo{author}{Reuter~Lorenz, P.A.}, \bibinfo{author}{Schiff, N.D.},
+  \bibinfo{author}{Sharma, A.}, \bibinfo{author}{Shekim, L.},
+  \bibinfo{author}{Stryker, M.P.}, \bibinfo{author}{Sullivan, E.V.},
+  \bibinfo{author}{Vinogradov, S.}, \bibinfo{year}{2011}.
+\newblock \bibinfo{title}{Harnessing neuroplasticity for clinical
+  applications}.
+\newblock \bibinfo{journal}{Brain} \URLprefix
+  \url{https://doi.org/10.1093/brain/awr039},
+  \DOIprefix\doi{10.1093/brain/awr039}.
+%Type = Article
+\bibitem[{Dagnino et~al.(2023)Dagnino, Braboszcz, Kroupi, Splittgerber, Brauer,
+  Dempfle, Breitling-Ziegler, Prehn-Kristensen, Krauel, Siniatchkin
+  et~al.}]{Dagnino2023}
+\bibinfo{author}{Dagnino, P.C.}, \bibinfo{author}{Braboszcz, C.},
+  \bibinfo{author}{Kroupi, E.}, \bibinfo{author}{Splittgerber, M.},
+  \bibinfo{author}{Brauer, H.}, \bibinfo{author}{Dempfle, A.},
+  \bibinfo{author}{Breitling-Ziegler, C.}, \bibinfo{author}{Prehn-Kristensen,
+  A.}, \bibinfo{author}{Krauel, K.}, \bibinfo{author}{Siniatchkin, M.}, et~al.,
+  \bibinfo{year}{2023}.
+\newblock \bibinfo{title}{Stratification of responses to tdcs intervention in a
+  healthy pediatric population based on resting-state eeg profiles}.
+\newblock \bibinfo{journal}{Scientific Reports} \bibinfo{volume}{13},
+  \bibinfo{pages}{8438}.
+%Type = Article
+\bibitem[{Ebrahimzadeh et~al.(2021)Ebrahimzadeh, Asgarinejad, Saliminia,
+  Ashoori and Seraji}]{ebrahimzadeh2021_predicting}
+\bibinfo{author}{Ebrahimzadeh, E.}, \bibinfo{author}{Asgarinejad, M.},
+  \bibinfo{author}{Saliminia, S.}, \bibinfo{author}{Ashoori, S.},
+  \bibinfo{author}{Seraji, M.}, \bibinfo{year}{2021}.
+\newblock \bibinfo{title}{Predicting clinical response to transcranial magnetic
+  stimulation in major depression using time-frequency eeg signal processing}.
+\newblock \bibinfo{journal}{Biomedical Engineering Applications Basis and
+  Communications} \URLprefix \url{https://doi.org/10.4015/s1016237221500484},
+  \DOIprefix\doi{10.4015/s1016237221500484}.
+%Type = Article
+\bibitem[{Faust et~al.(2014)Faust, Ang, Puthankattil and Joseph}]{Faust2014}
+\bibinfo{author}{Faust, O.}, \bibinfo{author}{Ang, P.C.A.},
+  \bibinfo{author}{Puthankattil, S.D.}, \bibinfo{author}{Joseph, P.K.},
+  \bibinfo{year}{2014}.
+\newblock \bibinfo{title}{Depression diagnosis support system based on eeg
+  signal entropies}.
+\newblock \bibinfo{journal}{Journal of Mechanics in Medicine and Biology}
+  \bibinfo{volume}{14}, \bibinfo{pages}{1450035}.
+\newblock \DOIprefix\doi{10.1142/S0219519414500353}.
+%Type = Article
+\bibitem[{Fu and Costafreda(2013)}]{Fu2013}
+\bibinfo{author}{Fu, C.H.}, \bibinfo{author}{Costafreda, S.G.},
+  \bibinfo{year}{2013}.
+\newblock \bibinfo{title}{Neuroimaging-based biomarkers in psychiatry: clinical
+  opportunities of a paradigm shift}.
+\newblock \bibinfo{journal}{The Canadian Journal of Psychiatry}
+  \bibinfo{volume}{58}, \bibinfo{pages}{499--508}.
+%Type = Article
+\bibitem[{Fu et~al.(2019)Fu, Fan and Davatzikos}]{Fu2019}
+\bibinfo{author}{Fu, C.H.}, \bibinfo{author}{Fan, Y.},
+  \bibinfo{author}{Davatzikos, C.}, \bibinfo{year}{2019}.
+\newblock \bibinfo{title}{Addressing heterogeneity (and homogeneity) in
+  treatment mechanisms in depression and the potential to develop diagnostic
+  and predictive biomarkers}.
+\newblock \bibinfo{journal}{NeuroImage: Clinical} \bibinfo{volume}{24},
+  \bibinfo{pages}{101997}.
+%Type = Article
+\bibitem[{Funk and George(2008)}]{funk2008_prefrontal}
+\bibinfo{author}{Funk, A.P.}, \bibinfo{author}{George, M.S.},
+  \bibinfo{year}{2008}.
+\newblock \bibinfo{title}{Prefrontal eeg asymmetry as a potential biomarker of
+  antidepressant treatment response with transcranial magnetic stimulation
+  (tms): A case series}.
+\newblock \bibinfo{journal}{Clinical EEG and Neuroscience} \URLprefix
+  \url{https://doi.org/10.1177/155005940803900306},
+  \DOIprefix\doi{10.1177/155005940803900306}.
+%Type = Inproceedings
+\bibitem[{Ghiasi et~al.(2021)Ghiasi, Dell'Acqua, Messerotti~Benvenuti,
+  Scilingo, Gentili, Valenza and Greco}]{Ghiasi2021}
+\bibinfo{author}{Ghiasi, S.}, \bibinfo{author}{Dell'Acqua, C.},
+  \bibinfo{author}{Messerotti~Benvenuti, S.}, \bibinfo{author}{Scilingo, E.P.},
+  \bibinfo{author}{Gentili, C.}, \bibinfo{author}{Valenza, G.},
+  \bibinfo{author}{Greco, A.}, \bibinfo{year}{2021}.
+\newblock \bibinfo{title}{Classifying subclinical depression using {EEG}
+  spectral and connectivity measures}, in: \bibinfo{booktitle}{2021 43rd Annual
+  International Conference of the IEEE Engineering in Medicine \& Biology
+  Society (EMBC)}, \bibinfo{publisher}{IEEE}. pp. \bibinfo{pages}{2050--2053}.
+%Type = Inproceedings
+\bibitem[{Guo et~al.(2024)Guo, Zhang, Tan, Phua, Wang, Tor and
+  Ang}]{guo2024_restingstate}
+\bibinfo{author}{Guo, L.}, \bibinfo{author}{Zhang, Z.}, \bibinfo{author}{Tan,
+  X.}, \bibinfo{author}{Phua, K.}, \bibinfo{author}{Wang, C.},
+  \bibinfo{author}{Tor, P.}, \bibinfo{author}{Ang, K.}, \bibinfo{year}{2024}.
+\newblock \bibinfo{title}{Resting-state eeg biomarkers of accelerated
+  intermittent theta burst stimulation treatment for depression: a pilot
+  study}, in: \bibinfo{booktitle}{Annual International Conference of the IEEE
+  Engineering in Medicine and Biology Society}.
+\newblock \URLprefix
+  \url{https://www.semanticscholar.org/paper/9d00f9320f2f75435719d9cccc4133e989f8737e},
+  \DOIprefix\doi{10.1109/EMBC53108.2024.10782112}.
+%Type = Article
+\bibitem[{Hjorth(1970)}]{Hjorth1970}
+\bibinfo{author}{Hjorth, B.}, \bibinfo{year}{1970}.
+\newblock \bibinfo{title}{Eeg analysis based on time domain properties}.
+\newblock \bibinfo{journal}{Electroencephalography and Clinical
+  Neurophysiology} \bibinfo{volume}{29}, \bibinfo{pages}{306--310}.
+\newblock \DOIprefix\doi{10.1016/0013-4694(70)90143-4}.
+%Type = Article
+\bibitem[{Jaworska et~al.(2019)Jaworska, Salle, Ibrahim, Blier and
+  Knott}]{jaworska2019_leveraging}
+\bibinfo{author}{Jaworska, N.}, \bibinfo{author}{Salle, S.d.l.},
+  \bibinfo{author}{Ibrahim, M.H.}, \bibinfo{author}{Blier, P.},
+  \bibinfo{author}{Knott, V.}, \bibinfo{year}{2019}.
+\newblock \bibinfo{title}{Leveraging machine learning approaches for predicting
+  antidepressant treatment response using electroencephalography (eeg) and
+  clinical data}.
+\newblock \bibinfo{journal}{Frontiers in Psychiatry} \URLprefix
+  \url{https://doi.org/10.3389/fpsyt.2018.00768},
+  \DOIprefix\doi{10.3389/fpsyt.2018.00768}.
+%Type = Article
+\bibitem[{Jaworska et~al.(2018)Jaworska, Wang, Smith, Blier, Knott and
+  Protzner}]{Jaworska2018}
+\bibinfo{author}{Jaworska, N.}, \bibinfo{author}{Wang, H.},
+  \bibinfo{author}{Smith, D.M.}, \bibinfo{author}{Blier, P.},
+  \bibinfo{author}{Knott, V.}, \bibinfo{author}{Protzner, A.B.},
+  \bibinfo{year}{2018}.
+\newblock \bibinfo{title}{Pre-treatment eeg signal variability is associated
+  with treatment success in depression}.
+\newblock \bibinfo{journal}{NeuroImage: Clinical} \bibinfo{volume}{17},
+  \bibinfo{pages}{368--377}.
+\newblock \DOIprefix\doi{10.1016/j.nicl.2017.10.035}.
+%Type = Article
+\bibitem[{Kratter et~al.(2026)Kratter, Austelle, Lissemore, Wada, Geoly,
+  Chaiken, Kaloiani, Johnson, Wan, Kozyr, Makarewycz, Wong, Sridhar, Espil,
+  Bassano, Kim, Ehrie, Maron~Katz, Tischler, Nejad, Batail, Phillips, Cole,
+  Ford, Bentzley, Jo, Schatzberg, Spiegel, Rolle, Sahlem and
+  Williams}]{kratter2026_stanford}
+\bibinfo{author}{Kratter, I.H.}, \bibinfo{author}{Austelle, C.W.},
+  \bibinfo{author}{Lissemore, J.I.}, \bibinfo{author}{Wada, M.},
+  \bibinfo{author}{Geoly, A.}, \bibinfo{author}{Chaiken, A.},
+  \bibinfo{author}{Kaloiani, I.}, \bibinfo{author}{Johnson, N.},
+  \bibinfo{author}{Wan, S.}, \bibinfo{author}{Kozyr, L.},
+  \bibinfo{author}{Makarewycz, E.}, \bibinfo{author}{Wong, B.L.},
+  \bibinfo{author}{Sridhar, M.}, \bibinfo{author}{Espil, F.M.},
+  \bibinfo{author}{Bassano, N.}, \bibinfo{author}{Kim, B.},
+  \bibinfo{author}{Ehrie, J.}, \bibinfo{author}{Maron~Katz, A.},
+  \bibinfo{author}{Tischler, C.}, \bibinfo{author}{Nejad, R.},
+  \bibinfo{author}{Batail, J.M.}, \bibinfo{author}{Phillips, A.},
+  \bibinfo{author}{Cole, E.}, \bibinfo{author}{Ford, T.J.},
+  \bibinfo{author}{Bentzley, B.S.}, \bibinfo{author}{Jo, B.},
+  \bibinfo{author}{Schatzberg, A.F.}, \bibinfo{author}{Spiegel, D.},
+  \bibinfo{author}{Rolle, C.}, \bibinfo{author}{Sahlem, G.L.},
+  \bibinfo{author}{Williams, N.}, \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{Stanford neuromodulation therapy for
+  treatment-resistant depression: a randomized controlled trial confirming
+  efficacy, and an <scp>eeg</scp> study providing insight into mechanism of
+  action and a potentially predictive biomarker of efficacy}.
+\newblock \bibinfo{journal}{World Psychiatry} \URLprefix
+  \url{https://doi.org/10.1002/wps.70032}, \DOIprefix\doi{10.1002/wps.70032}.
+%Type = Article
+\bibitem[{Leuchter et~al.(2010)Leuchter, Cook, Hamilton, Narr, Toga, Hunter,
+  Faull, Whitelegge, Andrews, Loo, Way, Nelson, Horvath and
+  Lebowitz}]{leuchter2010_biomarkers}
+\bibinfo{author}{Leuchter, A.F.}, \bibinfo{author}{Cook, I.A.},
+  \bibinfo{author}{Hamilton, S.P.}, \bibinfo{author}{Narr, K.L.},
+  \bibinfo{author}{Toga, A.}, \bibinfo{author}{Hunter, A.M.},
+  \bibinfo{author}{Faull, K.}, \bibinfo{author}{Whitelegge, J.},
+  \bibinfo{author}{Andrews, A.M.}, \bibinfo{author}{Loo, J.},
+  \bibinfo{author}{Way, B.}, \bibinfo{author}{Nelson, S.F.},
+  \bibinfo{author}{Horvath, S.}, \bibinfo{author}{Lebowitz, B.D.},
+  \bibinfo{year}{2010}.
+\newblock \bibinfo{title}{Biomarkers to predict antidepressant response}.
+\newblock \bibinfo{journal}{Current Psychiatry Reports} \URLprefix
+  \url{https://pubmed.ncbi.nlm.nih.gov/20963521/},
+  \DOIprefix\doi{10.1007/s11920-010-0160-4}.
+%Type = Article
+\bibitem[{Lord and Allen(2023)}]{Lord2023}
+\bibinfo{author}{Lord, B.}, \bibinfo{author}{Allen, J.J.B.},
+  \bibinfo{year}{2023}.
+\newblock \bibinfo{title}{Evaluating eeg complexity metrics as biomarkers for
+  depression}.
+\newblock \bibinfo{journal}{Psychophysiology} \bibinfo{volume}{60}.
+\newblock \DOIprefix\doi{10.1111/psyp.14274}.
+%Type = Article
+\bibitem[{Mahato et~al.(2020)Mahato, Goyal, Ram and Paul}]{Mahato2020}
+\bibinfo{author}{Mahato, S.}, \bibinfo{author}{Goyal, N.},
+  \bibinfo{author}{Ram, D.}, \bibinfo{author}{Paul, S.}, \bibinfo{year}{2020}.
+\newblock \bibinfo{title}{Detection of depression and scaling of severity using
+  six channel {EEG} data}.
+\newblock \bibinfo{journal}{J. Med. Syst.} \bibinfo{volume}{44},
+  \bibinfo{pages}{118}.
+%Type = Article
+\bibitem[{Milev et~al.(2016)Milev, Giacobbe, Kennedy, Blumberger, Daskalakis,
+  Downar, Modirrousta, Patry, Vila~Rodriguez, Lam, MacQueen, Parikh, Ravindran
+  and Group}]{milev2016_canadian}
+\bibinfo{author}{Milev, R.}, \bibinfo{author}{Giacobbe, P.},
+  \bibinfo{author}{Kennedy, S.H.}, \bibinfo{author}{Blumberger, D.M.},
+  \bibinfo{author}{Daskalakis, Z.J.}, \bibinfo{author}{Downar, J.},
+  \bibinfo{author}{Modirrousta, M.}, \bibinfo{author}{Patry, S.},
+  \bibinfo{author}{Vila~Rodriguez, F.}, \bibinfo{author}{Lam, R.W.},
+  \bibinfo{author}{MacQueen, G.}, \bibinfo{author}{Parikh, S.V.},
+  \bibinfo{author}{Ravindran, A.}, \bibinfo{author}{Group, t.C.D.W.},
+  \bibinfo{year}{2016}.
+\newblock \bibinfo{title}{Canadian network for mood and anxiety treatments
+  (canmat) 2016 clinical guidelines for the management of adults with major
+  depressive disorder}.
+\newblock \bibinfo{journal}{The Canadian Journal of Psychiatry} \URLprefix
+  \url{https://doi.org/10.1177/0706743716660033},
+  \DOIprefix\doi{10.1177/0706743716660033}.
+%Type = Article
+\bibitem[{Miranda et~al.(2019)Miranda, Cox, Alexander, Danev and
+  Lakey}]{Miranda2019}
+\bibinfo{author}{Miranda, P.}, \bibinfo{author}{Cox, C.D.},
+  \bibinfo{author}{Alexander, M.}, \bibinfo{author}{Danev, S.},
+  \bibinfo{author}{Lakey, J.R.}, \bibinfo{year}{2019}.
+\newblock \bibinfo{title}{Overview of current diagnostic, prognostic, and
+  therapeutic use of eeg and eeg-based markers of cognition, mental, and brain
+  health}.
+\newblock \bibinfo{journal}{Integr. Mol. Med} \bibinfo{volume}{6}.
+%Type = Inproceedings
+\bibitem[{Moncy et~al.(2024)Moncy, Fan and Fu}]{Moncy2024}
+\bibinfo{author}{Moncy, J.C.}, \bibinfo{author}{Fan, Y.}, \bibinfo{author}{Fu,
+  C.H.}, \bibinfo{year}{2024}.
+\newblock \bibinfo{title}{Prediction of treatment outcome to transcranial
+  direct current stimulation in major depression based on deep learning of eeg
+  data}, in: \bibinfo{booktitle}{2024 IEEE Conference on Artificial
+  Intelligence (CAI)}, pp. \bibinfo{pages}{1123--1128}.
+\newblock \DOIprefix\doi{10.1109/CAI59869.2024.00201}.
+%Type = Article
+\bibitem[{Moncy et~al.(2025)Moncy, Xiao, Woodham, Ghazi-Noori, Rezaei, Bramon,
+  Ritter, Bauer, Young, Fan and Fu}]{Moncy2025BD}
+\bibinfo{author}{Moncy, J.C.}, \bibinfo{author}{Xiao, W.},
+  \bibinfo{author}{Woodham, R.D.}, \bibinfo{author}{Ghazi-Noori, A.R.},
+  \bibinfo{author}{Rezaei, H.}, \bibinfo{author}{Bramon, E.},
+  \bibinfo{author}{Ritter, P.}, \bibinfo{author}{Bauer, M.},
+  \bibinfo{author}{Young, A.H.}, \bibinfo{author}{Fan, Y.},
+  \bibinfo{author}{Fu, C.H.}, \bibinfo{year}{2025}.
+\newblock \bibinfo{title}{Deep learning based treatment remission prediction to
+  transcranial direct current stimulation in bipolar depression using eeg power
+  spectral density}.
+\newblock \bibinfo{journal}{medRxiv}
+  \DOIprefix\doi{10.1101/2024.07.16.24310445}.
+%Type = Article
+\bibitem[{Monni et~al.(2022)Monni, Collison, Hill, Oumeziane and
+  Foti}]{Monni2022}
+\bibinfo{author}{Monni, A.}, \bibinfo{author}{Collison, K.L.},
+  \bibinfo{author}{Hill, K.E.}, \bibinfo{author}{Oumeziane, B.A.},
+  \bibinfo{author}{Foti, D.}, \bibinfo{year}{2022}.
+\newblock \bibinfo{title}{The novel frontal alpha asymmetry factor and its
+  association with depression, anxiety, and personality traits}.
+\newblock \bibinfo{journal}{Psychophysiology} \bibinfo{volume}{59},
+  \bibinfo{pages}{e14109}.
+\newblock \DOIprefix\doi{10.1111/psyp.14109}.
+%Type = Article
+\bibitem[{Mumtaz et~al.(2017)Mumtaz, Xia, Mohd~Yasin, Azhar~Ali and
+  Malik}]{Mumtaz2017}
+\bibinfo{author}{Mumtaz, W.}, \bibinfo{author}{Xia, L.},
+  \bibinfo{author}{Mohd~Yasin, M.A.}, \bibinfo{author}{Azhar~Ali, S.S.},
+  \bibinfo{author}{Malik, A.S.}, \bibinfo{year}{2017}.
+\newblock \bibinfo{title}{A wavelet-based technique to predict treatment
+  outcome for major depressive disorder}.
+\newblock \bibinfo{journal}{PLOS ONE} \bibinfo{volume}{12},
+  \bibinfo{pages}{e0171409}.
+\newblock \DOIprefix\doi{10.1371/journal.pone.0171409}.
+%Type = Article
+\bibitem[{Murphy et~al.(2023)Murphy, Tamman, Lijffijt, Amarneh, Iqbal, Swann,
+  Averill, OBrien and Mathew}]{murphy2023_neural}
+\bibinfo{author}{Murphy, N.}, \bibinfo{author}{Tamman, A.J.F.},
+  \bibinfo{author}{Lijffijt, M.}, \bibinfo{author}{Amarneh, D.},
+  \bibinfo{author}{Iqbal, S.}, \bibinfo{author}{Swann, A.C.},
+  \bibinfo{author}{Averill, L.A.}, \bibinfo{author}{OBrien, B.},
+  \bibinfo{author}{Mathew, S.J.}, \bibinfo{year}{2023}.
+\newblock \bibinfo{title}{Neural complexity eeg biomarkers of rapid and
+  post-rapid ketamine effects in late-life treatment-resistant depression: a
+  randomized control trial}.
+\newblock \bibinfo{journal}{Neuropsychopharmacology} \URLprefix
+  \url{https://doi.org/10.1038/s41386-023-01586-4},
+  \DOIprefix\doi{10.1038/s41386-023-01586-4}.
+%Type = Article
+\bibitem[{Mutz et~al.(2018)Mutz, Edgcumbe, Brunoni and Fu}]{Mutz2018}
+\bibinfo{author}{Mutz, J.}, \bibinfo{author}{Edgcumbe, D.R.},
+  \bibinfo{author}{Brunoni, A.R.}, \bibinfo{author}{Fu, C.H.},
+  \bibinfo{year}{2018}.
+\newblock \bibinfo{title}{Efficacy and acceptability of non-invasive brain
+  stimulation for the treatment of adult unipolar and bipolar depression: a
+  systematic review and meta-analysis of randomised sham-controlled trials}.
+\newblock \bibinfo{journal}{Neuroscience \& Biobehavioral Reviews}
+  \bibinfo{volume}{92}, \bibinfo{pages}{291--303}.
+%Type = Article
+\bibitem[{Oakley et~al.(2022)Oakley, Coskuner, Cadwallader, Ravan and
+  Hasey}]{oakley2022_eeg}
+\bibinfo{author}{Oakley, T.}, \bibinfo{author}{Coskuner, J.},
+  \bibinfo{author}{Cadwallader, A.}, \bibinfo{author}{Ravan, M.},
+  \bibinfo{author}{Hasey, G.}, \bibinfo{year}{2022}.
+\newblock \bibinfo{title}{Eeg biomarkers to predict response to sertraline and
+  placebo treatment in major depressive disorder}.
+\newblock \bibinfo{journal}{IEEE Transactions on Biomedical Engineering}
+  \URLprefix \url{https://doi.org/10.1109/tbme.2022.3204861},
+  \DOIprefix\doi{10.1109/tbme.2022.3204861}.
+%Type = Article
+\bibitem[{Olbrich and Arns(2013)}]{olbrich2013_eeg}
+\bibinfo{author}{Olbrich, S.}, \bibinfo{author}{Arns, M.},
+  \bibinfo{year}{2013}.
+\newblock \bibinfo{title}{Eeg biomarkers in major depressive disorder:
+  Discriminative power and prediction of treatment response}.
+\newblock \bibinfo{journal}{International Review of Psychiatry} \URLprefix
+  \url{https://doi.org/10.3109/09540261.2013.816269},
+  \DOIprefix\doi{10.3109/09540261.2013.816269}.
+%Type = Article
+\bibitem[{Olbrich et~al.(2015)Olbrich, Dinteren and
+  Arns}]{olbrich2015_personalized}
+\bibinfo{author}{Olbrich, S.}, \bibinfo{author}{Dinteren, R.v.},
+  \bibinfo{author}{Arns, M.}, \bibinfo{year}{2015}.
+\newblock \bibinfo{title}{Personalized medicine: Review and perspectives of
+  promising baseline eeg biomarkers in major depressive disorder and attention
+  deficit hyperactivity disorder}.
+\newblock \bibinfo{journal}{Neuropsychobiology} \URLprefix
+  \url{https://doi.org/10.1159/000437435}, \DOIprefix\doi{10.1159/000437435}.
+%Type = Article
+\bibitem[{Pettorruso et~al.(2024)Pettorruso, Lorenzo, Benatti, dAndrea,
+  Cavallotto, Carullo, Mancusi, Marco, Mammarella, Dattilio, Barlocci, Rosa,
+  Cocco, Padula, Bubbico, Perrucci, Guidotti, DAndrea, Marzetti, Zoratto,
+  Dellosso and Martinotti}]{pettorruso2024_overcoming}
+\bibinfo{author}{Pettorruso, M.}, \bibinfo{author}{Lorenzo, G.D.},
+  \bibinfo{author}{Benatti, B.}, \bibinfo{author}{dAndrea, G.},
+  \bibinfo{author}{Cavallotto, C.}, \bibinfo{author}{Carullo, R.},
+  \bibinfo{author}{Mancusi, G.}, \bibinfo{author}{Marco, O.D.},
+  \bibinfo{author}{Mammarella, G.}, \bibinfo{author}{Dattilio, A.},
+  \bibinfo{author}{Barlocci, E.}, \bibinfo{author}{Rosa, I.},
+  \bibinfo{author}{Cocco, A.}, \bibinfo{author}{Padula, L.P.},
+  \bibinfo{author}{Bubbico, G.}, \bibinfo{author}{Perrucci, M.G.},
+  \bibinfo{author}{Guidotti, R.}, \bibinfo{author}{DAndrea, A.},
+  \bibinfo{author}{Marzetti, L.}, \bibinfo{author}{Zoratto, F.},
+  \bibinfo{author}{Dellosso, B.}, \bibinfo{author}{Martinotti, G.},
+  \bibinfo{year}{2024}.
+\newblock \bibinfo{title}{Overcoming treatment-resistant depression with
+  machine-learning based tools: a study protocol combining eeg and clinical
+  data to personalize glutamatergic and brain stimulation interventions
+  (selectool project)}.
+\newblock \bibinfo{journal}{Frontiers in Psychiatry} \URLprefix
+  \url{https://www.semanticscholar.org/paper/169e53dbe54745e1df0495183343bda9d6a8a29e},
+  \DOIprefix\doi{10.3389/fpsyt.2024.1436006}.
+%Type = Article
+\bibitem[{Puthankattil and Joseph(2012)}]{Puthankattil2012}
+\bibinfo{author}{Puthankattil, S.D.}, \bibinfo{author}{Joseph, P.K.},
+  \bibinfo{year}{2012}.
+\newblock \bibinfo{title}{Classification of eeg signals in normal and
+  depression conditions by ann using rwe and signal entropy}.
+\newblock \bibinfo{journal}{J. Mech. Med. Biol.} \bibinfo{volume}{12},
+  \bibinfo{pages}{1240019}.
+%Type = Article
+\bibitem[{Razza et~al.(2020)Razza, Palumbo, Moffa, Carvalho, Solmi, Loo and
+  Brunoni}]{razza2020systematic}
+\bibinfo{author}{Razza, L.B.}, \bibinfo{author}{Palumbo, P.},
+  \bibinfo{author}{Moffa, A.H.}, \bibinfo{author}{Carvalho, A.F.},
+  \bibinfo{author}{Solmi, M.}, \bibinfo{author}{Loo, C.K.},
+  \bibinfo{author}{Brunoni, A.R.}, \bibinfo{year}{2020}.
+\newblock \bibinfo{title}{A systematic review and meta-analysis on the effects
+  of transcranial direct current stimulation in depressive episodes}.
+\newblock \bibinfo{journal}{Depression and Anxiety} \bibinfo{volume}{37},
+  \bibinfo{pages}{594--608}.
+%Type = Article
+\bibitem[{Reissmann et~al.(2026)Reissmann, Rupprecht, Langguth, Rischer and
+  Schoisswohl}]{reissmann2026_thetacordance}
+\bibinfo{author}{Reissmann, A.}, \bibinfo{author}{Rupprecht, M.},
+  \bibinfo{author}{Langguth, B.}, \bibinfo{author}{Rischer, J.},
+  \bibinfo{author}{Schoisswohl, S.}, \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{Theta-cordance as a biomarker of treatment response
+  to intermittent theta burst stimulation in patients with treatment-resistant
+  depression.}
+\newblock \bibinfo{journal}{Clinical Neurophysiology} \URLprefix
+  \url{https://www.semanticscholar.org/paper/c2c05fd78b73d7ebd82bcbd5cb8af3516e1f5751},
+  \DOIprefix\doi{10.1016/j.clinph.2026.2111710}.
+%Type = Article
+\bibitem[{Rimmer et~al.(2024)Rimmer, Woodham, Cahill and Fu}]{Rimmer2024}
+\bibinfo{author}{Rimmer, R.M.}, \bibinfo{author}{Woodham, R.D.},
+  \bibinfo{author}{Cahill, S.}, \bibinfo{author}{Fu, C.H.},
+  \bibinfo{year}{2024}.
+\newblock \bibinfo{title}{Acceptability of home-based transcranial direct
+  current stimulation (tdcs) in major depression: a qualitative analysis of
+  individual experiences}.
+\newblock \bibinfo{journal}{Mental Health Review Journal} \bibinfo{volume}{29},
+  \bibinfo{pages}{79--91}.
+%Type = Article
+\bibitem[{Romero~Marin et~al.(2026)Romero~Marin, Lopez~Rodriguez,
+  Lakis~Granell, Buloz~Osorio, Cabello~Toscano, Urretavizcaya~Sarachaga,
+  Alonso~Ortega, Chopra, Solana~Sanchez, Camprodon, Pascual~Leone, Bartres~Faz,
+  Cappon and Cattaneo}]{romeromarn2026_remotely}
+\bibinfo{author}{Romero~Marin, R.}, \bibinfo{author}{Lopez~Rodriguez, S.},
+  \bibinfo{author}{Lakis~Granell, S.}, \bibinfo{author}{Buloz~Osorio, E.},
+  \bibinfo{author}{Cabello~Toscano, M.},
+  \bibinfo{author}{Urretavizcaya~Sarachaga, M.},
+  \bibinfo{author}{Alonso~Ortega, M.d.P.}, \bibinfo{author}{Chopra, M.},
+  \bibinfo{author}{Solana~Sanchez, J.}, \bibinfo{author}{Camprodon, J.},
+  \bibinfo{author}{Pascual~Leone, A.}, \bibinfo{author}{Bartres~Faz, D.},
+  \bibinfo{author}{Cappon, D.}, \bibinfo{author}{Cattaneo, G.},
+  \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{Remotely supervised home-based tdcs in
+  treatment-resistant depression: Feasibility, effectiveness and eeg biomarkers
+  of response}.
+\newblock \bibinfo{journal}{Research Square} \URLprefix
+  \url{https://www.semanticscholar.org/paper/7ba628353818d20f18ac5ecdccca2bd39bca3d77},
+  \DOIprefix\doi{10.21203/rs.3.rs-8709698/v1}.
+%Type = Article
+\bibitem[{Shalbaf et~al.(2018)Shalbaf, Brenner, Pang, Blumberger, Downar,
+  Daskalakis, Tham, Lam, Farzan and Vila-Rodriguez}]{shalbaf2018_nonlinear}
+\bibinfo{author}{Shalbaf, R.}, \bibinfo{author}{Brenner, C.A.},
+  \bibinfo{author}{Pang, C.}, \bibinfo{author}{Blumberger, D.M.},
+  \bibinfo{author}{Downar, J.}, \bibinfo{author}{Daskalakis, Z.J.},
+  \bibinfo{author}{Tham, J.}, \bibinfo{author}{Lam, R.W.},
+  \bibinfo{author}{Farzan, F.}, \bibinfo{author}{Vila-Rodriguez, F.},
+  \bibinfo{year}{2018}.
+\newblock \bibinfo{title}{Non-linear entropy analysis in eeg to predict
+  treatment response to repetitive transcranial magnetic stimulation in
+  depression}.
+\newblock \bibinfo{journal}{Frontiers in Pharmacology} \URLprefix
+  \url{https://doi.org/10.3389/fphar.2018.01188},
+  \DOIprefix\doi{10.3389/fphar.2018.01188}.
+%Type = Article
+\bibitem[{Sheen et~al.(2024)Sheen, Mazza, Momi, Miron, Mansouri, Russell, Zhou,
+  Hyde, Fox, Voetterl, Assi, Daskalakis, Blumberger, Griffiths and
+  Downar}]{sheen2024_response}
+\bibinfo{author}{Sheen, J.}, \bibinfo{author}{Mazza, F.},
+  \bibinfo{author}{Momi, D.}, \bibinfo{author}{Miron, J.},
+  \bibinfo{author}{Mansouri, F.}, \bibinfo{author}{Russell, T.},
+  \bibinfo{author}{Zhou, R.}, \bibinfo{author}{Hyde, M.}, \bibinfo{author}{Fox,
+  L.}, \bibinfo{author}{Voetterl, H.}, \bibinfo{author}{Assi, E.B.},
+  \bibinfo{author}{Daskalakis, Z.}, \bibinfo{author}{Blumberger, D.},
+  \bibinfo{author}{Griffiths, J.D.}, \bibinfo{author}{Downar, J.},
+  \bibinfo{year}{2024}.
+\newblock \bibinfo{title}{N100 as a response prediction biomarker for
+  accelerated 1 hz right dlpfc-rtms in major depression.}
+\newblock \bibinfo{journal}{Journal of Affective Disorders} \URLprefix
+  \url{https://www.semanticscholar.org/paper/c0dabdc70010a5fb8ea6f2546d37fe9e83a13071},
+  \DOIprefix\doi{10.1016/j.jad.2024.07.131}.
+%Type = Article
+\bibitem[{Shen et~al.(2025)Shen, Sun, Chen and Gao}]{Shen2025}
+\bibinfo{author}{Shen, A.}, \bibinfo{author}{Sun, J.}, \bibinfo{author}{Chen,
+  X.}, \bibinfo{author}{Gao, X.}, \bibinfo{year}{2025}.
+\newblock \bibinfo{title}{A data-centric and interpretable eeg framework for
+  depression severity grading using shap-based insights}.
+\newblock \bibinfo{journal}{Journal of NeuroEngineering and Rehabilitation}
+  \bibinfo{volume}{22}.
+\newblock \DOIprefix\doi{10.1186/s12984-025-01645-5}.
+%Type = Article
+\bibitem[{Shim et~al.(2021)Shim, Lee and Hwang}]{Shim2021}
+\bibinfo{author}{Shim, M.}, \bibinfo{author}{Lee, S.H.},
+  \bibinfo{author}{Hwang, H.J.}, \bibinfo{year}{2021}.
+\newblock \bibinfo{title}{Inflated prediction accuracy of neuropsychiatric
+  biomarkers caused by data leakage in feature selection}.
+\newblock \bibinfo{journal}{Scientific Reports} \bibinfo{volume}{11}.
+\newblock \DOIprefix\doi{10.1038/s41598-021-87157-3}.
+%Type = Article
+\bibitem[{Simmatis et~al.(2023)Simmatis, Russo, Geraci, Harmsen and
+  Samuel}]{simmatis2023_technical}
+\bibinfo{author}{Simmatis, L.}, \bibinfo{author}{Russo, E.E.},
+  \bibinfo{author}{Geraci, J.}, \bibinfo{author}{Harmsen, I.E.},
+  \bibinfo{author}{Samuel, N.}, \bibinfo{year}{2023}.
+\newblock \bibinfo{title}{Technical and clinical considerations for
+  electroencephalography-based biomarkers for major depressive disorder}.
+\newblock \bibinfo{journal}{npj Mental Health Research} \URLprefix
+  \url{https://doi.org/10.1038/s44184-023-00038-7},
+  \DOIprefix\doi{10.1038/s44184-023-00038-7}.
+%Type = Incollection
+\bibitem[{Siuly et~al.(2017)Siuly, Li and Zhang}]{Siuly2017}
+\bibinfo{author}{Siuly, S.}, \bibinfo{author}{Li, Y.}, \bibinfo{author}{Zhang,
+  Y.}, \bibinfo{year}{2017}.
+\newblock \bibinfo{title}{Electroencephalogram (eeg) and its background}, in:
+  \bibinfo{booktitle}{EEG signal analysis and classification: Techniques and
+  applications}. \bibinfo{publisher}{Springer}, pp. \bibinfo{pages}{3--21}.
+%Type = Article
+\bibitem[{Stoyell et~al.(2021)Stoyell, Wilmskoetter, Dobrota, Chinappen,
+  Bonilha, Mintz, Brinkmann, Herman, Peters, Vulliemoz
+  et~al.}]{stoyell2021high}
+\bibinfo{author}{Stoyell, S.M.}, \bibinfo{author}{Wilmskoetter, J.},
+  \bibinfo{author}{Dobrota, M.A.}, \bibinfo{author}{Chinappen, D.M.},
+  \bibinfo{author}{Bonilha, L.}, \bibinfo{author}{Mintz, M.},
+  \bibinfo{author}{Brinkmann, B.H.}, \bibinfo{author}{Herman, S.T.},
+  \bibinfo{author}{Peters, J.M.}, \bibinfo{author}{Vulliemoz, S.}, et~al.,
+  \bibinfo{year}{2021}.
+\newblock \bibinfo{title}{High-density eeg in current clinical practice and
+  opportunities for the future}.
+\newblock \bibinfo{journal}{Journal of clinical neurophysiology}
+  \bibinfo{volume}{38}, \bibinfo{pages}{112--123}.
+%Type = Article
+\bibitem[{Thair et~al.(2017)Thair, Holloway, Newport and
+  Smith}]{thair2017_transcranial}
+\bibinfo{author}{Thair, H.}, \bibinfo{author}{Holloway, A.L.},
+  \bibinfo{author}{Newport, R.}, \bibinfo{author}{Smith, A.D.},
+  \bibinfo{year}{2017}.
+\newblock \bibinfo{title}{Transcranial direct current stimulation (tdcs): A
+  beginner's guide for design and implementation}.
+\newblock \bibinfo{journal}{Frontiers in Neuroscience} \URLprefix
+  \url{https://doi.org/10.3389/fnins.2017.00641},
+  \DOIprefix\doi{10.3389/fnins.2017.00641}.
+%Type = Article
+\bibitem[{Tsai et~al.(2023)Tsai, Li and Juan}]{tsai2023_review}
+\bibinfo{author}{Tsai, Y.C.}, \bibinfo{author}{Li, C.T.},
+  \bibinfo{author}{Juan, C.H.}, \bibinfo{year}{2023}.
+\newblock \bibinfo{title}{A review of critical brain oscillations in depression
+  and the efficacy of transcranial magnetic stimulation treatment}.
+\newblock \bibinfo{journal}{Frontiers in Psychiatry} \URLprefix
+  \url{https://doi.org/10.3389/fpsyt.2023.1073984},
+  \DOIprefix\doi{10.3389/fpsyt.2023.1073984}.
+%Type = Article
+\bibitem[{Ulrich et~al.(2025)Ulrich, Schneider, Deuring, Erni, Ridder, Sarlon
+  and Bruhl}]{ulrich2025_alterations}
+\bibinfo{author}{Ulrich, S.}, \bibinfo{author}{Schneider, E.},
+  \bibinfo{author}{Deuring, G.}, \bibinfo{author}{Erni, S.},
+  \bibinfo{author}{Ridder, M.d.}, \bibinfo{author}{Sarlon, J.},
+  \bibinfo{author}{Bruhl, A.B.}, \bibinfo{year}{2025}.
+\newblock \bibinfo{title}{Alterations in resting-state eeg functional
+  connectivity in patients with major depressive disorder receiving
+  electroconvulsive therapy: A systematic review}.
+\newblock \bibinfo{journal}{Neuroscience \& Biobehavioral Reviews} \URLprefix
+  \url{https://doi.org/10.1016/j.neubiorev.2025.106017},
+  \DOIprefix\doi{10.1016/j.neubiorev.2025.106017}.
+%Type = Article
+\bibitem[{Waller et~al.(2026)Waller, Carpenter and
+  Jones}]{waller2026_transient}
+\bibinfo{author}{Waller, D.A.}, \bibinfo{author}{Carpenter, L.L.},
+  \bibinfo{author}{Jones, S.R.}, \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{Transient frontal spectral events from eeg predict
+  antidepressant response to sertraline in depression.}
+\newblock \bibinfo{journal}{Journal of Psychiatric Research} \URLprefix
+  \url{https://www.semanticscholar.org/paper/6a3e902c05c07569afa93b0bb3e0b484bf519824},
+  \DOIprefix\doi{10.1016/j.jpsychires.2026.03.010}.
+%Type = Article
+\bibitem[{Watts et~al.(2022)Watts, Pulice, Reilly, Brunoni, Kapczinski and
+  Passos}]{watts2022predicting}
+\bibinfo{author}{Watts, D.}, \bibinfo{author}{Pulice, R.F.},
+  \bibinfo{author}{Reilly, J.}, \bibinfo{author}{Brunoni, A.R.},
+  \bibinfo{author}{Kapczinski, F.}, \bibinfo{author}{Passos, I.C.},
+  \bibinfo{year}{2022}.
+\newblock \bibinfo{title}{Predicting treatment response using eeg in major
+  depressive disorder: A machine-learning meta-analysis}.
+\newblock \bibinfo{journal}{Translational psychiatry} \bibinfo{volume}{12},
+  \bibinfo{pages}{332}.
+%Type = Article
+\bibitem[{Welch(1967)}]{Welch1967}
+\bibinfo{author}{Welch, P.}, \bibinfo{year}{1967}.
+\newblock \bibinfo{title}{The use of fast fourier transform for the estimation
+  of power spectra: A method based on time averaging over short, modified
+  periodograms}.
+\newblock \bibinfo{journal}{IEEE Transactions on Audio and Electroacoustics}
+  \bibinfo{volume}{15}, \bibinfo{pages}{70--73}.
+\newblock \DOIprefix\doi{10.1109/TAU.1967.1161901}.
+%Type = Article
+\bibitem[{Widge et~al.(2019)Widge, Bilge, Montana, Chang, Rodriguez,
+  Deckersbach, Carpenter, Kalin and Nemeroff}]{Widge2019}
+\bibinfo{author}{Widge, A.S.}, \bibinfo{author}{Bilge, M.T.},
+  \bibinfo{author}{Montana, R.}, \bibinfo{author}{Chang, W.},
+  \bibinfo{author}{Rodriguez, C.I.}, \bibinfo{author}{Deckersbach, T.},
+  \bibinfo{author}{Carpenter, L.L.}, \bibinfo{author}{Kalin, N.H.},
+  \bibinfo{author}{Nemeroff, C.B.}, \bibinfo{year}{2019}.
+\newblock \bibinfo{title}{Electroencephalographic biomarkers for treatment
+  response prediction in major depressive illness: A meta-analysis}.
+\newblock \bibinfo{journal}{American Journal of Psychiatry}
+  \bibinfo{volume}{176}, \bibinfo{pages}{44--56}.
+\newblock \DOIprefix\doi{10.1176/appi.ajp.2018.17121358}.
+%Type = Article
+\bibitem[{Woodham et~al.(2025)Woodham, Selvaraj, Lajmi, Hobday, Sheehan,
+  Ghazi-Noori, Lagerberg, Rizvi, Kwon, Orhii et~al.}]{woodham2025home}
+\bibinfo{author}{Woodham, R.D.}, \bibinfo{author}{Selvaraj, S.},
+  \bibinfo{author}{Lajmi, N.}, \bibinfo{author}{Hobday, H.},
+  \bibinfo{author}{Sheehan, G.}, \bibinfo{author}{Ghazi-Noori, A.R.},
+  \bibinfo{author}{Lagerberg, P.J.}, \bibinfo{author}{Rizvi, M.},
+  \bibinfo{author}{Kwon, S.S.}, \bibinfo{author}{Orhii, P.}, et~al.,
+  \bibinfo{year}{2025}.
+\newblock \bibinfo{title}{Home-based transcranial direct current stimulation
+  treatment for major depressive disorder: a fully remote phase 2 randomized
+  sham-controlled trial}.
+\newblock \bibinfo{journal}{Nature medicine} \bibinfo{volume}{31},
+  \bibinfo{pages}{87--95}.
+%Type = Article
+\bibitem[{Xiao et~al.(2025a)Xiao, Moncy, Ghazi-Noori, Woodham, Rezaei, Bramon,
+  Ritter, Bauer, Young and Fu}]{Xiao2025JAD}
+\bibinfo{author}{Xiao, W.}, \bibinfo{author}{Moncy, J.C.},
+  \bibinfo{author}{Ghazi-Noori, A.R.}, \bibinfo{author}{Woodham, R.D.},
+  \bibinfo{author}{Rezaei, H.}, \bibinfo{author}{Bramon, E.},
+  \bibinfo{author}{Ritter, P.}, \bibinfo{author}{Bauer, M.},
+  \bibinfo{author}{Young, A.H.}, \bibinfo{author}{Fu, C.H.},
+  \bibinfo{year}{2025}a.
+\newblock \bibinfo{title}{Enhanced network synchronization connectivity
+  following transcranial direct current stimulation (tdcs) in bipolar
+  depression: effects on eeg oscillations and deep learning-based predictors of
+  clinical remission}.
+\newblock \bibinfo{journal}{Journal of Affective Disorders}
+  \bibinfo{volume}{369}, \bibinfo{pages}{576--587}.
+%Type = Article
+\bibitem[{Xiao et~al.(2025b)Xiao, Moncy, Woodham, Selvaraj, Lajmi, Hobday,
+  Sheehan, Ghazi-Noori, Lagerberg, Machado-Vieira et~al.}]{Xiao2025PMIP}
+\bibinfo{author}{Xiao, W.}, \bibinfo{author}{Moncy, J.C.},
+  \bibinfo{author}{Woodham, R.D.}, \bibinfo{author}{Selvaraj, S.},
+  \bibinfo{author}{Lajmi, N.}, \bibinfo{author}{Hobday, H.},
+  \bibinfo{author}{Sheehan, G.}, \bibinfo{author}{Ghazi-Noori, A.R.},
+  \bibinfo{author}{Lagerberg, P.J.}, \bibinfo{author}{Machado-Vieira, R.},
+  et~al., \bibinfo{year}{2025}b.
+\newblock \bibinfo{title}{Home-based transcranial direct current stimulation
+  (tdcs) in major depressive disorder: enhanced network synchronization with
+  active relative to sham and deep learning-based predictors of remission}.
+\newblock \bibinfo{journal}{Personalized Medicine in Psychiatry}
+  \bibinfo{volume}{49}, \bibinfo{pages}{100147}.
+%Type = Inproceedings
+\bibitem[{Zeidabadi and Rashidi(2025)}]{zeidabadi2025_prediction}
+\bibinfo{author}{Zeidabadi, A.A.}, \bibinfo{author}{Rashidi, S.},
+  \bibinfo{year}{2025}.
+\newblock \bibinfo{title}{Prediction of rtms treatment response in depression
+  using a frequency-based eeg biomarker}, in: \bibinfo{booktitle}{International
+  Conference on Computer and Knowledge Engineering}.
+\newblock \URLprefix
+  \url{https://www.semanticscholar.org/paper/fa7b0c55f517ebfbaa6af5be40ba57129e5d87f2},
+  \DOIprefix\doi{10.1109/ICCKE68588.2025.11273345}.
+%Type = Article
+\bibitem[{Zhang et~al.(2023)Zhang, Zhou, Chen, Hu, Li, Bai, Han, Wang, Liang,
+  Chen, Cong, Yan and Li}]{Zhang2023EEGMethods}
+\bibinfo{author}{Zhang, H.}, \bibinfo{author}{Zhou, Q.Q.},
+  \bibinfo{author}{Chen, H.}, \bibinfo{author}{Hu, X.Q.}, \bibinfo{author}{Li,
+  W.G.}, \bibinfo{author}{Bai, Y.}, \bibinfo{author}{Han, J.X.},
+  \bibinfo{author}{Wang, Y.}, \bibinfo{author}{Liang, Z.H.},
+  \bibinfo{author}{Chen, D.}, \bibinfo{author}{Cong, F.Y.},
+  \bibinfo{author}{Yan, J.Q.}, \bibinfo{author}{Li, X.L.},
+  \bibinfo{year}{2023}.
+\newblock \bibinfo{title}{The applied principles of eeg analysis methods in
+  neuroscience and clinical neurology}.
+\newblock \bibinfo{journal}{Military Medical Research} \bibinfo{volume}{10}.
+\newblock \DOIprefix\doi{10.1186/s40779-023-00502-7}.
+%Type = Article
+\bibitem[{Zhao et~al.(2022)Zhao, Ng, Khoo and Chi}]{Zhao2022}
+\bibinfo{author}{Zhao, S.}, \bibinfo{author}{Ng, S.C.}, \bibinfo{author}{Khoo,
+  S.}, \bibinfo{author}{Chi, A.}, \bibinfo{year}{2022}.
+\newblock \bibinfo{title}{Temporal and spatial dynamics of {EEG} features in
+  female college students with subclinical depression}.
+\newblock \bibinfo{journal}{Int. J. Environ. Res. Public Health}
+  \bibinfo{volume}{19}.
+%Type = Article
+\bibitem[{Zhdanov et~al.(2020)}]{zhdanov_svm_prediction}
+\bibinfo{author}{Zhdanov, A.}, et~al., \bibinfo{year}{2020}.
+\newblock \bibinfo{title}{Use of machine learning for predicting escitalopram
+  treatment outcome from eeg in adults with depression}.
+\newblock \bibinfo{journal}{Human Brain Mapping} \bibinfo{note}{Placeholder
+  citation for Zhdanov SVM study}.
+
+\end{thebibliography}

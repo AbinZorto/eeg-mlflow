@@ -1,0 +1,49 @@
+This is BibTeX, Version 0.99d (TeX Live 2024)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+The style file: plainnat.bst
+Database file #1: references.bib
+Database file #2: references_analysis_subset.bib
+Warning--empty journal in babiloni2012_guidelines
+You've used 64 entries,
+            2773 wiz_defined-function locations,
+            1032 strings with 28366 characters,
+and the built_in function-call counts, 46734 in all, are:
+= -- 3711
+> -- 4889
+< -- 12
++ -- 1634
+- -- 1569
+* -- 4642
+:= -- 7772
+add.period$ -- 264
+call.type$ -- 64
+change.case$ -- 709
+chr.to.int$ -- 63
+cite$ -- 129
+duplicate$ -- 1345
+empty$ -- 2299
+format.name$ -- 1646
+if$ -- 9210
+int.to.chr$ -- 2
+int.to.str$ -- 1
+missing$ -- 64
+newline$ -- 398
+num.names$ -- 256
+pop$ -- 1305
+preamble$ -- 1
+purify$ -- 645
+quote$ -- 0
+skip$ -- 1330
+stack$ -- 0
+substring$ -- 762
+swap$ -- 110
+text.length$ -- 3
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 704
+warning$ -- 1
+while$ -- 243
+width$ -- 0
+write$ -- 951
+(There was 1 warning)

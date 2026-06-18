@@ -9,6 +9,6 @@ CNN trunk & Three 1D convolutional blocks with filter progressions \texttt{[64,6
 Recurrent stage & Two bidirectional LSTM layers with 128 and 64 hidden units followed the CNN trunk. \\
 Attention and fusion & Eight-head self-attention with dropout 0.1 and residual layer normalization, followed by global mean pooling. Multi-scale pooled CNN features were concatenated through feature-pyramid fusion. \\
 Dense head & Two dense blocks of 256 and 128 units with batch normalization, nonlinear activations, and dropout 0.3 and 0.4, followed by a two-logit output layer. \\
-Optimization & AdamW with learning rate 0.001 and weight decay 0.01; cosine warm restarts to a minimum learning rate of $10^{-6}$; batch size 8192 before fold-size adjustment; label smoothing 0.05; gradient clipping at 1.0; mixed precision; maximum 100 epochs; early stopping patience 5 with best-state restore. \\
+Optimization & AdamW with learning rate 0.001 and weight decay 0.01; cosine warm restarts to a minimum learning rate of $10^{-6}$; batch size 8192 (upper bound, reduced to the full per-fold training set of approximately 2,300 windows for the 6 s configuration by the batch-resolution logic, resulting in full-batch gradient descent per fold); label smoothing 0.05; gradient clipping at 1.0; mixed precision; maximum 100 epochs; early stopping patience 5 with best-state restore. \\
 \bottomrule
 \end{tabularx}

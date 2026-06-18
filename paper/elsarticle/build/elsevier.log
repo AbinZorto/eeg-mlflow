@@ -1,0 +1,3049 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.10.26)  27 MAR 2026 18:22
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**elsevier.tex
+(./elsevier.tex
+LaTeX2e <2023-11-01> patch level 1
+L3 programming layer <2024-02-20>
+(./cas-dc.cls
+Document Class: cas-dc 2024/05/04, 2.4: Formatting class for CAS double column 
+articles
+\c@blind=\count188
+\@bls=\dimen140
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2023/05/17 v1.4n Standard LaTeX document class
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/fleqn.clo
+File: fleqn.clo 2016/12/29 v1.2b Standard LaTeX option (flush left equations)
+\mathindent=\skip48
+Applying: [2015/01/01] Make \[ robust on input line 50.
+LaTeX Info: Redefining \[ on input line 51.
+Already applied: [0000/00/00] Make \[ robust on input line 62.
+Applying: [2015/01/01] Make \] robust on input line 74.
+LaTeX Info: Redefining \] on input line 75.
+Already applied: [0000/00/00] Make \] robust on input line 83.
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2023/05/17 v1.4n Standard LaTeX file (size option)
+)
+\c@part=\count189
+\c@section=\count190
+\c@subsection=\count191
+\c@subsubsection=\count192
+\c@paragraph=\count193
+\c@subparagraph=\count194
+\c@figure=\count195
+\c@table=\count196
+\abovecaptionskip=\skip49
+\belowcaptionskip=\skip50
+\bibindent=\dimen141
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
+\KV@toks@=\toks17
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2022/03/10 v1.4e Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2021/08/11 v1.11 sin cos tan (DPC)
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 107.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2022/09/22 v1.2b Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen142
+\Gin@req@width=\dimen143
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2023/05/13 v2.17o AMS math features
+\@mathmargin=\skip51
+
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2024/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2021/08/26 v2.01 AMS text
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks18
+\ex@=\dimen144
+))
+(/usr/local/texlive/2024/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen145
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 2022/04/08 v2.04 operator names
+)
+\inf@bad=\count197
+LaTeX Info: Redefining \frac on input line 234.
+\uproot@=\count198
+\leftroot@=\count199
+LaTeX Info: Redefining \overline on input line 399.
+LaTeX Info: Redefining \colon on input line 410.
+\classnum@=\count266
+\DOTSCASE@=\count267
+LaTeX Info: Redefining \ldots on input line 496.
+LaTeX Info: Redefining \dots on input line 499.
+LaTeX Info: Redefining \cdots on input line 620.
+\Mathstrutbox@=\box51
+\strutbox@=\box52
+LaTeX Info: Redefining \big on input line 722.
+LaTeX Info: Redefining \Big on input line 723.
+LaTeX Info: Redefining \bigg on input line 724.
+LaTeX Info: Redefining \Bigg on input line 725.
+\big@size=\dimen146
+LaTeX Font Info:    Redeclaring font encoding OML on input line 743.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 744.
+\macc@depth=\count268
+LaTeX Info: Redefining \bmod on input line 905.
+LaTeX Info: Redefining \pmod on input line 910.
+LaTeX Info: Redefining \smash on input line 940.
+LaTeX Info: Redefining \relbar on input line 970.
+LaTeX Info: Redefining \Relbar on input line 971.
+\c@MaxMatrixCols=\count269
+\dotsspace@=\muskip16
+\c@parentequation=\count270
+\dspbrk@lvl=\count271
+\tag@help=\toks19
+\row@=\count272
+\column@=\count273
+\maxfields@=\count274
+\andhelp@=\toks20
+\eqnshift@=\dimen147
+\alignsep@=\dimen148
+\tagshift@=\dimen149
+\tagwidth@=\dimen150
+\totwidth@=\dimen151
+\lineht@=\dimen152
+\@envbody=\toks21
+\multlinegap=\skip52
+\multlinetaggap=\skip53
+\mathdisplay@stack=\toks22
+LaTeX Info: Redefining \[ on input line 2953.
+LaTeX Info: Redefining \] on input line 2954.
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2024-02-20 L3 programming layer (loader) 
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+File: l3backend-pdftex.def 2024-02-20 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count275
+\l__pdf_internal_box=\box53
+))
+(/usr/local/texlive/2024/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
+Package: xparse 2024-02-18 L3 Experimental document command parser
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count276
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/preprint/balance.sty
+Package: balance 1999/02/23 4.3 (PWD)
+\oldvsize=\dimen153
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/booktabs/booktabs.sty
+Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
+\heavyrulewidth=\dimen154
+\lightrulewidth=\dimen155
+\cmidrulewidth=\dimen156
+\belowrulesep=\dimen157
+\belowbottomsep=\dimen158
+\aboverulesep=\dimen159
+\abovetopsep=\dimen160
+\cmidrulesep=\dimen161
+\cmidrulekern=\dimen162
+\defaultaddspace=\dimen163
+\@cmidla=\count277
+\@cmidlb=\count278
+\@aboverulesep=\dimen164
+\@belowrulesep=\dimen165
+\@thisruleclass=\count279
+\@lastruleclass=\count280
+\@thisrulewidth=\dimen166
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/makecell/makecell.sty
+Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/tools/array.sty
+Package: array 2023/10/16 v2.5g Tabular extension package (FMi)
+\col@sep=\dimen167
+\ar@mcellbox=\box54
+\extrarowheight=\dimen168
+\NC@list=\toks23
+\extratabsurround=\skip54
+\backup@length=\skip55
+\ar@cellbox=\box55
+)
+\rotheadsize=\dimen169
+\c@nlinenum=\count281
+\TeXr@lab=\toks24
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/multirow/multirow.sty
+Package: multirow 2021/03/15 v2.8 Span multiple rows of a table
+\multirow@colwidth=\skip56
+\multirow@cntb=\count282
+\multirow@dima=\skip57
+\bigstrutjot=\dimen170
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/colortbl/colortbl.sty
+Package: colortbl 2024/02/20 v1.0g Color table columns (DPC)
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/color.sty
+Package: color 2022/01/06 v1.3d Standard LaTeX Color (DPC)
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package color Info: Driver file: pdftex.def on input line 149.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/mathcolor.ltx))
+\everycr=\toks25
+\minrowclearance=\skip58
+\rownum=\count283
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/tools/dcolumn.sty
+Package: dcolumn 2023/07/08 v1.06 decimal alignment package (DPC)
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/sttools/stfloats.sty
+Package: stfloats 2017/03/27 v3.3 Improve float mechanism and baselineskip sett
+ings
+\@dblbotnum=\count284
+\c@dblbotnumber=\count285
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/tools/xspace.sty
+Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
+)
+(/usr/local/texlive/2024/texmf-dist/tex/generic/xstring/xstring.sty
+(/usr/local/texlive/2024/texmf-dist/tex/generic/xstring/xstring.tex
+\xs_counta=\count286
+\xs_countb=\count287
+)
+Package: xstring 2023/08/22 v1.86 String manipulations (CT)
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/footmisc/footmisc.sty
+Package: footmisc 2023/07/05 v6.0f a miscellany of footnote facilities
+\FN@temptoken=\toks26
+\footnotemargin=\dimen171
+\@outputbox@depth=\dimen172
+Package footmisc Info: Declaring symbol style bringhurst on input line 696.
+Package footmisc Info: Declaring symbol style chicago on input line 704.
+Package footmisc Info: Declaring symbol style wiley on input line 713.
+Package footmisc Info: Declaring symbol style lamport-robust on input line 724.
+
+Package footmisc Info: Declaring symbol style lamport* on input line 744.
+Package footmisc Info: Declaring symbol style lamport*-robust on input line 765
+.
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2023/11/15 v3.01 LaTeX color extensions (UK)
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: pdftex.def on input line 274.
+LaTeX Info: Redefining \color on input line 758.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/mathcolor.ltx)
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1350.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1354.
+Package xcolor Info: Model `RGB' extended on input line 1366.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1368.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1370.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1371.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1372.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1373.
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/xcolor/svgnam.def
+File: svgnam.def 2023/11/15 v3.01 Predefined colors according to SVG 1.1 (UK)
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/dvipsnam.def
+File: dvipsnam.def 2016/06/17 v3.0m Driver-dependent file (DPC,SPQR)
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2024-01-20 v7.01h Hypertext links for LaTeX
+
+(/usr/local/texlive/2024/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2022/02/03 v1.0f TeX engine tests
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty
+Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
+)
+(/usr/local/texlive/2024/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
+)
+(/usr/local/texlive/2024/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
+
+(/usr/local/texlive/2024/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
+Package: ltxcmds 2023-12-04 v1.26 LaTeX kernel commands for general use (HO)
+)
+(/usr/local/texlive/2024/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(/usr/local/texlive/2024/texmf-dist/tex/generic/infwarerr/infwarerr.sty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+))
+(/usr/local/texlive/2024/texmf-dist/tex/latex/hycolor/hycolor.sty
+Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/auxhook/auxhook.sty
+Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/hyperref/nameref.sty
+Package: nameref 2023-11-26 v2.56 Cross-referencing by name of section
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/refcount/refcount.sty
+Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
+)
+(/usr/local/texlive/2024/texmf-dist/tex/generic/gettitlestring/gettitlestring.s
+ty
+Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
+ (/usr/local/texlive/2024/texmf-dist/tex/latex/kvoptions/kvoptions.sty
+Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
+))
+\c@section@level=\count288
+)
+\@linkdim=\dimen173
+\Hy@linkcounter=\count289
+\Hy@pagecounter=\count290
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2024-01-20 v7.01h Hyperref: PDFDocEncoding definition (HO)
+Now handling font encoding PD1 ...
+... no UTF-8 mapping file for font encoding PD1
+)
+(/usr/local/texlive/2024/texmf-dist/tex/generic/intcalc/intcalc.sty
+Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
+)
+\Hy@SavedSpaceFactor=\count291
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/hyperref/puenc.def
+File: puenc.def 2024-01-20 v7.01h Hyperref: PDF Unicode definition (HO)
+Now handling font encoding PU ...
+... no UTF-8 mapping file for font encoding PU
+)
+Package hyperref Info: Option `colorlinks' set `true' on input line 4062.
+Package hyperref Info: Hyper figures OFF on input line 4179.
+Package hyperref Info: Link nesting OFF on input line 4184.
+Package hyperref Info: Hyper index ON on input line 4187.
+Package hyperref Info: Plain pages OFF on input line 4194.
+Package hyperref Info: Backreferencing OFF on input line 4199.
+Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
+Package hyperref Info: Bookmarks ON on input line 4446.
+\c@Hy@tempcnt=\count292
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip17
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 4784.
+\XeTeXLinkMargin=\dimen174
+
+(/usr/local/texlive/2024/texmf-dist/tex/generic/bitset/bitset.sty
+Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
+
+(/usr/local/texlive/2024/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
+Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
+)
+))
+\Fld@menulength=\count293
+\Field@Width=\dimen175
+\Fld@charsize=\dimen176
+Package hyperref Info: Hyper figures OFF on input line 6063.
+Package hyperref Info: Link nesting OFF on input line 6068.
+Package hyperref Info: Hyper index ON on input line 6071.
+Package hyperref Info: backreferencing OFF on input line 6078.
+Package hyperref Info: Link coloring ON on input line 6081.
+Package hyperref Info: Link coloring with OCG OFF on input line 6088.
+Package hyperref Info: PDF/A mode OFF on input line 6093.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/atbegshi-ltx.sty
+Package: atbegshi-ltx 2021/01/10 v1.0c Emulation of the original atbegshi
+package with kernel methods
+)
+\Hy@abspage=\count294
+\c@Item=\count295
+\c@Hfootnote=\count296
+)
+Package hyperref Info: Driver (autodetected): hpdftex.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/hyperref/hpdftex.def
+File: hpdftex.def 2024-01-20 v7.01h Hyperref driver for pdfTeX
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/atveryend-ltx.sty
+Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atveryend pac
+kage
+with kernel methods
+)
+\Fld@listcount=\count297
+\c@bookmark@seq@number=\count298
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+Package: rerunfilecheck 2022-07-10 v1.10 Rerun checks for auxiliary files (HO)
+
+(/usr/local/texlive/2024/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
+)
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+85.
+)
+\Hy@SectionHShift=\skip59
+) (./cas-common.sty
+\l_stm_title_before_dim=\dimen177
+\l_stm_title_after_dim=\dimen178
+\g_ead_int=\count299
+\g_uad_int=\count300
+\@eadauthor=\toks27
+\g_stm_tnote_int=\count301
+\g_stm_fnote_int=\count302
+\g_stm_cor_int=\count303
+\g_stm_au_int=\count304
+\g_stm_aau_int=\count305
+\l_autype_int=\count306
+\l_stm_augroup_before_dim=\dimen179
+\l_stm_augroup_after_dim=\dimen180
+\l_stm_augroup_lskip_tl=\dimen181
+\l_stm_augroup_rskip_tl=\dimen182
+\g_stm_aff_int=\count307
+\g_stm_aff_ext_int=\count308
+\g_stm_aff_int_int=\count309
+\g_stm_fn_aff_ext_int=\count310
+\g_stm_fn_aff_int_int=\count311
+\l_stm_aff_before_dim=\dimen183
+\l_stm_aff_after_dim=\dimen184
+\l_stm_aff_lskip_dim=\dimen185
+\l_stm_aff_rskip_dim=\dimen186
+\g_stm_augr_int=\count312
+\g_stm_aaugr_int=\count313
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/moreverb/moreverb.sty
+Package: moreverb 2008/06/03 v2.3a `more' verbatim facilities
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/tools/verbatim.sty
+Package: verbatim 2023-11-06 v1.5v LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks28
+\verbatim@line=\toks29
+\verbatim@in@stream=\read2
+)
+\tab@position=\count314
+\tab@size=\count315
+\listing@line=\count316
+)
+\g_stm_abs_box=\box56
+\casgrabsbox=\box57
+\casauhlbox=\box58
+\g_stm_key_box=\box59
+\g_stm_jtype_int=\count317
+\g_stm_blind_int=\count318
+\c@au=\count319
+\c@cnote=\count320
+\c@tnote=\count321
+\c@fnote=\count322
+\c@aff=\count323
+\g_stm_notes_box=\box60
+\g_stm_front_box=\box61
+\paraindent=\dimen187
+\subparaindent=\dimen188
+\FullWidth=\dimen189
+\l_tbl_width_dim=\dimen190
+\l_tbl_abovecap_skip=\skip60
+\l_tbl_belowcap_skip=\skip61
+\l_tbl_abovetbl_skip=\skip62
+\l_tbl_belowtbl_skip=\skip63
+\l_fig_width_dim=\dimen191
+\cascaptionbox=\box62
+\l_fig_abovecap_skip=\skip64
+\l_fig_belowcap_skip=\skip65
+\l_fig_abovefig_skip=\skip66
+\l_fig_belowfig_skip=\skip67
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/wrapfig/wrapfig.sty
+\wrapoverhang=\dimen192
+\WF@size=\dimen193
+\c@WF@wrappedlines=\count324
+\WF@box=\box63
+\WF@everypar=\toks30
+Package: wrapfig 2003/01/31  v 3.6
+)
+\l_wrap_figwidth_dim=\dimen194
+\l_wrap_fighspace_dim=\dimen195
+\l_wrap_figvspace_dim=\dimen196
+\l_wrap_fighcorr_dim=\dimen197
+\l_wrap_figvcorr_dim=\dimen198
+\l_above_bio_dim=\dimen199
+\l_wrap_figlcorr_int=\count325
+\l_wrap_figlines_int=\count326
+\l_bio_text_box=\box64
+\c@ca_biography_ctr=\count327
+\l_ca_temp_inta=\count328
+\leftMargin=\dimen256
+\@enLab=\toks31
+\@sep=\skip68
+\@@sep=\skip69
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/stix/stix.sty
+Package: stix 2018/04/17 v1.1.3-latex STIX fonts support package
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/textcomp.sty
+Package: textcomp 2020/02/02 v2.0n Standard LaTeX package
+LaTeX Font Info:    Changing ? sub-encoding to TS1/0 on input line 78.
+)
+Now handling font encoding LS1 ...
+... no UTF-8 mapping file for font encoding LS1
+Now handling font encoding LS2 ...
+... no UTF-8 mapping file for font encoding LS2
+LaTeX Font Info:    Redeclaring symbol font `letters' on input line 76.
+LaTeX Font Info:    Encoding `OML' has changed to `LS1' for symbol font
+(Font)              `letters' in the math version `normal' on input line 76.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `normal'
+(Font)                  OML/cmm/m/it --> LS1/stix/m/it on input line 76.
+LaTeX Font Info:    Encoding `OML' has changed to `LS1' for symbol font
+(Font)              `letters' in the math version `bold' on input line 76.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
+(Font)                  OML/cmm/b/it --> LS1/stix/m/it on input line 76.
+LaTeX Font Info:    Redeclaring symbol font `operators' on input line 77.
+LaTeX Font Info:    Encoding `OT1' has changed to `LS1' for symbol font
+(Font)              `operators' in the math version `normal' on input line 77.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  OT1/cmr/m/n --> LS1/stix/m/n on input line 77.
+LaTeX Font Info:    Encoding `OT1' has changed to `LS1' for symbol font
+(Font)              `operators' in the math version `bold' on input line 77.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/cmr/bx/n --> LS1/stix/m/n on input line 77.
+\symbold-operators=\mathgroup6
+LaTeX Font Info:    Redeclaring symbol font `symbols' on input line 79.
+LaTeX Font Info:    Encoding `OMS' has changed to `LS1' for symbol font
+(Font)              `symbols' in the math version `normal' on input line 79.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
+(Font)                  OMS/cmsy/m/n --> LS1/stixscr/m/n on input line 79.
+LaTeX Font Info:    Encoding `OMS' has changed to `LS1' for symbol font
+(Font)              `symbols' in the math version `bold' on input line 79.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
+(Font)                  OMS/cmsy/b/n --> LS1/stixscr/m/n on input line 79.
+\symsymbols2=\mathgroup7
+\symsymbols3=\mathgroup8
+\symsymbols4=\mathgroup9
+\symintegrals=\mathgroup10
+LaTeX Font Info:    Redeclaring symbol font `largesymbols' on input line 84.
+LaTeX Font Info:    Encoding `OMX' has changed to `LS2' for symbol font
+(Font)              `largesymbols' in the math version `normal' on input line 8
+4.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
+(Font)                  OMX/cmex/m/n --> LS2/stixex/m/n on input line 84.
+LaTeX Font Info:    Encoding `OMX' has changed to `LS2' for symbol font
+(Font)              `largesymbols' in the math version `bold' on input line 84.
+
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
+(Font)                  OMX/cmex/m/n --> LS2/stixex/m/n on input line 84.
+\symarrows1=\mathgroup11
+\symarrows2=\mathgroup12
+\symarrows3=\mathgroup13
+LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
+(Font)                  LS1/stix/m/it --> LS1/stix/b/it on input line 88.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  LS1/stix/m/n --> LS1/stix/b/n on input line 89.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
+(Font)                  LS1/stixscr/m/n --> LS1/stixscr/b/n on input line 90.
+LaTeX Font Info:    Overwriting symbol font `symbols2' in version `bold'
+(Font)                  LS1/stixfrak/m/n --> LS1/stixfrak/b/n on input line 91.
+
+LaTeX Font Info:    Overwriting symbol font `symbols3' in version `bold'
+(Font)                  LS1/stixbb/m/n --> LS1/stixbb/b/n on input line 92.
+LaTeX Font Info:    Overwriting symbol font `symbols4' in version `bold'
+(Font)                  LS1/stixbb/m/it --> LS1/stixbb/b/it on input line 93.
+LaTeX Font Info:    Overwriting symbol font `integrals' in version `bold'
+(Font)                  LS2/stixcal/m/n --> LS2/stixcal/b/n on input line 94.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
+(Font)                  LS2/stixex/m/n --> LS2/stixex/b/n on input line 95.
+LaTeX Font Info:    Overwriting symbol font `arrows1' in version `bold'
+(Font)                  LS1/stixsf/m/n --> LS1/stixsf/b/n on input line 96.
+LaTeX Font Info:    Overwriting symbol font `arrows2' in version `bold'
+(Font)                  LS1/stixsf/m/it --> LS1/stixsf/b/it on input line 97.
+LaTeX Font Info:    Overwriting symbol font `arrows3' in version `bold'
+(Font)                  LS2/stixtt/m/n --> LS2/stixtt/b/n on input line 98.
+LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 99.
+LaTeX Font Info:    Redeclaring math alphabet \mathfrak on input line 102.
+LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 106.
+LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 108.
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 109.
+LaTeX Info: Redefining \yen on input line 456.
+LaTeX Info: Redefining \circledR on input line 458.
+LaTeX Info: Redefining \checkmark on input line 460.
+LaTeX Info: Redefining \maltese on input line 461.
+LaTeX Font Info:    Redeclaring math accent \grave on input line 698.
+LaTeX Font Info:    Redeclaring math accent \acute on input line 699.
+LaTeX Font Info:    Redeclaring math accent \hat on input line 700.
+LaTeX Font Info:    Redeclaring math accent \tilde on input line 701.
+LaTeX Font Info:    Redeclaring math accent \bar on input line 702.
+LaTeX Font Info:    Redeclaring math accent \breve on input line 703.
+LaTeX Font Info:    Redeclaring math accent \dot on input line 704.
+LaTeX Font Info:    Redeclaring math accent \ddot on input line 705.
+LaTeX Font Info:    Redeclaring math accent \mathring on input line 707.
+LaTeX Font Info:    Redeclaring math accent \check on input line 708.
+LaTeX Font Info:    Redeclaring math accent \vec on input line 716.
+LaTeX Font Info:    Redeclaring math accent \widehat on input line 728.
+LaTeX Font Info:    Redeclaring math accent \widetilde on input line 729.
+LaTeX Info: Redefining \vdots on input line 1518.
+LaTeX Info: Redefining \cdots on input line 1522.
+LaTeX Font Info:    Redeclaring math symbol \mathsterling on input line 1978.
+LaTeX Info: Redefining \not on input line 2144.
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/inconsolata/inconsolata.sty
+Package: inconsolata 2019/05/17 v1.12
+
+`inconsolata-zi4' v1.12, 2019/05/17 Text macros for Inconsolata (msharpe)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+Package: xkeyval 2022/06/16 v2.9 package option processing (HA)
+
+(/usr/local/texlive/2024/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+(/usr/local/texlive/2024/texmf-dist/tex/generic/xkeyval/xkvutils.tex
+\XKV@toks=\toks32
+\XKV@tempa@toks=\toks33
+)
+\XKV@depth=\count329
+File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
+))
+\zifour@ocount=\count330
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2020/01/02 v5.9 Page Geometry
+
+(/usr/local/texlive/2024/texmf-dist/tex/generic/iftex/ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+)
+\Gm@cnth=\count331
+\Gm@cntv=\count332
+\c@Gm@tempcnt=\count333
+\Gm@bindingoffset=\dimen257
+\Gm@wd@mp=\dimen258
+\Gm@odd@mp=\dimen259
+\Gm@even@mp=\dimen260
+\Gm@layoutwidth=\dimen261
+\Gm@layoutheight=\dimen262
+\Gm@layouthoffset=\dimen263
+\Gm@layoutvoffset=\dimen264
+\Gm@dimlist=\toks34
+))
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2021/02/14 v1.3d Input encoding file
+\inpenc@prehook=\toks35
+\inpenc@posthook=\toks36
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/utf8.def
+File: utf8.def 2022/06/07 v1.3c UTF-8 support
+Now handling font encoding OML ...
+... no UTF-8 mapping file for font encoding OML
+Now handling font encoding OMS ...
+... processing UTF-8 mapping file for font encoding OMS
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/omsenc.dfu
+File: omsenc.dfu 2022/06/07 v1.3c UTF-8 support
+   defining Unicode char U+00A7 (decimal 167)
+   defining Unicode char U+00B6 (decimal 182)
+   defining Unicode char U+00B7 (decimal 183)
+   defining Unicode char U+2020 (decimal 8224)
+   defining Unicode char U+2021 (decimal 8225)
+   defining Unicode char U+2022 (decimal 8226)
+)
+Now handling font encoding OT1 ...
+... processing UTF-8 mapping file for font encoding OT1
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/ot1enc.dfu
+File: ot1enc.dfu 2022/06/07 v1.3c UTF-8 support
+   defining Unicode char U+00A0 (decimal 160)
+   defining Unicode char U+00A1 (decimal 161)
+   defining Unicode char U+00A3 (decimal 163)
+   defining Unicode char U+00AD (decimal 173)
+   defining Unicode char U+00B8 (decimal 184)
+   defining Unicode char U+00BF (decimal 191)
+   defining Unicode char U+00C5 (decimal 197)
+   defining Unicode char U+00C6 (decimal 198)
+   defining Unicode char U+00D8 (decimal 216)
+   defining Unicode char U+00DF (decimal 223)
+   defining Unicode char U+00E6 (decimal 230)
+   defining Unicode char U+00EC (decimal 236)
+   defining Unicode char U+00ED (decimal 237)
+   defining Unicode char U+00EE (decimal 238)
+   defining Unicode char U+00EF (decimal 239)
+   defining Unicode char U+00F8 (decimal 248)
+   defining Unicode char U+0131 (decimal 305)
+   defining Unicode char U+0141 (decimal 321)
+   defining Unicode char U+0142 (decimal 322)
+   defining Unicode char U+0152 (decimal 338)
+   defining Unicode char U+0153 (decimal 339)
+   defining Unicode char U+0174 (decimal 372)
+   defining Unicode char U+0175 (decimal 373)
+   defining Unicode char U+0176 (decimal 374)
+   defining Unicode char U+0177 (decimal 375)
+   defining Unicode char U+0218 (decimal 536)
+   defining Unicode char U+0219 (decimal 537)
+   defining Unicode char U+021A (decimal 538)
+   defining Unicode char U+021B (decimal 539)
+   defining Unicode char U+0237 (decimal 567)
+   defining Unicode char U+2013 (decimal 8211)
+   defining Unicode char U+2014 (decimal 8212)
+   defining Unicode char U+2018 (decimal 8216)
+   defining Unicode char U+2019 (decimal 8217)
+   defining Unicode char U+201C (decimal 8220)
+   defining Unicode char U+201D (decimal 8221)
+   defining Unicode char U+FB00 (decimal 64256)
+   defining Unicode char U+FB01 (decimal 64257)
+   defining Unicode char U+FB02 (decimal 64258)
+   defining Unicode char U+FB03 (decimal 64259)
+   defining Unicode char U+FB04 (decimal 64260)
+   defining Unicode char U+FB05 (decimal 64261)
+   defining Unicode char U+FB06 (decimal 64262)
+)
+Now handling font encoding T1 ...
+... processing UTF-8 mapping file for font encoding T1
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/t1enc.dfu
+File: t1enc.dfu 2022/06/07 v1.3c UTF-8 support
+   defining Unicode char U+00A0 (decimal 160)
+   defining Unicode char U+00A1 (decimal 161)
+   defining Unicode char U+00A3 (decimal 163)
+   defining Unicode char U+00AB (decimal 171)
+   defining Unicode char U+00AD (decimal 173)
+   defining Unicode char U+00BB (decimal 187)
+   defining Unicode char U+00BF (decimal 191)
+   defining Unicode char U+00C0 (decimal 192)
+   defining Unicode char U+00C1 (decimal 193)
+   defining Unicode char U+00C2 (decimal 194)
+   defining Unicode char U+00C3 (decimal 195)
+   defining Unicode char U+00C4 (decimal 196)
+   defining Unicode char U+00C5 (decimal 197)
+   defining Unicode char U+00C6 (decimal 198)
+   defining Unicode char U+00C7 (decimal 199)
+   defining Unicode char U+00C8 (decimal 200)
+   defining Unicode char U+00C9 (decimal 201)
+   defining Unicode char U+00CA (decimal 202)
+   defining Unicode char U+00CB (decimal 203)
+   defining Unicode char U+00CC (decimal 204)
+   defining Unicode char U+00CD (decimal 205)
+   defining Unicode char U+00CE (decimal 206)
+   defining Unicode char U+00CF (decimal 207)
+   defining Unicode char U+00D0 (decimal 208)
+   defining Unicode char U+00D1 (decimal 209)
+   defining Unicode char U+00D2 (decimal 210)
+   defining Unicode char U+00D3 (decimal 211)
+   defining Unicode char U+00D4 (decimal 212)
+   defining Unicode char U+00D5 (decimal 213)
+   defining Unicode char U+00D6 (decimal 214)
+   defining Unicode char U+00D8 (decimal 216)
+   defining Unicode char U+00D9 (decimal 217)
+   defining Unicode char U+00DA (decimal 218)
+   defining Unicode char U+00DB (decimal 219)
+   defining Unicode char U+00DC (decimal 220)
+   defining Unicode char U+00DD (decimal 221)
+   defining Unicode char U+00DE (decimal 222)
+   defining Unicode char U+00DF (decimal 223)
+   defining Unicode char U+00E0 (decimal 224)
+   defining Unicode char U+00E1 (decimal 225)
+   defining Unicode char U+00E2 (decimal 226)
+   defining Unicode char U+00E3 (decimal 227)
+   defining Unicode char U+00E4 (decimal 228)
+   defining Unicode char U+00E5 (decimal 229)
+   defining Unicode char U+00E6 (decimal 230)
+   defining Unicode char U+00E7 (decimal 231)
+   defining Unicode char U+00E8 (decimal 232)
+   defining Unicode char U+00E9 (decimal 233)
+   defining Unicode char U+00EA (decimal 234)
+   defining Unicode char U+00EB (decimal 235)
+   defining Unicode char U+00EC (decimal 236)
+   defining Unicode char U+00ED (decimal 237)
+   defining Unicode char U+00EE (decimal 238)
+   defining Unicode char U+00EF (decimal 239)
+   defining Unicode char U+00F0 (decimal 240)
+   defining Unicode char U+00F1 (decimal 241)
+   defining Unicode char U+00F2 (decimal 242)
+   defining Unicode char U+00F3 (decimal 243)
+   defining Unicode char U+00F4 (decimal 244)
+   defining Unicode char U+00F5 (decimal 245)
+   defining Unicode char U+00F6 (decimal 246)
+   defining Unicode char U+00F8 (decimal 248)
+   defining Unicode char U+00F9 (decimal 249)
+   defining Unicode char U+00FA (decimal 250)
+   defining Unicode char U+00FB (decimal 251)
+   defining Unicode char U+00FC (decimal 252)
+   defining Unicode char U+00FD (decimal 253)
+   defining Unicode char U+00FE (decimal 254)
+   defining Unicode char U+00FF (decimal 255)
+   defining Unicode char U+0100 (decimal 256)
+   defining Unicode char U+0101 (decimal 257)
+   defining Unicode char U+0102 (decimal 258)
+   defining Unicode char U+0103 (decimal 259)
+   defining Unicode char U+0104 (decimal 260)
+   defining Unicode char U+0105 (decimal 261)
+   defining Unicode char U+0106 (decimal 262)
+   defining Unicode char U+0107 (decimal 263)
+   defining Unicode char U+0108 (decimal 264)
+   defining Unicode char U+0109 (decimal 265)
+   defining Unicode char U+010A (decimal 266)
+   defining Unicode char U+010B (decimal 267)
+   defining Unicode char U+010C (decimal 268)
+   defining Unicode char U+010D (decimal 269)
+   defining Unicode char U+010E (decimal 270)
+   defining Unicode char U+010F (decimal 271)
+   defining Unicode char U+0110 (decimal 272)
+   defining Unicode char U+0111 (decimal 273)
+   defining Unicode char U+0112 (decimal 274)
+   defining Unicode char U+0113 (decimal 275)
+   defining Unicode char U+0114 (decimal 276)
+   defining Unicode char U+0115 (decimal 277)
+   defining Unicode char U+0116 (decimal 278)
+   defining Unicode char U+0117 (decimal 279)
+   defining Unicode char U+0118 (decimal 280)
+   defining Unicode char U+0119 (decimal 281)
+   defining Unicode char U+011A (decimal 282)
+   defining Unicode char U+011B (decimal 283)
+   defining Unicode char U+011C (decimal 284)
+   defining Unicode char U+011D (decimal 285)
+   defining Unicode char U+011E (decimal 286)
+   defining Unicode char U+011F (decimal 287)
+   defining Unicode char U+0120 (decimal 288)
+   defining Unicode char U+0121 (decimal 289)
+   defining Unicode char U+0122 (decimal 290)
+   defining Unicode char U+0123 (decimal 291)
+   defining Unicode char U+0124 (decimal 292)
+   defining Unicode char U+0125 (decimal 293)
+   defining Unicode char U+0128 (decimal 296)
+   defining Unicode char U+0129 (decimal 297)
+   defining Unicode char U+012A (decimal 298)
+   defining Unicode char U+012B (decimal 299)
+   defining Unicode char U+012C (decimal 300)
+   defining Unicode char U+012D (decimal 301)
+   defining Unicode char U+012E (decimal 302)
+   defining Unicode char U+012F (decimal 303)
+   defining Unicode char U+0130 (decimal 304)
+   defining Unicode char U+0131 (decimal 305)
+   defining Unicode char U+0132 (decimal 306)
+   defining Unicode char U+0133 (decimal 307)
+   defining Unicode char U+0134 (decimal 308)
+   defining Unicode char U+0135 (decimal 309)
+   defining Unicode char U+0136 (decimal 310)
+   defining Unicode char U+0137 (decimal 311)
+   defining Unicode char U+0139 (decimal 313)
+   defining Unicode char U+013A (decimal 314)
+   defining Unicode char U+013B (decimal 315)
+   defining Unicode char U+013C (decimal 316)
+   defining Unicode char U+013D (decimal 317)
+   defining Unicode char U+013E (decimal 318)
+   defining Unicode char U+0141 (decimal 321)
+   defining Unicode char U+0142 (decimal 322)
+   defining Unicode char U+0143 (decimal 323)
+   defining Unicode char U+0144 (decimal 324)
+   defining Unicode char U+0145 (decimal 325)
+   defining Unicode char U+0146 (decimal 326)
+   defining Unicode char U+0147 (decimal 327)
+   defining Unicode char U+0148 (decimal 328)
+   defining Unicode char U+014A (decimal 330)
+   defining Unicode char U+014B (decimal 331)
+   defining Unicode char U+014C (decimal 332)
+   defining Unicode char U+014D (decimal 333)
+   defining Unicode char U+014E (decimal 334)
+   defining Unicode char U+014F (decimal 335)
+   defining Unicode char U+0150 (decimal 336)
+   defining Unicode char U+0151 (decimal 337)
+   defining Unicode char U+0152 (decimal 338)
+   defining Unicode char U+0153 (decimal 339)
+   defining Unicode char U+0154 (decimal 340)
+   defining Unicode char U+0155 (decimal 341)
+   defining Unicode char U+0156 (decimal 342)
+   defining Unicode char U+0157 (decimal 343)
+   defining Unicode char U+0158 (decimal 344)
+   defining Unicode char U+0159 (decimal 345)
+   defining Unicode char U+015A (decimal 346)
+   defining Unicode char U+015B (decimal 347)
+   defining Unicode char U+015C (decimal 348)
+   defining Unicode char U+015D (decimal 349)
+   defining Unicode char U+015E (decimal 350)
+   defining Unicode char U+015F (decimal 351)
+   defining Unicode char U+0160 (decimal 352)
+   defining Unicode char U+0161 (decimal 353)
+   defining Unicode char U+0162 (decimal 354)
+   defining Unicode char U+0163 (decimal 355)
+   defining Unicode char U+0164 (decimal 356)
+   defining Unicode char U+0165 (decimal 357)
+   defining Unicode char U+0168 (decimal 360)
+   defining Unicode char U+0169 (decimal 361)
+   defining Unicode char U+016A (decimal 362)
+   defining Unicode char U+016B (decimal 363)
+   defining Unicode char U+016C (decimal 364)
+   defining Unicode char U+016D (decimal 365)
+   defining Unicode char U+016E (decimal 366)
+   defining Unicode char U+016F (decimal 367)
+   defining Unicode char U+0170 (decimal 368)
+   defining Unicode char U+0171 (decimal 369)
+   defining Unicode char U+0172 (decimal 370)
+   defining Unicode char U+0173 (decimal 371)
+   defining Unicode char U+0174 (decimal 372)
+   defining Unicode char U+0175 (decimal 373)
+   defining Unicode char U+0176 (decimal 374)
+   defining Unicode char U+0177 (decimal 375)
+   defining Unicode char U+0178 (decimal 376)
+   defining Unicode char U+0179 (decimal 377)
+   defining Unicode char U+017A (decimal 378)
+   defining Unicode char U+017B (decimal 379)
+   defining Unicode char U+017C (decimal 380)
+   defining Unicode char U+017D (decimal 381)
+   defining Unicode char U+017E (decimal 382)
+   defining Unicode char U+01C4 (decimal 452)
+   defining Unicode char U+01C5 (decimal 453)
+   defining Unicode char U+01C6 (decimal 454)
+   defining Unicode char U+01C7 (decimal 455)
+   defining Unicode char U+01C8 (decimal 456)
+   defining Unicode char U+01C9 (decimal 457)
+   defining Unicode char U+01CA (decimal 458)
+   defining Unicode char U+01CB (decimal 459)
+   defining Unicode char U+01CC (decimal 460)
+   defining Unicode char U+01CD (decimal 461)
+   defining Unicode char U+01CE (decimal 462)
+   defining Unicode char U+01CF (decimal 463)
+   defining Unicode char U+01D0 (decimal 464)
+   defining Unicode char U+01D1 (decimal 465)
+   defining Unicode char U+01D2 (decimal 466)
+   defining Unicode char U+01D3 (decimal 467)
+   defining Unicode char U+01D4 (decimal 468)
+   defining Unicode char U+01E2 (decimal 482)
+   defining Unicode char U+01E3 (decimal 483)
+   defining Unicode char U+01E6 (decimal 486)
+   defining Unicode char U+01E7 (decimal 487)
+   defining Unicode char U+01E8 (decimal 488)
+   defining Unicode char U+01E9 (decimal 489)
+   defining Unicode char U+01EA (decimal 490)
+   defining Unicode char U+01EB (decimal 491)
+   defining Unicode char U+01F0 (decimal 496)
+   defining Unicode char U+01F4 (decimal 500)
+   defining Unicode char U+01F5 (decimal 501)
+   defining Unicode char U+0218 (decimal 536)
+   defining Unicode char U+0219 (decimal 537)
+   defining Unicode char U+021A (decimal 538)
+   defining Unicode char U+021B (decimal 539)
+   defining Unicode char U+0232 (decimal 562)
+   defining Unicode char U+0233 (decimal 563)
+   defining Unicode char U+0237 (decimal 567)
+   defining Unicode char U+02D9 (decimal 729)
+   defining Unicode char U+02DB (decimal 731)
+   defining Unicode char U+1E02 (decimal 7682)
+   defining Unicode char U+1E03 (decimal 7683)
+   defining Unicode char U+1E0D (decimal 7693)
+   defining Unicode char U+1E1E (decimal 7710)
+   defining Unicode char U+1E1F (decimal 7711)
+   defining Unicode char U+1E25 (decimal 7717)
+   defining Unicode char U+1E30 (decimal 7728)
+   defining Unicode char U+1E31 (decimal 7729)
+   defining Unicode char U+1E37 (decimal 7735)
+   defining Unicode char U+1E8E (decimal 7822)
+   defining Unicode char U+1E8F (decimal 7823)
+   defining Unicode char U+1E43 (decimal 7747)
+   defining Unicode char U+1E45 (decimal 7749)
+   defining Unicode char U+1E47 (decimal 7751)
+   defining Unicode char U+1E5B (decimal 7771)
+   defining Unicode char U+1E63 (decimal 7779)
+   defining Unicode char U+1E6D (decimal 7789)
+   defining Unicode char U+1E90 (decimal 7824)
+   defining Unicode char U+1E91 (decimal 7825)
+   defining Unicode char U+1E9E (decimal 7838)
+   defining Unicode char U+1EF2 (decimal 7922)
+   defining Unicode char U+1EF3 (decimal 7923)
+   defining Unicode char U+200C (decimal 8204)
+   defining Unicode char U+2010 (decimal 8208)
+   defining Unicode char U+2011 (decimal 8209)
+   defining Unicode char U+2012 (decimal 8210)
+   defining Unicode char U+2013 (decimal 8211)
+   defining Unicode char U+2014 (decimal 8212)
+   defining Unicode char U+2015 (decimal 8213)
+   defining Unicode char U+2018 (decimal 8216)
+   defining Unicode char U+2019 (decimal 8217)
+   defining Unicode char U+201A (decimal 8218)
+   defining Unicode char U+201C (decimal 8220)
+   defining Unicode char U+201D (decimal 8221)
+   defining Unicode char U+201E (decimal 8222)
+   defining Unicode char U+2030 (decimal 8240)
+   defining Unicode char U+2031 (decimal 8241)
+   defining Unicode char U+2039 (decimal 8249)
+   defining Unicode char U+203A (decimal 8250)
+   defining Unicode char U+2423 (decimal 9251)
+   defining Unicode char U+1E20 (decimal 7712)
+   defining Unicode char U+1E21 (decimal 7713)
+   defining Unicode char U+FB00 (decimal 64256)
+   defining Unicode char U+FB01 (decimal 64257)
+   defining Unicode char U+FB02 (decimal 64258)
+   defining Unicode char U+FB03 (decimal 64259)
+   defining Unicode char U+FB04 (decimal 64260)
+   defining Unicode char U+FB05 (decimal 64261)
+   defining Unicode char U+FB06 (decimal 64262)
+)
+Now handling font encoding TS1 ...
+... processing UTF-8 mapping file for font encoding TS1
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/ts1enc.dfu
+File: ts1enc.dfu 2022/06/07 v1.3c UTF-8 support
+   defining Unicode char U+00A2 (decimal 162)
+   defining Unicode char U+00A3 (decimal 163)
+   defining Unicode char U+00A4 (decimal 164)
+   defining Unicode char U+00A5 (decimal 165)
+   defining Unicode char U+00A6 (decimal 166)
+   defining Unicode char U+00A7 (decimal 167)
+   defining Unicode char U+00A8 (decimal 168)
+   defining Unicode char U+00A9 (decimal 169)
+   defining Unicode char U+00AA (decimal 170)
+   defining Unicode char U+00AC (decimal 172)
+   defining Unicode char U+00AE (decimal 174)
+   defining Unicode char U+00AF (decimal 175)
+   defining Unicode char U+00B0 (decimal 176)
+   defining Unicode char U+00B1 (decimal 177)
+   defining Unicode char U+00B2 (decimal 178)
+   defining Unicode char U+00B3 (decimal 179)
+   defining Unicode char U+00B4 (decimal 180)
+   defining Unicode char U+00B5 (decimal 181)
+   defining Unicode char U+00B6 (decimal 182)
+   defining Unicode char U+00B7 (decimal 183)
+   defining Unicode char U+00B9 (decimal 185)
+   defining Unicode char U+00BA (decimal 186)
+   defining Unicode char U+00BC (decimal 188)
+   defining Unicode char U+00BD (decimal 189)
+   defining Unicode char U+00BE (decimal 190)
+   defining Unicode char U+00D7 (decimal 215)
+   defining Unicode char U+00F7 (decimal 247)
+   defining Unicode char U+0192 (decimal 402)
+   defining Unicode char U+02C7 (decimal 711)
+   defining Unicode char U+02D8 (decimal 728)
+   defining Unicode char U+02DD (decimal 733)
+   defining Unicode char U+0E3F (decimal 3647)
+   defining Unicode char U+2016 (decimal 8214)
+   defining Unicode char U+2020 (decimal 8224)
+   defining Unicode char U+2021 (decimal 8225)
+   defining Unicode char U+2022 (decimal 8226)
+   defining Unicode char U+2030 (decimal 8240)
+   defining Unicode char U+2031 (decimal 8241)
+   defining Unicode char U+203B (decimal 8251)
+   defining Unicode char U+203D (decimal 8253)
+   defining Unicode char U+2044 (decimal 8260)
+   defining Unicode char U+204E (decimal 8270)
+   defining Unicode char U+2052 (decimal 8274)
+   defining Unicode char U+20A1 (decimal 8353)
+   defining Unicode char U+20A4 (decimal 8356)
+   defining Unicode char U+20A6 (decimal 8358)
+   defining Unicode char U+20A9 (decimal 8361)
+   defining Unicode char U+20AB (decimal 8363)
+   defining Unicode char U+20AC (decimal 8364)
+   defining Unicode char U+20B1 (decimal 8369)
+   defining Unicode char U+2103 (decimal 8451)
+   defining Unicode char U+2116 (decimal 8470)
+   defining Unicode char U+2117 (decimal 8471)
+   defining Unicode char U+211E (decimal 8478)
+   defining Unicode char U+2120 (decimal 8480)
+   defining Unicode char U+2122 (decimal 8482)
+   defining Unicode char U+2126 (decimal 8486)
+   defining Unicode char U+2127 (decimal 8487)
+   defining Unicode char U+212E (decimal 8494)
+   defining Unicode char U+2190 (decimal 8592)
+   defining Unicode char U+2191 (decimal 8593)
+   defining Unicode char U+2192 (decimal 8594)
+   defining Unicode char U+2193 (decimal 8595)
+   defining Unicode char U+2329 (decimal 9001)
+   defining Unicode char U+3008 (decimal 12296)
+   defining Unicode char U+232A (decimal 9002)
+   defining Unicode char U+3009 (decimal 12297)
+   defining Unicode char U+2422 (decimal 9250)
+   defining Unicode char U+25E6 (decimal 9702)
+   defining Unicode char U+25EF (decimal 9711)
+   defining Unicode char U+266A (decimal 9834)
+   defining Unicode char U+27E8 (decimal 10216)
+   defining Unicode char U+27E9 (decimal 10217)
+   defining Unicode char U+FEFF (decimal 65279)
+)
+Now handling font encoding OMX ...
+... no UTF-8 mapping file for font encoding OMX
+Now handling font encoding U ...
+... no UTF-8 mapping file for font encoding U
+Now handling font encoding PD1 ...
+... no UTF-8 mapping file for font encoding PD1
+Now handling font encoding PU ...
+... no UTF-8 mapping file for font encoding PU
+Now handling font encoding LS1 ...
+... no UTF-8 mapping file for font encoding LS1
+Now handling font encoding LS2 ...
+... no UTF-8 mapping file for font encoding LS2
+   defining Unicode char U+00A9 (decimal 169)
+   defining Unicode char U+00AA (decimal 170)
+   defining Unicode char U+00AE (decimal 174)
+   defining Unicode char U+00BA (decimal 186)
+   defining Unicode char U+02C6 (decimal 710)
+   defining Unicode char U+02DC (decimal 732)
+   defining Unicode char U+200C (decimal 8204)
+   defining Unicode char U+2026 (decimal 8230)
+   defining Unicode char U+2122 (decimal 8482)
+   defining Unicode char U+2423 (decimal 9251)
+   defining Unicode char U+FEFF (decimal 65279)
+))
+(/usr/local/texlive/2024/texmf-dist/tex/latex/natbib/natbib.sty
+Package: natbib 2010/09/13 8.31b (PWD, AO)
+\bibhang=\skip70
+\bibsep=\skip71
+LaTeX Info: Redefining \cite on input line 694.
+\c@NAT@ctr=\count334
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/tools/tabularx.sty
+Package: tabularx 2023/07/08 v2.11c `tabularx' package (DPC)
+\TX@col@width=\dimen265
+\TX@old@table=\dimen266
+\TX@old@col=\dimen267
+\TX@target=\dimen268
+\TX@delta=\dimen269
+\TX@cols=\count335
+\TX@ftn=\toks37
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/hyphenat/hyphenat.sty
+Package: hyphenat 2009/09/02 v2.3c hyphenation utilities
+\langwohyphens=\language89
+LaTeX Info: Redefining \_ on input line 43.
+)
+LaTeX Font Info:    Trying to load font information for T1+stix on input line 2
+0.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/stix/t1stix.fd
+File: t1stix.fd 2015/04/17 v1.1.2-latex STIX T1 font definitions
+)
+(build/elsevier.aux)
+\openout1 = `elsevier.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for LS1/stix/m/n on input line 20.
+LaTeX Font Info:    Trying to load font information for LS1+stix on input line 
+20.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls1stix.fd
+File: ls1stix.fd 2015/04/17 v1.1.2-latex STIX LS1 font definitions
+)
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for LS2/stix/m/n on input line 20.
+LaTeX Font Info:    Trying to load font information for LS2+stix on input line 
+20.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls2stix.fd
+File: ls2stix.fd 2015/04/17 v1.1.2-latex STIX LS2 font definitions
+)
+LaTeX Font Info:    ... okay on input line 20.
+
+(/usr/local/texlive/2024/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count336
+\scratchdimen=\dimen270
+\scratchbox=\box65
+\nofMPsegments=\count337
+\nofMParguments=\count338
+\everyMPshowfont=\toks38
+\MPscratchCnt=\count339
+\MPscratchDim=\dimen271
+\MPnumerator=\count340
+\makeMPintoPDFobject=\count341
+\everyMPtoPDFconversion=\toks39
+) (/usr/local/texlive/2024/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/grfext/grfext.sty
+Package: grfext 2019/12/03 v1.3 Manage graphics extensions (HO)
+)
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+Package grfext Info: Graphics extension search list:
+(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 504.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+LaTeX Info: Command `\dddot' is already robust on input line 20.
+LaTeX Info: Command `\ddddot' is already robust on input line 20.
+Package hyperref Info: Link coloring ON on input line 20.
+
+(build/elsevier.out) (build/elsevier.out)
+\@outlinefile=\write3
+\openout3 = `elsevier.out'.
+
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/upquote/upquote.sty
+Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
+tim
+)
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: custom
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(51.4995pt, 494.50888pt, 51.4995pt)
+* v-part:(T,H,B)=(55.48286pt, 689.4103pt, 51.784pt)
+* \paperwidth=597.50787pt
+* \paperheight=796.67715pt
+* \textwidth=494.50888pt
+* \textheight=689.4103pt
+* \oddsidemargin=-20.7705pt
+* \evensidemargin=-20.7705pt
+* \topmargin=-40.78712pt
+* \headheight=12.0pt
+* \headsep=12.0pt
+* \topskip=10.0pt
+* \footskip=12.0pt
+* \marginparwidth=57.0pt
+* \marginparsep=11.0pt
+* \columnsep=18.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+\verbatim@out=\write4
+\openout4 = `elsevier.abs'.
+
+LaTeX Font Info:    Trying to load font information for LS1+stixscr on input li
+ne 69.
+(/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls1stixscr.fd
+File: ls1stixscr.fd 2015/04/17 v1.1.2-latex STIX script LS1 font definitions
+)
+LaTeX Font Info:    Trying to load font information for LS2+stixex on input lin
+e 69.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls2stixex.fd
+File: ls2stixex.fd 2015/04/17 v1.1.2-latex STIX extentions LS2 font definitions
+
+)
+LaTeX Font Info:    Trying to load font information for U+msa on input line 69.
+
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 69.
+
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+LaTeX Font Info:    Trying to load font information for LS1+stixfrak on input l
+ine 69.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls1stixfrak.fd
+File: ls1stixfrak.fd 2015/04/17 v1.1.2-latex STIX fraktur LS1 font definitions
+)
+LaTeX Font Info:    Trying to load font information for LS1+stixbb on input lin
+e 69.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls1stixbb.fd
+File: ls1stixbb.fd 2015/04/17 v1.1.2-latex STIX blackboard LS1 font definitions
+
+)
+LaTeX Font Info:    Trying to load font information for LS2+stixcal on input li
+ne 69.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls2stixcal.fd
+File: ls2stixcal.fd 2015/04/17 v1.1.2-latex STIX calligraphic LS2 font definiti
+ons
+)
+LaTeX Font Info:    Trying to load font information for LS1+stixsf on input lin
+e 69.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls1stixsf.fd
+File: ls1stixsf.fd 2015/04/17 v1.1.2-latex STIX sans-serif LS1 font definitions
+
+)
+LaTeX Font Info:    Trying to load font information for LS2+stixtt on input lin
+e 69.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls2stixtt.fd
+File: ls2stixtt.fd 2015/04/17 v1.1.2-latex STIX typewriter LS2 font definitions
+
+)
+Overfull \hbox (123.62721pt too wide) detected at line 69
+[]
+ []
+
+(build/elsevier.abs
+LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 1.
+
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/inconsolata/t1zi4.fd
+File: t1zi4.fd 2018/01/14 T1/zi4 (Inconsolata)
+)
+LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
+(Font)              scaled to size 6.80005pt on input line 1.
+)
+
+Package hyperref Warning: Ignoring empty anchor on input line 69.
+
+
+Package hyperref Warning: Ignoring empty anchor on input line 69.
+
+<thumbnails/cas-email.jpeg, id=4, 225.84375pt x 225.84375pt>
+File: thumbnails/cas-email.jpeg Graphic file (type jpg)
+<use thumbnails/cas-email.jpeg>
+Package pdftex.def Info: thumbnails/cas-email.jpeg  used on input line 69.
+(pdftex.def)             Requested size: 7.99838pt x 8.0pt.
+
+Package hyperref Warning: Ignoring empty anchor on input line 69.
+
+(../sections/introduction.tex
+Underfull \hbox (badness 10000) in paragraph at lines 1--2
+[]\T1/stix/m/n/10 Treatment-resistant de-pres-sion (TRD) re-mains a
+ []
+
+
+Underfull \hbox (badness 3701) in paragraph at lines 1--2
+\T1/stix/m/n/10 such as tran-scra-nial di-rect cur-rent stim-u-la-tion (tDCS)
+ []
+
+
+Underfull \hbox (badness 7379) in paragraph at lines 1--2
+[][]\T1/stix/m/n/10 2011[][]). More re-cent stud-ies have pushed tDCS into
+ []
+
+
+Underfull \hbox (badness 5563) in paragraph at lines 1--2
+\T1/stix/m/n/10 pre-treat-ment strat-i-fi-ca-tion a prac-ti-cal clin-i-cal prob
+-lem
+ []
+
+
+Underfull \hbox (badness 7344) in paragraph at lines 3--4
+[]\T1/stix/m/n/10 In that set-ting, EEG is ap-peal-ing be-cause it is
+ []
+
+
+Underfull \hbox (badness 4024) in paragraph at lines 3--4
+\T1/stix/m/n/10 com-par-a-tively in-ex-pen-sive, portable, and al-ready used
+ []
+
+
+Underfull \hbox (badness 1924) in paragraph at lines 3--4
+\T1/stix/m/n/10 across trans-la-tional neu-ro-phys-i-ol-ogy work-flows ([][]Cas
+-son
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 3--4
+\T1/stix/m/n/10 Wear-able and reduced-channel EEG sys-tems fur-ther
+ []
+
+
+Underfull \hbox (badness 4205) in paragraph at lines 5--6
+\T1/stix/m/n/10 dis-or-der is en-cour-ag-ing and method-olog-i-cally un-even.
+ []
+
+
+Underfull \hbox (badness 4846) in paragraph at lines 5--6
+\T1/stix/m/n/10 guid-ance re-in-force the same stan-dard-iza-tion pres-sures
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 5--6
+\T1/stix/m/n/10 pre-dic-tion. Ex-ter-nal gen-er-al-iza-tion, fea-ture sta-bil-i
+ty,
+ []
+
+
+Underfull \hbox (badness 4441) in paragraph at lines 5--6
+\T1/stix/m/n/10 et al.[][], [][]2020[][]). Entropy-focused EEG work and re-cent
+
+ []
+
+
+Underfull \hbox (badness 1796) in paragraph at lines 5--6
+\T1/stix/m/n/10 from a dif-fer-ent an-gle ([][]Puthankat-til and Joseph[][], []
+[]2012[][];
+ []
+
+
+Underfull \hbox (badness 1917) in paragraph at lines 7--8
+[]\T1/stix/m/n/10 That ten-sion is es-pe-cially sharp in rel-a-tively small
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 7--8
+\T1/stix/m/n/10 neu-ro-mod-u-la-tion stud-ies. Rich mod-els can im-prove
+ []
+
+
+Underfull \hbox (badness 1902) in paragraph at lines 7--8
+\T1/stix/m/n/10 in-crease the risk of un-sta-ble fea-ture se-lec-tion, in-flate
+d
+ []
+
+
+Underfull \hbox (badness 2435) in paragraph at lines 7--8
+\T1/stix/m/n/10 per-for-mance es-ti-mates, and overly con-fi-dent biomarker
+ []
+
+
+Underfull \hbox (badness 5924) in paragraph at lines 7--8
+\T1/stix/m/n/10 in-ter-pretabil-ity and low-density fea-si-bil-ity, and re-cent
+
+ []
+
+
+Underfull \hbox (badness 3407) in paragraph at lines 7--8
+\T1/stix/m/n/10 data-centric frame-works have started to move in that
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 7--8
+\T1/stix/m/n/10 More re-cent response-oriented stud-ies con-tinue that
+ []
+
+
+Underfull \hbox (badness 2326) in paragraph at lines 7--8
+\T1/stix/m/n/10 a sim-i-lar con-clu-sion ([][]Ul-rich et al.[][], [][]2025[][])
+. Within the
+ []
+
+
+Underfull \hbox (badness 7595) in paragraph at lines 7--8
+\T1/stix/m/n/10 in-ter-pretable feature-selection work-flow can iso-late a
+ []
+
+LaTeX Font Info:    Trying to load font information for T1+cmss on input line 8
+.
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/t1cmss.fd
+File: t1cmss.fd 2023/04/13 v2.5m Standard LaTeX font definitions
+) [1{/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr
+/local/texlive/2024/texmf-dist/fonts/enc/dvips/stix/stix-t1.enc}{/usr/local/tex
+live/2024/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}
+
+
+{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc} <
+/usr/local/texlive/2024/texmf-dist/tex/latex/els-cas-templates/thumbnails/cas-e
+mail.jpeg>])
+Underfull \hbox (badness 10000) in paragraph at lines 9--73
+[]\T1/stix/m/n/10 This manuscript fo-cuses on a nar-row ob-jec-tive:
+ []
+
+
+Underfull \hbox (badness 2310) in paragraph at lines 9--73
+\T1/stix/m/n/10 eval-u-a-tion. We com-pare two clas-si-fiers over the same
+ []
+
+
+Underfull \hbox (badness 2418) in paragraph at lines 9--73
+\T1/stix/m/n/10 feature-selection sweep to test whether a low-montage
+ []
+
+
+Underfull \hbox (badness 3547) in paragraph at lines 9--73
+\T1/stix/m/n/10 in adults with TRD. The em-pha-sis is on par-si-mony,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 9--73
+\T1/stix/m/n/10 val-i-da-tion. Our work-ing hy-poth-e-sis was that use-ful
+ []
+
+
+Underfull \hbox (badness 4819) in paragraph at lines 9--73
+\T1/stix/m/n/10 would show stronger effect-direction con-sis-tency than
+ []
+
+(../sections/methods.tex
+Underfull \hbox (badness 10000) in paragraph at lines 3--4
+\T1/stix/m/n/10 mul-ti-site, double-blind, ran-dom-ized sham-controlled
+ []
+
+
+Underfull \hbox (badness 4713) in paragraph at lines 3--4
+\T1/stix/m/n/10 home-based tDCS trial for ma-jor de-pres-sive dis-or-der
+ []
+
+
+Underfull \hbox (badness 2818) in paragraph at lines 3--4
+\T1/stix/m/n/10 7 re-mis-sion cases and 14 non-remission cases in the
+ []
+
+(../tables/cohort_summary.tex)
+LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
+(Font)              scaled to size 8.50006pt on input line 13.
+
+Underfull \hbox (badness 2158) in paragraph at lines 13--14
+\T1/stix/m/n/10 at 256 Hz. The avail-able study ex-ports com-prised 10
+ []
+
+
+Underfull \hbox (badness 3158) in paragraph at lines 13--14
+\T1/stix/m/n/10 s seg-ments with 2,560 sam-ples per chan-nel, and the
+ []
+
+
+Underfull \hbox (badness 3088) in paragraph at lines 13--14
+\T1/stix/m/n/10 un-der-ly-ing record-ing ses-sions were stored ei-ther as a
+ []
+
+
+Underfull \hbox (badness 1048) in paragraph at lines 13--14
+\T1/stix/m/n/10 par-tic-i-pant. Across the co-hort, the ex-port set con-tained
+ []
+
+
+Underfull \hbox (badness 7869) in paragraph at lines 13--14
+\T1/stix/m/n/10 1,203 win-dows, in-clud-ing 393 remission-labeled and
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 13--14
+\T1/stix/m/n/10 810 non-remission-labeled win-dows. This ac-qui-si-tion
+ []
+
+
+Underfull \hbox (badness 1292) in paragraph at lines 15--16
+[]\T1/stix/m/n/10 For the present sweep, the pro-cess-ing con-fig-u-ra-tion
+ []
+
+
+Underfull \hbox (badness 4391) in paragraph at lines 15--16
+\T1/stix/m/n/10 ap-plied participant-level per-channel de-mean-ing be-fore
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 15--16
+\T1/stix/m/n/10 up-sam-pling, fol-lowed by a fourth-order But-ter-worth
+ []
+
+
+Underfull \hbox (badness 1895) in paragraph at lines 15--16
+\T1/stix/m/n/10 Hz, and zero-overlap win-dow slic-ing. The sweep then
+ []
+
+
+Underfull \hbox (badness 1708) in paragraph at lines 15--16
+\T1/stix/m/n/10 record-ings. These choices ma-te-ri-ally af-fect down-stream
+ []
+
+
+Underfull \hbox (badness 2237) in paragraph at lines 15--16
+\T1/stix/m/n/10 EEG fea-ture dis-tri-bu-tions, es-pe-cially in low-density or
+ []
+
+
+Underfull \hbox (badness 2556) in paragraph at lines 15--16
+\T1/stix/m/n/10 portable pipelines ([][]Siuly et al.[][], [][]2017[][]; [][]Mi-
+randa et al.[][],
+ []
+
+
+Underfull \hbox (badness 3138) in paragraph at lines 15--16
+[][]\T1/stix/m/n/10 2019[][]; [][]Ma-hato et al.[][], [][]2020[][]). They also 
+in-ter-sect with
+ []
+
+
+Underfull \hbox (badness 1648) in paragraph at lines 15--16
+\T1/stix/m/n/10 stan-dard-iza-tion and signal-quality con-cerns in wear-able
+ []
+
+
+Underfull \hbox (badness 2213) in paragraph at lines 15--16
+[][]\T1/stix/m/n/10 2023[][]). The method-olog-i-cal con-tri-bu-tion of the pre
+sent
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 15--16
+\T1/stix/m/n/10 participant-level outer val-i-da-tion, fold-internal fea-ture
+ []
+
+
+Underfull \hbox (badness 2277) in paragraph at lines 15--16
+\T1/stix/m/n/10 se-lec-tion, fold-internal class re-bal-anc-ing, and post hoc
+ []
+
+<figures/figure0_processing_pipeline.png, id=185, 910.602pt x 487.3407pt>
+File: figures/figure0_processing_pipeline.png Graphic file (type png)
+<use figures/figure0_processing_pipeline.png>
+Package pdftex.def Info: figures/figure0_processing_pipeline.png  used on input
+ line 19.
+(pdftex.def)             Requested size: 494.50888pt x 264.65474pt.
+
+Underfull \hbox (badness 1215) in paragraph at lines 26--27
+\T1/stix/m/n/10 win-dow. With all four chan-nels avail-able, the ex-trac-tor
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 26--27
+\T1/stix/m/n/10 channel-local de-scrip-tors, re-gional asym-me-try terms,
+ []
+
+
+Underfull \hbox (badness 2617) in paragraph at lines 26--27
+\T1/stix/m/n/10 chan-nel con-tributed 39 lo-cal mea-sures, com-pris-ing 21
+ []
+
+
+Underfull \hbox (badness 1616) in paragraph at lines 26--27
+\T1/stix/m/n/10 and 6 en-tropy or non-lin-ear com-plex-ity de-scrip-tors, for
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 26--27
+\T1/stix/m/n/10 156 channel-local mea-sures over-all. The re-main-ing
+ []
+
+
+Underfull \hbox (badness 6316) in paragraph at lines 26--27
+\T1/stix/m/n/10 91 mea-sures sum-ma-rized asym-me-try, frontal-temporal
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 26--27
+\T1/stix/m/n/10 bal-ance, cross-channel syn-chrony, and TP10-focused
+ []
+
+
+Underfull \hbox (badness 3713) in paragraph at lines 26--27
+\T1/stix/m/n/10 the ex-tracted fea-ture fam-i-lies and their com-pu-ta-tional
+ []
+
+(../tables/feature_extraction_summary.tex)
+Underfull \hbox (badness 1910) in paragraph at lines 36--37
+\T1/stix/m/n/10 channel-local fea-tures. Spec-tral fea-tures were es-ti-mated
+ []
+
+
+Underfull \hbox (badness 3199) in paragraph at lines 36--37
+\T1/stix/m/n/10 nor-mal-ized by to-tal power, frequency-weighted power,
+ []
+
+
+Underfull \hbox (badness 2865) in paragraph at lines 36--37
+\T1/stix/m/n/10 spec-tral edge fre-quen-cies at 90% and 95%, and PSD
+ []
+
+
+Underfull \hbox (badness 1009) in paragraph at lines 36--37
+\T1/stix/m/n/10 min-i-mum, me-dian, skew-ness, kur-to-sis). These mea-sures
+ []
+
+
+Underfull \hbox (badness 1281) in paragraph at lines 36--37
+\T1/stix/m/n/10 were in-cluded be-cause spec-tral con-tent re-mains one of
+ []
+
+
+Underfull \hbox (badness 5592) in paragraph at lines 36--37
+\T1/stix/m/n/10 con-tent has also ap-peared re-peat-edly in pre-treat-ment
+ []
+
+[2] [3 <./figures/figure0_processing_pipeline.png>]
+Underfull \hbox (badness 7415) in paragraph at lines 38--39
+[]\T1/stix/m/n/10 Time-domain de-scrip-tors were also com-puted for
+ []
+
+
+Underfull \hbox (badness 2119) in paragraph at lines 38--39
+\T1/stix/m/n/10 peak-to-peak range, zero cross-ings, and mean ab-so-lute
+ []
+
+
+Underfull \hbox (badness 3503) in paragraph at lines 38--39
+\T1/stix/m/n/10 de-vi-a-tion, to-gether with Hjorth ac-tiv-ity, mo-bil-ity, and
+
+ []
+
+
+Underfull \hbox (badness 2717) in paragraph at lines 38--39
+\T1/stix/m/n/10 com-plex-ity ([][]Hjorth[][], [][]1970[][]; [][]Zhang et al.[][
+], [][]2023[][]). These
+ []
+
+
+Underfull \hbox (badness 6608) in paragraph at lines 40--41
+[]\T1/stix/m/n/10 Entropy and non-lin-ear com-plex-ity mea-sures were
+ []
+
+
+Underfull \hbox (badness 1694) in paragraph at lines 40--41
+\T1/stix/m/n/10 Lya-punov ex-po-nent, and de-trended fluc-tu-a-tion anal-y-sis.
+
+ []
+
+
+Underfull \hbox (badness 2460) in paragraph at lines 40--41
+\T1/stix/m/n/10 Com-plex-ity mea-sures were cal-cu-lated on a de-meaned,
+ []
+
+
+Underfull \hbox (badness 2556) in paragraph at lines 40--41
+\T1/stix/m/n/10 im-pli-cated en-tropy, vari-abil-ity, and broader com-plex-ity
+ []
+
+
+Underfull \hbox (badness 2689) in paragraph at lines 40--41
+\T1/stix/m/n/10 struc-ture ([][]Puthankat-til and Joseph[][], [][]2012[][]; [][
+]Faust et al.[][],
+ []
+
+
+Underfull \hbox (badness 1320) in paragraph at lines 40--41
+[][]\T1/stix/m/n/10 2014[][]; [][]Acharya et al.[][], [][]2015[][]). That pat-t
+ern also ap-pears
+ []
+
+
+Underfull \hbox (badness 7486) in paragraph at lines 40--41
+\T1/stix/m/n/10 in pre-treat-ment re-sponse and large-scale resting-state
+ []
+
+
+Underfull \hbox (badness 7238) in paragraph at lines 42--43
+[]\T1/stix/m/n/10 The four-channel mon-tage also sup-ports a range
+ []
+
+
+Underfull \hbox (badness 7203) in paragraph at lines 42--43
+\T1/stix/m/n/10 of re-gional in-ter-ac-tion fea-tures de-rived from cached
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 42--43
+\T1/stix/m/n/10 band-power es-ti-mates. Tra-di-tional frontal asym-me-try
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 42--43
+\T1/stix/m/n/10 (\T1/zi4/m/n/10 AF7\T1/stix/m/n/10 /\T1/zi4/m/n/10 AF8\T1/stix/
+m/n/10 ) and tem-po-ral asym-me-try (\T1/zi4/m/n/10 TP9\T1/stix/m/n/10 /\T1/zi4
+/m/n/10 TP10\T1/stix/m/n/10 ) were
+ []
+
+
+Underfull \hbox (badness 2205) in paragraph at lines 49--51
+\T1/stix/m/n/10 Using the same band-power cache, we also com-puted
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 49--51
+\T1/stix/m/n/10 within each hemi-sphere, ip-si-lat-eral frontal-temporal
+ []
+
+
+Underfull \hbox (badness 1275) in paragraph at lines 49--51
+\T1/stix/m/n/10 ra-tios and nor-mal-ized dif-fer-ences on the left and right
+ []
+
+
+Underfull \hbox (badness 2556) in paragraph at lines 49--51
+\T1/stix/m/n/10 hemi-spheres, and di-ag-o-nal frontal-temporal in-ter-ac-tions
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 49--51
+\T1/stix/m/n/10 be-cause reduced-channel de-pres-sion EEG stud-ies
+ []
+
+[4]
+Underfull \hbox (badness 10000) in paragraph at lines 52--53
+[]\T1/stix/m/n/10 Pairwise syn-chrony fea-tures were added for six
+ []
+
+
+Underfull \hbox (badness 7685) in paragraph at lines 52--53
+\T1/stix/m/n/10 com-puted max-i-mum nor-mal-ized cross-correlation and
+ []
+
+
+Underfull \hbox (badness 5847) in paragraph at lines 52--53
+\T1/stix/m/n/10 in resting-state de-pres-sion EEG and neu-ro-mod-u-la-tion
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 54--55
+[]\T1/stix/m/n/10 Finally, the ex-trac-tor in-cluded three ex-ploratory
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 54--55
+\T1/stix/m/n/10 TP10-specific de-rived de-scrip-tors: peak promi-nence,
+ []
+
+
+Underfull \hbox (badness 5359) in paragraph at lines 54--55
+\T1/stix/m/n/10 peak con-cen-tra-tion ra-tio, and an asymmetry-weighted
+ []
+
+
+Underfull \hbox (badness 5217) in paragraph at lines 54--55
+\T1/stix/m/n/10 peak-prominence term. These sum-ma-rize whether the
+ []
+
+
+Underfull \hbox (badness 4378) in paragraph at lines 54--55
+\T1/zi4/m/n/10 TP10 \T1/stix/m/n/10 spec-trum con-tains a sharp dom-i-nant peak
+, how
+ []
+
+
+Underfull \hbox (badness 2698) in paragraph at lines 54--55
+\T1/stix/m/n/10 con-cen-trated that peak is rel-a-tive to to-tal power, and
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 54--55
+\T1/stix/m/n/10 whether that con-cen-tra-tion co-varies with ip-si-lat-eral
+ []
+
+
+Underfull \hbox (badness 5105) in paragraph at lines 54--55
+\T1/stix/m/n/10 in low-montage de-pres-sion EEG anal-y-ses, while still
+ []
+
+
+Underfull \hbox (badness 3209) in paragraph at lines 58--59
+\T1/stix/m/n/10 over the same feature-selection pro-to-col: an ad-vanced
+ []
+
+
+Underfull \hbox (badness 1297) in paragraph at lines 58--59
+\T1/stix/m/n/10 se-quen-tial win-dow or-der-ing, Se-lec-tKBest with ANOVA
+ []
+
+
+Underfull \hbox (badness 5189) in paragraph at lines 58--59
+\LS1/stix/m/it/10 F$ \T1/stix/m/n/10 statis-tics, leave-one-participant-out out
+er eval-u-a-tion,
+ []
+
+
+Underfull \hbox (badness 6944) in paragraph at lines 60--61
+[]\T1/stix/m/n/10 This de-sign mat-ters for in-ter-pre-ta-tion. The outer
+ []
+
+
+Underfull \hbox (badness 1147) in paragraph at lines 60--61
+\T1/stix/m/n/10 to the outer train-ing folds, which is im-por-tant be-cause
+ []
+
+
+Underfull \hbox (badness 3884) in paragraph at lines 60--61
+\T1/stix/m/n/10 leak-age at these steps can ma-te-ri-ally in-flate re-ported
+ []
+
+
+Underfull \hbox (badness 2245) in paragraph at lines 60--61
+\T1/stix/m/n/10 pa-ram-e-ter con-trolled how many fea-tures were se-lected
+ []
+
+
+Underfull \hbox (badness 6016) in paragraph at lines 60--61
+\T1/stix/m/n/10 in-side each outer train-ing fold. The feature-selection
+ []
+
+
+Underfull \hbox (badness 4303) in paragraph at lines 60--61
+\T1/stix/m/n/10 be-hav-ior be-cause both clas-si-fiers con-sumed the same
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 64--65
+[]\T1/stix/m/n/10 Both clas-si-fiers op-er-ated on the fold-selected
+ []
+
+
+Underfull \hbox (badness 1132) in paragraph at lines 64--65
+\T1/stix/m/n/10 set-ting. Patient-level out-puts were de-rived by av-er-ag-ing
+ []
+
+
+Underfull \hbox (badness 5431) in paragraph at lines 64--65
+\T1/stix/m/n/10 held-out win-dow prob-a-bil-i-ties within each par-tic-i-pant
+ []
+
+(../tables/model_configuration_summary.tex)
+Underfull \hbox (badness 10000) in paragraph at lines 78--79
+\T1/stix/m/n/10 self-attention with resid-ual layer nor-mal-iza-tion and
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 80--81
+\T1/stix/m/n/10 The con-vo-lu-tional front end sum-ma-rized short-range
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 80--81
+\T1/stix/m/n/10 po-si-tions af-ter re-cur-rent en-cod-ing. Feature-pyramid
+ []
+
+
+Underfull \hbox (badness 2460) in paragraph at lines 80--81
+\T1/stix/m/n/10 stage be-fore bi-nary clas-si-fi-ca-tion. Batch nor-mal-iza-tio
+n,
+ []
+
+
+Underfull \hbox (badness 2970) in paragraph at lines 80--81
+\T1/stix/m/n/10 dropout, la-bel smooth-ing, gra-di-ent clip-ping, and early
+ []
+
+
+Underfull \hbox (badness 1910) in paragraph at lines 84--85
+[]\T1/stix/m/n/10 The pri-mary end-point was patient-level ROC-AUC,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 84--85
+\T1/stix/m/n/10 com-puted from par-tic-i-pant prob-a-bil-i-ties ag-gre-gated
+ []
+
+
+Underfull \hbox (badness 1496) in paragraph at lines 84--85
+\T1/stix/m/n/10 over held-out win-dows. Sec-ondary patient-level met-rics
+ []
+
+
+Underfull \hbox (badness 5316) in paragraph at lines 84--85
+\T1/stix/m/n/10 claims use patient-level met-rics. Window-level scores
+ []
+
+[5])
+Underfull \hbox (badness 4024) in paragraph at lines 86--76
+\T1/stix/m/n/10 we used sev-eral post hoc sum-maries: mean pair-wise
+ []
+
+
+Underfull \hbox (badness 1348) in paragraph at lines 86--76
+\T1/stix/m/n/10 Jac-card over-lap, Kuncheva in-dex, unique fea-ture count,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 86--76
+\T1/stix/m/n/10 top-feature share, class-conditional se-lec-tion deltas,
+ []
+
+
+Underfull \hbox (badness 4543) in paragraph at lines 86--76
+\T1/stix/m/n/10 and effect-direction con-sis-tency. These sum-maries are
+ []
+
+
+Underfull \hbox (badness 2409) in paragraph at lines 86--76
+\T1/stix/m/n/10 over-lap can co-ex-ist with re-cur-ring fea-tures that re-tain
+ []
+
+(../sections/results.tex
+Underfull \hbox (badness 2735) in paragraph at lines 3--4
+[]\T1/stix/m/n/10 Across the 150 suc-cess-ful runs, the hy-brid model
+ []
+
+<figures/sweep_window_roc_auc.png, id=310, 474.8139pt x 350.5095pt>
+File: figures/sweep_window_roc_auc.png Graphic file (type png)
+<use figures/sweep_window_roc_auc.png>
+Package pdftex.def Info: figures/sweep_window_roc_auc.png  used on input line 7
+.
+(pdftex.def)             Requested size: 223.95975pt x 165.3278pt.
+
+Underfull \hbox (badness 1824) in paragraph at lines 12--13
+\T1/stix/m/n/10 and \T1/zi4/m/n/10 inner-k \T1/stix/m/n/10 dif-fered across the
+ two model fam-i-lies in
+ []
+
+
+Underfull \hbox (badness 8170) in paragraph at lines 12--13
+\T1/stix/m/n/10 stronger ROC-AUC across the spars-est bud-gets and
+ []
+
+
+Underfull \hbox (badness 1028) in paragraph at lines 12--13
+\T1/stix/m/n/10 sweep at \T1/zi4/m/n/10 inner-k=1\T1/stix/m/n/10 . The lin-ear 
+SVM did not show the
+ []
+
+
+Underfull \hbox (badness 2698) in paragraph at lines 12--13
+\T1/stix/m/n/10 same pat-tern and reached its best ROC-AUC only at
+ []
+
+
+Underfull \hbox (badness 1117) in paragraph at lines 12--13
+\T1/stix/m/n/10 there-fore aligned with peak dis-crim-i-na-tion only for the
+ []
+
+<figures/sweep_inner_k_roc_auc.png, id=312, 474.8139pt x 350.5095pt>
+File: figures/sweep_inner_k_roc_auc.png Graphic file (type png)
+<use figures/sweep_inner_k_roc_auc.png>
+Package pdftex.def Info: figures/sweep_inner_k_roc_auc.png  used on input line 
+16.
+(pdftex.def)             Requested size: 223.95975pt x 165.3278pt.
+LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
+(Font)              scaled to size 7.65005pt on input line 17.
+
+Underfull \hbox (badness 5519) in paragraph at lines 21--22
+[]\T1/stix/m/n/10 Figures [][]4[][] and [][]5[][] show a sec-ond re-lated pat-t
+ern.
+ []
+
+
+Underfull \hbox (badness 1997) in paragraph at lines 21--22
+\T1/stix/m/n/10 In-creas-ing \T1/zi4/m/n/10 inner-k \T1/stix/m/n/10 in-creased 
+both hard-set over-lap and
+ []
+
+
+Underfull \hbox (badness 5036) in paragraph at lines 21--22
+\T1/stix/m/n/10 the to-tal num-ber of unique se-lected fea-tures. Larger
+ []
+
+
+Underfull \hbox (badness 1824) in paragraph at lines 21--22
+\T1/stix/m/n/10 dis-crim-i-na-tion. The sweep con-cen-trated its best hy-brid
+ []
+
+
+Underfull \hbox (badness 2600) in paragraph at lines 21--22
+\T1/stix/m/n/10 biomarker dis-cov-ery and sug-gests that model ca-pac-ity
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 21--22
+\T1/stix/m/n/10 and per-fold spar-sity mat-tered to-gether rather than
+ []
+
+<figures/sweep_jaccard_inner_k.png, id=315, 474.8139pt x 350.5095pt>
+File: figures/sweep_jaccard_inner_k.png Graphic file (type png)
+<use figures/sweep_jaccard_inner_k.png>
+Package pdftex.def Info: figures/sweep_jaccard_inner_k.png  used on input line 
+25.
+(pdftex.def)             Requested size: 223.95975pt x 165.3278pt.
+<figures/sweep_unique_features_inner_k.png, id=316, 478.1865pt x 350.5095pt>
+File: figures/sweep_unique_features_inner_k.png Graphic file (type png)
+<use figures/sweep_unique_features_inner_k.png>
+Package pdftex.def Info: figures/sweep_unique_features_inner_k.png  used on inp
+ut line 32.
+(pdftex.def)             Requested size: 223.95975pt x 164.16187pt.
+
+Underfull \hbox (badness 1442) in paragraph at lines 39--40
+[]\T1/stix/m/n/10 The best hy-brid con-fig-u-ra-tion achieved patient-level
+ []
+
+
+Underfull \hbox (badness 6412) in paragraph at lines 39--40
+\T1/stix/m/n/10 ROC-AUC 0.816, PR-AUC 0.579, bal-anced ac-cu-racy
+ []
+
+[6 <./figures/sweep_window_roc_auc.png>]
+<figures/main_patient_roc_curve.png, id=333, 513.117pt x 397.0032pt>
+File: figures/main_patient_roc_curve.png Graphic file (type png)
+<use figures/main_patient_roc_curve.png>
+Package pdftex.def Info: figures/main_patient_roc_curve.png  used on input line
+ 43.
+(pdftex.def)             Requested size: 223.95975pt x 173.27654pt.
+<figures/main_patient_pr_curve.png, id=334, 513.117pt x 397.0032pt>
+File: figures/main_patient_pr_curve.png Graphic file (type png)
+<use figures/main_patient_pr_curve.png>
+Package pdftex.def Info: figures/main_patient_pr_curve.png  used on input line 
+50.
+(pdftex.def)             Requested size: 223.95975pt x 173.27654pt.
+<figures/main_patient_confusion_matrix.png, id=337, 447.1104pt x 346.6551pt>
+File: figures/main_patient_confusion_matrix.png Graphic file (type png)
+<use figures/main_patient_confusion_matrix.png>
+Package pdftex.def Info: figures/main_patient_confusion_matrix.png  used on inp
+ut line 61.
+(pdftex.def)             Requested size: 223.95975pt x 173.64449pt.
+<figures/main_patient_metric_summary.png, id=338, 585.6279pt x 411.2163pt>
+File: figures/main_patient_metric_summary.png Graphic file (type png)
+<use figures/main_patient_metric_summary.png>
+Package pdftex.def Info: figures/main_patient_metric_summary.png  used on input
+ line 68.
+(pdftex.def)             Requested size: 223.95975pt x 157.2552pt.
+ (../tables/best_run_comparison.tex)
+Underfull \hbox (badness 4328) in paragraph at lines 84--85
+[]\T1/stix/m/n/10 A small re-cur-ring fea-ture set emerged re-peat-edly,
+ []
+
+
+Underfull \hbox (badness 5147) in paragraph at lines 84--85
+\T1/stix/m/n/10 though not in ev-ery fold, and the se-lected set was
+ []
+
+
+Underfull \hbox (badness 3323) in paragraph at lines 84--85
+\T1/stix/m/n/10 The most re-cur-rent fea-ture was \T1/zi4/m/n/10 tp10_-spectral
+_-entropy\T1/stix/m/n/10 ,
+ []
+
+
+Underfull \hbox (badness 5189) in paragraph at lines 84--85
+\T1/stix/m/n/10 se-lected in 8 of 21 folds. The next most re-cur-rent
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 84--85
+\T1/stix/m/n/10 fea-tures were \T1/zi4/m/n/10 left_-frontal_-temporal_-diff_-ga
+mma\T1/stix/m/n/10 ,
+ []
+
+<figures/biomarker_selection_frequency.png, id=342, 685.3605pt x 382.5492pt>
+File: figures/biomarker_selection_frequency.png Graphic file (type png)
+<use figures/biomarker_selection_frequency.png>
+Package pdftex.def Info: figures/biomarker_selection_frequency.png  used on inp
+ut line 88.
+(pdftex.def)             Requested size: 223.95975pt x 125.00996pt.
+
+Underfull \hbox (badness 1412) in paragraph at lines 89--89
+[][]\T1/cmss/bx/n/9 Figure 10:[] []\T1/cmss/m/n/9 Selection-frequency rank-ing 
+for the re-cur-rent
+ []
+
+<figures/biomarker_kuncheva_summary.png, id=343, 412.1799pt x 367.8543pt>
+File: figures/biomarker_kuncheva_summary.png Graphic file (type png)
+<use figures/biomarker_kuncheva_summary.png>
+Package pdftex.def Info: figures/biomarker_kuncheva_summary.png  used on input 
+line 95.
+(pdftex.def)             Requested size: 223.95975pt x 199.8732pt.
+(../tables/hybrid_recurrent_biomarkers.tex)
+<figures/figure5_sign_consistency.png, id=345, 728.7225pt x 397.0032pt>
+File: figures/figure5_sign_consistency.png Graphic file (type png)
+<use figures/figure5_sign_consistency.png>
+Package pdftex.def Info: figures/figure5_sign_consistency.png  used on input li
+ne 113.
+(pdftex.def)             Requested size: 223.95975pt x 122.0096pt.
+
+Underfull \hbox (badness 2653) in paragraph at lines 114--114
+[][]\T1/cmss/bx/n/9 Figure 12:[] []\T1/cmss/m/n/9 Sign-consistency sum-mary for
+ the re-cur-rent
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 118--119
+\T1/stix/m/n/10 the non-remission group, whereas \T1/zi4/m/n/10 af7_-zero_-cros
+sings
+ []
+
+
+Underfull \hbox (badness 3128) in paragraph at lines 118--119
+\T1/stix/m/n/10 was more fre-quently se-lected in re-mis-sion folds. The
+ []
+
+[7 <./figures/sweep_inner_k_roc_auc.png> <./figures/sweep_jaccard_inner_k.png> 
+<./figures/sweep_unique_features_inner_k.png> <./figures/main_patient_roc_curve
+.png>]
+<figures/figure6_class_conditional_selection.png, id=367, 728.7225pt x 397.0032
+pt>
+File: figures/figure6_class_conditional_selection.png Graphic file (type png)
+<use figures/figure6_class_conditional_selection.png>
+Package pdftex.def Info: figures/figure6_class_conditional_selection.png  used 
+on input line 122.
+(pdftex.def)             Requested size: 223.95975pt x 122.0096pt.
+
+Underfull \hbox (badness 1325) in paragraph at lines 127--128
+[]\T1/stix/m/n/10 The effect-size sum-maries fol-lowed the same broad
+ []
+
+
+Underfull \hbox (badness 5771) in paragraph at lines 127--128
+\T1/stix/m/n/10 jus-tify defini-tive mech-a-nis-tic claims. They pro-vide a
+ []
+
+
+Underfull \hbox (badness 1635) in paragraph at lines 127--128
+\T1/stix/m/n/10 biomark-ers show in-ter-pretable di-rec-tion-al-ity even when
+ []
+
+<figures/figure7_effect_size.png, id=369, 728.9634pt x 397.0032pt>
+File: figures/figure7_effect_size.png Graphic file (type png)
+<use figures/figure7_effect_size.png>
+Package pdftex.def Info: figures/figure7_effect_size.png  used on input line 13
+1.
+(pdftex.def)             Requested size: 223.95975pt x 121.9672pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 132--132
+\T1/cmss/m/n/9 from the best hy-brid run. Pos-i-tive val-ues in-di-cate
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 132--132
+\T1/cmss/m/n/9 remission-skewed ef-fects and neg-a-tive val-ues in-di-cate
+ []
+
+) (../sections/discussion.tex
+Underfull \hbox (badness 1142) in paragraph at lines 3--4
+\T1/stix/m/n/10 more use-ful to the hy-brid ar-chi-tec-ture than to a lin-ear
+ []
+
+
+Underfull \hbox (badness 2205) in paragraph at lines 3--4
+\T1/stix/m/n/10 and frontal-temporal in-for-ma-tion with-out di-lu-tion from
+ []
+
+
+Underfull \hbox (badness 1968) in paragraph at lines 3--4
+\T1/stix/m/n/10 set of mod-er-ate ad-di-tive cues be-fore reach-ing its best
+ []
+
+
+Underfull \hbox (badness 1448) in paragraph at lines 3--4
+\T1/stix/m/n/10 sep-a-ra-tion be-tween the best sparse hy-brid run and the
+ []
+
+[8 <./figures/main_patient_pr_curve.png> <./figures/main_patient_confusion_matr
+ix.png>]
+Underfull \hbox (badness 1881) in paragraph at lines 5--6
+\T1/stix/m/n/10 tighter biomarker dis-ci-pline, bet-ter stan-dard-iza-tion, and
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 5--6
+\T1/stix/m/n/10 learn-ing stud-ies have like-wise re-ported en-cour-ag-ing
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 5--6
+\T1/stix/m/n/10 treatment-response sig-nals, in-clud-ing com-bi-na-tions of
+ []
+
+
+Underfull \hbox (badness 6608) in paragraph at lines 5--6
+\T1/stix/m/n/10 EEG and clin-i-cal co-vari-ates ([][]Al-Kaysi et al.[][], [][]2
+017[][];
+ []
+
+
+Underfull \hbox (badness 4168) in paragraph at lines 5--6
+\T1/stix/m/n/10 stud-ies reach sim-i-lar con-clu-sions while still ex-pos-ing
+ []
+
+[9 <./figures/main_patient_metric_summary.png> <./figures/biomarker_selection_f
+requency.png> <./figures/biomarker_kuncheva_summary.png> <./figures/figure5_sig
+n_consistency.png> <./figures/figure6_class_conditional_selection.png> <./figur
+es/figure7_effect_size.png>]
+Underfull \hbox (badness 1275) in paragraph at lines 7--8
+[]\T1/stix/m/n/10 The present sweep adds a feature-selection view to
+ []
+
+
+Underfull \hbox (badness 6876) in paragraph at lines 7--8
+\T1/stix/m/n/10 bud-gets yield more over-lap and many more unique
+ []
+
+
+Underfull \hbox (badness 5331) in paragraph at lines 7--8
+\T1/stix/m/n/10 dis-crim-i-na-tion. The pan-els sup-port a small re-cur-ring
+ []
+
+
+Underfull \hbox (badness 2213) in paragraph at lines 7--8
+\T1/stix/m/n/10 That read-ing keeps the mod-est Jac-card and Kuncheva
+ []
+
+
+Underfull \hbox (badness 5548) in paragraph at lines 7--8
+\T1/stix/m/n/10 scores in view and gives ap-pro-pri-ate weight to the
+ []
+
+
+Underfull \hbox (badness 7344) in paragraph at lines 7--8
+\T1/stix/m/n/10 stronger effect-direction sig-nal. Method-olog-i-cally, this
+ []
+
+
+Underfull \hbox (badness 8132) in paragraph at lines 7--8
+\T1/stix/m/n/10 out-of-sample val-i-da-tion, and known vul-ner-a-bil-ity to
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 7--8
+\T1/stix/m/n/10 leak-age from pre-cross-validation fea-ture pro-cess-ing
+ []
+
+
+Underfull \hbox (badness 2564) in paragraph at lines 7--8
+\T1/stix/m/n/10 ([][]Widge et al.[][], [][]2019[][]; [][]Shim et al.[][], [][]2
+021[][]). The present
+ []
+
+
+Underfull \hbox (badness 1448) in paragraph at lines 7--8
+\T1/stix/m/n/10 and re-bal-anc-ing in-side participant-level outer folds and
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 9--10
+\T1/stix/m/n/10 response-relevant in-for-ma-tion across mul-ti-ple fea-ture
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 11--12
+[]\T1/stix/m/n/10 The spe-cific biomark-ers in the present sweep
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 11--12
+\T1/stix/m/n/10 are plau-si-ble enough to de-serve follow-up.
+ []
+
+
+Underfull \hbox (badness 1874) in paragraph at lines 11--12
+\T1/zi4/m/n/10 tp10_-spectral_-entropy \T1/stix/m/n/10 was the most fre-quently
+ se-lected
+ []
+
+
+Underfull \hbox (badness 1371) in paragraph at lines 11--12
+\T1/stix/m/n/10 re-peat-edly in de-pres-sion EEG stud-ies ([][]Puthankat-til an
+d
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 11--12
+\T1/stix/m/n/10 Pre-treat-ment mul-ti-scale en-tropy and signal-variability
+ []
+
+
+Underfull \hbox (badness 4441) in paragraph at lines 11--12
+\T1/stix/m/n/10 re-sponse, al-though the re-ported di-rec-tion de-pends on
+ []
+
+
+Underfull \hbox (badness 3579) in paragraph at lines 11--12
+\T1/stix/m/n/10 eval-u-a-tion found com-plex-ity met-rics to be sta-ble but
+ []
+
+
+Underfull \hbox (badness 1509) in paragraph at lines 11--12
+\T1/stix/m/n/10 not to sup-port a sim-ple uni-form depression-complexity
+ []
+
+
+Underfull \hbox (badness 1688) in paragraph at lines 11--12
+\T1/stix/m/n/10 as-so-ci-a-tion ([][]Lord and Allen[][], [][]2023[][]). The pre
+sent TP10
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 13--14
+[]\T1/stix/m/n/10 The frontal-temporal beta and gamma dif-fer-ence
+ []
+
+
+Underfull \hbox (badness 6559) in paragraph at lines 13--14
+\T1/stix/m/n/10 and paired asym-me-try terms have been re-ported as
+ []
+
+
+Underfull \hbox (badness 1584) in paragraph at lines 13--14
+\T1/stix/m/n/10 frontal-temporal fea-tures have been linked to treat-ment
+ []
+
+
+Underfull \hbox (badness 1939) in paragraph at lines 13--14
+\T1/stix/m/n/10 there-fore bet-ter read as family-level ex-ten-sions of that
+ []
+
+
+Underfull \hbox (badness 2941) in paragraph at lines 15--16
+\T1/stix/m/n/10 prece-dent as a named biomarker. AF7-centered sig-nal
+ []
+
+
+Underfull \hbox (badness 2653) in paragraph at lines 15--16
+\T1/stix/m/n/10 rel-e-vance has ap-peared in ad-ja-cent low-montage work
+ []
+
+
+Underfull \hbox (badness 4673) in paragraph at lines 15--16
+\T1/stix/m/n/10 is com-pat-i-ble with the broader low-montage find-ings
+ []
+
+
+Underfull \hbox (badness 2653) in paragraph at lines 17--18
+\T1/stix/m/n/10 from the same group point in a sim-i-lar low-montage
+ []
+
+
+Underfull \hbox (badness 3557) in paragraph at lines 17--18
+\T1/stix/m/n/10 di-rec-tion. PSD-based mod-el-ing again high-lighted AF7
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 17--18
+\T1/stix/m/n/10 frontal-temporal and tem-poropari-etal syn-chro-niza-tion
+ []
+
+
+Underfull \hbox (badness 1688) in paragraph at lines 17--18
+\T1/stix/m/n/10 pro-to-col. They sup-port reduced-montage fea-si-bil-ity and
+ []
+
+
+Underfull \hbox (badness 1859) in paragraph at lines 19--20
+\T1/stix/m/n/10 in-ter-vals are wide, and there is no ex-ter-nal val-i-da-tion
+ []
+
+
+Underfull \hbox (badness 2119) in paragraph at lines 19--20
+\T1/stix/m/n/10 pipeline it-self be-cause the same feature-selection layer
+ []
+
+
+Underfull \hbox (badness 4229) in paragraph at lines 19--20
+\T1/stix/m/n/10 de-scrip-tive sum-maries. The re-cur-ring fea-tures can be
+ []
+
+)
+Underfull \hbox (badness 3612) in paragraph at lines 21--82
+[]\T1/stix/m/n/10 Future work should test whether the same sparse
+ []
+
+
+Underfull \hbox (badness 4341) in paragraph at lines 21--82
+\T1/stix/m/n/10 low-density mon-tages, and ex-plicit ex-ter-nal val-i-da-tion
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 21--82
+\T1/stix/m/n/10 ([][]Dagnino et al.[][], [][]2023[][]). Ad-ja-cent response-pre
+diction
+ []
+
+
+Underfull \hbox (badness 4403) in paragraph at lines 21--82
+\T1/stix/m/n/10 tar-gets for that next stage ([][]Funk and George[][], [][]2008
+[][];
+ []
+
+
+Underfull \hbox (badness 3250) in paragraph at lines 21--82
+\T1/stix/m/n/10 transport-oriented stud-ies of-fer one clear di-rec-tion for
+ []
+
+
+Underfull \hbox (badness 2680) in paragraph at lines 21--82
+\T1/stix/m/n/10 follow-up ([][]Romero Marin et al.[][], [][]2026[][]; [][]Krat-
+ter et al.[][],
+ []
+
+
+Underfull \hbox (badness 1888) in paragraph at lines 21--82
+\T1/stix/m/n/10 stud-ies also pro-vide rel-e-vant bench-marks for that next
+ []
+
+
+Underfull \hbox (badness 2922) in paragraph at lines 21--82
+[][]\T1/stix/m/n/10 Reiss-mann et al.[][], [][]2026[][]). Re-lated pro-to-col a
+nd re-view
+ []
+
+
+Underfull \hbox (badness 1533) in paragraph at lines 21--82
+\T1/stix/m/n/10 val-i-da-tion ef-fort ([][]Ul-rich et al.[][], [][]2025[][]; []
+[]Pet-tor-ruso et al.[][],
+ []
+
+[10] (../sections/conclusion.tex
+Underfull \hbox (badness 1371) in paragraph at lines 1--2
+\T1/stix/m/n/10 use-ful patient-level dis-crim-i-na-tion of tDCS re-sponse in
+ []
+
+
+Underfull \hbox (badness 1983) in paragraph at lines 1--2
+\T1/stix/m/n/10 re-sult came from an ex-tremely sparse feature-selection
+ []
+
+
+Underfull \hbox (badness 2503) in paragraph at lines 1--2
+\T1/stix/m/n/10 while se-lect-ing only 1 fea-ture per fold and 7 unique
+ []
+
+
+Underfull \hbox (badness 1259) in paragraph at lines 1--2
+\T1/stix/m/n/10 re-cur-rent fea-tures over-all. Hard-set over-lap across folds
+ []
+
+
+Underfull \hbox (badness 2189) in paragraph at lines 1--2
+\T1/stix/m/n/10 in-ter-pretable biomarker sig-na-ture with con-sis-tent ef-fect
+
+ []
+
+)
+Underfull \hbox (badness 10000) in paragraph at lines 3--85
+[]\T1/stix/m/n/10 That com-bi-na-tion of par-si-mony, in-ter-pretabil-ity,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 3--85
+\T1/stix/m/n/10 and subject-independent eval-u-a-tion de-fines the main
+ []
+
+
+Underfull \hbox (badness 1028) in paragraph at lines 3--85
+\T1/stix/m/n/10 con-tri-bu-tion of the present draft. Ex-ter-nal val-i-da-tion 
+in
+ []
+
+
+Underfull \hbox (badness 4647) in paragraph at lines 3--85
+\T1/stix/m/n/10 sup-port the fea-si-bil-ity of sparse short-timescale EEG
+ []
+
+
+Underfull \hbox (badness 1924) in paragraph at lines 3--85
+\T1/stix/m/n/10 biomarker dis-cov-ery for tDCS re-sponse in a clin-i-cally
+ []
+
+(build/elsevier.bbl
+Underfull \hbox (badness 1460) in paragraph at lines 29--43
+[]\T1/stix/m/n/8 Al-Kaysi, A.M., Al-Ani, A., Loo, C.K., Pow-ell, T.Y., Mar-tin,
+ D.M.,
+ []
+
+
+Underfull \hbox (badness 1242) in paragraph at lines 29--43
+\T1/stix/m/n/8 Break-s-pear, M., Boon-stra, T.W., 2017.  Pre-dict-ing tdcs trea
+t-ment
+ []
+
+
+Underfull \hbox (badness 1490) in paragraph at lines 44--72
+\T1/stix/m/n/8 H., S., Kl-effner, Kil-lian, Lam, W., R., Li-otti, Mario, Mcan-d
+rews,
+ []
+
+
+Underfull \hbox (badness 1546) in paragraph at lines 44--72
+\T1/stix/m/n/8 Pat, M., Milev, Roumen, Price, Rae, Ravin-dran, Arun, Rotzinger,
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 44--72
+\T1/stix/m/n/8 of elec-troen-cephalog-ra-phy for multi-site, multi-platform and
+
+ []
+
+
+Underfull \hbox (badness 5847) in paragraph at lines 44--72
+\T1/stix/m/n/8 multi-investigator stud-ies: In-sights from the cana-dian biomar
+ker
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 44--72
+\T1/zi4/m/n/8 research . unipd . it / bitstream / 11577 / 3260320 / 1 / Liotti 
+_ SciRep2017 . pdf$[][]\T1/stix/m/n/8 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 91--103
+[]\T1/stix/m/n/8 Bailey, N., Hoy, K., Sul-li-van, C., All-man, B., Ro-gasch, N.
+,
+ []
+
+
+Underfull \hbox (badness 7151) in paragraph at lines 91--103
+\T1/stix/m/n/8 Daskalakis, Z., Fitzger-ald, P., 2023.  Con-cur-rent tran-scra-n
+ial
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 91--103
+\T1/stix/m/n/8 mag-netic stim-u-la-tion and elec-troen-cephalog-ra-phy mea-sure
+s are
+ []
+
+
+Underfull \hbox (badness 4108) in paragraph at lines 91--103
+\T1/stix/m/n/8 as-so-ci-ated with an-tide-pres-sant re-sponse from rtms treat-m
+ent for
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 91--103
+\T1/zi4/m/n/8 8278c0b8d2b48ae5ed473c09d6c3f9ba34f53391$[][]\T1/stix/m/n/8 , doi
+:[][]$\T1/zi4/m/n/8 10 . 1101 / 2023 . 02 . 10 .
+ []
+
+
+Underfull \hbox (badness 6125) in paragraph at lines 104--117
+\T1/stix/m/n/8 M.A., Pas-cual Leone, A., Fregni, F., 2007.  A ran-dom-ized,
+ []
+
+
+Underfull \hbox (badness 1173) in paragraph at lines 139--148
+\T1/stix/m/n/8 Syn-thetic mi-nor-ity over-sampling tech-nique.  Jour-nal of Ar-
+ti-fi-cial
+ []
+
+
+Underfull \hbox (badness 3919) in paragraph at lines 163--189
+[]\T1/stix/m/n/8 Cramer, S.C., Sur, M., Dobkin, B.H., OBrien, C.P., Sanger, T.D
+.,
+ []
+
+
+Underfull \hbox (badness 1442) in paragraph at lines 190--202
+\T1/stix/m/n/8 Sini-atchkin, M., et al., 2023.  Strat-i-fi-ca-tion of re-sponse
+s to tdcs
+ []
+
+
+Underfull \hbox (badness 2213) in paragraph at lines 203--212
+\T1/stix/m/n/8 M., 2021.  Pre-dict-ing clin-i-cal re-sponse to tran-scra-nial m
+ag-netic
+ []
+
+
+Underfull \hbox (badness 3536) in paragraph at lines 203--212
+\T1/stix/m/n/8 stim-u-la-tion in ma-jor de-pres-sion us-ing time-frequency eeg 
+sig-nal
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 203--212
+\T1/stix/m/n/8 pro-cess-ing.  Biomed-i-cal En-gi-neer-ing Ap-pli-ca-tions Ba-si
+s and
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 203--212
+\T1/stix/m/n/8 Com-mu-ni-ca-tions URL: [][]$\T1/zi4/m/n/8 https : / / doi . org
+ / 10 . 4015 / s1016237221500484$[][]\T1/stix/m/n/8 ,
+ []
+
+
+Underfull \hbox (badness 1092) in paragraph at lines 213--222
+\T1/stix/m/n/8 di-ag-no-sis sup-port sys-tem based on eeg sig-nal en-tropies.  
+Jour-nal
+ []
+
+
+Underfull \hbox (badness 5756) in paragraph at lines 240--250
+[]\T1/stix/m/n/8 Funk, A.P., George, M.S., 2008.  Pre-frontal eeg asym-me-try a
+s
+ []
+
+
+Underfull \hbox (badness 4634) in paragraph at lines 240--250
+\T1/stix/m/n/8 a po-ten-tial biomarker of an-tide-pres-sant treat-ment re-spons
+e with
+ []
+
+
+Underfull \hbox (badness 1308) in paragraph at lines 251--261
+\T1/stix/m/n/8 In-ter-na-tional Con-fer-ence of the IEEE En-gi-neer-ing in Medi
+cine &
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 262--273
+[]\T1/stix/m/n/8 Guo, L., Zhang, Z., Tan, X., Phua, K., Wang, C., Tor, P.,
+ []
+
+
+Underfull \hbox (badness 6428) in paragraph at lines 262--273
+\T1/stix/m/n/8 Ang, K., 2024.  Resting-state eeg biomark-ers of ac-cel-er-ated
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 262--273
+\T1/stix/m/n/8 in-ter-mit-tent theta burst stim-u-la-tion treat-ment for de-pre
+s-sion:
+ []
+
+
+Underfull \hbox (badness 3612) in paragraph at lines 262--273
+\T1/stix/m/n/8 a pi-lot study, in: An-nual In-ter-na-tional Con-fer-ence of the
+ IEEE
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 262--273
+\T1/zi4/m/n/8 semanticscholar . org / paper / 9d00f9320f2f75435719d9cccc4133e98
+9f8737e$[][]\T1/stix/m/n/8 ,
+ []
+
+[11]
+Underfull \hbox (badness 2150) in paragraph at lines 274--281
+[]\T1/stix/m/n/8 Hjorth, B., 1970.  Eeg anal-y-sis based on time do-main prop-e
+r-ties.
+ []
+
+
+Underfull \hbox (badness 1038) in paragraph at lines 282--293
+[]\T1/stix/m/n/8 Jaworska, N., Salle, S.d.l., Ibrahim, M.H., Blier, P., Knott, 
+V., 2019.
+ []
+
+
+Underfull \hbox (badness 3826) in paragraph at lines 439--451
+[]\T1/stix/m/n/8 Murphy, N., Tam-man, A.J.F., Li-jf-fijt, M., Amarneh, D., Iqba
+l, S.,
+ []
+
+
+Underfull \hbox (badness 7704) in paragraph at lines 439--451
+\T1/stix/m/n/8 in late-life treatment-resistant de-pres-sion: a ran-dom-ized co
+n-trol
+ []
+
+
+Underfull \hbox (badness 3417) in paragraph at lines 439--451
+\T1/stix/m/n/8 trial.  Neu-ropsy-chophar-ma-col-ogy URL: [][]$\T1/zi4/m/n/8 htt
+ps : / / doi . org / 10 . 1038 /
+ []
+
+
+Underfull \hbox (badness 1596) in paragraph at lines 463--472
+\T1/stix/m/n/8 in ma-jor de-pres-sive dis-or-der.  IEEE Trans-ac-tions on Biome
+d-i-cal
+ []
+
+
+Underfull \hbox (badness 1881) in paragraph at lines 473--482
+[]\T1/stix/m/n/8 Olbrich, S., Arns, M., 2013.  Eeg biomark-ers in ma-jor de-pre
+s-sive
+ []
+
+
+Underfull \hbox (badness 1748) in paragraph at lines 473--482
+\T1/stix/m/n/8 In-ter-na-tional Re-view of Psy-chi-a-try URL: [][]$\T1/zi4/m/n/
+8 https : / / doi . org / 10 . 3109 /
+ []
+
+
+Underfull \hbox (badness 1314) in paragraph at lines 483--494
+\T1/stix/m/n/8 Re-view and per-spec-tives of promis-ing base-line eeg biomark-e
+rs in
+ []
+
+
+Underfull \hbox (badness 1867) in paragraph at lines 495--515
+[]\T1/stix/m/n/8 Pettorruso, M., Lorenzo, G.D., Be-natti, B., dAn-drea, G., Cav
+-al-lotto,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 495--515
+\T1/stix/m/n/8 C., Carullo, R., Man-cusi, G., Marco, O.D., Mam-marella, G.,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 495--515
+\T1/stix/m/n/8 Dat-tilio, A., Bar-locci, E., Rosa, I., Cocco, A., Padula, L.P.,
+
+ []
+
+
+Underfull \hbox (badness 1097) in paragraph at lines 495--515
+\T1/stix/m/n/8 Bub-bico, G., Per-rucci, M.G., Guidotti, R., DAn-drea, A., Marze
+tti,
+ []
+
+
+Underfull \hbox (badness 1708) in paragraph at lines 495--515
+\T1/stix/m/n/8 L., Zo-ratto, F., Del-losso, B., Mar-tinotti, G., 2024.  Over-co
+m-ing
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 495--515
+\T1/stix/m/n/8 treatment-resistant de-pres-sion with machine-learning based
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 495--515
+\T1/stix/m/n/8 tools: a study pro-to-col com-bin-ing eeg and clin-i-cal data to
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 495--515
+\T1/stix/m/n/8 per-son-al-ize glu-ta-mater-gic and brain stim-u-la-tion in-ter-
+ven-tions
+ []
+
+
+Underfull \hbox (badness 4036) in paragraph at lines 495--515
+\T1/stix/m/n/8 (se-lec-tool project).  Fron-tiers in Psy-chi-a-try URL: [][]$\T
+1/zi4/m/n/8 https : / / www .
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 495--515
+\T1/zi4/m/n/8 semanticscholar . org / paper / 169e53dbe54745e1df0495183343bda9d
+6a8a29e$[][]\T1/stix/m/n/8 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 536--546
+\T1/stix/m/n/8 de-pres-sion.  Clin-i-cal Neu-ro-phys-i-ol-ogy URL: [][]$\T1/zi4
+/m/n/8 https : / / www .
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 536--546
+\T1/zi4/m/n/8 semanticscholar . org / paper / c2c05fd78b73d7ebd82bcbd5cb8af3516
+e1f5751$[][]\T1/stix/m/n/8 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 560--577
+[]\T1/stix/m/n/8 Romero Marin, R., Lopez Ro-driguez, S., Lakis Granell, S.,
+ []
+
+
+Underfull \hbox (badness 1810) in paragraph at lines 560--577
+\T1/stix/m/n/8 Bu-loz Os-o-rio, E., Ca-bello Toscano, M., Ur-re-taviz-caya Sara
+chaga,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 560--577
+\T1/stix/m/n/8 M., Alonso Or-tega, M.d.P., Chopra, M., Solana Sanchez, J.,
+ []
+
+
+Underfull \hbox (badness 1960) in paragraph at lines 560--577
+\T1/stix/m/n/8 Cam-prodon, J., Pas-cual Leone, A., Bartres Faz, D., Cap-pon, D.
+,
+ []
+
+
+Underfull \hbox (badness 3701) in paragraph at lines 560--577
+\T1/stix/m/n/8 Cat-ta-neo, G., 2026.  Re-motely su-per-vised home-based tdcs in
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 560--577
+\T1/stix/m/n/8 treatment-resistant de-pres-sion: Fea-si-bil-ity, ef-fec-tive-ne
+ss and eeg
+ []
+
+
+Underfull \hbox (badness 5417) in paragraph at lines 560--577
+\T1/stix/m/n/8 biomark-ers of re-sponse.  Re-search Square URL: [][]$\T1/zi4/m/
+n/8 https : / / www .
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 560--577
+\T1/zi4/m/n/8 semanticscholar . org / paper / 7ba628353818d20f18ac5ecdccca2bd39
+bca3d77$[][]\T1/stix/m/n/8 ,
+ []
+
+
+Underfull \hbox (badness 1024) in paragraph at lines 578--593
+[]\T1/stix/m/n/8 Shalbaf, R., Bren-ner, C.A., Pang, C., Blum-berger, D.M., Dow-
+nar, J.,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 594--608
+\T1/zi4/m/n/8 semanticscholar . org / paper / c0dabdc70010a5fb8ea6f2546d37fe9e8
+3a13071$[][]\T1/stix/m/n/8 ,
+ []
+
+[12]
+Underfull \hbox (badness 2351) in paragraph at lines 609--617
+[]\T1/stix/m/n/8 Shen, A., Sun, J., Chen, X., Gao, X., 2025.  A data-centric an
+d
+ []
+
+
+Underfull \hbox (badness 1590) in paragraph at lines 609--617
+\T1/stix/m/n/8 in-ter-pretable eeg frame-work for de-pres-sion sever-ity grad-i
+ng us-ing
+ []
+
+
+Underfull \hbox (badness 4429) in paragraph at lines 627--636
+\T1/stix/m/n/8 biomark-ers for ma-jor de-pres-sive dis-or-der.  npj Men-tal Hea
+lth
+ []
+
+
+Underfull \hbox (badness 1226) in paragraph at lines 679--691
+\T1/stix/m/n/8 J., Bruhl, A.B., 2025.  Al-ter-ations in resting-state eeg func-
+tional
+ []
+
+
+Underfull \hbox (badness 2772) in paragraph at lines 679--691
+\T1/stix/m/n/8 con-nec-tiv-ity in pa-tients with ma-jor de-pres-sive dis-or-der
+ re-ceiv-ing
+ []
+
+
+Underfull \hbox (badness 1509) in paragraph at lines 679--691
+\T1/stix/m/n/8 elec-tro-con-vul-sive ther-apy: A sys-tem-atic re-view.  Neu-ro-
+science &
+ []
+
+
+Underfull \hbox (badness 3291) in paragraph at lines 679--691
+\T1/stix/m/n/8 Biobe-hav-ioral Re-views URL: [][]$\T1/zi4/m/n/8 https : / / doi
+ . org / 10 . 1016 / j . neubiorev .
+ []
+
+
+Underfull \hbox (badness 1571) in paragraph at lines 692--701
+[]\T1/stix/m/n/8 Waller, D.A., Car-pen-ter, L.L., Jones, S.R., 2026.  Tran-sien
+t frontal
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 692--701
+\T1/zi4/m/n/8 semanticscholar . org / paper / 6a3e902c05c07569afa93b0bb3e0b484b
+f519824$[][]\T1/stix/m/n/8 ,
+ []
+
+
+Underfull \hbox (badness 1308) in paragraph at lines 722--734
+[]\T1/stix/m/n/8 Widge, A.S., Bilge, M.T., Mon-tana, R., Chang, W., Ro-driguez,
+ C.I.,
+ []
+
+
+Underfull \hbox (badness 2409) in paragraph at lines 735--748
+[]\T1/stix/m/n/8 Woodham, R.D., Sel-varaj, S., La-jmi, N., Hob-day, H., Shee-ha
+n, G.,
+ []
+
+
+Underfull \hbox (badness 1509) in paragraph at lines 735--748
+\T1/stix/m/n/8 Ghazi-Noori, A.R., Lager-berg, P.J., Rizvi, M., Kwon, S.S., Orhi
+i,
+ []
+
+
+Underfull \hbox (badness 2884) in paragraph at lines 735--748
+\T1/stix/m/n/8 treat-ment for ma-jor de-pres-sive dis-or-der: a fully re-mote p
+hase 2
+ []
+
+
+Underfull \hbox (badness 1057) in paragraph at lines 749--763
+\T1/stix/m/n/8 Bra-mon, E., Rit-ter, P., Bauer, M., Young, A.H., Fu, C.H., 2025
+a.
+ []
+
+
+Underfull \hbox (badness 2941) in paragraph at lines 777--787
+[]\T1/stix/m/n/8 Zeidabadi, A.A., Rashidi, S., 2025.  Pre-dic-tion of rtms trea
+t-ment
+ []
+
+
+Underfull \hbox (badness 5578) in paragraph at lines 777--787
+\T1/stix/m/n/8 re-sponse in de-pres-sion us-ing a frequency-based eeg biomarker
+,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 777--787
+\T1/stix/m/n/8 in: In-ter-na-tional Con-fer-ence on Com-puter and Knowl-edge
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 777--787
+\T1/stix/m/n/8 En-gi-neer-ing.  URL: [][]$\T1/zi4/m/n/8 https : / / www . seman
+ticscholar . org / paper /
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 777--787
+\T1/zi4/m/n/8 fa7b0c55f517ebfbaa6af5be40ba57129e5d87f2$[][]\T1/stix/m/n/8 , doi
+:[][]$\T1/zi4/m/n/8 10 . 1109 / ICCKE68588 .
+ []
+
+
+Underfull \hbox (badness 1394) in paragraph at lines 809--814
+[]\T1/stix/m/n/8 Zhdanov, A., et al., 2020.  Use of ma-chine learn-ing for pre-
+dict-ing
+ []
+
+) [13] (build/elsevier.aux)
+ ***********
+LaTeX2e <2023-11-01> patch level 1
+L3 programming layer <2024-02-20>
+ ***********
+Package rerunfilecheck Info: File `elsevier.out' has not changed.
+(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
+ ) 
+Here is how much of TeX's memory you used:
+ 17453 strings out of 474116
+ 270137 string characters out of 5743681
+ 1970187 words of memory out of 5000000
+ 39359 multiletter control sequences out of 15000+600000
+ 648605 words of font info for 156 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 90i,13n,93p,1768b,672s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2024/texmf-dist/fonts/type1/public/inconsolata/Inconsolat
+a-zi4r.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/STIXGene
+ral-Bold.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/STIXGe
+neral-Italic.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/ST
+IXGeneral-Regular.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/cm
+-super/sfss0800.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/cm-s
+uper/sfss0900.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/cm-sup
+er/sfsx0900.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/sti
+x-mathex.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/stix-m
+athit.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/stix-math
+rm.pfb>
+Output written on build/elsevier.pdf (13 pages, 2072864 bytes).
+PDF statistics:
+ 684 PDF objects out of 1000 (max. 8388607)
+ 613 compressed objects within 7 object streams
+ 112 named destinations out of 1000 (max. 500000)
+ 76 words of extra memory for PDF output out of 10000 (max. 10000000)
+

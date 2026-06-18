@@ -1,0 +1,111 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{milev2016_canadian,boggio2007_randomized,Brunoni2016,Mutz2018,razza2020systematic,thair2017_transcranial,cramer2011_harnessing}
+\citation{woodham2025home,Rimmer2024}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\citation{Siuly2017,Casson2010,babiloni2012_guidelines,stoyell2021high,simmatis2023_technical,Miranda2019}
+\citation{olbrich2013_eeg,olbrich2015_personalized,leuchter2010_biomarkers,Fu2013,Fu2019,simmatis2023_technical,watts2022predicting,cohen2023electroencephalography}
+\citation{AlKaysi2017,jaworska2019_leveraging,oakley2022_eeg,shalbaf2018_nonlinear,ebrahimzadeh2021_predicting,zhdanov_svm_prediction,Puthankattil2012,Ghiasi2021,Zhao2022}
+\citation{funk2008_prefrontal,bailey2023_concurrent,murphy2023_neural,guo2024_restingstate,tsai2023_review,Dagnino2023,Moncy2024,Xiao2025PMIP,Xiao2025JAD,sheen2024_response,zeidabadi2025_prediction,reissmann2026_thetacordance,ulrich2025_alterations}
+\citation{Moncy2024,Xiao2025PMIP}
+\citation{woodham2025home}
+\citation{woodham2025home}
+\citation{woodham2025home}
+\citation{woodham2025home}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Methods}{2}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Dataset and signal representation}{2}{subsection.2.1}\protected@file@percent }
+\citation{Casson2010,stoyell2021high}
+\citation{Siuly2017,Miranda2019,Mahato2020,babiloni2012_guidelines,simmatis2023_technical}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Cohort, acquisition, and sweep configuration summary. Trial descriptors derive from the parent home-based tDCS study \citep  {woodham2025home}; acquisition totals and sweep settings derive from the analyzed EEG exports and current experiment configuration.}}{3}{table.caption.1}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{tab:cohort-summary}{{1}{3}{Cohort, acquisition, and sweep configuration summary. Trial descriptors derive from the parent home-based tDCS study \citep {woodham2025home}; acquisition totals and sweep settings derive from the analyzed EEG exports and current experiment configuration}{table.caption.1}{}}
+\citation{olbrich2013_eeg,olbrich2015_personalized,simmatis2023_technical}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Sweep design and validation}{4}{subsection.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Models}{4}{subsection.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Outcome metrics and biomarker summaries}{4}{subsection.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Results}{4}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Sweep-level comparison}{4}{subsection.3.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Sweep-level overview across 150 successful runs. The top row compares patient-level ROC-AUC by model as window size and \texttt  {inner-k} vary. The bottom row shows the shared feature-selection behavior of the pipeline because both classifiers use the same selected feature subsets for matched sweep settings. Stars mark the best individual hybrid and SVM runs.}}{5}{figure.caption.2}\protected@file@percent }
+\newlabel{fig:sweep-overview}{{1}{5}{Sweep-level overview across 150 successful runs. The top row compares patient-level ROC-AUC by model as window size and \texttt {inner-k} vary. The bottom row shows the shared feature-selection behavior of the pipeline because both classifiers use the same selected feature subsets for matched sweep settings. Stars mark the best individual hybrid and SVM runs}{figure.caption.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Best-run patient-level performance}{5}{subsection.3.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Best-run main-results composite for the hybrid model (\texttt  {mlflow\_run\_id=561eb29a046946818320bea18f21bed6}). The figure summarizes the patient-level ROC curve, PR curve, confusion matrix, and metric summary for the highest-performing sweep configuration.}}{6}{figure.caption.3}\protected@file@percent }
+\newlabel{fig:main-results}{{2}{6}{Best-run main-results composite for the hybrid model (\texttt {mlflow\_run\_id=561eb29a046946818320bea18f21bed6}). The figure summarizes the patient-level ROC curve, PR curve, confusion matrix, and metric summary for the highest-performing sweep configuration}{figure.caption.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Best-performing configuration for each model family.}}{6}{table.caption.4}\protected@file@percent }
+\newlabel{tab:best-run-comparison}{{2}{6}{Best-performing configuration for each model family}{table.caption.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Sparse biomarker set with modest hard-set overlap}{6}{subsection.3.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Biomarker-stability composite for the best hybrid run. Panel A ranks the recurrent features by selection frequency. Panel D reports the modest Kuncheva stability summary.}}{7}{figure.caption.5}\protected@file@percent }
+\newlabel{fig:biomarker-stability}{{3}{7}{Biomarker-stability composite for the best hybrid run. Panel A ranks the recurrent features by selection frequency. Panel D reports the modest Kuncheva stability summary}{figure.caption.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Recurrent candidate biomarkers from the best hybrid run. $\Delta $ selection is remission minus non-remission selection share.}}{7}{table.caption.6}\protected@file@percent }
+\newlabel{tab:hybrid-biomarkers}{{3}{7}{Recurrent candidate biomarkers from the best hybrid run. $\Delta $ selection is remission minus non-remission selection share}{table.caption.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Effect-direction consistency and class-conditional patterns}{7}{subsection.3.4}\protected@file@percent }
+\citation{olbrich2013_eeg,olbrich2015_personalized,leuchter2010_biomarkers,simmatis2023_technical,alonso2017_standardization,Fu2019}
+\citation{AlKaysi2017,jaworska2019_leveraging,oakley2022_eeg,shalbaf2018_nonlinear,ebrahimzadeh2021_predicting,zhdanov_svm_prediction,watts2022predicting,cohen2023electroencephalography}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Biomarker-interpretation composite for the best hybrid run. The recurring features show consistent effect direction, with \texttt  {tp10\_spectral\_entropy} skewing toward non-remission-associated selections and \texttt  {af7\_zero\_crossings} skewing toward remission-associated selections.}}{8}{figure.caption.7}\protected@file@percent }
+\newlabel{fig:biomarker-interpretation}{{4}{8}{Biomarker-interpretation composite for the best hybrid run. The recurring features show consistent effect direction, with \texttt {tp10\_spectral\_entropy} skewing toward non-remission-associated selections and \texttt {af7\_zero\_crossings} skewing toward remission-associated selections}{figure.caption.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Discussion}{8}{section.4}\protected@file@percent }
+\citation{Moncy2024,Xiao2025PMIP}
+\citation{Moncy2024,Xiao2025PMIP}
+\citation{Moncy2025BD,Xiao2025JAD}
+\citation{Dagnino2023}
+\citation{funk2008_prefrontal,bailey2023_concurrent,guo2024_restingstate,Moncy2024,Xiao2025PMIP,Xiao2025JAD,romeromarn2026_remotely,kratter2026_stanford,waller2026_transient,sheen2024_response,zeidabadi2025_prediction,reissmann2026_thetacordance,ulrich2025_alterations,pettorruso2024_overcoming}
+\bibstyle{plainnat}
+\bibdata{references,references_analysis_subset}
+\bibcite{abbott2020_preliminary}{{1}{2020}{{Abbott et~al.}}{{Abbott, C, Calhoun, D, Espinoza, Randall, Jiang, Rongtao, Jones, Tom, Narr, L, Qi, Shile, Sui, Jing, Sun, Hailun, Upston, Joel, Wade, and Sc}}}
+\bibcite{abelson2020_protocol}{{2}{2020}{{Abelson et~al.}}{{Abelson, J, Akeman, E, Aupperle, L, Bodurka, J, Clausen, AN, Cosgrove, KT, Craske, MG, Kirlic, N, Martell, C, Mathis, B, McDermott, TJ, Paulus, M, Santiago, J, Thompson, WK, Wolitzky-Taylor, and K}}}
+\bibcite{agnetti2012_effects}{{3}{2012}{{Agnetti et~al.}}{{Agnetti, Virgilio, Aiello, Elena, Natale, Edoardo, Deriu, Franca, Paulus, Stephan, Sotgiu, Giovanni, Tolu, and Eusebio}}}
+\bibcite{alamian2017_alterations}{{4}{2017}{{Alamian et~al.}}{{Alamian, Hincapié, Combrisson, Thiery, Martel, Althukov, and Jerbi}}}
+\bibcite{alexander2017_open}{{5}{2017}{{Alexander et~al.}}{{Alexander, Escalera, Ai, Andreotti, Febre, Mangone, Potler, Langer, Alexander, Kovacs, Litke, O’Hagan, Andersen, Bronstein, Bui, Bushey, Butler, Castagna, Camacho, Chan, Citera, Clucas, Cohen, Dufek, Eaves, Fradera, Gardner, Grant-Villegas, Green, Gregory, Hart, Harris, Horton, Kahn, Kabotyanski, Karmel, Kelly, Kleinman, Koo, Kramer, Lennon, Lord, Mantello, Margolis, Merikangas, Milham, Minniti, Neuhaus, Levine, Osman, Parra, Pugh, Racanello, Restrepo, Saltzman, Septimus, Tobe, Waltz, Williams, Yeo, Castellanos, Klein, Paus, Leventhal, Craddock, Koplewicz, and Milham}}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion}{10}{section.5}\protected@file@percent }
+\bibcite{allen2012_tracking}{{6}{2012}{{Allen et~al.}}{{Allen, Damaraju, Plis, Erhardt, Eichele, and Calhoun}}}
+\bibcite{alonso2017_standardization}{{7}{2017}{{Alonso et~al.}}{{Alonso, Esther, Arnott, R., Atluri, Sravya, Blumberger, Daniel, Brenner, A., Daskalakis, J., Dhami, Prabhjot, Dharsee, Moyez, Evans, R., Farzan, Faranak, Frehlich, Matthew, Frey, N., Kennedy, H., Kleffner, Killian, Lam, W., Liotti, Mario, Mcandrews, Pat, Milev, Roumen, Price, Rae, Ravindran, Arun, Rotzinger, Susan, Vila-Rodriguez, Fidel, Wong, and Willy}}}
+\bibcite{babiloni2012_guidelines}{{8}{2012}{{BABILONI et~al.}}{{BABILONI, CLAUDIO, PH, M, WH, DH, J, U, K, Collaborators, M, T, VJ, FH, M, A, JF, S, LS, GS, B, A, WK, JM, FJ, and RG}}}
+\bibcite{babulal2018_perspectives}{{9}{2018}{{Babulal et~al.}}{{Babulal, Quiroz, Albensi, Arenaza‐Urquijo, Astell, Babiloni, Bahar‐Fuchs, Bell, Bowman, Brickman, Chételat, Ciro, Cohen, Dilworth‐Anderson, Dodge, Dreux, Edland, Esbensen, Evered, Ewers, Fargo, Fortea, González, Gustafson, Head, Hendrix, Hofer, Johnson, Jutten, Kilborn, Lanctôt, Manly, Martins, Mielke, Morris, Murray, Oh, Parra, Rissman, Roe, Santos, Scarmeas, Schneider, Schupf, Sikkes, Snyder, Sohrabi, Stern, Strydom, Tang, Muñiz‐Terrera, Teunissen, Lent, Weinborn, Wesselman, Wilcock, Zetterberg, and O’Bryant}}}
+\bibcite{bailey2023_concurrent}{{10}{2023}{{Bailey et~al.}}{{Bailey, Hoy, Sullivan, Allman, Rogasch, Daskalakis, and Fitzgerald}}}
+\bibcite{boggio2007_randomized}{{11}{2007}{{Boggio et~al.}}{{Boggio, Rigonatti, Ribeiro, Myczkowski, Nitsche, Pascual‐Leone, and Fregni}}}
+\bibcite{borbly2016_twoprocess}{{12}{2016}{{Borbély et~al.}}{{Borbély, Daan, Wirz‐Justice, and Deboer}}}
+\bibcite{cecchi2020_dose}{{13}{2020}{{Cecchi et~al.}}{{Cecchi, J, Gerges, Paul, Hicks, W, Monroe, C, Phreaner, Jenna, Small, and L}}}
+\bibcite{chen2020_functional}{{14}{2020}{{Chen et~al.}}{{Chen, Wagner, Heugel, Sugar, Lee, Conant, Malloy, Heffernan, Quirk, Zinos, Beardsley, Prost, and Whelan}}}
+\bibcite{cramer2011_harnessing}{{15}{2011}{{Cramer et~al.}}{{Cramer, Sur, Dobkin, O’Brien, Sanger, Trojanowski, Rumsey, Hicks, Cameron, Chen, Chen, Cohen, deCharms, Duffy, Eden, Fetz, Filart, Freund, Grant, Haber, Kalivas, Kolb, Kramer, Lynch, Mayberg, McQuillen, Nitkin, Pascual–Leone, Reuter‐Lorenz, Schiff, Sharma, Shekim, Stryker, Sullivan, and Vinogradov}}}
+\bibcite{davis2020_discovery}{{16}{2020}{{Davis et~al.}}{{Davis, Aghaeepour, Ahn, Angst, Borsook, Brenton, Burczynski, Crean, Edwards, Gaudillière, Hergenroeder, Iadarola, Iyengar, Jiang, Kong, Mackey, Saab, Sang, Scholz, Segerdahl, Tracey, Veasley, Wang, Wager, Wasan, and Pelleymounter}}}
+\bibcite{dijk2022_two}{{17}{2022}{{Dijk et~al.}}{{Dijk, Wingen, Denys, Olbrich, Ruth, and Arns}}}
+\bibcite{duncan2018_getting}{{18}{2018}{{Duncan et~al.}}{{Duncan, S, Elger, E, Engel, Jerome, Staba, Richard, Vakharia, N, Witt, and Juri-Alexander}}}
+\bibcite{duncan2012_concomitant}{{19}{2012}{{Duncan et~al.}}{{Duncan, Sarasso, Ferrarelli, Selter, Riedner, Hejazi, Yuan, Brutsché, Manji, Tononi, and Zarate}}}
+\bibcite{ebrahimzadeh2021_predicting}{{20}{2021}{{Ebrahimzadeh et~al.}}{{Ebrahimzadeh, Asgarinejad, Saliminia, Ashoori, and Seraji}}}
+\bibcite{funk2008_prefrontal}{{21}{2008}{{Funk and George}}{{}}}
+\bibcite{gu2021_eegbased}{{22}{2021}{{Gu et~al.}}{{Gu, Cao, Jolfaei, Xu, Wu, Jung, and Lin}}}
+\bibcite{guo2024_restingstate}{{23}{2024}{{Guo et~al.}}{{Guo, Zhang, Tan, Phua, Wang, Tor, and Ang}}}
+\bibcite{herrmann2013_transcranial}{{24}{2013}{{Herrmann et~al.}}{{Herrmann, Rach, Neuling, and Strüber}}}
+\bibcite{jaworska2019_leveraging}{{25}{2019}{{Jaworska et~al.}}{{Jaworska, Salle, Ibrahim, Blier, and Knott}}}
+\bibcite{keeser2011_prefrontal}{{26}{2011}{{Keeser et~al.}}{{Keeser, Meindl, Bor, Palm, Pogarell, Mulert, Brunelin, Möller, Reiser, and Padberg}}}
+\bibcite{kong2025_alterations}{{27}{2025}{{Kong et~al.}}{{Kong, Sun, Zhu, Li, Wang, Shao, Li, and Hu}}}
+\bibcite{kratter2026_stanford}{{28}{2026}{{Kratter et~al.}}{{Kratter, Austelle, Lissemore, Wada, Geoly, Chaiken, Kaloiani, Johnson, Wan, Kozyr, Makarewycz, Wong, Sridhar, Espil, Bassano, Kim, Ehrie, Maron‐Katz, Tischler, Nejad, Batail, Phillips, Cole, Ford, Bentzley, Jo, Schatzberg, Spiegel, Rolle, Sahlem, and Williams}}}
+\bibcite{lefaucheur2020_evidencebased}{{29}{2020}{{Lefaucheur et~al.}}{{Lefaucheur, Alemán, Baeken, Benninger, Brunelin, Lazzaro, Filipović, Grefkes, Hasan, Hummel, Jääskeläinen, Langguth, Leocani, Londero, Nardone, Nguyen, Nyffeler, Oliveira‐Maia, Oliviero, Padberg, Palm, Paulus, Poulet, Quartarone, Rachid, Rektorová, Rossi, Sahlsten, Schecklmann, Szekely, and Ziemann}}}
+\bibcite{leuchter2010_biomarkers}{{30}{2010}{{Leuchter et~al.}}{{Leuchter, Cook, Hamilton, Narr, Toga, Hunter, Faull, Whitelegge, Andrews, Loo, Way, Nelson, Horvath, and Lebowitz}}}
+\bibcite{li2025_machine}{{31}{2025}{{Li et~al.}}{{Li, Detke, Paul, Potter, Zhang, Breier, Alphs, Wolkowitz, Ereshefsky, Grecco, and Wang}}}
+\bibcite{mckeith2017_diagnosis}{{32}{2017}{{McKeith et~al.}}{{McKeith, Boeve, Dickson, Halliday, Taylor, Weintraub, Aarsland, Galvin, Attems, Ballard, Bayston, Beach, Blanc‬, Bohnen, Bonanni, Brás, Brundin, Burn, Chen‐Plotkin, Duda, El‐Agnaf, Feldman, Ferman, ffytche, Fujishiro, Galasko, Goldman, Gomperts, Graff‐Radford, Honig, Iranzo, Kantarci, Kaufer, Kukull, Lee, Leverenz, Lewis, Lippa, Lunde, Masellis, Masliah, McLean, Mollenhauer, Montine, Moreno, Mori, Murray, O’Brien, Orimo, Postuma, Ramaswamy, Ross, Salmon, Singleton, Taylor, Thomas, Tiraboschi, Toledo, Trojanowski, Tsuang, Walker, Yamada, and Kosaka}}}
+\bibcite{milev2016_canadian}{{33}{2016}{{Milev et~al.}}{{Milev, Giacobbe, Kennedy, Blumberger, Daskalakis, Downar, Modirrousta, Patry, Vila‐Rodriguez, Lam, MacQueen, Parikh, Ravindran, and Group}}}
+\bibcite{murphy2023_neural}{{34}{2023}{{Murphy et~al.}}{{Murphy, Tamman, Lijffijt, Amarneh, Iqbal, Swann, Averill, O’Brien, and Mathew}}}
+\bibcite{oakley2022_eeg}{{35}{2022}{{Oakley et~al.}}{{Oakley, Coskuner, Cadwallader, Ravan, and Hasey}}}
+\bibcite{olbrich2013_eeg}{{36}{2013}{{Olbrich and Arns}}{{}}}
+\bibcite{olbrich2015_personalized}{{37}{2015}{{Olbrich et~al.}}{{Olbrich, Dinteren, and Arns}}}
+\bibcite{omurtag2017_decoding}{{38}{2017}{{Omurtag et~al.}}{{Omurtag, T, T, B, Aghajani, Keles, C, D, and O}}}
+\bibcite{peters2016_corticostriatalthalamic}{{39}{2016}{{Peters et~al.}}{{Peters, Dunlop, and Downar}}}
+\bibcite{pettorruso2024_overcoming}{{40}{2024}{{Pettorruso et~al.}}{{Pettorruso, Lorenzo, Benatti, d’Andrea, Cavallotto, Carullo, Mancusi, Marco, Mammarella, D'attilio, Barlocci, Rosa, Cocco, Padula, Bubbico, Perrucci, Guidotti, D’Andrea, Marzetti, Zoratto, Dell'osso, and Martinotti}}}
+\bibcite{rasch2013_about}{{41}{2013}{{Rasch and Born}}{{}}}
+\bibcite{reissmann2026_thetacordance}{{42}{2026}{{Reissmann et~al.}}{{Reissmann, Rupprecht, Langguth, Rischer, and Schoisswohl}}}
+\bibcite{romeromarn2026_remotely}{{43}{2026}{{Romero-Marín et~al.}}{{Romero-Marín, López-Rodríguez, Lakis-Granell, Buloz-Osorio, Cabello-Toscano, Urretavizcaya-Sarachaga, Alonso-Ortega, Chopra, Solana-Sánchez, Camprodon, Pascual-Leone, Bartrés-Faz, Cappon, and Cattaneo}}}
+\bibcite{rossi2020_safety}{{44}{2020}{{Rossi et~al.}}{{Rossi, Antal, Bestmann, Bikson, Brewer, Brockmöller, Carpenter, Cincotta, Chen, Daskalakis, Lazzaro, Fox, George, Gilbert, Kimiskidis, Koch, Ilmoniemi, Lefaucheur, Leocani, Lisanby, Miniussi, Padberg, Pascual‐Leone, Paulus, Peterchev, Quartarone, Rotenberg, Rothwell, Rossini, Santarnecchi, Shafi, Siebner, Ugawa, Wassermann, Zangen, Ziemann, and Hallett}}}
+\bibcite{shalbaf2018_nonlinear}{{45}{2018}{{Shalbaf et~al.}}{{Shalbaf, Brenner, Pang, Blumberger, Downar, Daskalakis, Tham, Lam, Farzan, and Vila‐Rodriguez}}}
+\bibcite{sheen2024_response}{{46}{2024}{{Sheen et~al.}}{{Sheen, Mazza, Momi, Miron, Mansouri, Russell, Zhou, Hyde, Fox, Voetterl, Assi, Daskalakis, Blumberger, Griffiths, and Downar}}}
+\bibcite{simmatis2023_technical}{{47}{2023}{{Simmatis et~al.}}{{Simmatis, Russo, Geraci, Harmsen, and Samuel}}}
+\bibcite{steiger2019_depression}{{48}{2019}{{Steiger and Pawlowski}}{{}}}
+\bibcite{steiger2015_sleep}{{49}{2015}{{Steiger et~al.}}{{Steiger, Pawlowski, and Kimura}}}
+\bibcite{thair2017_transcranial}{{50}{2017}{{Thair et~al.}}{{Thair, Holloway, Newport, and Smith}}}
+\bibcite{tsai2023_review}{{51}{2023}{{Tsai et~al.}}{{Tsai, Li, and Juan}}}
+\bibcite{ulrich2025_alterations}{{52}{2025}{{Ulrich et~al.}}{{Ulrich, Schneider, Deuring, Erni, Ridder, Sarlon, and Brühl}}}
+\bibcite{waller2026_transient}{{53}{2026}{{Waller et~al.}}{{Waller, Carpenter, and Jones}}}
+\bibcite{zaehle2010_transcranial}{{54}{2010}{{Zaehle et~al.}}{{Zaehle, Rach, and Herrmann}}}
+\bibcite{zeidabadi2025_prediction}{{55}{2025}{{Zeidabadi and Rashidi}}{{}}}
+\gdef \@abspage@last{17}

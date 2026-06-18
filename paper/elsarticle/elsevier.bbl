@@ -1,0 +1,238 @@
+\begin{thebibliography}{10}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \def\href#1#2{#2} \def\path#1{#1}\fi
+
+\bibitem{Woodham2021}
+R.~Woodham, R.~M. Rimmer, J.~Mutz, C.~H.~Y. Fu, Is tdcs a potential first line treatment for major depression?, International Review of Psychiatry 33~(3) (2021) 250--265.
+\newblock \href {https://doi.org/10.1080/09540261.2021.1879030} {\path{doi:10.1080/09540261.2021.1879030}}.
+
+\bibitem{woodham2025home}
+R.~D. Woodham, S.~Selvaraj, N.~Lajmi, H.~Hobday, G.~Sheehan, A.-R. Ghazi-Noori, P.~J. Lagerberg, M.~Rizvi, S.~S. Kwon, P.~Orhii, et~al., Home-based transcranial direct current stimulation treatment for major depressive disorder: a fully remote phase 2 randomized sham-controlled trial, Nature medicine 31~(1) (2025) 87--95.
+\newblock \href {https://doi.org/10.1038/s41591-024-03305-y} {\path{doi:10.1038/s41591-024-03305-y}}.
+
+\bibitem{Hampsey2026}
+E.~Hampsey, M.~Kalfas, L.~Carter, M.~Bloomfield, H.~Rezaei, A.~H. Young, C.~H.~Y. Fu, A systematic review of transcranial electrical stimulation and meta-analysis of transcranial direct current stimulation rcts in unipolar and bipolar depression, Journal of Affective Disorders 400 (2026) 121009.
+\newblock \href {https://doi.org/10.1016/j.jad.2025.121009} {\path{doi:10.1016/j.jad.2025.121009}}.
+
+\bibitem{Rimmer2024}
+R.~M. Rimmer, R.~D. Woodham, S.~Cahill, C.~H. Fu, Acceptability of home-based transcranial direct current stimulation (tdcs) in major depression: a qualitative analysis of individual experiences, Mental Health Review Journal 29~(1) (2024) 79--91.
+
+\bibitem{olbrich2013_eeg}
+S.~Olbrich, M.~Arns, \href{https://doi.org/10.3109/09540261.2013.816269}{Eeg biomarkers in major depressive disorder: Discriminative power and prediction of treatment response}, International Review of Psychiatry (2013).
+\newblock \href {https://doi.org/10.3109/09540261.2013.816269} {\path{doi:10.3109/09540261.2013.816269}}.
+\newline\urlprefix\url{https://doi.org/10.3109/09540261.2013.816269}
+
+\bibitem{olbrich2015_personalized}
+S.~Olbrich, R.~v. Dinteren, M.~Arns, \href{https://doi.org/10.1159/000437435}{Personalized medicine: Review and perspectives of promising baseline eeg biomarkers in major depressive disorder and attention deficit hyperactivity disorder}, Neuropsychobiology (2015).
+\newblock \href {https://doi.org/10.1159/000437435} {\path{doi:10.1159/000437435}}.
+\newline\urlprefix\url{https://doi.org/10.1159/000437435}
+
+\bibitem{leuchter2010_biomarkers}
+A.~F. Leuchter, I.~A. Cook, S.~P. Hamilton, K.~L. Narr, A.~Toga, A.~M. Hunter, K.~Faull, J.~Whitelegge, A.~M. Andrews, J.~Loo, B.~Way, S.~F. Nelson, S.~Horvath, B.~D. Lebowitz, \href{https://pubmed.ncbi.nlm.nih.gov/20963521/}{Biomarkers to predict antidepressant response}, Current Psychiatry Reports (2010).
+\newblock \href {https://doi.org/10.1007/s11920-010-0160-4} {\path{doi:10.1007/s11920-010-0160-4}}.
+\newline\urlprefix\url{https://pubmed.ncbi.nlm.nih.gov/20963521/}
+
+\bibitem{Fu2013}
+C.~H. Fu, S.~G. Costafreda, Neuroimaging-based biomarkers in psychiatry: clinical opportunities of a paradigm shift, The Canadian Journal of Psychiatry 58~(9) (2013) 499--508.
+
+\bibitem{Fu2019}
+C.~H. Fu, Y.~Fan, C.~Davatzikos, Addressing heterogeneity (and homogeneity) in treatment mechanisms in depression and the potential to develop diagnostic and predictive biomarkers, NeuroImage: Clinical 24 (2019) 101997.
+
+\bibitem{Widge2019}
+A.~S. Widge, M.~T. Bilge, R.~Montana, W.~Chang, C.~I. Rodriguez, T.~Deckersbach, L.~L. Carpenter, N.~H. Kalin, C.~B. Nemeroff, Electroencephalographic biomarkers for treatment response prediction in major depressive illness: A meta-analysis, American Journal of Psychiatry 176~(1) (2019) 44--56.
+\newblock \href {https://doi.org/10.1176/appi.ajp.2018.17121358} {\path{doi:10.1176/appi.ajp.2018.17121358}}.
+
+\bibitem{simmatis2023_technical}
+L.~Simmatis, E.~E. Russo, J.~Geraci, I.~E. Harmsen, N.~Samuel, \href{https://doi.org/10.1038/s44184-023-00038-7}{Technical and clinical considerations for electroencephalography-based biomarkers for major depressive disorder}, npj Mental Health Research (2023).
+\newblock \href {https://doi.org/10.1038/s44184-023-00038-7} {\path{doi:10.1038/s44184-023-00038-7}}.
+\newline\urlprefix\url{https://doi.org/10.1038/s44184-023-00038-7}
+
+\bibitem{watts2022predicting}
+D.~Watts, R.~F. Pulice, J.~Reilly, A.~R. Brunoni, F.~Kapczinski, I.~C. Passos, Predicting treatment response using eeg in major depressive disorder: A machine-learning meta-analysis, Translational psychiatry 12~(1) (2022) 332.
+
+\bibitem{cohen2023electroencephalography}
+S.~Cohen, J.~Zantvoord, B.~Wezenberg, J.~Daams, C.~Bockting, D.~Denys, G.~van Wingen, Electroencephalography for predicting antidepressant treatment success: a systematic review and meta-analysis, Journal of Affective Disorders 321 (2023) 201--207.
+
+\bibitem{AlKaysi2017}
+A.~M. Al-Kaysi, A.~Al-Ani, C.~K. Loo, T.~Y. Powell, D.~M. Martin, M.~Breakspear, T.~W. Boonstra, Predicting tdcs treatment outcomes of patients with major depressive disorder using automated eeg classification, Journal of affective disorders 208 (2017) 597--603.
+
+\bibitem{jaworska2019_leveraging}
+N.~Jaworska, S.~d.~l. Salle, M.~H. Ibrahim, P.~Blier, V.~Knott, \href{https://doi.org/10.3389/fpsyt.2018.00768}{Leveraging machine learning approaches for predicting antidepressant treatment response using electroencephalography (eeg) and clinical data}, Frontiers in Psychiatry (2019).
+\newblock \href {https://doi.org/10.3389/fpsyt.2018.00768} {\path{doi:10.3389/fpsyt.2018.00768}}.
+\newline\urlprefix\url{https://doi.org/10.3389/fpsyt.2018.00768}
+
+\bibitem{oakley2022_eeg}
+T.~Oakley, J.~Coskuner, A.~Cadwallader, M.~Ravan, G.~Hasey, \href{https://doi.org/10.1109/tbme.2022.3204861}{Eeg biomarkers to predict response to sertraline and placebo treatment in major depressive disorder}, IEEE Transactions on Biomedical Engineering (2022).
+\newblock \href {https://doi.org/10.1109/tbme.2022.3204861} {\path{doi:10.1109/tbme.2022.3204861}}.
+\newline\urlprefix\url{https://doi.org/10.1109/tbme.2022.3204861}
+
+\bibitem{shalbaf2018_nonlinear}
+R.~Shalbaf, C.~A. Brenner, C.~Pang, D.~M. Blumberger, J.~Downar, Z.~J. Daskalakis, J.~Tham, R.~W. Lam, F.~Farzan, F.~Vila-Rodriguez, \href{https://doi.org/10.3389/fphar.2018.01188}{Non-linear entropy analysis in eeg to predict treatment response to repetitive transcranial magnetic stimulation in depression}, Frontiers in Pharmacology (2018).
+\newblock \href {https://doi.org/10.3389/fphar.2018.01188} {\path{doi:10.3389/fphar.2018.01188}}.
+\newline\urlprefix\url{https://doi.org/10.3389/fphar.2018.01188}
+
+\bibitem{ebrahimzadeh2021_predicting}
+E.~Ebrahimzadeh, M.~Asgarinejad, S.~Saliminia, S.~Ashoori, M.~Seraji, \href{https://doi.org/10.4015/s1016237221500484}{Predicting clinical response to transcranial magnetic stimulation in major depression using time-frequency eeg signal processing}, Biomedical Engineering Applications Basis and Communications (2021).
+\newblock \href {https://doi.org/10.4015/s1016237221500484} {\path{doi:10.4015/s1016237221500484}}.
+\newline\urlprefix\url{https://doi.org/10.4015/s1016237221500484}
+
+\bibitem{zhdanov_svm_prediction}
+A.~Zhdanov, et~al., Use of machine learning for predicting escitalopram treatment outcome from eeg in adults with depression, Human Brain MappingPlaceholder citation for Zhdanov SVM study (2020).
+
+\bibitem{Puthankattil2012}
+S.~D. Puthankattil, P.~K. Joseph, Classification of eeg signals in normal and depression conditions by ann using rwe and signal entropy, J. Mech. Med. Biol. 12~(04) (2012) 1240019.
+
+\bibitem{Ghiasi2021}
+S.~Ghiasi, C.~Dell'Acqua, S.~Messerotti~Benvenuti, E.~P. Scilingo, C.~Gentili, G.~Valenza, A.~Greco, Classifying subclinical depression using {EEG} spectral and connectivity measures, in: 2021 43rd Annual International Conference of the IEEE Engineering in Medicine \& Biology Society (EMBC), IEEE, 2021, pp. 2050--2053.
+
+\bibitem{Zhao2022}
+S.~Zhao, S.-C. Ng, S.~Khoo, A.~Chi, Temporal and spatial dynamics of {EEG} features in female college students with subclinical depression, Int. J. Environ. Res. Public Health 19~(3) (Feb. 2022).
+
+\bibitem{Shim2021}
+M.~Shim, S.-H. Lee, H.-J. Hwang, Inflated prediction accuracy of neuropsychiatric biomarkers caused by data leakage in feature selection, Scientific Reports 11~(1) (apr 2021).
+\newblock \href {https://doi.org/10.1038/s41598-021-87157-3} {\path{doi:10.1038/s41598-021-87157-3}}.
+
+\bibitem{Shen2025}
+A.~Shen, J.~Sun, X.~Chen, X.~Gao, A data-centric and interpretable eeg framework for depression severity grading using shap-based insights, Journal of NeuroEngineering and Rehabilitation 22~(1) (may 2025).
+\newblock \href {https://doi.org/10.1186/s12984-025-01645-5} {\path{doi:10.1186/s12984-025-01645-5}}.
+
+\bibitem{funk2008_prefrontal}
+A.~P. Funk, M.~S. George, \href{https://doi.org/10.1177/155005940803900306}{Prefrontal eeg asymmetry as a potential biomarker of antidepressant treatment response with transcranial magnetic stimulation (tms): A case series}, Clinical EEG and Neuroscience (2008).
+\newblock \href {https://doi.org/10.1177/155005940803900306} {\path{doi:10.1177/155005940803900306}}.
+\newline\urlprefix\url{https://doi.org/10.1177/155005940803900306}
+
+\bibitem{bailey2023_concurrent}
+N.~Bailey, K.~Hoy, C.~Sullivan, B.~Allman, N.~Rogasch, Z.~Daskalakis, P.~Fitzgerald, \href{https://www.semanticscholar.org/paper/8278c0b8d2b48ae5ed473c09d6c3f9ba34f53391}{Concurrent transcranial magnetic stimulation and electroencephalography measures are associated with antidepressant response from rtms treatment for depression}, medRxiv (2023).
+\newblock \href {https://doi.org/10.1101/2023.02.10.23285794} {\path{doi:10.1101/2023.02.10.23285794}}.
+\newline\urlprefix\url{https://www.semanticscholar.org/paper/8278c0b8d2b48ae5ed473c09d6c3f9ba34f53391}
+
+\bibitem{murphy2023_neural}
+N.~Murphy, A.~J.~F. Tamman, M.~Lijffijt, D.~Amarneh, S.~Iqbal, A.~C. Swann, L.~A. Averill, B.~OBrien, S.~J. Mathew, \href{https://doi.org/10.1038/s41386-023-01586-4}{Neural complexity eeg biomarkers of rapid and post-rapid ketamine effects in late-life treatment-resistant depression: a randomized control trial}, Neuropsychopharmacology (2023).
+\newblock \href {https://doi.org/10.1038/s41386-023-01586-4} {\path{doi:10.1038/s41386-023-01586-4}}.
+\newline\urlprefix\url{https://doi.org/10.1038/s41386-023-01586-4}
+
+\bibitem{guo2024_restingstate}
+L.~Guo, Z.~Zhang, X.~Tan, K.~Phua, C.~Wang, P.~Tor, K.~Ang, \href{https://www.semanticscholar.org/paper/9d00f9320f2f75435719d9cccc4133e989f8737e}{Resting-state eeg biomarkers of accelerated intermittent theta burst stimulation treatment for depression: a pilot study}, in: Annual International Conference of the IEEE Engineering in Medicine and Biology Society, 2024.
+\newblock \href {https://doi.org/10.1109/EMBC53108.2024.10782112} {\path{doi:10.1109/EMBC53108.2024.10782112}}.
+\newline\urlprefix\url{https://www.semanticscholar.org/paper/9d00f9320f2f75435719d9cccc4133e989f8737e}
+
+\bibitem{tsai2023_review}
+Y.-C. Tsai, C.-T. Li, C.-H. Juan, \href{https://doi.org/10.3389/fpsyt.2023.1073984}{A review of critical brain oscillations in depression and the efficacy of transcranial magnetic stimulation treatment}, Frontiers in Psychiatry (2023).
+\newblock \href {https://doi.org/10.3389/fpsyt.2023.1073984} {\path{doi:10.3389/fpsyt.2023.1073984}}.
+\newline\urlprefix\url{https://doi.org/10.3389/fpsyt.2023.1073984}
+
+\bibitem{Dagnino2023}
+P.~C. Dagnino, C.~Braboszcz, E.~Kroupi, M.~Splittgerber, H.~Brauer, A.~Dempfle, C.~Breitling-Ziegler, A.~Prehn-Kristensen, K.~Krauel, M.~Siniatchkin, et~al., Stratification of responses to tdcs intervention in a healthy pediatric population based on resting-state eeg profiles, Scientific Reports 13~(1) (2023) 8438.
+
+\bibitem{sheen2024_response}
+J.~Sheen, F.~Mazza, D.~Momi, J.~Miron, F.~Mansouri, T.~Russell, R.~Zhou, M.~Hyde, L.~Fox, H.~Voetterl, E.~B. Assi, Z.~Daskalakis, D.~Blumberger, J.~D. Griffiths, J.~Downar, \href{https://www.semanticscholar.org/paper/c0dabdc70010a5fb8ea6f2546d37fe9e83a13071}{N100 as a response prediction biomarker for accelerated 1 hz right dlpfc-rtms in major depression.}, Journal of Affective Disorders (2024).
+\newblock \href {https://doi.org/10.1016/j.jad.2024.07.131} {\path{doi:10.1016/j.jad.2024.07.131}}.
+\newline\urlprefix\url{https://www.semanticscholar.org/paper/c0dabdc70010a5fb8ea6f2546d37fe9e83a13071}
+
+\bibitem{zeidabadi2025_prediction}
+A.~A. Zeidabadi, S.~Rashidi, \href{https://www.semanticscholar.org/paper/fa7b0c55f517ebfbaa6af5be40ba57129e5d87f2}{Prediction of rtms treatment response in depression using a frequency-based eeg biomarker}, in: International Conference on Computer and Knowledge Engineering, 2025.
+\newblock \href {https://doi.org/10.1109/ICCKE68588.2025.11273345} {\path{doi:10.1109/ICCKE68588.2025.11273345}}.
+\newline\urlprefix\url{https://www.semanticscholar.org/paper/fa7b0c55f517ebfbaa6af5be40ba57129e5d87f2}
+
+\bibitem{reissmann2026_thetacordance}
+A.~Reissmann, M.~Rupprecht, B.~Langguth, J.~Rischer, S.~Schoisswohl, \href{https://www.semanticscholar.org/paper/c2c05fd78b73d7ebd82bcbd5cb8af3516e1f5751}{Theta-cordance as a biomarker of treatment response to intermittent theta burst stimulation in patients with treatment-resistant depression.}, Clinical Neurophysiology (2026).
+\newblock \href {https://doi.org/10.1016/j.clinph.2026.2111710} {\path{doi:10.1016/j.clinph.2026.2111710}}.
+\newline\urlprefix\url{https://www.semanticscholar.org/paper/c2c05fd78b73d7ebd82bcbd5cb8af3516e1f5751}
+
+\bibitem{ulrich2025_alterations}
+S.~Ulrich, E.~Schneider, G.~Deuring, S.~Erni, M.~d. Ridder, J.~Sarlon, A.~B. Bruhl, \href{https://doi.org/10.1016/j.neubiorev.2025.106017}{Alterations in resting-state eeg functional connectivity in patients with major depressive disorder receiving electroconvulsive therapy: A systematic review}, Neuroscience \& Biobehavioral Reviews (2025).
+\newblock \href {https://doi.org/10.1016/j.neubiorev.2025.106017} {\path{doi:10.1016/j.neubiorev.2025.106017}}.
+\newline\urlprefix\url{https://doi.org/10.1016/j.neubiorev.2025.106017}
+
+\bibitem{Moncy2024}
+J.~C. Moncy, Y.~Fan, C.~H. Fu, Prediction of treatment outcome to transcranial direct current stimulation in major depression based on deep learning of eeg data, in: 2024 IEEE Conference on Artificial Intelligence (CAI), 2024, pp. 1123--1128.
+\newblock \href {https://doi.org/10.1109/CAI59869.2024.00201} {\path{doi:10.1109/CAI59869.2024.00201}}.
+
+\bibitem{Xiao2025PMIP}
+W.~Xiao, J.~C. Moncy, R.~D. Woodham, S.~Selvaraj, N.~Lajmi, H.~Hobday, G.~Sheehan, A.-R. Ghazi-Noori, P.~J. Lagerberg, R.~Machado-Vieira, et~al., Home-based transcranial direct current stimulation (tdcs) in major depressive disorder: enhanced network synchronization with active relative to sham and deep learning-based predictors of remission, Personalized Medicine in Psychiatry 49 (2025) 100147.
+
+\bibitem{Miranda2019}
+P.~Miranda, C.~D. Cox, M.~Alexander, S.~Danev, J.~R. Lakey, Overview of current diagnostic, prognostic, and therapeutic use of eeg and eeg-based markers of cognition, mental, and brain health, Integr. Mol. Med 6~(5) (2019).
+
+\bibitem{Siuly2017}
+S.~Siuly, Y.~Li, Y.~Zhang, Electroencephalogram (eeg) and its background, in: EEG signal analysis and classification: Techniques and applications, Springer, 2017, pp. 3--21.
+
+\bibitem{Mahato2020}
+S.~Mahato, N.~Goyal, D.~Ram, S.~Paul, Detection of depression and scaling of severity using six channel {EEG} data, J. Med. Syst. 44~(7) (2020) 118.
+
+\bibitem{babiloni2012_guidelines}
+BABILONI, CLAUDIO, B.~PH, B.~M, D.~WH, F.~DH, F.~J, H.~U, H.~K, I.~P. E. G.~C. Collaborators, J.~M, K.~T, K.~VJ, L.~D.~S. FH, M.~M, M.~A, N.~JF, O.~S, P.~LS, R.~GS, S.~B, S.~A, S.~WK, v.~G. JM, W.~FJ, W.~RG, \href{https://iris.uniroma1.it/bitstream/11573/802874/1/Jobert_Guidelines_2012.pdf}{Guidelines for the recording and evaluation of pharmaco-eeg data in man: the international pharmaco-eeg society (ipeg)} (2012).
+\newblock \href {https://doi.org/10.1159/000343478} {\path{doi:10.1159/000343478}}.
+\newline\urlprefix\url{https://iris.uniroma1.it/bitstream/11573/802874/1/Jobert_Guidelines_2012.pdf}
+
+\bibitem{Zhang2023EEGMethods}
+H.~Zhang, Q.-Q. Zhou, H.~Chen, X.-Q. Hu, W.-G. Li, Y.~Bai, J.-X. Han, Y.~Wang, Z.-H. Liang, D.~Chen, F.-Y. Cong, J.-Q. Yan, X.-L. Li, The applied principles of eeg analysis methods in neuroscience and clinical neurology, Military Medical Research 10~(1) (dec 2023).
+\newblock \href {https://doi.org/10.1186/s40779-023-00502-7} {\path{doi:10.1186/s40779-023-00502-7}}.
+
+\bibitem{Welch1967}
+P.~Welch, The use of fast fourier transform for the estimation of power spectra: A method based on time averaging over short, modified periodograms, IEEE Transactions on Audio and Electroacoustics 15~(2) (1967) 70--73.
+\newblock \href {https://doi.org/10.1109/TAU.1967.1161901} {\path{doi:10.1109/TAU.1967.1161901}}.
+
+\bibitem{Mumtaz2017}
+W.~Mumtaz, L.~Xia, M.~A. Mohd~Yasin, S.~S. Azhar~Ali, A.~S. Malik, A wavelet-based technique to predict treatment outcome for major depressive disorder, PLOS ONE 12~(2) (2017) e0171409.
+\newblock \href {https://doi.org/10.1371/journal.pone.0171409} {\path{doi:10.1371/journal.pone.0171409}}.
+
+\bibitem{Jaworska2018}
+N.~Jaworska, H.~Wang, D.~M. Smith, P.~Blier, V.~Knott, A.~B. Protzner, Pre-treatment eeg signal variability is associated with treatment success in depression, NeuroImage: Clinical 17 (2018) 368--377.
+\newblock \href {https://doi.org/10.1016/j.nicl.2017.10.035} {\path{doi:10.1016/j.nicl.2017.10.035}}.
+
+\bibitem{Hjorth1970}
+B.~Hjorth, Eeg analysis based on time domain properties, Electroencephalography and Clinical Neurophysiology 29~(3) (1970) 306--310.
+\newblock \href {https://doi.org/10.1016/0013-4694(70)90143-4} {\path{doi:10.1016/0013-4694(70)90143-4}}.
+
+\bibitem{Faust2014}
+O.~Faust, P.~C.~A. Ang, S.~D. Puthankattil, P.~K. Joseph, Depression diagnosis support system based on eeg signal entropies, Journal of Mechanics in Medicine and Biology 14~(3) (2014) 1450035.
+\newblock \href {https://doi.org/10.1142/S0219519414500353} {\path{doi:10.1142/S0219519414500353}}.
+
+\bibitem{Acharya2015}
+U.~R. Acharya, V.~K. Sudarshan, H.~Adeli, J.~Santhosh, J.~E.~W. Koh, S.~D. Puthankatti, A.~Adeli, A novel depression diagnosis index using nonlinear features in eeg signals, European Neurology 74~(1-2) (2015) 79--83.
+\newblock \href {https://doi.org/10.1159/000438457} {\path{doi:10.1159/000438457}}.
+
+\bibitem{Lord2023}
+B.~Lord, J.~J.~B. Allen, Evaluating eeg complexity metrics as biomarkers for depression, Psychophysiology 60~(8) (feb 2023).
+\newblock \href {https://doi.org/10.1111/psyp.14274} {\path{doi:10.1111/psyp.14274}}.
+
+\bibitem{Monni2022}
+A.~Monni, K.~L. Collison, K.~E. Hill, B.~A. Oumeziane, D.~Foti, The novel frontal alpha asymmetry factor and its association with depression, anxiety, and personality traits, Psychophysiology 59~(11) (2022) e14109.
+\newblock \href {https://doi.org/10.1111/psyp.14109} {\path{doi:10.1111/psyp.14109}}.
+
+\bibitem{Chawla2002}
+N.~V. Chawla, K.~W. Bowyer, L.~O. Hall, W.~P. Kegelmeyer, Smote: Synthetic minority over-sampling technique, Journal of Artificial Intelligence Research 16 (2002) 321--357.
+\newblock \href {https://doi.org/10.1613/jair.953} {\path{doi:10.1613/jair.953}}.
+
+\bibitem{Moncy2025BD}
+J.~C. Moncy, W.~Xiao, R.~D. Woodham, A.-R. Ghazi-Noori, H.~Rezaei, E.~Bramon, P.~Ritter, M.~Bauer, A.~H. Young, Y.~Fan, C.~H. Fu, Deep learning based treatment remission prediction to transcranial direct current stimulation in bipolar depression using eeg power spectral density, medRxiv (2025).
+\newblock \href {https://doi.org/10.1101/2024.07.16.24310445} {\path{doi:10.1101/2024.07.16.24310445}}.
+
+\bibitem{Xiao2025JAD}
+W.~Xiao, J.~C. Moncy, A.-R. Ghazi-Noori, R.~D. Woodham, H.~Rezaei, E.~Bramon, P.~Ritter, M.~Bauer, A.~H. Young, C.~H. Fu, Enhanced network synchronization connectivity following transcranial direct current stimulation (tdcs) in bipolar depression: effects on eeg oscillations and deep learning-based predictors of clinical remission, Journal of Affective Disorders 369 (2025) 576--587.
+
+\bibitem{romeromarn2026_remotely}
+R.~Romero~Marin, S.~Lopez~Rodriguez, S.~Lakis~Granell, E.~Buloz~Osorio, M.~Cabello~Toscano, M.~Urretavizcaya~Sarachaga, M.~d.~P. Alonso~Ortega, M.~Chopra, J.~Solana~Sanchez, J.~Camprodon, A.~Pascual~Leone, D.~Bartres~Faz, D.~Cappon, G.~Cattaneo, \href{https://www.semanticscholar.org/paper/7ba628353818d20f18ac5ecdccca2bd39bca3d77}{Remotely supervised home-based tdcs in treatment-resistant depression: Feasibility, effectiveness and eeg biomarkers of response}, Research Square (2026).
+\newblock \href {https://doi.org/10.21203/rs.3.rs-8709698/v1} {\path{doi:10.21203/rs.3.rs-8709698/v1}}.
+\newline\urlprefix\url{https://www.semanticscholar.org/paper/7ba628353818d20f18ac5ecdccca2bd39bca3d77}
+
+\bibitem{kratter2026_stanford}
+I.~H. Kratter, C.~W. Austelle, J.~I. Lissemore, M.~Wada, A.~Geoly, A.~Chaiken, I.~Kaloiani, N.~Johnson, S.~Wan, L.~Kozyr, E.~Makarewycz, B.~L. Wong, M.~Sridhar, F.~M. Espil, N.~Bassano, B.~Kim, J.~Ehrie, A.~Maron~Katz, C.~Tischler, R.~Nejad, J.-M. Batail, A.~Phillips, E.~Cole, T.~J. Ford, B.~S. Bentzley, B.~Jo, A.~F. Schatzberg, D.~Spiegel, C.~Rolle, G.~L. Sahlem, N.~Williams, \href{https://doi.org/10.1002/wps.70032}{Stanford neuromodulation therapy for treatment-resistant depression: a randomized controlled trial confirming efficacy, and an <scp>eeg</scp> study providing insight into mechanism of action and a potentially predictive biomarker of efficacy}, World Psychiatry (2026).
+\newblock \href {https://doi.org/10.1002/wps.70032} {\path{doi:10.1002/wps.70032}}.
+\newline\urlprefix\url{https://doi.org/10.1002/wps.70032}
+
+\bibitem{waller2026_transient}
+D.~A. Waller, L.~L. Carpenter, S.~R. Jones, \href{https://www.semanticscholar.org/paper/6a3e902c05c07569afa93b0bb3e0b484bf519824}{Transient frontal spectral events from eeg predict antidepressant response to sertraline in depression.}, Journal of Psychiatric Research (2026).
+\newblock \href {https://doi.org/10.1016/j.jpsychires.2026.03.010} {\path{doi:10.1016/j.jpsychires.2026.03.010}}.
+\newline\urlprefix\url{https://www.semanticscholar.org/paper/6a3e902c05c07569afa93b0bb3e0b484bf519824}
+
+\bibitem{pettorruso2024_overcoming}
+M.~Pettorruso, G.~D. Lorenzo, B.~Benatti, G.~dAndrea, C.~Cavallotto, R.~Carullo, G.~Mancusi, O.~D. Marco, G.~Mammarella, A.~Dattilio, E.~Barlocci, I.~Rosa, A.~Cocco, L.~P. Padula, G.~Bubbico, M.~G. Perrucci, R.~Guidotti, A.~DAndrea, L.~Marzetti, F.~Zoratto, B.~Dellosso, G.~Martinotti, \href{https://www.semanticscholar.org/paper/169e53dbe54745e1df0495183343bda9d6a8a29e}{Overcoming treatment-resistant depression with machine-learning based tools: a study protocol combining eeg and clinical data to personalize glutamatergic and brain stimulation interventions (selectool project)}, Frontiers in Psychiatry (2024).
+\newblock \href {https://doi.org/10.3389/fpsyt.2024.1436006} {\path{doi:10.3389/fpsyt.2024.1436006}}.
+\newline\urlprefix\url{https://www.semanticscholar.org/paper/169e53dbe54745e1df0495183343bda9d6a8a29e}
+
+\end{thebibliography}
