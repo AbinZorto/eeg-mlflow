@@ -74,7 +74,15 @@ To determine whether the hybrid architecture's advantage at \texttt{inner-k=1} r
 
 An additional ablation removed SMOTE from the best hybrid configuration. Performance fell from ROC-AUC 0.816 to 0.582 (balanced accuracy 0.500, F1 0.308), indicating that SMOTE contributes substantially to the hybrid's performance in the 1-dimensional feature regime — consistent with the observation that synthetic oversampling provides the only mechanism for exposing class-boundary information when a single scalar feature is available.
 
-These findings indicate that the hybrid CNN-LSTM's performance at extreme sparsity is not attributable to non-linearity alone, nor to SMOTE alone. The convolutional, recurrent, attention, and feature-pyramid stages, together with SMOTE-based training, appear jointly necessary to extract discriminatory signal from a single feature per fold.}
+These findings indicate that the hybrid CNN-LSTM's performance at extreme sparsity is not attributable to non-linearity alone, nor to SMOTE alone. The convolutional, recurrent, attention, and feature-pyramid stages, together with SMOTE-based training, appear jointly necessary to extract discriminatory signal from a single feature per fold.
+
+\begin{paperwidetable}
+  \centering
+  \caption{Intermediate baseline classifiers and ablations evaluated at the best hybrid configuration (6~s, \texttt{inner-k=1}). All models used identical data, feature selection, and validation splits. Neural baselines and ablation trained on NVIDIA RTX 3090.}
+  \label{tab:intermediate-baselines}
+  \footnotesize
+  \input{tables/intermediate_baselines.tex}
+\end{paperwidetable}
 
 The winning hybrid run selected an average of 1 feature per fold and yielded only 7 unique features that appeared in at least one fold across the entire participant-level validation process (Table~\ref{tab:hybrid-biomarkers}). That degree of sparsity is one of the most distinctive findings in the sweep. Hard-set overlap was modest, with a mean pairwise Jaccard value of 0.190 and a mean Kuncheva index of 0.187. Figure~\ref{fig:biomarker-frequency} shows the small candidate pool, while the overlap statistics indicate that recurrence was concentrated in a few repeatedly reappearing features rather than in a broadly shared foldwise set.
 
