@@ -68,17 +68,13 @@ The best SVM baseline reached balanced accuracy 0.643 and ROC-AUC 0.510 [95\% CI
   \footnotesize Bootstrap 95\% CIs from 1,000 resamples. Hybrid permutation test: raw $p=0.008$; primary correction (2 model families) $p_\text{corr}=0.016$; robustness checks: max-T across 150 configurations $p_\text{corr}=0.302$, full-sweep Bonferroni $p_\text{corr}=1.00$.
 \end{paperwidetable}
 
-\subsection{Intermediate baselines at the sparsest budget}
+\subsection{Intermediate baselines and ablation at the sparsest budget}
 
-To determine whether the hybrid architecture's advantage at \texttt{inner-k=1} reflected generic benefits of non-linearity or specific architectural properties, we evaluated eight classical classifiers at the identical configuration (6 s windows, \texttt{inner-k=1}, SMOTE, LOPO equalization, same dataset and folds). All eight performed at or below chance (Table~\ref{tab:intermediate-baselines}). The best classical model (Random Forest) reached ROC-AUC 0.296, compared with 0.816 for the hybrid. No classical model achieved a significant permutation p-value (all $p > 0.9$). This indicates that the hybrid CNN-LSTM's performance at extreme sparsity is not attributable to non-linearity alone; the convolutional, recurrent, and attention stages appear necessary to extract discriminatory signal from a single feature per fold.
+To determine whether the hybrid architecture's advantage at \texttt{inner-k=1} reflected generic benefits of non-linearity or specific architectural properties, we evaluated eight classical classifiers and two neural baselines under the identical configuration (6 s windows, \texttt{inner-k=1}, SMOTE, LOPO equalization, same dataset and folds). All ten baselines performed at or below chance (Table~\ref{tab:intermediate-baselines}). The best classical model (Random Forest) reached ROC-AUC 0.296, compared with 0.816 for the hybrid. A 2-layer MLP (ROC-AUC 0.204) and a GAP variant of the hybrid architecture that removes self-attention and feature-pyramid fusion (ROC-AUC 0.235) both failed to exceed chance. No baseline achieved a significant permutation p-value (all $p \ge 0.9$).
 
-\begin{paperwidetable}
-  \centering
-  \caption{Intermediate baseline classifiers evaluated at the best hybrid configuration (6 s, \texttt{inner-k=1}). All models used identical data, feature selection, and validation splits.}
-  \label{tab:intermediate-baselines}
-  \footnotesize
-  \input{tables/intermediate_baselines.tex}
-\end{paperwidetable}}
+An additional ablation removed SMOTE from the best hybrid configuration. Performance fell from ROC-AUC 0.816 to 0.582 (balanced accuracy 0.500, F1 0.308), indicating that SMOTE contributes substantially to the hybrid's performance in the 1-dimensional feature regime — consistent with the observation that synthetic oversampling provides the only mechanism for exposing class-boundary information when a single scalar feature is available.
+
+These findings indicate that the hybrid CNN-LSTM's performance at extreme sparsity is not attributable to non-linearity alone, nor to SMOTE alone. The convolutional, recurrent, attention, and feature-pyramid stages, together with SMOTE-based training, appear jointly necessary to extract discriminatory signal from a single feature per fold.}
 
 The winning hybrid run selected an average of 1 feature per fold and yielded only 7 unique features that appeared in at least one fold across the entire participant-level validation process (Table~\ref{tab:hybrid-biomarkers}). That degree of sparsity is one of the most distinctive findings in the sweep. Hard-set overlap was modest, with a mean pairwise Jaccard value of 0.190 and a mean Kuncheva index of 0.187. Figure~\ref{fig:biomarker-frequency} shows the small candidate pool, while the overlap statistics indicate that recurrence was concentrated in a few repeatedly reappearing features rather than in a broadly shared foldwise set.
 

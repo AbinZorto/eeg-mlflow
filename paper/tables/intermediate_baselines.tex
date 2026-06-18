@@ -1,19 +1,27 @@
-\begin{tabular}{lcccccc}
+\begin{tabular}{lcccccl}
 \toprule
-Model & ROC-AUC & Bal.\ Acc. & MCC & F1 & $p$ (perm.) \\
+Model & ROC-AUC & Bal.\ Acc. & MCC & F1 & $p$ (perm.) & Notes \\
 \midrule
-Hybrid CNN-LSTM (best) & \textbf{0.816} & \textbf{0.786} & \textbf{0.571} & \textbf{0.714} & 0.008 \\
+Hybrid CNN-LSTM (best) & \textbf{0.816} & \textbf{0.786} & \textbf{0.571} & \textbf{0.714} & 0.008 & Full architecture, SMOTE \\
 \midrule
-Random Forest & 0.296 & 0.321 & $-$0.337 & 0.222 & 0.930 \\
-Extra Trees & 0.286 & 0.500 & 0.000 & 0.375 & 0.934 \\
-AdaBoost & 0.286 & 0.393 & $-$0.204 & 0.250 & 0.942 \\
-Gradient Boosting & 0.276 & 0.393 & $-$0.204 & 0.250 & 0.936 \\
-Decision Tree & 0.276 & 0.500 & 0.000 & 0.308 & 0.946 \\
-KNN & 0.255 & 0.464 & $-$0.067 & 0.353 & 0.974 \\
-SVM-RBF & 0.204 & 0.429 & $-$0.135 & 0.333 & 0.978 \\
-SVM-Linear & 0.204 & 0.357 & $-$0.277 & 0.300 & 0.988 \\
+\multicolumn{7}{l}{\textit{Classical models (inner-k=1, SMOTE)}} \\
+Random Forest & 0.296 & 0.321 & $-$0.337 & 0.222 & 0.930 & \\
+Extra Trees & 0.286 & 0.500 & 0.000 & 0.375 & 0.934 & \\
+AdaBoost & 0.286 & 0.393 & $-$0.204 & 0.250 & 0.942 & \\
+Gradient Boosting & 0.276 & 0.393 & $-$0.204 & 0.250 & 0.936 & \\
+Decision Tree & 0.276 & 0.500 & 0.000 & 0.308 & 0.946 & \\
+KNN & 0.255 & 0.464 & $-$0.067 & 0.353 & 0.974 & \\
+SVM-RBF & 0.204 & 0.429 & $-$0.135 & 0.333 & 0.978 & \\
+SVM-Linear & 0.204 & 0.357 & $-$0.277 & 0.300 & 0.988 & \\
+\midrule
+\multicolumn{7}{l}{\textit{Neural baselines (inner-k=1, SMOTE)}} \\
+MLP (2-layer) & 0.204 & 0.429 & $-$0.135 & 0.333 & \textgreater{}0.95 & \\
+GAP variant (no attn.) & 0.235 & 0.464 & $-$0.067 & 0.353 & \textgreater{}0.95 & \\
+\midrule
+\multicolumn{7}{l}{\textit{Ablation (hybrid architecture)}} \\
+Hybrid, no SMOTE & 0.582 & 0.500 & 0.000 & 0.308 & \textgreater{}0.05 & SMOTE essential at $k{=}1$ \\
 \bottomrule
 \end{tabular}
 
 \smallskip
-\footnotesize All models evaluated with the same configuration: window size 6~s, \texttt{inner-k}=1, SelectKBest ($F$-classif), SMOTE enabled, LOPO group equalization enabled, patient-level mean aggregation. Permutation p-values from 500 iterations. The hybrid result is shown for reference (not part of this sweep).
+\footnotesize All models evaluated at window size 6~s, \texttt{inner-k}=1, SelectKBest ($F$-classif), LOPO group equalization enabled, patient-level mean aggregation. The hybrid result is from the original 150-run sweep (reference). Classical models run on CPU; neural baselines and ablation run on NVIDIA RTX 3090. GAP = Global Average Pooling variant removing self-attention and feature-pyramid fusion.
