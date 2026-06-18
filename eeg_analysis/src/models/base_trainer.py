@@ -24,6 +24,29 @@ class BaseTrainer:
         self.model_name = config.get('model_name', 'model')
         self.classifier_name = config.get('classifier', 'random_forest')
         self.classifier_params = config.get('classifier_params', {})
+        self._feature_noise_config = config.get('feature_noise', {'enabled': False, 'std': 0.0})
+
+    def _inject_feature_noise(self, X):
+        """Replace selected feature values with i.i.d. Gaussian noise.
+
+        After feature selection, each selected feature column is replaced with
+        independent draws from N(0, noise_std). The original column mean and std
+        are not preserved — this is a hard no-information sanity check.
+
+        Args:
+            X: DataFrame of selected features.
+
+        Returns:
+            DataFrame with noised feature values, or unchanged if noise is disabled.
+        """
+        if not self._feature_noise_config.get('enabled', False):
+            return X
+        noise_std = self._feature_noise_config.get('std', 1.0)
+        X_noised = X.copy()
+        rng = np.random.default_rng()
+        for col in X_noised.columns:
+            X_noised[col] = rng.normal(0.0, noise_std, size=len(X_noised))
+        return X_noised
 
     def _get_metrics_reporting_config(self) -> Dict[str, Any]:
         reporting = dict(DEFAULT_METRICS_REPORTING)

@@ -346,3 +346,101 @@ class TestDeepLearningTrainer:
 
         assert trainer.use_smote is True
         assert trainer.model_params['use_smote'] is True
+
+
+# ── Feature noise injection tests ──────────────────────────────────────
+
+class TestFeatureNoise:
+    """Tests for _inject_feature_noise in BaseTrainer."""
+
+    @pytest.fixture
+    def sample_X(self):
+        """Create a small feature DataFrame for testing."""
+        rng = np.random.default_rng(42)
+        return pd.DataFrame({
+            'feat_a': rng.normal(5.0, 2.0, 1000),
+            'feat_b': rng.normal(-3.0, 0.5, 1000),
+            'feat_c': rng.uniform(0, 10, 1000),
+        })
+
+    @pytest.fixture
+    def base_config(self):
+        return {
+            'model_name': 'test_model',
+            'classifier': 'random_forest',
+            'feature_noise': {'enabled': True, 'std': 1.0},
+            'feature_selection': {'enabled': True, 'n_features': 3, 'method': 'select_k_best_f_classif'},
+        }
+
+    def test_noise_disabled_returns_unchanged(self, sample_X):
+        """When feature_noise is disabled, X is returned unchanged."""
+        from src.models.base_trainer import BaseTrainer
+        config = {'feature_noise': {'enabled': False, 'std': 0.0}}
+        trainer = BaseTrainer(config)
+        result = trainer._inject_feature_noise(sample_X)
+        pd.testing.assert_frame_equal(result, sample_X)
+
+    def test_noise_preserves_shape_and_columns(self, sample_X, base_config):
+        """Noise injection does not change shape or column names."""
+        from src.models.base_trainer import BaseTrainer
+        trainer = BaseTrainer(base_config)
+        result = trainer._inject_feature_noise(sample_X)
+        assert result.shape == sample_X.shape
+        assert list(result.columns) == list(sample_X.columns)
+
+    def test_noise_changes_all_values(self, sample_X, base_config):
+        """When noise is enabled, all feature values are replaced."""
+        from src.models.base_trainer import BaseTrainer
+        trainer = BaseTrainer(base_config)
+        result = trainer._inject_feature_noise(sample_X)
+        assert not (result.values == sample_X.values).any()
+
+    def test_noise_is_zero_mean(self, sample_X, base_config):
+        """Injected noise is approximately N(0, std)."""
+        from src.models.base_trainer import BaseTrainer
+        trainer = BaseTrainer(base_config)
+        result = trainer._inject_feature_noise(sample_X)
+        for col in result.columns:
+            assert abs(result[col].mean()) < 0.1
+
+    def test_noise_respects_std(self, sample_X):
+        """Injected noise std matches the configured value."""
+        from src.models.base_trainer import BaseTrainer
+        config = {'feature_noise': {'enabled': True, 'std': 3.0}}
+        trainer = BaseTrainer(config)
+        result = trainer._inject_feature_noise(sample_X)
+        for col in result.columns:
+            assert 2.5 < result[col].std() < 3.5
+
+    def test_noise_is_independent_across_columns(self, sample_X, base_config):
+        """Noise is drawn independently for each column."""
+        from src.models.base_trainer import BaseTrainer
+        trainer = BaseTrainer(base_config)
+        result = trainer._inject_feature_noise(sample_X)
+        corr = result.corr()
+        for i in range(len(result.columns)):
+            for j in range(i + 1, len(result.columns)):
+                assert abs(corr.iloc[i, j]) < 0.1
+
+    def test_original_data_is_not_mutated(self, sample_X, base_config):
+        """_inject_feature_noise returns a copy; original is untouched."""
+        from src.models.base_trainer import BaseTrainer
+        original = sample_X.copy()
+        trainer = BaseTrainer(base_config)
+        _ = trainer._inject_feature_noise(sample_X)
+        pd.testing.assert_frame_equal(sample_X, original)
+
+    def test_different_calls_produce_different_noise(self, sample_X, base_config):
+        """Each call to _inject_feature_noise produces fresh noise."""
+        from src.models.base_trainer import BaseTrainer
+        trainer = BaseTrainer(base_config)
+        r1 = trainer._inject_feature_noise(sample_X)
+        r2 = trainer._inject_feature_noise(sample_X)
+        assert not (r1.values == r2.values).any()
+
+    def test_config_defaults_to_disabled(self, sample_X):
+        """When feature_noise is absent from config, noise is disabled."""
+        from src.models.base_trainer import BaseTrainer
+        trainer = BaseTrainer({'model_name': 'test'})
+        result = trainer._inject_feature_noise(sample_X)
+        pd.testing.assert_frame_equal(result, sample_X)

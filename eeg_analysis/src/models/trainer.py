@@ -459,6 +459,7 @@ class Trainer(BaseTrainer):
                     mlflow.log_param("selected_features_list", selected_feature_names_fold)
                     mlflow.log_param("feature_selection_method", self.feature_selection_config.get('method', 'model_based'))
                     X_train = X_train_raw[selected_feature_names_fold]
+                    X_train = self._inject_feature_noise(X_train)
                     X_test = X_test_raw[selected_feature_names_fold]
                 else:
                     X_train = X_train_raw
@@ -619,6 +620,7 @@ class Trainer(BaseTrainer):
                 consensus_source = "all_features_fallback"
 
             X_final_train = X_orig[selected_feature_names]
+            X_final_train = self._inject_feature_noise(X_final_train)
 
             mlflow.log_param("feature_selection_method", self.feature_selection_config.get('method', 'model_based'))
             mlflow.log_param("feature_selection_final_strategy", "consensus_frequency")

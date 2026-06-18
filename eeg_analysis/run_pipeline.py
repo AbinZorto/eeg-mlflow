@@ -510,8 +510,9 @@ def get_available_models_from_config(config_path):
 @click.option('--use-smote', type=click.Choice(['true', 'false']), default=None, help='Override SMOTE usage for training.')
 @click.option('--feature-categories', type=str, help='Comma-separated list of feature categories to include (e.g., "spectral_features,psd_statistics,temporal_features"). Use "list" to see available categories.')
 @click.option('--use-dataset-from-run', type=str, help='MLflow run ID to load dataset from (optional)')
+@click.option('--feature-noise-std', type=float, default=None, help='Replace selected feature values with Gaussian noise of the given std (zero mean) after feature selection. Used for the no-information sanity check. When not set, features are passed through unchanged.')
 @click.pass_context
-def train(ctx, window_size, model_type, enable_feature_selection, n_features_select, fs_method, outer_k, inner_k, equalize_lopo_groups, use_smote, feature_categories, use_dataset_from_run):
+def train(ctx, window_size, model_type, enable_feature_selection, n_features_select, fs_method, outer_k, inner_k, equalize_lopo_groups, use_smote, feature_categories, use_dataset_from_run, feature_noise_std):
     """Train the model"""
     config = ctx.obj['config']
     logger.info(
@@ -519,6 +520,7 @@ def train(ctx, window_size, model_type, enable_feature_selection, n_features_sel
         f"enable_feature_selection={enable_feature_selection}, n_features_select={n_features_select}, "
         f"fs_method='{fs_method}', outer_k={outer_k}, inner_k={inner_k}, "
         f"equalize_lopo_groups={equalize_lopo_groups}, use_smote={use_smote}, "
+        f"feature_noise_std={feature_noise_std}, "
         f"use_dataset_from_run='{use_dataset_from_run}'"
     )
 
@@ -581,6 +583,13 @@ def train(ctx, window_size, model_type, enable_feature_selection, n_features_sel
         'method': fs_method
     }
     logger.info(f"Config for feature selection set to: {config['feature_selection']}")
+
+    # Store feature noise config
+    if feature_noise_std is not None and feature_noise_std > 0:
+        config['feature_noise'] = {'enabled': True, 'std': feature_noise_std}
+        logger.info(f"Feature noise injection enabled with std={feature_noise_std}")
+    else:
+        config['feature_noise'] = {'enabled': False, 'std': 0.0}
 
     # Store per-fold feature-count and final consensus-count overrides under cv config.
     cv_config = config.get('cv', {})
@@ -831,6 +840,10 @@ def train(ctx, window_size, model_type, enable_feature_selection, n_features_sel
             mlflow.log_param(
                 "smote_enabled",
                 bool(config.get('use_smote', config.get('model', {}).get('use_smote', False))),
+            )
+            mlflow.log_param(
+                "feature_noise_std",
+                config.get('feature_noise', {}).get('std', 0.0),
             )
             
             # Log feature filtering info
