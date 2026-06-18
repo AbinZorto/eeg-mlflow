@@ -9,6 +9,10 @@ CNN trunk & Three 1D convolutional blocks with filter progressions \texttt{[64,6
 Recurrent stage & Two bidirectional LSTM layers with 128 and 64 hidden units followed the CNN trunk. \\
 Attention and fusion & Eight-head self-attention with dropout 0.1 and residual layer normalization, followed by global mean pooling. Multi-scale pooled CNN features were concatenated through feature-pyramid fusion. \\
 Dense head & Two dense blocks of 256 and 128 units with batch normalization, nonlinear activations, and dropout 0.3 and 0.4, followed by a two-logit output layer. \\
-Optimization & AdamW with learning rate 0.001 and weight decay 0.01; cosine warm restarts to a minimum learning rate of $10^{-6}$; batch size 8192 (upper bound, reduced to the full per-fold training set of approximately 2,300 windows for the 6 s configuration by the batch-resolution logic, resulting in full-batch gradient descent per fold); label smoothing 0.05; gradient clipping at 1.0; mixed precision; maximum 100 epochs; early stopping patience 5 with best-state restore. \\
+Optimization & AdamW with learning rate 0.001 and weight decay 0.01; cosine warm restarts to a minimum learning rate of $10^{-6}$; label smoothing 0.05; gradient clipping at 1.0; mixed precision; maximum 100 epochs; early stopping patience 5 with best-state restore. \\
+\midrule
+\multicolumn{2}{l}{\textbf{Training strategy and batch sizing}} \\
+\addlinespace
+Training regime & Full-batch gradient descent per LOPO fold. The batch-size ceiling of 8192 is a guard value, not a tuned hyperparameter: it was set to exceed the largest per-fold dataset in the sweep ($\approx$ 5,000 windows at 2~s) and is automatically reduced to the training-set size by the batch-resolution logic (effective batch $\approx$ 2,300 windows at 6~s). Full-batch was chosen deliberately because the architecture contains BatchNorm1d layers after every convolutional block; with per-fold datasets of only 2,000--5,000 windows, conventional mini-batch sizes (32--128) would produce high-variance normalization statistics that could encode participant identity rather than population-level features. Full-batch accumulation yields stable, reproducible statistics from the entire training fold and is tractable because each LOPO fold is trained independently on a single GPU. \\
 \bottomrule
 \end{tabularx}
