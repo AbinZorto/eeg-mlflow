@@ -74,6 +74,8 @@ To determine whether the hybrid architecture's advantage at \texttt{inner-k=1} r
 
 An additional ablation removed SMOTE from the best hybrid configuration. Performance fell from ROC-AUC 0.816 to 0.582 (balanced accuracy 0.500, F1 0.308), indicating that SMOTE contributes substantially to the hybrid's performance in the 1-dimensional feature regime; this is consistent with the observation that synthetic oversampling provides the only mechanism for exposing class-boundary information when a single scalar feature is available.
 
+A third ablation addressed the concern that the hybrid architecture, at \texttt{inner-k=1}, might exploit batch-level or distributional artifacts rather than the selected feature. After feature selection, all selected feature values were replaced with i.i.d.\ Gaussian noise ($\mathcal{N}(0, 1)$) and the model was retrained under the identical LOPO configuration. Performance fell to ROC-AUC 0.408 (balanced accuracy 0.393, F1 0.250), indistinguishable from chance. This confirms that the model relies on the actual feature values and is not driven by distributional cues accessible through batch normalization statistics.
+
 These findings indicate that the hybrid CNN-LSTM's performance at extreme sparsity is not attributable to non-linearity alone, nor to SMOTE alone. The convolutional, recurrent, attention, and feature-pyramid stages, together with SMOTE-based training, appear jointly necessary to extract discriminatory signal from a single feature per fold.
 
 \begin{paperwidetable}
