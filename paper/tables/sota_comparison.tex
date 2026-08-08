@@ -2,17 +2,17 @@
 \toprule
 Study & Method & EEG channels & $n$ & AUC & Ext.\ val. & Task \\
 \midrule
-\citet{Moncy2024} & Deep learning (PSD features) & 4 (AF7,AF8,TP9,TP10) & 21 & 0.76$^\dagger$ & No & tDCS remission prediction \\
-\citet{Xiao2025PMIP} & PLV connectivity + ML & 4 (AF7,AF8,TP9,TP10) & 21 & 0.72$^\dagger$ & No & tDCS remission prediction \\
-\citet{AlKaysi2017} & SVM, RF, LR (clinical + EEG) & 19 & 80 & 0.82 & No & Antidepressant response \\
-\citet{jaworska2019_leveraging} & SVM, LR (EEG + clinical) & 32 & 73 & 0.83 & No & Antidepressant response \\
-\citet{oakley2022_eeg} & LORETA + SVM & 72 & 65 & 0.75 & No & Sertraline/placebo response \\
-\citet{ebrahimzadeh2021_predicting} & Nonlinear EEG + classifier & 19 & 30 & 0.90 & No & Antidepressant response \\
-\citet{shalbaf2018_nonlinear} & Nonlinear features + SVM & 19 & 45 & 0.88 & No & rTMS response \\
-\citet{zhdanov_svm_prediction} & SVM with spectral features & 19 & 44 & 0.76 & No & Treatment response \\
-\textbf{This study} & \textbf{Sparse CNN-LSTM + handcrafted features} & \textbf{4 (AF7,AF8,TP9,TP10)} & \textbf{21} & \textbf{0.82} & \textbf{No} & \textbf{tDCS remission prediction} \\
+Moncy et al. (2024) & CNN, PSD features & 4* & 21 & 0.76$^\dagger$ & No & tDCS remission \\
+Xiao et al. (2025) & PLV + ML & 4* & 21 & 0.72$^\dagger$ & No & tDCS remission \\
+Al-Kaysi et al. (2017) & SVM, RF, LR & 19 & 80 & 0.82 & No & Antidepressant \\
+Jaworska et al. (2019) & SVM, LR & 32 & 73 & 0.83 & No & Antidepressant \\
+Oakley et al. (2022) & LORETA + SVM & 72 & 65 & 0.75 & No & Sertraline/placebo \\
+Ebrahimzadeh et al. (2021) & Nonlinear EEG & 19 & 30 & 0.90 & No & Antidepressant \\
+Shalbaf et al. (2018) & Nonlinear + SVM & 19 & 45 & 0.88 & No & rTMS \\
+Zhdanov et al. (2020) & SVM, spectral & 19 & 44 & 0.76 & No & Escitalopram \\
+\textbf{This study} & \textbf{CNN-LSTM, sparse} & \textbf{4*} & \textbf{21} & \textbf{0.82} & \textbf{No} & \textbf{tDCS remission} \\
 \bottomrule
 \end{tabular}
 
 \smallskip
-\footnotesize $^\dagger$Estimated from reported metrics. AUC = area under the ROC curve (patient-level where available). Ext.\ val. = external validation cohort. Studies selected for relevance to EEG-based treatment response prediction in depression; the list is illustrative rather than exhaustive.
+\footnotesize *Low-montage 4-channel headset (AF7, AF8, TP9, TP10). $^\dagger$Estimated from reported metrics. AUC = area under the ROC curve (patient-level where available). Ext.\ val. = external validation cohort. Studies selected for relevance to EEG-based treatment response prediction in depression; the list is illustrative rather than exhaustive.

@@ -2,7 +2,7 @@
 
 \UseRawInputEncoding
 \usepackage[utf8]{inputenc}
-\usepackage[numbers,sort&compress]{natbib}
+\usepackage[authoryear,sort&compress]{natbib}
 \usepackage{amsmath}
 \usepackage{tabularx}
 \usepackage[none]{hyphenat}
@@ -22,10 +22,10 @@
 \def\floatpagepagefraction{1}
 \def\textpagefraction{.001}
 
-\shorttitle{Sparse Biomarker Discovery from Low-Montage Resting-State EEG}
+\shorttitle{Sparse Feature Selection from Low-Montage Resting-State EEG}
 \shortauthors{Zorto et al.}
 
-\title[mode=title]{Sparse Biomarker Discovery from Low-Montage Resting-State EEG for tDCS Treatment Remission in Adults with Major Depressive Disorder}
+\title[mode=title]{Sparse Feature Selection from Low-Montage Resting-State EEG for tDCS Treatment Remission Prediction in Adults with Major Depressive Disorder}
 
 \author[inst1]{Abin Daniel Zorto}
 \cormark[1]
@@ -62,15 +62,15 @@
             country={UK}}
 
 \begin{abstract}
-This study evaluated a sparse low-montage resting-state EEG framework for identifying clinically interpretable biomarkers associated with remission outcomes in a home-based transcranial direct current stimulation (tDCS) randomised sham-controlled trial in adults with major depressive disorder. Using 4-channel eyes-closed EEG, we conducted a controlled sweep of 150 successful runs across two model families, an advanced hybrid 1D CNN-LSTM and a linear support vector machine (SVM), varying window size (2--10 s) and per-fold feature budget (\texttt{inner-k} 1--70) with leave-one-participant-out group equalization and SMOTE during training.
+We evaluated whether sparse feature selection from 4-channel resting-state EEG could identify remission predictors in a home-based tDCS trial for major depression. Across 150 configurations of a hybrid CNN-LSTM and linear SVM, we varied window length (2--10~s) and feature budget (1--70) under leave-one-participant-out cross-validation with SMOTE.
 
-The strongest configuration (hybrid model, 6 s windows, \texttt{inner-k=1}) achieved patient-level ROC-AUC 0.816, PR-AUC 0.579, balanced accuracy 0.786, accuracy 0.810, and MCC 0.571 over 21 held-out participants. The best SVM configuration (8 s, \texttt{inner-k=30}) reached ROC-AUC 0.510 and MCC 0.277. Notably, this performance was obtained with sparsity, selecting 1 feature per fold and yielding only 7 unique recurrent features overall, with a permutation-tested ROC-AUC advantage over chance ($p=0.008$). Hard-set overlap across folds was modest (mean pairwise Jaccard 0.190; Kuncheva index 0.187), while recurrent features showed perfect mean effect-direction consistency.
+The strongest hybrid configuration (6~s windows, one feature per fold) achieved patient-level ROC-AUC~0.816, PR-AUC~0.579, balanced accuracy~0.786, and MCC~0.571 over 21 held-out participants. A permutation test confirmed above-chance discrimination (raw $p=0.008$; 2-family Bonferroni-corrected $p_\text{corr}=0.016$), although significance does not survive correction for the full 150-configuration sweep. The best SVM (8~s, 30 features) reached ROC-AUC~0.510 ($p=0.469$, uncorrected). The hybrid model exhibited extreme sparsity: only 7 unique features appeared across folds, with modest overlap (mean Jaccard~0.190) but perfect effect-direction consistency among recurrent features.
 
-These findings show that clinically relevant patient-level discrimination can emerge from highly sparse representations of low-montage EEG. The strongest run concentrated its signal in a small recurrent biomarker set centered on temporal spectral entropy and frontal-temporal difference measures. The findings suggest a compact, interpretable biomarker that converges with previous power spectral density-based findings, supporting low-montage resting-state EEG as a basis for pretreatment stratification.
+These findings suggest that patient-level discrimination signals are recoverable from highly sparse representations of low-montage EEG. The recurrent features centred on temporal spectral entropy and frontal-temporal difference measures, converging with prior analyses in the same cohort. The results support low-montage resting-state EEG as a basis for pretreatment stratification research, pending independent validation.
 \end{abstract}
 
 \begin{keywords}
-resting-state EEG \sep transcranial direct current stimulation \sep major depressive disorder \sep biomarker discovery \sep low montage EEG
+resting-state EEG \sep transcranial direct current stimulation \sep major depressive disorder \sep feature selection \sep low montage EEG
 \end{keywords}
 
 \maketitle
@@ -95,7 +95,7 @@ resting-state EEG \sep transcranial direct current stimulation \sep major depres
 \section*{Acknowledgements}
 \input{../sections/acknowledgements}
 
-\bibliographystyle{elsarticle-num}
+\bibliographystyle{elsarticle-harv}
 \bibliography{references}
 
 \end{document}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.10.26)  3 APR 2026 18:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.10.26)  4 JUL 2026 17:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -7,7 +7,8 @@ entering extended mode
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
 (./cas-dc.cls
-Document Class: cas-dc 2024/05/04, 2.4: Formatting class for CAS double column articles
+Document Class: cas-dc 2024/05/04, 2.4: Formatting class for CAS double column 
+articles
 \c@blind=\count188
 \@bls=\dimen140
 (/usr/local/texlive/2024/texmf-dist/tex/latex/base/article.cls
@@ -21,7 +22,8 @@ Already applied: [0000/00/00] Make \[ robust on input line 62.
 Applying: [2015/01/01] Make \] robust on input line 74.
 LaTeX Info: Redefining \] on input line 75.
 Already applied: [0000/00/00] Make \] robust on input line 83.
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/base/size10.clo
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/size10.clo
 File: size10.clo 2023/05/17 v1.4n Standard LaTeX file (size option)
 )
 \c@part=\count189
@@ -35,39 +37,49 @@ File: size10.clo 2023/05/17 v1.4n Standard LaTeX file (size option)
 \abovecaptionskip=\skip49
 \belowcaptionskip=\skip50
 \bibindent=\dimen141
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/graphicx.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
- (/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/keyval.sty
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
 \KV@toks@=\toks17
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/graphics.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/graphics.sty
 Package: graphics 2022/03/10 v1.4e Standard LaTeX Graphics (DPC,SPQR)
- (/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/trig.sty
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 2021/08/11 v1.11 sin cos tan (DPC)
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
 Package graphics Info: Driver file: pdftex.def on input line 107.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/graphics-def/pdftex.def
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/graphics-def/pdftex.def
 File: pdftex.def 2022/09/22 v1.2b Graphics/color driver for pdftex
 ))
 \Gin@req@height=\dimen142
 \Gin@req@width=\dimen143
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/amsmath/amsmath.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2023/05/13 v2.17o AMS math features
 \@mathmargin=\skip51
 
 For additional information on amsmath, use the `?' option.
 (/usr/local/texlive/2024/texmf-dist/tex/latex/amsmath/amstext.sty
 Package: amstext 2021/08/26 v2.01 AMS text
- (/usr/local/texlive/2024/texmf-dist/tex/latex/amsmath/amsgen.sty
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks18
 \ex@=\dimen144
-)) (/usr/local/texlive/2024/texmf-dist/tex/latex/amsmath/amsbsy.sty
+))
+(/usr/local/texlive/2024/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 \pmbraise@=\dimen145
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/amsmath/amsopn.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2022/04/08 v2.04 operator names
 )
 \inf@bad=\count197
@@ -117,30 +129,38 @@ LaTeX Info: Redefining \Relbar on input line 971.
 \mathdisplay@stack=\toks22
 LaTeX Info: Redefining \[ on input line 2953.
 LaTeX Info: Redefining \] on input line 2954.
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 \symAMSa=\mathgroup4
 \symAMSb=\mathgroup5
 LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/amssymb.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/amssymb.sty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/l3kernel/expl3.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/l3kernel/expl3.sty
 Package: expl3 2024-02-20 L3 programming layer (loader) 
- (/usr/local/texlive/2024/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-02-20 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count275
 \l__pdf_internal_box=\box53
-)) (/usr/local/texlive/2024/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
+))
+(/usr/local/texlive/2024/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
 Package: xparse 2024-02-18 L3 Experimental document command parser
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/etoolbox/etoolbox.sty
 Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
 \etb@tempcnta=\count276
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/preprint/balance.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/preprint/balance.sty
 Package: balance 1999/02/23 4.3 (PWD)
 \oldvsize=\dimen153
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/booktabs/booktabs.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/booktabs/booktabs.sty
 Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \heavyrulewidth=\dimen154
 \lightrulewidth=\dimen155
@@ -159,9 +179,11 @@ Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \@thisruleclass=\count279
 \@lastruleclass=\count280
 \@thisrulewidth=\dimen166
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/makecell/makecell.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/makecell/makecell.sty
 Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
- (/usr/local/texlive/2024/texmf-dist/tex/latex/tools/array.sty
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/tools/array.sty
 Package: array 2023/10/16 v2.5g Tabular extension package (FMi)
 \col@sep=\dimen167
 \ar@mcellbox=\box54
@@ -174,38 +196,50 @@ Package: array 2023/10/16 v2.5g Tabular extension package (FMi)
 \rotheadsize=\dimen169
 \c@nlinenum=\count281
 \TeXr@lab=\toks24
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/multirow/multirow.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/multirow/multirow.sty
 Package: multirow 2021/03/15 v2.8 Span multiple rows of a table
 \multirow@colwidth=\skip56
 \multirow@cntb=\count282
 \multirow@dima=\skip57
 \bigstrutjot=\dimen170
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/colortbl/colortbl.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/colortbl/colortbl.sty
 Package: colortbl 2024/02/20 v1.0g Color table columns (DPC)
- (/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/color.sty
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/color.sty
 Package: color 2022/01/06 v1.3d Standard LaTeX Color (DPC)
- (/usr/local/texlive/2024/texmf-dist/tex/latex/graphics-cfg/color.cfg
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/graphics-cfg/color.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package color Info: Driver file: pdftex.def on input line 149.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/mathcolor.ltx))
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/mathcolor.ltx))
 \everycr=\toks25
 \minrowclearance=\skip58
 \rownum=\count283
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/tools/dcolumn.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/tools/dcolumn.sty
 Package: dcolumn 2023/07/08 v1.06 decimal alignment package (DPC)
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/sttools/stfloats.sty
-Package: stfloats 2017/03/27 v3.3 Improve float mechanism and baselineskip settings
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/sttools/stfloats.sty
+Package: stfloats 2017/03/27 v3.3 Improve float mechanism and baselineskip sett
+ings
 \@dblbotnum=\count284
 \c@dblbotnumber=\count285
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/tools/xspace.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/tools/xspace.sty
 Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
-) (/usr/local/texlive/2024/texmf-dist/tex/generic/xstring/xstring.sty (/usr/local/texlive/2024/texmf-dist/tex/generic/xstring/xstring.tex
+)
+(/usr/local/texlive/2024/texmf-dist/tex/generic/xstring/xstring.sty
+(/usr/local/texlive/2024/texmf-dist/tex/generic/xstring/xstring.tex
 \xs_counta=\count286
 \xs_countb=\count287
 )
 Package: xstring 2023/08/22 v1.86 String manipulations (CT)
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/footmisc/footmisc.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/footmisc/footmisc.sty
 Package: footmisc 2023/07/05 v6.0f a miscellany of footnote facilities
 \FN@temptoken=\toks26
 \footnotemargin=\dimen171
@@ -214,16 +248,21 @@ Package footmisc Info: Declaring symbol style bringhurst on input line 696.
 Package footmisc Info: Declaring symbol style chicago on input line 704.
 Package footmisc Info: Declaring symbol style wiley on input line 713.
 Package footmisc Info: Declaring symbol style lamport-robust on input line 724.
+
 Package footmisc Info: Declaring symbol style lamport* on input line 744.
-Package footmisc Info: Declaring symbol style lamport*-robust on input line 765.
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/xcolor/xcolor.sty
+Package footmisc Info: Declaring symbol style lamport*-robust on input line 765
+.
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2023/11/15 v3.01 LaTeX color extensions (UK)
- (/usr/local/texlive/2024/texmf-dist/tex/latex/graphics-cfg/color.cfg
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/graphics-cfg/color.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package xcolor Info: Driver file: pdftex.def on input line 274.
 LaTeX Info: Redefining \color on input line 758.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/mathcolor.ltx)
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/mathcolor.ltx)
 Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1350.
 Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1354.
 Package xcolor Info: Model `RGB' extended on input line 1366.
@@ -233,40 +272,56 @@ Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1370.
 Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1371.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1372.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1373.
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/xcolor/svgnam.def
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/xcolor/svgnam.def
 File: svgnam.def 2023/11/15 v3.01 Predefined colors according to SVG 1.1 (UK)
 )
 (/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/dvipsnam.def
 File: dvipsnam.def 2016/06/17 v3.0m Driver-dependent file (DPC,SPQR)
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/hyperref/hyperref.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2024-01-20 v7.01h Hypertext links for LaTeX
- (/usr/local/texlive/2024/texmf-dist/tex/generic/iftex/iftex.sty
+
+(/usr/local/texlive/2024/texmf-dist/tex/generic/iftex/iftex.sty
 Package: iftex 2022/02/03 v1.0f TeX engine tests
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty
 Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
-) (/usr/local/texlive/2024/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
 Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
-) (/usr/local/texlive/2024/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/generic/pdfescape/pdfescape.sty
 Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
- (/usr/local/texlive/2024/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
+
+(/usr/local/texlive/2024/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
 Package: ltxcmds 2023-12-04 v1.26 LaTeX kernel commands for general use (HO)
-) (/usr/local/texlive/2024/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
-Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO)
- (/usr/local/texlive/2024/texmf-dist/tex/generic/infwarerr/infwarerr.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(/usr/local/texlive/2024/texmf-dist/tex/generic/infwarerr/infwarerr.sty
 Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
 )
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 Package pdftexcmds Info: \pdfdraftmode found.
-)) (/usr/local/texlive/2024/texmf-dist/tex/latex/hycolor/hycolor.sty
+))
+(/usr/local/texlive/2024/texmf-dist/tex/latex/hycolor/hycolor.sty
 Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/auxhook/auxhook.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/auxhook/auxhook.sty
 Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/hyperref/nameref.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2023-11-26 v2.56 Cross-referencing by name of section
- (/usr/local/texlive/2024/texmf-dist/tex/latex/refcount/refcount.sty
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/refcount/refcount.sty
 Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
-) (/usr/local/texlive/2024/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/generic/gettitlestring/gettitlestring.s
+ty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
  (/usr/local/texlive/2024/texmf-dist/tex/latex/kvoptions/kvoptions.sty
 Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
@@ -276,15 +331,18 @@ Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
 \@linkdim=\dimen173
 \Hy@linkcounter=\count289
 \Hy@pagecounter=\count290
- (/usr/local/texlive/2024/texmf-dist/tex/latex/hyperref/pd1enc.def
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2024-01-20 v7.01h Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
 ... no UTF-8 mapping file for font encoding PD1
-) (/usr/local/texlive/2024/texmf-dist/tex/generic/intcalc/intcalc.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/generic/intcalc/intcalc.sty
 Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 )
 \Hy@SavedSpaceFactor=\count291
- (/usr/local/texlive/2024/texmf-dist/tex/latex/hyperref/puenc.def
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/hyperref/puenc.def
 File: puenc.def 2024-01-20 v7.01h Hyperref: PDF Unicode definition (HO)
 Now handling font encoding PU ...
 ... no UTF-8 mapping file for font encoding PU
@@ -298,16 +356,20 @@ Package hyperref Info: Backreferencing OFF on input line 4199.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4446.
 \c@Hy@tempcnt=\count292
- (/usr/local/texlive/2024/texmf-dist/tex/latex/url/url.sty
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip17
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
 LaTeX Info: Redefining \url on input line 4784.
 \XeTeXLinkMargin=\dimen174
- (/usr/local/texlive/2024/texmf-dist/tex/generic/bitset/bitset.sty
+
+(/usr/local/texlive/2024/texmf-dist/tex/generic/bitset/bitset.sty
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
- (/usr/local/texlive/2024/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
-Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO)
+
+(/usr/local/texlive/2024/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
+Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
+)
 ))
 \Fld@menulength=\count293
 \Field@Width=\dimen175
@@ -319,7 +381,8 @@ Package hyperref Info: backreferencing OFF on input line 6078.
 Package hyperref Info: Link coloring ON on input line 6081.
 Package hyperref Info: Link coloring with OCG OFF on input line 6088.
 Package hyperref Info: PDF/A mode OFF on input line 6093.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/base/atbegshi-ltx.sty
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/atbegshi-ltx.sty
 Package: atbegshi-ltx 2021/01/10 v1.0c Emulation of the original atbegshi
 package with kernel methods
 )
@@ -328,20 +391,26 @@ package with kernel methods
 \c@Hfootnote=\count296
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/hyperref/hpdftex.def
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/hyperref/hpdftex.def
 File: hpdftex.def 2024-01-20 v7.01h Hyperref driver for pdfTeX
- (/usr/local/texlive/2024/texmf-dist/tex/latex/base/atveryend-ltx.sty
-Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atveryend package
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/atveryend-ltx.sty
+Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atveryend pac
+kage
 with kernel methods
 )
 \Fld@listcount=\count297
 \c@bookmark@seq@number=\count298
- (/usr/local/texlive/2024/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
 Package: rerunfilecheck 2022-07-10 v1.10 Rerun checks for auxiliary files (HO)
- (/usr/local/texlive/2024/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+
+(/usr/local/texlive/2024/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
 Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 )
-Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 285.
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+85.
 )
 \Hy@SectionHShift=\skip59
 ) (./cas-common.sty
@@ -371,9 +440,11 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 28
 \l_stm_aff_rskip_dim=\dimen186
 \g_stm_augr_int=\count312
 \g_stm_aaugr_int=\count313
- (/usr/local/texlive/2024/texmf-dist/tex/latex/moreverb/moreverb.sty
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/moreverb/moreverb.sty
 Package: moreverb 2008/06/03 v2.3a `more' verbatim facilities
- (/usr/local/texlive/2024/texmf-dist/tex/latex/tools/verbatim.sty
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/tools/verbatim.sty
 Package: verbatim 2023-11-06 v1.5v LaTeX2e package for verbatim enhancements
 \every@verbatim=\toks28
 \verbatim@line=\toks29
@@ -434,11 +505,14 @@ Package: wrapfig 2003/01/31  v 3.6
 \@enLab=\toks31
 \@sep=\skip68
 \@@sep=\skip69
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/base/fontenc.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/stix/stix.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/stix/stix.sty
 Package: stix 2018/04/17 v1.1.3-latex STIX fonts support package
- (/usr/local/texlive/2024/texmf-dist/tex/latex/base/textcomp.sty
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/textcomp.sty
 Package: textcomp 2020/02/02 v2.0n Standard LaTeX package
 LaTeX Font Info:    Changing ? sub-encoding to TS1/0 on input line 78.
 )
@@ -480,11 +554,13 @@ LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
 \symintegrals=\mathgroup10
 LaTeX Font Info:    Redeclaring symbol font `largesymbols' on input line 84.
 LaTeX Font Info:    Encoding `OMX' has changed to `LS2' for symbol font
-(Font)              `largesymbols' in the math version `normal' on input line 84.
+(Font)              `largesymbols' in the math version `normal' on input line 8
+4.
 LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
 (Font)                  OMX/cmex/m/n --> LS2/stixex/m/n on input line 84.
 LaTeX Font Info:    Encoding `OMX' has changed to `LS2' for symbol font
 (Font)              `largesymbols' in the math version `bold' on input line 84.
+
 LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
 (Font)                  OMX/cmex/m/n --> LS2/stixex/m/n on input line 84.
 \symarrows1=\mathgroup11
@@ -498,6 +574,7 @@ LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
 (Font)                  LS1/stixscr/m/n --> LS1/stixscr/b/n on input line 90.
 LaTeX Font Info:    Overwriting symbol font `symbols2' in version `bold'
 (Font)                  LS1/stixfrak/m/n --> LS1/stixfrak/b/n on input line 91.
+
 LaTeX Font Info:    Overwriting symbol font `symbols3' in version `bold'
 (Font)                  LS1/stixbb/m/n --> LS1/stixbb/b/n on input line 92.
 LaTeX Font Info:    Overwriting symbol font `symbols4' in version `bold'
@@ -538,11 +615,16 @@ LaTeX Info: Redefining \vdots on input line 1518.
 LaTeX Info: Redefining \cdots on input line 1522.
 LaTeX Font Info:    Redeclaring math symbol \mathsterling on input line 1978.
 LaTeX Info: Redefining \not on input line 2144.
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/inconsolata/inconsolata.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/inconsolata/inconsolata.sty
 Package: inconsolata 2019/05/17 v1.12
- `inconsolata-zi4' v1.12, 2019/05/17 Text macros for Inconsolata (msharpe) (/usr/local/texlive/2024/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+
+`inconsolata-zi4' v1.12, 2019/05/17 Text macros for Inconsolata (msharpe)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/xkeyval/xkeyval.sty
 Package: xkeyval 2022/06/16 v2.9 package option processing (HA)
- (/usr/local/texlive/2024/texmf-dist/tex/generic/xkeyval/xkeyval.tex (/usr/local/texlive/2024/texmf-dist/tex/generic/xkeyval/xkvutils.tex
+
+(/usr/local/texlive/2024/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+(/usr/local/texlive/2024/texmf-dist/tex/generic/xkeyval/xkvutils.tex
 \XKV@toks=\toks32
 \XKV@tempa@toks=\toks33
 )
@@ -550,9 +632,11 @@ Package: xkeyval 2022/06/16 v2.9 package option processing (HA)
 File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
 ))
 \zifour@ocount=\count330
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/geometry/geometry.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2020/01/02 v5.9 Page Geometry
- (/usr/local/texlive/2024/texmf-dist/tex/generic/iftex/ifvtex.sty
+
+(/usr/local/texlive/2024/texmf-dist/tex/generic/iftex/ifvtex.sty
 Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 )
 \Gm@cnth=\count331
@@ -567,17 +651,20 @@ Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 \Gm@layouthoffset=\dimen263
 \Gm@layoutvoffset=\dimen264
 \Gm@dimlist=\toks34
-)) (/usr/local/texlive/2024/texmf-dist/tex/latex/base/inputenc.sty
+))
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/inputenc.sty
 Package: inputenc 2021/02/14 v1.3d Input encoding file
 \inpenc@prehook=\toks35
 \inpenc@posthook=\toks36
- (/usr/local/texlive/2024/texmf-dist/tex/latex/base/utf8.def
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/utf8.def
 File: utf8.def 2022/06/07 v1.3c UTF-8 support
 Now handling font encoding OML ...
 ... no UTF-8 mapping file for font encoding OML
 Now handling font encoding OMS ...
 ... processing UTF-8 mapping file for font encoding OMS
- (/usr/local/texlive/2024/texmf-dist/tex/latex/base/omsenc.dfu
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/omsenc.dfu
 File: omsenc.dfu 2022/06/07 v1.3c UTF-8 support
    defining Unicode char U+00A7 (decimal 167)
    defining Unicode char U+00B6 (decimal 182)
@@ -588,7 +675,8 @@ File: omsenc.dfu 2022/06/07 v1.3c UTF-8 support
 )
 Now handling font encoding OT1 ...
 ... processing UTF-8 mapping file for font encoding OT1
- (/usr/local/texlive/2024/texmf-dist/tex/latex/base/ot1enc.dfu
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/ot1enc.dfu
 File: ot1enc.dfu 2022/06/07 v1.3c UTF-8 support
    defining Unicode char U+00A0 (decimal 160)
    defining Unicode char U+00A1 (decimal 161)
@@ -636,7 +724,8 @@ File: ot1enc.dfu 2022/06/07 v1.3c UTF-8 support
 )
 Now handling font encoding T1 ...
 ... processing UTF-8 mapping file for font encoding T1
- (/usr/local/texlive/2024/texmf-dist/tex/latex/base/t1enc.dfu
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/t1enc.dfu
 File: t1enc.dfu 2022/06/07 v1.3c UTF-8 support
    defining Unicode char U+00A0 (decimal 160)
    defining Unicode char U+00A1 (decimal 161)
@@ -915,7 +1004,8 @@ File: t1enc.dfu 2022/06/07 v1.3c UTF-8 support
 )
 Now handling font encoding TS1 ...
 ... processing UTF-8 mapping file for font encoding TS1
- (/usr/local/texlive/2024/texmf-dist/tex/latex/base/ts1enc.dfu
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/base/ts1enc.dfu
 File: ts1enc.dfu 2022/06/07 v1.3c UTF-8 support
    defining Unicode char U+00A2 (decimal 162)
    defining Unicode char U+00A3 (decimal 163)
@@ -1015,13 +1105,15 @@ Now handling font encoding LS2 ...
    defining Unicode char U+2122 (decimal 8482)
    defining Unicode char U+2423 (decimal 9251)
    defining Unicode char U+FEFF (decimal 65279)
-)) (/usr/local/texlive/2024/texmf-dist/tex/latex/natbib/natbib.sty
+))
+(/usr/local/texlive/2024/texmf-dist/tex/latex/natbib/natbib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip70
 \bibsep=\skip71
 LaTeX Info: Redefining \cite on input line 694.
 \c@NAT@ctr=\count334
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/tools/tabularx.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/tools/tabularx.sty
 Package: tabularx 2023/07/08 v2.11c `tabularx' package (DPC)
 \TX@col@width=\dimen265
 \TX@old@table=\dimen266
@@ -1030,13 +1122,16 @@ Package: tabularx 2023/07/08 v2.11c `tabularx' package (DPC)
 \TX@delta=\dimen269
 \TX@cols=\count335
 \TX@ftn=\toks37
-) (/usr/local/texlive/2024/texmf-dist/tex/latex/hyphenat/hyphenat.sty
+)
+(/usr/local/texlive/2024/texmf-dist/tex/latex/hyphenat/hyphenat.sty
 Package: hyphenat 2009/09/02 v2.3c hyphenation utilities
 \langwohyphens=\language89
 LaTeX Info: Redefining \_ on input line 43.
 )
-LaTeX Font Info:    Trying to load font information for T1+stix on input line 20.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/stix/t1stix.fd
+LaTeX Font Info:    Trying to load font information for T1+stix on input line 2
+0.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/stix/t1stix.fd
 File: t1stix.fd 2015/04/17 v1.1.2-latex STIX T1 font definitions
 ) (./elsevier.aux)
 \openout1 = `elsevier.aux'.
@@ -1060,18 +1155,23 @@ LaTeX Font Info:    ... okay on input line 20.
 LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 20.
 LaTeX Font Info:    ... okay on input line 20.
 LaTeX Font Info:    Checking defaults for LS1/stix/m/n on input line 20.
-LaTeX Font Info:    Trying to load font information for LS1+stix on input line 20.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls1stix.fd
+LaTeX Font Info:    Trying to load font information for LS1+stix on input line 
+20.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls1stix.fd
 File: ls1stix.fd 2015/04/17 v1.1.2-latex STIX LS1 font definitions
 )
 LaTeX Font Info:    ... okay on input line 20.
 LaTeX Font Info:    Checking defaults for LS2/stix/m/n on input line 20.
-LaTeX Font Info:    Trying to load font information for LS2+stix on input line 20.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls2stix.fd
+LaTeX Font Info:    Trying to load font information for LS2+stix on input line 
+20.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls2stix.fd
 File: ls2stix.fd 2015/04/17 v1.1.2-latex STIX LS2 font definitions
 )
 LaTeX Font Info:    ... okay on input line 20.
- (/usr/local/texlive/2024/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+
+(/usr/local/texlive/2024/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count336
 \scratchdimen=\dimen270
@@ -1086,25 +1186,33 @@ LaTeX Font Info:    ... okay on input line 20.
 \everyMPtoPDFconversion=\toks39
 ) (/usr/local/texlive/2024/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
- (/usr/local/texlive/2024/texmf-dist/tex/latex/grfext/grfext.sty
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/grfext/grfext.sty
 Package: grfext 2019/12/03 v1.3 Manage graphics extensions (HO)
 )
-Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
 Package grfext Info: Graphics extension search list:
-(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPEG,.JBIG2,.JB2,.eps]
+(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
 (grfext)             \AppendGraphicsExtensions on input line 504.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
-File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
 ))
 LaTeX Info: Command `\dddot' is already robust on input line 20.
 LaTeX Info: Command `\ddddot' is already robust on input line 20.
 Package hyperref Info: Link coloring ON on input line 20.
- (./elsevier.out) (./elsevier.out)
+
+(./elsevier.out) (./elsevier.out)
 \@outlinefile=\write3
 \openout3 = `elsevier.out'.
 
- (/usr/local/texlive/2024/texmf-dist/tex/latex/upquote/upquote.sty
-Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verbatim
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/upquote/upquote.sty
+Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
+tim
 )
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -1143,68 +1251,69 @@ Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verbat
 \verbatim@out=\write4
 \openout4 = `elsevier.abs'.
 
-LaTeX Font Info:    Trying to load font information for LS1+stixscr on input line 76.
+LaTeX Font Info:    Trying to load font information for LS1+stixscr on input li
+ne 76.
 (/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls1stixscr.fd
 File: ls1stixscr.fd 2015/04/17 v1.1.2-latex STIX script LS1 font definitions
 )
-LaTeX Font Info:    Trying to load font information for LS2+stixex on input line 76.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls2stixex.fd
+LaTeX Font Info:    Trying to load font information for LS2+stixex on input lin
+e 76.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls2stixex.fd
 File: ls2stixex.fd 2015/04/17 v1.1.2-latex STIX extentions LS2 font definitions
+
 )
 LaTeX Font Info:    Trying to load font information for U+msa on input line 76.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsa.fd
+
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
 LaTeX Font Info:    Trying to load font information for U+msb on input line 76.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsb.fd
+
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for LS1+stixfrak on input line 76.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls1stixfrak.fd
+LaTeX Font Info:    Trying to load font information for LS1+stixfrak on input l
+ine 76.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls1stixfrak.fd
 File: ls1stixfrak.fd 2015/04/17 v1.1.2-latex STIX fraktur LS1 font definitions
 )
-LaTeX Font Info:    Trying to load font information for LS1+stixbb on input line 76.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls1stixbb.fd
+LaTeX Font Info:    Trying to load font information for LS1+stixbb on input lin
+e 76.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls1stixbb.fd
 File: ls1stixbb.fd 2015/04/17 v1.1.2-latex STIX blackboard LS1 font definitions
+
 )
-LaTeX Font Info:    Trying to load font information for LS2+stixcal on input line 76.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls2stixcal.fd
-File: ls2stixcal.fd 2015/04/17 v1.1.2-latex STIX calligraphic LS2 font definitions
+LaTeX Font Info:    Trying to load font information for LS2+stixcal on input li
+ne 76.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls2stixcal.fd
+File: ls2stixcal.fd 2015/04/17 v1.1.2-latex STIX calligraphic LS2 font definiti
+ons
 )
-LaTeX Font Info:    Trying to load font information for LS1+stixsf on input line 76.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls1stixsf.fd
+LaTeX Font Info:    Trying to load font information for LS1+stixsf on input lin
+e 76.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls1stixsf.fd
 File: ls1stixsf.fd 2015/04/17 v1.1.2-latex STIX sans-serif LS1 font definitions
+
 )
-LaTeX Font Info:    Trying to load font information for LS2+stixtt on input line 76.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls2stixtt.fd
+LaTeX Font Info:    Trying to load font information for LS2+stixtt on input lin
+e 76.
+
+(/usr/local/texlive/2024/texmf-dist/tex/latex/stix/ls2stixtt.fd
 File: ls2stixtt.fd 2015/04/17 v1.1.2-latex STIX typewriter LS2 font definitions
+
 )
 Overfull \hbox (123.62721pt too wide) detected at line 76
 []
  []
 
-(./elsevier.abs
-LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 1.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/inconsolata/t1zi4.fd
-File: t1zi4.fd 2018/01/14 T1/zi4 (Inconsolata)
-)
-LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 6.80005pt on input line 1.
-
-Underfull \hbox (badness 1642) in paragraph at lines 76--2
- \T1/stix/m/n/8 cur-rent stim-u-la-tion (tDCS) ran-domised sham-controlled trial in adults with ma-jor de-pres-sive
- []
-
-
-Underfull \hbox (badness 1014) in paragraph at lines 3--4
- []\T1/stix/m/n/8 The strongest con-fig-u-ra-tion (hy-brid model, 6 s win-dows, \T1/zi4/m/n/8 inner-k=1\T1/stix/m/n/8 ) achieved patient-level
- []
-
-)
-Underfull \hbox (badness 1102) in paragraph at lines 5--76
- \T1/stix/m/n/8 re-cur-rent biomarker set cen-tered on tem-po-ral spec-tral en-tropy and frontal-temporal dif-fer-ence
- []
-
+(./elsevier.abs)
 
 Package hyperref Warning: Ignoring empty anchor on input line 76.
 
@@ -1216,12 +1325,21 @@ File: thumbnails/cas-email.jpeg Graphic file (type jpg)
 <use thumbnails/cas-email.jpeg>
 Package pdftex.def Info: thumbnails/cas-email.jpeg  used on input line 76.
 (pdftex.def)             Requested size: 7.99838pt x 8.0pt.
+LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 76
+.
+(/usr/local/texlive/2024/texmf-dist/tex/latex/inconsolata/t1zi4.fd
+File: t1zi4.fd 2018/01/14 T1/zi4 (Inconsolata)
+)
+LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
+(Font)              scaled to size 6.80005pt on input line 76.
+
 
 Package hyperref Warning: Ignoring empty anchor on input line 76.
 
 (../sections/introduction.tex
 Underfull \hbox (badness 10000) in paragraph at lines 1--2
-\T1/stix/m/n/10 het-ero-gene-ity in clin-i-cal pre-sen-ta-tion, neu-ro-bi-ol-ogy,
+\T1/stix/m/n/10 het-ero-gene-ity in clin-i-cal pre-sen-ta-tion, neu-ro-bi-ol-og
+y,
  []
 
 
@@ -1231,7 +1349,8 @@ Underfull \hbox (badness 10000) in paragraph at lines 1--2
 
 
 Underfull \hbox (badness 2922) in paragraph at lines 1--2
-\T1/stix/m/n/10 phar-ma-co-log-i-cal and psy-chother-a-peu-tic in-ter-ven-tions, a
+\T1/stix/m/n/10 phar-ma-co-log-i-cal and psy-chother-a-peu-tic in-ter-ven-tions
+, a
  []
 
 
@@ -1240,224 +1359,211 @@ Underfull \hbox (badness 10000) in paragraph at lines 1--2
  []
 
 
-Underfull \hbox (badness 4391) in paragraph at lines 1--2
-\T1/stix/m/n/10 large-scale stud-ies sup-port the fea-si-bil-ity and clin-i-cal
- []
-
-
-Underfull \hbox (badness 1983) in paragraph at lines 1--2
-\T1/stix/m/n/10 po-ten-tial of tDCS, in-clud-ing fully re-mote, home-based
- []
-
-
 Underfull \hbox (badness 10000) in paragraph at lines 1--2
-\T1/stix/m/n/10 de-liv-ery, treat-ment out-comes re-main vari-able at the
+\T1/stix/m/n/10 (tDCS) ([][]Wood-ham et al.[][], [][]2021[][]). While ran-dom-i
+zed
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3--4
+Underfull \hbox (badness 1377) in paragraph at lines 1--2
+\T1/stix/m/n/10 vari-able at the in-di-vid-ual level ([][]Hampsey et al.[][], [
+][]2026[][];
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 5--6
 []\T1/stix/m/n/10 Home-based de-liv-ery has moved from con-cept
  []
 
 
-Underfull \hbox (badness 4739) in paragraph at lines 3--4
+Underfull \hbox (badness 4739) in paragraph at lines 5--6
 \T1/stix/m/n/10 to clin-i-cal trial: a fully re-mote phase 2 ran-dom-ized
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3--4
-\T1/stix/m/n/10 work found the ap-proach ac-cept-able to par-tic-i-pants
+Underfull \hbox (badness 1005) in paragraph at lines 5--6
+\T1/stix/m/n/10 ma-jor de-pres-sive dis-or-der ([][]Wood-ham et al.[][], [][]20
+25[][]), and
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3--4
-\T1/stix/m/n/10 [[]]. These ad-vances make pre-treat-ment strat-i-fi-ca-tion
+Underfull \hbox (badness 6510) in paragraph at lines 5--6
+\T1/stix/m/n/10 treat-ment be-gins. Elec-troen-cephalog-ra-phy (EEG) is a
  []
 
 
-Underfull \hbox (badness 7907) in paragraph at lines 3--4
-\T1/stix/m/n/10 a prac-ti-cal clin-i-cal prob-lem. A cen-tral chal-lenge is
+Underfull \hbox (badness 4328) in paragraph at lines 5--6
+\T1/stix/m/n/10 low cost, and high tem-po-ral res-o-lu-tion. A 4-channel
  []
 
 
-Underfull \hbox (badness 3815) in paragraph at lines 3--4
-\T1/stix/m/n/10 Elec-troen-cephalog-ra-phy (EEG) is a po-ten-tial modal-ity
+Underfull \hbox (badness 2837) in paragraph at lines 5--6
+\T1/stix/m/n/10 low-montage con-fig-u-ra-tion (AF7, AF8, TP9, TP10) is
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 5--6
-\T1/stix/m/n/10 Re-views and biomarker overviews have re-peat-edly
+Underfull \hbox (badness 1314) in paragraph at lines 5--6
+\T1/stix/m/n/10 is lightweight, self-applicable by pa-tients with min-i-mal
  []
 
 
-Underfull \hbox (badness 1142) in paragraph at lines 5--6
-\T1/stix/m/n/10 high-lighted spec-tral, asym-me-try, vig-i-lance, en-tropy, and
+Underfull \hbox (badness 3078) in paragraph at lines 5--6
+\T1/stix/m/n/10 nec-es-sar-ily trades off spa-tial cov-er-age (cap-tur-ing only
+
  []
 
 
-Underfull \hbox (badness 1442) in paragraph at lines 5--6
-\T1/stix/m/n/10 com-plex-ity sig-na-tures as po-ten-tially in-for-ma-tive marker
+Underfull \hbox (badness 7777) in paragraph at lines 5--6
+\T1/stix/m/n/10 against prac-ti-cal de-ploy-a-bil-ity. A key open ques-tion
  []
 
 
-Underfull \hbox (badness 3240) in paragraph at lines 5--6
-\T1/stix/m/n/10 but also the need for more ro-bust treatment-response
+Underfull \hbox (badness 1371) in paragraph at lines 5--6
+\T1/stix/m/n/10 is whether the lim-ited spa-tial sam-pling of a 4-channel
  []
 
 
-Underfull \hbox (badness 1406) in paragraph at lines 5--6
-\T1/stix/m/n/10 mod-els and bet-ter trans-la-tional dis-ci-pline [[]--[]]. More
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 5--6
-\T1/stix/m/n/10 re-cent meta-analytic work on EEG-based treat-ment
- []
-
-
-Underfull \hbox (badness 3536) in paragraph at lines 5--6
-\T1/stix/m/n/10 and stan-dard-iza-tion [[]--[]]. Ma-chine learn-ing stud-ies
- []
-
-
-Underfull \hbox (badness 7796) in paragraph at lines 5--6
-\T1/stix/m/n/10 and neu-ro-mod-u-la-tion re-sponse pre-dic-tion, while also
- []
-
-
-Underfull \hbox (badness 1303) in paragraph at lines 5--6
-\T1/stix/m/n/10 [[]--[]]. Re-lated non-lin-ear and entropy-oriented stud-ies
- []
-
-
-Underfull \hbox (badness 5878) in paragraph at lines 5--6
-\T1/stix/m/n/10 point to the same cau-tion about di-men-sion-al-ity and
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 5--6
-\T1/stix/m/n/10 Leakage-specific and data-centric cri-tiques make the
- []
-
-
-Underfull \hbox (badness 1917) in paragraph at lines 7--8
-[]\T1/stix/m/n/10 That ten-sion is es-pe-cially sharp in rel-a-tively small
+Underfull \hbox (badness 1558) in paragraph at lines 5--6
+\T1/stix/m/n/10 present study di-rectly ad-dresses this ten-sion by test-ing
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 7--8
-\T1/stix/m/n/10 neu-ro-mod-u-la-tion stud-ies. Rich mod-els can im-prove
+\T1/stix/m/n/10 Re-views have high-lighted spec-tral, asym-me-try, and
  []
 
 
-Underfull \hbox (badness 1902) in paragraph at lines 7--8
-\T1/stix/m/n/10 in-crease the risk of un-sta-ble fea-ture se-lec-tion, in-flated
+Underfull \hbox (badness 10000) in paragraph at lines 7--8
+\T1/stix/m/n/10 en-tropy sig-na-tures as po-ten-tially in-for-ma-tive marker
  []
 
 
-Underfull \hbox (badness 2435) in paragraph at lines 7--8
-\T1/stix/m/n/10 per-for-mance es-ti-mates, and overly con-fi-dent biomarker
+Underfull \hbox (badness 6510) in paragraph at lines 7--8
+[][]\T1/stix/m/n/10 Ol-brich et al.[][], [][]2015[][]), but also em-pha-size th
+e need
  []
 
 
-Underfull \hbox (badness 1552) in paragraph at lines 7--8
-\T1/stix/m/n/10 de-tails in this lit-er-a-ture [[], []]. Clin-i-cally de-ploy-able
+Underfull \hbox (badness 3460) in paragraph at lines 7--8
+\T1/stix/m/n/10 for more ro-bust treatment-response mod-els and bet-ter
  []
 
 
-Underfull \hbox (badness 1360) in paragraph at lines 7--8
-\T1/stix/m/n/10 show sub-stan-tial promise [[]--[]]. Re-lated re-views and
+Underfull \hbox (badness 1796) in paragraph at lines 7--8
+\T1/stix/m/n/10 Meta-analytic work on EEG-based treat-ment pre-dic-tion
  []
 
 
-Underfull \hbox (badness 1728) in paragraph at lines 7--8
-\T1/stix/m/n/10 con-nec-tiv-ity changes in de-pres-sion treat-ment reaches a
+Underfull \hbox (badness 2698) in paragraph at lines 7--8
+\T1/stix/m/n/10 reaches a sim-i-lar con-clu-sion: use-ful sig-nal is present,
  []
 
-LaTeX Font Info:    Trying to load font information for T1+cmss on input line 8.
+
+Underfull \hbox (badness 4072) in paragraph at lines 7--8
+\T1/stix/m/n/10 but trans-la-tion de-pends on stronger method-ol-ogy and
+ []
+
+
+Underfull \hbox (badness 3690) in paragraph at lines 7--8
+\T1/stix/m/n/10 this into an-tide-pres-sant and neu-ro-mod-u-la-tion re-sponse
+ []
+
+
+Underfull \hbox (badness 1831) in paragraph at lines 7--8
+\T1/stix/m/n/10 un-der-ly-ing de-sign prob-lem ex-plicit ([][]Shen et al.[][], 
+[][]2025[][];
+ []
+
+
+Underfull \hbox (badness 1221) in paragraph at lines 7--8
+\T1/stix/m/n/10 stud-ies, rich mod-els risk un-sta-ble fea-ture se-lec-tion and
+
+ []
+
+
+Underfull \hbox (badness 1515) in paragraph at lines 7--8
+[][]\T1/stix/m/n/10 2019[][]). Emerg-ing response-prediction work con-tin-ues t
+o
+ []
+
+
+Underfull \hbox (badness 1168) in paragraph at lines 7--8
+\T1/stix/m/n/10 show promise while ex-pos-ing the same method-olog-i-cal
+ []
+
+LaTeX Font Info:    Trying to load font information for T1+cmss on input line 8
+.
 (/usr/local/texlive/2024/texmf-dist/tex/latex/base/t1cmss.fd
 File: t1cmss.fd 2023/04/13 v2.5m Standard LaTeX font definitions
-) [1{/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/stix/stix-t1.enc}{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}
+) [1{/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr
+/local/texlive/2024/texmf-dist/fonts/enc/dvips/stix/stix-t1.enc}
 
 
-{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc} </usr/local/texlive/2024/texmf-dist/tex/latex/els-cas-templates/thumbnails/cas-email.jpeg>]
+{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}{/u
+sr/local/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc} </us
+r/local/texlive/2024/texmf-dist/tex/latex/els-cas-templates/thumbnails/cas-emai
+l.jpeg>]
 Underfull \hbox (badness 1571) in paragraph at lines 9--10
 \T1/stix/m/n/10 anal-ysed here, power spec-tral den-sity (PSD)-based and
  []
 
 
-Underfull \hbox (badness 7415) in paragraph at lines 9--10
-\T1/stix/m/n/10 PLV-based anal-y-ses have ob-served that the base-line
+Underfull \hbox (badness 6141) in paragraph at lines 9--10
+\T1/stix/m/n/10 car-ries treatment-response in-for-ma-tion across mul-ti-ple
+ []
+
+
+Underfull \hbox (badness 1681) in paragraph at lines 9--10
+[][]\T1/stix/m/n/10 2025b[][]). PSD-based deep learn-ing ap-proaches iden-ti-fi
+ed
+ []
+
+
+Underfull \hbox (badness 1881) in paragraph at lines 9--10
+\T1/stix/m/n/10 power as in-for-ma-tive for treat-ment out-come pre-dic-tion
+ []
+
+
+Underfull \hbox (badness 2376) in paragraph at lines 9--10
+\T1/stix/m/n/10 pat-terns ([][]Xiao et al.[][], [][]2025b[][]). To-gether, thes
+e find-ings
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 9--10
-\T1/stix/m/n/10 EEG car-ries treatment-response in-for-ma-tion across
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 9--10
-\T1/stix/m/n/10 mul-ti-ple sig-nal rep-re-sen-ta-tions [[], []]. PSD-based
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 9--10
-\T1/stix/m/n/10 deep learn-ing ap-proaches iden-ti-fied tem-poropari-etal
- []
-
-
-Underfull \hbox (badness 4765) in paragraph at lines 9--10
-\T1/stix/m/n/10 spec-tral fea-tures, no-tably TP10 theta-alpha power, as
- []
-
-
-Underfull \hbox (badness 2359) in paragraph at lines 9--10
-\T1/stix/m/n/10 connectivity-based anal-y-ses high-lighted frontal-temporal
+\T1/stix/m/n/10 sug-gest that response-related sig-nal is present and
  []
 
 
 Underfull \hbox (badness 2221) in paragraph at lines 9--10
-\T1/stix/m/n/10 char-ac-ter-ized in terms of in-ter-pretabil-ity, sta-bil-ity, and
+\T1/stix/m/n/10 char-ac-ter-ized in terms of in-ter-pretabil-ity, sta-bil-ity, 
+and
  []
 
 )
-Underfull \hbox (badness 1057) in paragraph at lines 11--80
-\T1/stix/m/n/10 uses the same base-line EEG co-hort as our prior PSD-
+Underfull \hbox (badness 2229) in paragraph at lines 11--80
+\T1/stix/m/n/10 connectivity-based anal-y-ses ([][]Moncy et al.[][], [][]2024[]
+[]; [][]Xiao
  []
 
 
-Underfull \hbox (badness 1194) in paragraph at lines 11--80
-\T1/stix/m/n/10 and connectivity-based anal-y-ses [[], []], but ad-dresses
+Underfull \hbox (badness 5077) in paragraph at lines 11--80
+\T1/stix/m/n/10 fold-wise sparse feature-selection pipeline can iden-tify
  []
 
 
-Underfull \hbox (badness 4505) in paragraph at lines 11--80
-\T1/stix/m/n/10 a dis-tinct ques-tion. Rather than op-ti-mis-ing pre-dic-tive
+Underfull \hbox (badness 2903) in paragraph at lines 11--80
+\T1/stix/m/n/10 a small, re-cur-rent, and in-ter-pretable fea-ture set un-der
  []
 
 
-Underfull \hbox (badness 6859) in paragraph at lines 11--80
-\T1/stix/m/n/10 whether a strictly leakage-controlled, fold-wise sparse
+Underfull \hbox (badness 2538) in paragraph at lines 11--80
+\T1/stix/m/n/10 over the same feature-selection sweep to test whether
  []
 
 
-Underfull \hbox (badness 3525) in paragraph at lines 11--80
-\T1/stix/m/n/10 and in-ter-pretable biomarker set un-der participant-level
- []
-
-
-Underfull \hbox (badness 1460) in paragraph at lines 11--80
-\T1/stix/m/n/10 val-i-da-tion. We com-pared two clas-si-fiers over the same
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 11--80
-\T1/stix/m/n/10 feature-selection sweep to test whether low-montage
- []
-
-
-Underfull \hbox (badness 6859) in paragraph at lines 11--80
-\T1/stix/m/n/10 MDD. The anal-y-sis pri-or-i-tized par-si-mony, biomarker
+Underfull \hbox (badness 3668) in paragraph at lines 11--80
+\T1/stix/m/n/10 low-montage resting-state EEG could re-cover a small
  []
 
 
@@ -1476,13 +1582,8 @@ Underfull \hbox (badness 4556) in paragraph at lines 11--80
  []
 
 
-Underfull \hbox (badness 3019) in paragraph at lines 11--80
-\T1/stix/m/n/10 dis-cov-ery from a high-dimensional mod-elling prob-lem
- []
-
-
 Underfull \hbox (badness 10000) in paragraph at lines 11--80
-\T1/stix/m/n/10 to-ward a min-i-mal, in-ter-pretable sig-nal iden-ti-fi-ca-tion
+\T1/stix/m/n/10 from high-dimensional mod-elling to-ward a min-i-mal,
  []
 
 (../sections/methods.tex
@@ -1491,11 +1592,23 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--4
  []
 
 
-Underfull \hbox (badness 2818) in paragraph at lines 3--4
-\T1/stix/m/n/10 7 re-mis-sion cases and 14 non-remission cases in the
+Underfull \hbox (badness 3579) in paragraph at lines 3--4
+\T1/stix/m/n/10 home-based tDCS trial ([][]Wood-ham et al.[][], [][]2025[][]). 
+The
  []
 
-<../FuseHeadset.jpg, id=73, 1080.07515pt x 585.74835pt>
+
+Underfull \hbox (badness 4543) in paragraph at lines 3--4
+\T1/stix/m/n/10 an-a-lyzed co-hort con-tained 7 re-mis-sion cases and 14
+ []
+
+
+Underfull \hbox (badness 1325) in paragraph at lines 3--4
+\T1/stix/m/n/10 years. Ta-ble [][]1[][] sum-ma-rizes the co-hort, ac-qui-si-tio
+n, and
+ []
+
+<../FuseHeadset.jpg, id=89, 1080.07515pt x 585.74835pt>
 File: ../FuseHeadset.jpg Graphic file (type jpg)
 <use ../FuseHeadset.jpg>
 Package pdftex.def Info: ../FuseHeadset.jpg  used on input line 7.
@@ -1506,13 +1619,35 @@ LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
 LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
 (Font)              scaled to size 8.50006pt on input line 20.
 
-Underfull \hbox (badness 10000) in paragraph at lines 20--21
-\T1/stix/m/n/10 setup uses a lim-ited frontal-temporal mon-tage with
+Underfull \hbox (badness 4391) in paragraph at lines 20--21
+\T1/stix/m/n/10 portable-deployment rel-e-vance ([][]Mi-randa et al.[][], [][]2
+019[][]).
  []
 
 
-Underfull \hbox (badness 1635) in paragraph at lines 20--21
-\T1/stix/m/n/10 clear portable-deployment rel-e-vance [[]]. The mon-tage
+Underfull \hbox (badness 5681) in paragraph at lines 20--21
+\T1/stix/m/n/10 Four chan-nels were cho-sen as a de-lib-er-ate prac-ti-cal
+ []
+
+
+Underfull \hbox (badness 1983) in paragraph at lines 20--21
+\T1/stix/m/n/10 enough for un-su-per-vised home self-application with-out
+ []
+
+
+Underfull \hbox (badness 2913) in paragraph at lines 20--21
+\T1/stix/m/n/10 tech-ni-cian as-sis-tance. This con-fig-u-ra-tion omits cen-tra
+l,
+ []
+
+
+Underfull \hbox (badness 5607) in paragraph at lines 20--21
+\T1/stix/m/n/10 and pre-clud-ing the anal-y-sis of well-studied pos-te-rior
+ []
+
+
+Underfull \hbox (badness 5578) in paragraph at lines 20--21
+\T1/stix/m/n/10 32-electrode re-search cap is in-fea-si-ble. The mon-tage
  []
 
 
@@ -1536,31 +1671,63 @@ Underfull \hbox (badness 10000) in paragraph at lines 22--23
  []
 
 
-Underfull \hbox (badness 1895) in paragraph at lines 22--23
-\T1/stix/m/n/10 Hz, and zero-overlap win-dow slic-ing. The sweep then
+Underfull \hbox (badness 1072) in paragraph at lines 22--23
+\T1/stix/m/n/10 low-pass fil-ter at 60 Hz, a down-sam-pling step back to
  []
 
 
-Underfull \hbox (badness 1708) in paragraph at lines 22--23
-\T1/stix/m/n/10 record-ings. These choices ma-te-ri-ally af-fect down-stream
+Underfull \hbox (badness 1817) in paragraph at lines 22--23
+\T1/stix/m/n/10 256 Hz, and zero-overlap win-dow slic-ing. The 60 Hz
  []
 
 
-Underfull \hbox (badness 2237) in paragraph at lines 22--23
-\T1/stix/m/n/10 EEG fea-ture dis-tri-bu-tions, es-pe-cially in low-density or
+Underfull \hbox (badness 3635) in paragraph at lines 22--23
+\T1/stix/m/n/10 pro-vid-ing at-ten-u-a-tion above the Nyquist fre-quency of
  []
 
 
-Underfull \hbox (badness 7504) in paragraph at lines 22--23
-\T1/stix/m/n/10 portable pipelines [[]--[]]. They also in-ter-sect with
+Underfull \hbox (badness 1087) in paragraph at lines 22--23
+\T1/stix/m/n/10 the orig-i-nal 256 Hz record-ing; a notch fil-ter at 50 Hz
  []
 
 
-Underfull \hbox (badness 1648) in paragraph at lines 22--23
-\T1/stix/m/n/10 stan-dard-iza-tion and signal-quality con-cerns in wear-able
+Underfull \hbox (badness 6157) in paragraph at lines 22--23
+\T1/stix/m/n/10 (UK mains fre-quency) was not ap-plied be-cause the
  []
 
 
+Underfull \hbox (badness 10000) in paragraph at lines 22--23
+\T1/stix/m/n/10 The up-sam-ple/downsample pipeline pre-served sig-nal
+ []
+
+
+Underfull \hbox (badness 2680) in paragraph at lines 22--23
+\T1/stix/m/n/10 fi-delity while al-low-ing con-sis-tent fil-ter im-ple-men-ta-t
+ion
+ []
+
+
+Underfull \hbox (badness 6284) in paragraph at lines 22--23
+\T1/stix/m/n/10 across all win-dow sizes. The sweep then com-pared
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 22--23
+\T1/stix/m/n/10 dis-tri-bu-tions, es-pe-cially in low-density or portable
+ []
+
+
+Underfull \hbox (badness 2698) in paragraph at lines 22--23
+\T1/stix/m/n/10 et al.[][], [][]2017[][]). They also in-ter-sect with stan-dard
+-iza-tion
+ []
+
+
+Underfull \hbox (badness 3525) in paragraph at lines 22--23
+\T1/stix/m/n/10 and signal-quality con-cerns in wear-able EEG set-tings
+ []
+
+[2]
 Underfull \hbox (badness 1215) in paragraph at lines 26--27
 \T1/stix/m/n/10 win-dow. With all four chan-nels avail-able, the ex-trac-tor
  []
@@ -1616,8 +1783,8 @@ Underfull \hbox (badness 1210) in paragraph at lines 26--27
  []
 
 
-Underfull \hbox (badness 1681) in paragraph at lines 26--27
-\T1/stix/m/n/10 hy-poth-e-sis [[], []]. Ta-ble [][]2[][] sum-ma-rizes the ex-tracted
+Underfull \hbox (badness 10000) in paragraph at lines 26--27
+\T1/stix/m/n/10 sum-ma-rizes the ex-tracted fea-ture fam-i-lies and their
  []
 
 
@@ -1626,21 +1793,31 @@ Underfull \hbox (badness 1910) in paragraph at lines 28--29
  []
 
 
-Underfull \hbox (badness 1158) in paragraph at lines 28--29
-\T1/stix/m/n/10 from Welch power spec-tral den-si-ties [[]] and in-cluded
+Underfull \hbox (badness 3199) in paragraph at lines 28--29
+\T1/stix/m/n/10 nor-mal-ized by to-tal power, frequency-weighted power,
  []
 
 
-Underfull \hbox (badness 2846) in paragraph at lines 28--29
-\T1/stix/m/n/10 in-ter-pretable fea-ture fam-i-lies in de-pres-sion EEG work
+Underfull \hbox (badness 2865) in paragraph at lines 28--29
+\T1/stix/m/n/10 spec-tral edge fre-quen-cies at 90% and 95%, and PSD
  []
 
 
 Underfull \hbox (badness 1009) in paragraph at lines 28--29
-\T1/stix/m/n/10 [[], [], []]. Temporal-channel spec-tral con-tent has also
+\T1/stix/m/n/10 min-i-mum, me-dian, skew-ness, kur-to-sis). These mea-sures
  []
 
-[2] (../tables/feature_extraction_summary.tex)
+
+Underfull \hbox (badness 1281) in paragraph at lines 28--29
+\T1/stix/m/n/10 were in-cluded be-cause spec-tral con-tent re-mains one of
+ []
+
+
+Underfull \hbox (badness 5592) in paragraph at lines 28--29
+\T1/stix/m/n/10 con-tent has also ap-peared re-peat-edly in pre-treat-ment
+ []
+
+(../tables/feature_extraction_summary.tex)
 Underfull \hbox (badness 7415) in paragraph at lines 38--39
 []\T1/stix/m/n/10 Time-domain de-scrip-tors were also com-puted for
  []
@@ -1653,16 +1830,13 @@ Underfull \hbox (badness 2119) in paragraph at lines 38--39
 
 Underfull \hbox (badness 3503) in paragraph at lines 38--39
 \T1/stix/m/n/10 de-vi-a-tion, to-gether with Hjorth ac-tiv-ity, mo-bil-ity, and
+
  []
 
 
-Underfull \hbox (badness 1622) in paragraph at lines 38--39
-\T1/stix/m/n/10 dis-per-sion, lo-cal os-cil-la-tory rate, sig-nal rough-ness, and
- []
-
-
-Underfull \hbox (badness 1418) in paragraph at lines 38--39
-\T1/stix/m/n/10 clin-i-cally use-ful fea-tures must re-main in-ter-pretable and
+Underfull \hbox (badness 2717) in paragraph at lines 38--39
+\T1/stix/m/n/10 com-plex-ity ([][]Hjorth[][], [][]1970[][]; [][]Zhang et al.[][
+], [][]2023[][]). These
  []
 
 
@@ -1673,6 +1847,7 @@ Underfull \hbox (badness 6608) in paragraph at lines 40--41
 
 Underfull \hbox (badness 1694) in paragraph at lines 40--41
 \T1/stix/m/n/10 Lya-punov ex-po-nent, and de-trended fluc-tu-a-tion anal-y-sis.
+
  []
 
 
@@ -1681,18 +1856,14 @@ Underfull \hbox (badness 2460) in paragraph at lines 40--41
  []
 
 
-Underfull \hbox (badness 6428) in paragraph at lines 40--41
-\T1/stix/m/n/10 sub-sam-pled for nu-mer-i-cal sta-bil-ity. These de-scrip-tors
+Underfull \hbox (badness 2556) in paragraph at lines 40--41
+\T1/stix/m/n/10 im-pli-cated en-tropy, vari-abil-ity, and broader com-plex-ity
  []
 
 
-Underfull \hbox (badness 7740) in paragraph at lines 40--41
-\T1/stix/m/n/10 were re-tained be-cause de-pres-sion EEG stud-ies have
- []
-
-
-Underfull \hbox (badness 4205) in paragraph at lines 40--41
-\T1/stix/m/n/10 re-peat-edly im-pli-cated en-tropy, vari-abil-ity, and broader
+Underfull \hbox (badness 6575) in paragraph at lines 40--41
+\T1/stix/m/n/10 struc-ture ([][]Acharya et al.[][], [][]2015[][]; [][]Faust et 
+al.[][], [][]2014[][];
  []
 
 
@@ -1700,7 +1871,7 @@ Underfull \hbox (badness 7486) in paragraph at lines 40--41
 \T1/stix/m/n/10 in pre-treat-ment re-sponse and large-scale resting-state
  []
 
-
+[3 <../FuseHeadset.jpg>] [4]
 Underfull \hbox (badness 7238) in paragraph at lines 42--43
 []\T1/stix/m/n/10 The four-channel mon-tage also sup-ports a range
  []
@@ -1717,7 +1888,9 @@ Underfull \hbox (badness 10000) in paragraph at lines 42--43
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 42--43
-\T1/stix/m/n/10 (\T1/zi4/m/n/10 AF7\T1/stix/m/n/10 /\T1/zi4/m/n/10 AF8\T1/stix/m/n/10 ) and tem-po-ral asym-me-try (\T1/zi4/m/n/10 TP9\T1/stix/m/n/10 /\T1/zi4/m/n/10 TP10\T1/stix/m/n/10 ) were
+\T1/stix/m/n/10 (\T1/zi4/m/n/10 AF7\T1/stix/m/n/10 /\T1/zi4/m/n/10 AF8\T1/stix/
+m/n/10 ) and tem-po-ral asym-me-try (\T1/zi4/m/n/10 TP9\T1/stix/m/n/10 /\T1/zi4
+/m/n/10 TP10\T1/stix/m/n/10 ) were
  []
 
 
@@ -1760,7 +1933,7 @@ Underfull \hbox (badness 5847) in paragraph at lines 52--53
 \T1/stix/m/n/10 in resting-state de-pres-sion EEG and neu-ro-mod-u-la-tion
  []
 
-[3 <../FuseHeadset.jpg>] [4]
+
 Underfull \hbox (badness 10000) in paragraph at lines 54--55
 []\T1/stix/m/n/10 Finally, the ex-trac-tor in-cluded three ex-ploratory
  []
@@ -1782,7 +1955,8 @@ Underfull \hbox (badness 5217) in paragraph at lines 54--55
 
 
 Underfull \hbox (badness 4378) in paragraph at lines 54--55
-\T1/zi4/m/n/10 TP10 \T1/stix/m/n/10 spec-trum con-tains a sharp dom-i-nant peak, how
+\T1/zi4/m/n/10 TP10 \T1/stix/m/n/10 spec-trum con-tains a sharp dom-i-nant peak
+, how
  []
 
 
@@ -1846,14 +2020,15 @@ Underfull \hbox (badness 1043) in paragraph at lines 60--61
  []
 
 
-Underfull \hbox (badness 3271) in paragraph at lines 60--61
-\T1/stix/m/n/10 feature-selection sta-bil-ity pan-els in the study de-scribe
+Underfull \hbox (badness 4036) in paragraph at lines 60--61
+\T1/stix/m/n/10 study de-scribe shared pipeline be-hav-ior be-cause both
  []
 
-<../figures/figure0_processing_pipeline.png, id=151, 910.602pt x 487.3407pt>
+<../figures/figure0_processing_pipeline.png, id=211, 910.602pt x 487.3407pt>
 File: ../figures/figure0_processing_pipeline.png Graphic file (type png)
 <use ../figures/figure0_processing_pipeline.png>
-Package pdftex.def Info: ../figures/figure0_processing_pipeline.png  used on input line 64.
+Package pdftex.def Info: ../figures/figure0_processing_pipeline.png  used on in
+put line 64.
 (pdftex.def)             Requested size: 494.50888pt x 264.65474pt.
 
 Underfull \hbox (badness 10000) in paragraph at lines 71--72
@@ -1887,510 +2062,992 @@ Underfull \hbox (badness 2261) in paragraph at lines 83--84
 
 
 Underfull \hbox (badness 1975) in paragraph at lines 83--84
-\T1/stix/m/n/10 pro-gres-sions of \T1/zi4/m/n/10 [64,64]\T1/stix/m/n/10 , \T1/zi4/m/n/10 [128,128]\T1/stix/m/n/10 , and \T1/zi4/m/n/10 [256,128] \T1/stix/m/n/10 with
+\T1/stix/m/n/10 pro-gres-sions of \T1/zi4/m/n/10 [64,64]\T1/stix/m/n/10 , \T1/z
+i4/m/n/10 [128,128]\T1/stix/m/n/10 , and \T1/zi4/m/n/10 [256,128] \T1/stix/m/n/
+10 with
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 85--86
-\T1/stix/m/n/10 self-attention with resid-ual layer nor-mal-iza-tion and
+[]\T1/stix/m/n/10 Sequence mod-el-ing then used two bidi-rec-tional
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 87--88
-\T1/stix/m/n/10 The con-vo-lu-tional front end sum-ma-rized short-range
+Underfull \hbox (badness 1067) in paragraph at lines 85--86
+\T1/stix/m/n/10 and con-cate-nated with pooled multi-scale CNN out-puts
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 87--88
-\T1/stix/m/n/10 po-si-tions af-ter re-cur-rent en-cod-ing. Feature-pyramid
+Underfull \hbox (badness 4132) in paragraph at lines 85--86
+\T1/stix/m/n/10 ar-chi-tec-ture dis-tributes rep-re-sen-ta-tional ca-pac-ity ac
+ross
  []
 
 
-Underfull \hbox (badness 2460) in paragraph at lines 87--88
-\T1/stix/m/n/10 stage be-fore bi-nary clas-si-fi-ca-tion. Batch nor-mal-iza-tion,
+Underfull \hbox (badness 1248) in paragraph at lines 85--86
+\T1/stix/m/n/10 com-ple-men-tary stages: the pro-jec-tion and con-vo-lu-tional
  []
 
 
-Underfull \hbox (badness 2970) in paragraph at lines 87--88
-\T1/stix/m/n/10 dropout, la-bel smooth-ing, gra-di-ent clip-ping, and early
+Underfull \hbox (badness 10000) in paragraph at lines 85--86
+\T1/stix/m/n/10 front end com-presses and sum-ma-rizes the se-lected
  []
 
 
-Underfull \hbox (badness 1910) in paragraph at lines 91--92
+Underfull \hbox (badness 10000) in paragraph at lines 85--86
+\T1/stix/m/n/10 self-attention reweights in-for-ma-tive po-si-tions, and
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 85--86
+\T1/stix/m/n/10 Train-ing used AdamW, co-sine warm restarts, la-bel
+ []
+
+[5]
+Underfull \hbox (badness 3826) in paragraph at lines 87--88
+\T1/stix/m/n/10 5,000 win-dows at 2 s) and is au-to-mat-i-cally re-duced
+ []
+
+
+Underfull \hbox (badness 5260) in paragraph at lines 87--88
+\T1/stix/m/n/10 to the training-set size by the batch-resolution logic
+ []
+
+
+Underfull \hbox (badness 2165) in paragraph at lines 87--88
+\T1/stix/m/n/10 (ef-fec-tive batch ap-prox-i-mately 2,300 win-dows at 6 s).
+ []
+
+
+Underfull \hbox (badness 2932) in paragraph at lines 87--88
+\T1/stix/m/n/10 ac-cu-mu-lates sta-ble, population-level statis-tics from the
+ []
+
+
+Underfull \hbox (badness 1769) in paragraph at lines 89--90
+\T1/stix/m/n/10 con-vo-lu-tional, re-cur-rent, and attention-based stages can
+ []
+
+
+Underfull \hbox (badness 7851) in paragraph at lines 89--90
+\T1/stix/m/n/10 All ar-chi-tec-tural hy-per-pa-ram-e-ters (layer sizes, ker-nel
+
+ []
+
+
+Underfull \hbox (badness 2591) in paragraph at lines 89--90
+\T1/stix/m/n/10 sizes, at-ten-tion heads, learn-ing rate, dropout sched-ule,
+ []
+
+
+Underfull \hbox (badness 1117) in paragraph at lines 89--90
+\T1/stix/m/n/10 op-ti-mizer set-tings) were fixed a pri-ori from a stan-dard
+ []
+
+
+Underfull \hbox (badness 2828) in paragraph at lines 89--90
+\T1/stix/m/n/10 and window-size sweep rep-re-sents the only struc-tured
+ []
+
+
+Underfull \hbox (badness 1107) in paragraph at lines 89--90
+\T1/stix/m/n/10 hy-per-pa-ram-e-ter ex-plo-ration in this study. At inner-k=1,
+ []
+
+
+Underfull \hbox (badness 2653) in paragraph at lines 89--90
+\T1/stix/m/n/10 the stan-dard ra-tio-nale for syn-thetic over-sam-pling does
+ []
+
+
+Underfull \hbox (badness 1910) in paragraph at lines 93--94
 []\T1/stix/m/n/10 The pri-mary end-point was patient-level ROC-AUC,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 91--92
+Underfull \hbox (badness 10000) in paragraph at lines 93--94
 \T1/stix/m/n/10 com-puted from par-tic-i-pant prob-a-bil-i-ties ag-gre-gated
  []
 
 
-Underfull \hbox (badness 1496) in paragraph at lines 91--92
+Underfull \hbox (badness 1496) in paragraph at lines 93--94
 \T1/stix/m/n/10 over held-out win-dows. Sec-ondary patient-level met-rics
  []
 
 )
-Underfull \hbox (badness 10000) in paragraph at lines 93--83
+Underfull \hbox (badness 10000) in paragraph at lines 95--83
 []\T1/stix/m/n/10 To char-ac-ter-ize biomarker be-hav-ior across
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 93--83
+Underfull \hbox (badness 10000) in paragraph at lines 95--83
 \T1/stix/m/n/10 leave-one-participant-out folds, we used sev-eral post
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 93--83
+Underfull \hbox (badness 10000) in paragraph at lines 95--83
 \T1/stix/m/n/10 hoc sum-maries: mean pair-wise Jac-card over-lap,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 93--83
+Underfull \hbox (badness 10000) in paragraph at lines 95--83
 \T1/stix/m/n/10 class-conditional se-lec-tion deltas, and effect-direction
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 93--83
+Underfull \hbox (badness 10000) in paragraph at lines 95--83
 \T1/stix/m/n/10 con-sis-tency. These sum-maries are de-scrip-tive. They
  []
 
 
-Underfull \hbox (badness 4765) in paragraph at lines 93--83
-\T1/stix/m/n/10 char-ac-ter-ize re-cur-rence and di-rec-tion-al-ity across folds
+Underfull \hbox (badness 4765) in paragraph at lines 95--83
+\T1/stix/m/n/10 char-ac-ter-ize re-cur-rence and di-rec-tion-al-ity across fold
+s
  []
 
 
-Underfull \hbox (badness 2103) in paragraph at lines 93--83
+Underfull \hbox (badness 2103) in paragraph at lines 95--83
 \T1/stix/m/n/10 and do not sup-port causal in-ter-pre-ta-tion. Low over-lap
  []
 
 (../sections/results.tex
-Underfull \hbox (badness 2735) in paragraph at lines 3--4
-[]\T1/stix/m/n/10 Across the 150 suc-cess-ful runs, the hy-brid model
+Underfull \hbox (badness 2717) in paragraph at lines 3--4
+\T1/stix/m/n/10 the hy-brid model out-per-formed the SVM base-line on
  []
 
-[5]
-<../figures/sweep_window_roc_auc.png, id=170, 474.8139pt x 350.5095pt>
+[6 <../figures/figure0_processing_pipeline.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 5--6
+\T1/stix/m/n/10 p-values. Treat-ing the sweep as two model-family
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 5--6
+\T1/stix/m/n/10 com-par-isons (the pri-mary in-de-pen-dent fac-tor) yields
+ []
+
+
+Underfull \hbox (badness 1237) in paragraph at lines 5--6
+\T1/stix/m/n/10 cor-re-la-tions) yields $\LS1/stix/m/it/10 p[] \LS1/stix/m/n/10
+ = 0\LS1/stix/m/it/10 :\LS1/stix/m/n/10 302$\T1/stix/m/n/10 ; the null max-i-mu
+m
+ []
+
+
+Underfull \hbox (badness 1248) in paragraph at lines 5--6
+\T1/stix/m/n/10 dis-tri-bu-tion has mean 0.768 and 95th per-centile 0.908,
+ []
+
+
+Underfull \hbox (badness 5667) in paragraph at lines 5--6
+\T1/stix/m/n/10 plac-ing the ob-served max-i-mum of 0.816 within the
+ []
+
+
+Underfull \hbox (badness 2717) in paragraph at lines 5--6
+\T1/stix/m/n/10 range ex-pected un-der ran-dom la-bel per-mu-ta-tions. The
+ []
+
+
+Underfull \hbox (badness 1990) in paragraph at lines 5--6
+\T1/stix/m/n/10 full-sweep Bon-fer-roni ($\LS1/stix/m/it/10 p[] \LS1/stix/m/n/1
+0 = 1\LS1/stix/m/it/10 :\LS1/stix/m/n/10 00$\T1/stix/m/n/10 ) is me-chan-i-call
+y
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 5--6
+\T1/stix/m/n/10 for com-plete-ness. We adopt the struc-tured 2-family
+ []
+
+
+Underfull \hbox (badness 4647) in paragraph at lines 5--6
+\T1/stix/m/n/10 window-size and inner-k fac-tors rep-re-sent ex-ploratory
+ []
+
+
+Underfull \hbox (badness 3657) in paragraph at lines 5--6
+\T1/stix/m/n/10 lev-els of a sin-gle hy-poth-e-sis rather than in-de-pen-dent
+ []
+
+
+Underfull \hbox (badness 1629) in paragraph at lines 5--6
+\T1/stix/m/n/10 com-par-isons. Across the sweep, 2 of 150 runs (1.3%)
+ []
+
+<../figures/sweep_window_roc_auc.png, id=244, 474.8139pt x 350.5095pt>
 File: ../figures/sweep_window_roc_auc.png Graphic file (type png)
 <use ../figures/sweep_window_roc_auc.png>
-Package pdftex.def Info: ../figures/sweep_window_roc_auc.png  used on input line 7.
+Package pdftex.def Info: ../figures/sweep_window_roc_auc.png  used on input lin
+e 9.
 (pdftex.def)             Requested size: 223.95975pt x 165.3278pt.
 
-Underfull \hbox (badness 1824) in paragraph at lines 12--13
-\T1/stix/m/n/10 and \T1/zi4/m/n/10 inner-k \T1/stix/m/n/10 dif-fered across the two model fam-i-lies in
+Underfull \hbox (badness 1824) in paragraph at lines 14--15
+\T1/stix/m/n/10 and \T1/zi4/m/n/10 inner-k \T1/stix/m/n/10 dif-fered across the
+ two model fam-i-lies in
  []
 
 
-Underfull \hbox (badness 8170) in paragraph at lines 12--13
+Underfull \hbox (badness 8170) in paragraph at lines 14--15
 \T1/stix/m/n/10 stronger ROC-AUC across the spars-est bud-gets and
  []
 
 
-Underfull \hbox (badness 1028) in paragraph at lines 12--13
-\T1/stix/m/n/10 sweep at \T1/zi4/m/n/10 inner-k=1\T1/stix/m/n/10 . The lin-ear SVM did not show the
+Underfull \hbox (badness 1028) in paragraph at lines 14--15
+\T1/stix/m/n/10 sweep at \T1/zi4/m/n/10 inner-k=1\T1/stix/m/n/10 . The lin-ear 
+SVM did not show the
  []
 
 
-Underfull \hbox (badness 2698) in paragraph at lines 12--13
+Underfull \hbox (badness 2698) in paragraph at lines 14--15
 \T1/stix/m/n/10 same pat-tern and reached its best ROC-AUC only at
  []
 
 
-Underfull \hbox (badness 1117) in paragraph at lines 12--13
+Underfull \hbox (badness 1117) in paragraph at lines 14--15
 \T1/stix/m/n/10 there-fore aligned with peak dis-crim-i-na-tion only for the
  []
 
-[6 <../figures/figure0_processing_pipeline.png>]
-<../figures/sweep_inner_k_roc_auc.png, id=182, 474.8139pt x 350.5095pt>
+[7 <../figures/sweep_window_roc_auc.png>]
+<../figures/sweep_inner_k_roc_auc.png, id=258, 474.8139pt x 350.5095pt>
 File: ../figures/sweep_inner_k_roc_auc.png Graphic file (type png)
 <use ../figures/sweep_inner_k_roc_auc.png>
-Package pdftex.def Info: ../figures/sweep_inner_k_roc_auc.png  used on input line 16.
+Package pdftex.def Info: ../figures/sweep_inner_k_roc_auc.png  used on input li
+ne 18.
 (pdftex.def)             Requested size: 223.95975pt x 165.3278pt.
 
-Underfull \hbox (badness 5519) in paragraph at lines 21--22
-[]\T1/stix/m/n/10 Figures [][]5[][] and [][]6[][] show a sec-ond re-lated pat-tern.
+Underfull \hbox (badness 5519) in paragraph at lines 23--24
+[]\T1/stix/m/n/10 Figures [][]5[][] and [][]6[][] show a sec-ond re-lated pat-t
+ern.
  []
 
-
-Underfull \hbox (badness 1609) in paragraph at lines 21--22
-\T1/stix/m/n/10 and sug-gests that model ca-pac-ity and per-fold spar-sity
- []
-
-<../figures/sweep_jaccard_inner_k.png, id=185, 474.8139pt x 350.5095pt>
+<../figures/sweep_jaccard_inner_k.png, id=261, 474.8139pt x 350.5095pt>
 File: ../figures/sweep_jaccard_inner_k.png Graphic file (type png)
 <use ../figures/sweep_jaccard_inner_k.png>
-Package pdftex.def Info: ../figures/sweep_jaccard_inner_k.png  used on input line 25.
+Package pdftex.def Info: ../figures/sweep_jaccard_inner_k.png  used on input li
+ne 27.
 (pdftex.def)             Requested size: 223.95975pt x 165.3278pt.
-<../figures/sweep_unique_features_inner_k.png, id=186, 478.1865pt x 350.5095pt>
+<../figures/sweep_unique_features_inner_k.png, id=262, 478.1865pt x 350.5095pt>
+
 File: ../figures/sweep_unique_features_inner_k.png Graphic file (type png)
 <use ../figures/sweep_unique_features_inner_k.png>
-Package pdftex.def Info: ../figures/sweep_unique_features_inner_k.png  used on input line 32.
+Package pdftex.def Info: ../figures/sweep_unique_features_inner_k.png  used on 
+input line 34.
 (pdftex.def)             Requested size: 223.95975pt x 164.16187pt.
 
-Underfull \hbox (badness 1442) in paragraph at lines 39--40
+Underfull \hbox (badness 1442) in paragraph at lines 41--42
 []\T1/stix/m/n/10 The best hy-brid con-fig-u-ra-tion achieved patient-level
  []
 
 
-Underfull \hbox (badness 1067) in paragraph at lines 39--40
-\T1/stix/m/n/10 in-di-cates that the model re-tained use-ful precision-recall
+Underfull \hbox (badness 10000) in paragraph at lines 41--42
+\T1/stix/m/n/10 ROC-AUC 0.816 [95% CI: 0.600--0.990], PR-AUC
  []
 
-<../figures/main_patient_roc_curve.png, id=189, 513.117pt x 397.0032pt>
+
+Underfull \hbox (badness 1097) in paragraph at lines 41--42
+\T1/stix/m/n/10 ac-cu-racy 0.810 [95% CI: 0.619--0.952], F1 0.714 [95%
+ []
+
+
+Underfull \hbox (badness 5036) in paragraph at lines 41--42
+\T1/stix/m/n/10 CI: 0.364--0.941], and MCC 0.571 over 21 held-out
+ []
+
+
+Underfull \hbox (badness 2460) in paragraph at lines 41--42
+\T1/stix/m/n/10 par-tic-i-pants (Fig-ure [][]7[][]; Ta-ble [][]4[][]). The per-
+mu-ta-tion test
+ []
+
+
+Underfull \hbox (badness 1292) in paragraph at lines 41--42
+\T1/stix/m/n/10 Cor-rect-ing for the struc-tured sweep (2 model fam-i-lies)
+ []
+
+
+Underfull \hbox (badness 1389) in paragraph at lines 41--42
+\T1/stix/m/n/10 the more con-ser-va-tive max-T cor-rec-tion across all 150
+ []
+
+<../figures/main_patient_roc_curve.png, id=266, 513.117pt x 397.0032pt>
 File: ../figures/main_patient_roc_curve.png Graphic file (type png)
 <use ../figures/main_patient_roc_curve.png>
-Package pdftex.def Info: ../figures/main_patient_roc_curve.png  used on input line 43.
+Package pdftex.def Info: ../figures/main_patient_roc_curve.png  used on input l
+ine 45.
 (pdftex.def)             Requested size: 223.95975pt x 173.27654pt.
-<../figures/main_patient_metric_summary.png, id=191, 585.6279pt x 411.2163pt>
+
+Underfull \hbox (badness 2027) in paragraph at lines 52--53
+[]\T1/stix/m/n/10 The best SVM base-line reached bal-anced ac-cu-racy
+ []
+
+
+Underfull \hbox (badness 1668) in paragraph at lines 52--53
+\T1/stix/m/n/10 a non-significant per-mu-ta-tion re-sult (raw $\LS1/stix/m/it/1
+0 p \LS1/stix/m/n/10 = 0\LS1/stix/m/it/10 :\LS1/stix/m/n/10 469$\T1/stix/m/n/10
+ ,
+ []
+
+
+Underfull \hbox (badness 6141) in paragraph at lines 52--53
+\T1/stix/m/n/10 un-cor-rected). This weaker per-for-mance came with a
+ []
+
+
+Underfull \hbox (badness 1348) in paragraph at lines 52--53
+\T1/stix/m/n/10 larger over-all can-di-date set. The con-trast in-di-cates that
+
+ []
+
+[8 <../figures/sweep_inner_k_roc_auc.png> <../figures/sweep_jaccard_inner_k.png
+> <../figures/sweep_unique_features_inner_k.png> <../figures/main_patient_roc_c
+urve.png>]
+<../figures/main_patient_metric_summary.png, id=283, 585.6279pt x 411.2163pt>
 File: ../figures/main_patient_metric_summary.png Graphic file (type png)
 <use ../figures/main_patient_metric_summary.png>
-Package pdftex.def Info: ../figures/main_patient_metric_summary.png  used on input line 54.
+Package pdftex.def Info: ../figures/main_patient_metric_summary.png  used on in
+put line 56.
 (pdftex.def)             Requested size: 223.95975pt x 157.2552pt.
-(../tables/best_run_comparison.tex) [7 <../figures/sweep_window_roc_auc.png> <../figures/sweep_inner_k_roc_auc.png> <../figures/sweep_jaccard_inner_k.png> <../figures/sweep_unique_features_inner_k.png>]
-Underfull \hbox (badness 4328) in paragraph at lines 70--71
-[]\T1/stix/m/n/10 A small re-cur-ring fea-ture set emerged re-peat-edly,
+ (../tables/best_run_comparison.tex)
+Underfull \hbox (badness 10000) in paragraph at lines 73--74
+[]\T1/stix/m/n/10 To de-ter-mine whether the hy-brid ar-chi-tec-ture's
  []
 
 
-Underfull \hbox (badness 5147) in paragraph at lines 70--71
-\T1/stix/m/n/10 though not in ev-ery fold, and the se-lected set was
+Underfull \hbox (badness 10000) in paragraph at lines 73--74
+\T1/stix/m/n/10 ad-van-tage at \T1/zi4/m/n/10 inner-k=1 \T1/stix/m/n/10 re-flec
+ted generic ben-e-fits of
  []
 
 
-Underfull \hbox (badness 3323) in paragraph at lines 70--71
-\T1/stix/m/n/10 The most re-cur-rent fea-ture was \T1/zi4/m/n/10 tp10_-spectral_-entropy\T1/stix/m/n/10 ,
+Underfull \hbox (badness 10000) in paragraph at lines 73--74
+\T1/stix/m/n/10 non-linearity or spe-cific ar-chi-tec-tural prop-er-ties, we
  []
 
 
-Underfull \hbox (badness 5189) in paragraph at lines 70--71
-\T1/stix/m/n/10 se-lected in 8 of 21 folds. The next most re-cur-rent
+Underfull \hbox (badness 1796) in paragraph at lines 73--74
+\T1/stix/m/n/10 0.296, com-pared with 0.816 for the hy-brid. A 2-layer
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 70--71
-\T1/stix/m/n/10 fea-tures were \T1/zi4/m/n/10 left_-frontal_-temporal_-diff_-gamma\T1/stix/m/n/10 ,
+Underfull \hbox (badness 1776) in paragraph at lines 75--76
+\T1/stix/m/n/10 hy-brid con-fig-u-ra-tion. Per-for-mance fell from ROC-AUC
  []
 
-<../figures/biomarker_selection_frequency.png, id=211, 685.3605pt x 382.5492pt>
+
+Underfull \hbox (badness 3907) in paragraph at lines 75--76
+\T1/stix/m/n/10 0.816 to 0.582 (bal-anced ac-cu-racy 0.500, F1 0.308),
+ []
+
+
+Underfull \hbox (badness 1688) in paragraph at lines 75--76
+\T1/stix/m/n/10 in-di-cat-ing that SMOTE con-tributes sub-stan-tially to the
+ []
+
+
+Underfull \hbox (badness 4713) in paragraph at lines 75--76
+\T1/stix/m/n/10 this is con-sis-tent with the ob-ser-va-tion that syn-thetic
+ []
+
+
+Underfull \hbox (badness 4144) in paragraph at lines 77--78
+\T1/stix/m/n/10 or re-lies on dis-tri-bu-tional ar-ti-facts ac-ces-si-ble throu
+gh
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 77--78
+\T1/stix/m/n/10 con-fig-u-ra-tion. Per-for-mance fell to ROC-AUC 0.408
+ []
+
+
+Underfull \hbox (badness 2903) in paragraph at lines 77--78
+\T1/stix/m/n/10 (bal-anced ac-cu-racy 0.393, F1 0.250), in-dis-tin-guish-able
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 79--80
+\T1/stix/m/n/10 per-for-mance at ex-treme spar-sity is not at-tributable
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 79--80
+\T1/stix/m/n/10 to non-linearity alone, nor to SMOTE alone. The
+ []
+
+
+Underfull \hbox (badness 3657) in paragraph at lines 79--80
+\T1/stix/m/n/10 con-vo-lu-tional, re-cur-rent, at-ten-tion, and feature-pyramid
+
+ []
+
+(../tables/intermediate_baselines.tex)
+Underfull \hbox (badness 10000) in paragraph at lines 91--92
+[]\T1/stix/m/n/10 A small set of fea-tures emerged re-peat-edly,
+ []
+
+
+Underfull \hbox (badness 6094) in paragraph at lines 91--92
+\T1/stix/m/n/10 though not in ev-ery fold, and the se-lected fea-tures
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 91--92
+\T1/stix/m/n/10 were dom-i-nated by tem-po-ral and frontal-temporal
+ []
+
+
+Underfull \hbox (badness 4229) in paragraph at lines 91--92
+\T1/stix/m/n/10 de-scrip-tors. The most fre-quently se-lected fea-ture was
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 91--92
+\T1/stix/m/n/10 most fre-quent were \T1/zi4/m/n/10 left_-frontal_-temporal_-dif
+f_-gamma\T1/stix/m/n/10 ,
+ []
+
+
+Underfull \hbox (badness 1097) in paragraph at lines 91--92
+\T1/zi4/m/n/10 left_-frontal_-temporal_-diff_-beta\T1/stix/m/n/10 , and \T1/zi4
+/m/n/10 af7_-zero_-crossings\T1/stix/m/n/10 .
+ []
+
+<../figures/biomarker_selection_frequency.png, id=288, 685.3605pt x 382.5492pt>
+
 File: ../figures/biomarker_selection_frequency.png Graphic file (type png)
 <use ../figures/biomarker_selection_frequency.png>
-Package pdftex.def Info: ../figures/biomarker_selection_frequency.png  used on input line 74.
+Package pdftex.def Info: ../figures/biomarker_selection_frequency.png  used on 
+input line 95.
 (pdftex.def)             Requested size: 223.95975pt x 125.00996pt.
-
-Underfull \hbox (badness 2503) in paragraph at lines 75--75
-[][]\T1/cmss/bx/n/9 Figure 9:[] []\T1/cmss/m/n/9 Selection-frequency rank-ing for the re-cur-rent
- []
-
 (../tables/hybrid_recurrent_biomarkers.tex)
-Underfull \hbox (badness 1383) in paragraph at lines 88--89
-\T1/stix/m/n/10 se-lected. \T1/zi4/m/n/10 tp10_-spectral_-entropy \T1/stix/m/n/10 and the frontal-temporal
+Underfull \hbox (badness 1383) in paragraph at lines 109--110
+\T1/stix/m/n/10 se-lected. \T1/zi4/m/n/10 tp10_-spectral_-entropy \T1/stix/m/n/
+10 and the frontal-temporal
  []
 
 
-Underfull \hbox (badness 3128) in paragraph at lines 88--89
+Underfull \hbox (badness 3128) in paragraph at lines 109--110
 \T1/stix/m/n/10 was more fre-quently se-lected in re-mis-sion folds. The
  []
 
-<../figures/figure6_class_conditional_selection.png, id=213, 728.7225pt x 397.0032pt>
-File: ../figures/figure6_class_conditional_selection.png Graphic file (type png)
+<../figures/figure6_class_conditional_selection.png, id=290, 728.7225pt x 397.0
+032pt>
+File: ../figures/figure6_class_conditional_selection.png Graphic file (type png
+)
 <use ../figures/figure6_class_conditional_selection.png>
-Package pdftex.def Info: ../figures/figure6_class_conditional_selection.png  used on input line 92.
+Package pdftex.def Info: ../figures/figure6_class_conditional_selection.png  us
+ed on input line 113.
 (pdftex.def)             Requested size: 223.95975pt x 122.0096pt.
-
-Underfull \hbox (badness 1325) in paragraph at lines 97--98
+[9 <../figures/main_patient_metric_summary.png>]
+Underfull \hbox (badness 1325) in paragraph at lines 118--119
 []\T1/stix/m/n/10 The effect-size sum-maries fol-lowed the same broad
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 97--98
-\T1/stix/m/n/10 pat-tern, with \T1/zi4/m/n/10 af7_-zero_-crossings \T1/stix/m/n/10 re-tain-ing a pos-i-tive
+Underfull \hbox (badness 10000) in paragraph at lines 118--119
+\T1/stix/m/n/10 pat-tern, with \T1/zi4/m/n/10 af7_-zero_-crossings \T1/stix/m/n
+/10 re-tain-ing a pos-i-tive
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 97--98
+Underfull \hbox (badness 10000) in paragraph at lines 118--119
 \T1/stix/m/n/10 dis-tinc-tion mat-ters clin-i-cally. The selection-frequency
  []
 
 
-Underfull \hbox (badness 5302) in paragraph at lines 97--98
+Underfull \hbox (badness 5302) in paragraph at lines 118--119
 \T1/stix/m/n/10 pro-vide a con-crete in-ter-pre-ta-tion tar-get for follow-up
  []
 
 
-Underfull \hbox (badness 5274) in paragraph at lines 97--98
+Underfull \hbox (badness 5274) in paragraph at lines 118--119
 \T1/stix/m/n/10 val-i-da-tion. Taken to-gether, these re-sults in-di-cate that
  []
 
 
-Underfull \hbox (badness 1033) in paragraph at lines 97--98
+Underfull \hbox (badness 1033) in paragraph at lines 118--119
 \T1/stix/m/n/10 an ex-tremely sparse fea-ture bud-get, while the re-cur-rent
  []
 
 
-Underfull \hbox (badness 1122) in paragraph at lines 97--98
-\T1/stix/m/n/10 biomark-ers re-tain in-ter-pretable di-rec-tion-al-ity even when
+Underfull \hbox (badness 1122) in paragraph at lines 118--119
+\T1/stix/m/n/10 biomark-ers re-tain in-ter-pretable di-rec-tion-al-ity even whe
+n
  []
 
-[8 <../figures/main_patient_roc_curve.png> <../figures/main_patient_metric_summary.png> <../figures/biomarker_selection_frequency.png> <../figures/figure6_class_conditional_selection.png>]
-<../figures/figure7_effect_size.png, id=227, 728.9634pt x 397.0032pt>
+[10 <../figures/biomarker_selection_frequency.png> <../figures/figure6_class_co
+nditional_selection.png>]
+Underfull \hbox (badness 6542) in paragraph at lines 122--123
+\T1/stix/m/n/10 0.837 and MCC 0.571. Both al-ter-na-tive ag-gre-ga-tion
+ []
+
+
+Underfull \hbox (badness 1215) in paragraph at lines 122--123
+\T1/stix/m/n/10 re-sults are not driven by out-lier win-dows and that the
+ []
+
+<../figures/figure7_effect_size.png, id=311, 728.9634pt x 397.0032pt>
 File: ../figures/figure7_effect_size.png Graphic file (type png)
 <use ../figures/figure7_effect_size.png>
-Package pdftex.def Info: ../figures/figure7_effect_size.png  used on input line 101.
+Package pdftex.def Info: ../figures/figure7_effect_size.png  used on input line
+ 126.
 (pdftex.def)             Requested size: 223.95975pt x 121.9672pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 102--102
+Underfull \hbox (badness 10000) in paragraph at lines 127--127
 \T1/cmss/m/n/9 from the best hy-brid run. Pos-i-tive val-ues in-di-cate
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 102--102
+Underfull \hbox (badness 10000) in paragraph at lines 127--127
 \T1/cmss/m/n/9 remission-skewed ef-fects and neg-a-tive val-ues in-di-cate
  []
 
 ) (../sections/discussion.tex
-Underfull \hbox (badness 1142) in paragraph at lines 3--4
+Underfull \hbox (badness 2762) in paragraph at lines 3--4
+[]\T1/stix/m/n/10 Statistical in-fer-ence was as-sessed with per-mu-ta-tion
+ []
+
+
+Underfull \hbox (badness 1237) in paragraph at lines 3--4
+\T1/stix/m/n/10 tests and three tiers of multiple-comparisons cor-rec-tion
+ []
+
+
+Underfull \hbox (badness 3271) in paragraph at lines 3--4
+\T1/stix/m/n/10 to ac-count for the struc-tured sweep de-sign. The raw
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 3--4
+\T1/stix/m/n/10 per-mu-ta-tion cor-rec-tion across all 150 con-fig-u-ra-tions
+ []
+
+
+Underfull \hbox (badness 3547) in paragraph at lines 3--4
+\T1/stix/m/n/10 the lat-ter be-ing me-chan-i-cally un-in-for-ma-tive given the
+ []
+
+
+Underfull \hbox (badness 1107) in paragraph at lines 3--4
+\T1/stix/m/n/10 pri-mary in-fer-ence be-cause the inner-k and window-size
+ []
+
+
+Underfull \hbox (badness 1314) in paragraph at lines 3--4
+\T1/stix/m/n/10 with a 7:14 class im-bal-ance, pro-duc-ing wide boot-strap
+ []
+
+
+Underfull \hbox (badness 2027) in paragraph at lines 5--6
+[]\T1/stix/m/n/10 One plau-si-ble ex-pla-na-tion for the per-for-mance gap
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 5--6
+\T1/stix/m/n/10 be-tween mod-els is that ag-gres-sive per-fold prun-ing
+ []
+
+
+Underfull \hbox (badness 1953) in paragraph at lines 5--6
+\T1/stix/m/n/10 ex-posed a com-pact sig-nal set whose in-ter-ac-tions were
+ []
+
+
+Underfull \hbox (badness 1142) in paragraph at lines 5--6
 \T1/stix/m/n/10 more use-ful to the hy-brid ar-chi-tec-ture than to a lin-ear
  []
 
 
-Underfull \hbox (badness 2205) in paragraph at lines 3--4
-\T1/stix/m/n/10 and frontal-temporal in-for-ma-tion with-out di-lu-tion from
+Underfull \hbox (badness 1939) in paragraph at lines 5--6
+\T1/stix/m/n/10 de-ci-sion bound-ary. Sup-port-ing this in-ter-pre-ta-tion, eig
+ht
  []
 
 
-Underfull \hbox (badness 1968) in paragraph at lines 3--4
-\T1/stix/m/n/10 set of mod-er-ate ad-di-tive cues be-fore reach-ing its best
+Underfull \hbox (badness 5161) in paragraph at lines 5--6
+\T1/stix/m/n/10 clas-si-cal clas-si-fiers and two neu-ral base-lines (2-layer
  []
 
 
-Underfull \hbox (badness 1448) in paragraph at lines 3--4
-\T1/stix/m/n/10 sep-a-ra-tion be-tween the best sparse hy-brid run and the
+Underfull \hbox (badness 1975) in paragraph at lines 5--6
+\T1/stix/m/n/10 MLP, GAP ar-chi-tec-ture vari-ant) were eval-u-ated at the
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 5--6
-\T1/stix/m/n/10 in ma-jor de-pres-sive dis-or-der and treatment-response
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 5--6
-\T1/stix/m/n/10 tighter biomarker dis-ci-pline, bet-ter stan-dard-iza-tion,
+Underfull \hbox (badness 5431) in paragraph at lines 5--6
+\T1/stix/m/n/10 chance (ROC-AUC 0.204--0.296, Ta-ble [][]5[][]). Re-mov-ing
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 5--6
-\T1/stix/m/n/10 and more re-al-is-tic ex-pec-ta-tions about gen-er-al-iza-tion
+\T1/stix/m/n/10 show that the full CNN-BiLSTM-attention pipeline
  []
 
 
-Underfull \hbox (badness 6236) in paragraph at lines 5--6
-\T1/stix/m/n/10 [[], [], []]. Ma-chine learn-ing stud-ies have like-wise
+Underfull \hbox (badness 1371) in paragraph at lines 5--6
+\T1/stix/m/n/10 with SMOTE-based train-ing is jointly re-quired: nei-ther
  []
 
 
-Underfull \hbox (badness 2970) in paragraph at lines 5--6
-\T1/stix/m/n/10 com-bi-na-tions of EEG and clin-i-cal co-vari-ates [[]--[]].
+Underfull \hbox (badness 2512) in paragraph at lines 7--8
+[]\T1/stix/m/n/10 We did not com-pute for-mal paired sta-tis-ti-cal tests
  []
 
 
-Underfull \hbox (badness 2126) in paragraph at lines 5--6
-\T1/stix/m/n/10 overviews and re-views con-tinue to high-light the same
+Underfull \hbox (badness 1112) in paragraph at lines 7--8
+\T1/stix/m/n/10 the two model fam-i-lies be-cause the best con-fig-u-ra-tions
  []
 
 
-Underfull \hbox (badness 1275) in paragraph at lines 7--8
+Underfull \hbox (badness 4927) in paragraph at lines 7--8
+\T1/stix/m/n/10 inner-k val-ues near the hy-brid's op-ti-mum, the SVM
+ []
+
+
+Underfull \hbox (badness 1019) in paragraph at lines 7--8
+\T1/stix/m/n/10 com-ple-men-tary ev-i-dence: ten al-ter-na-tive mod-els all fai
+l
+ []
+
+
+Underfull \hbox (badness 1881) in paragraph at lines 9--10
+\T1/stix/m/n/10 tighter biomarker dis-ci-pline, bet-ter stan-dard-iza-tion, and
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 9--10
+\T1/stix/m/n/10 learn-ing stud-ies have like-wise re-ported en-cour-ag-ing
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 9--10
+\T1/stix/m/n/10 treatment-response sig-nals, in-clud-ing com-bi-na-tions of
+ []
+
+
+Underfull \hbox (badness 6608) in paragraph at lines 9--10
+\T1/stix/m/n/10 EEG and clin-i-cal co-vari-ates ([][]Al-Kaysi et al.[][], [][]2
+017[][];
+ []
+
+
+Underfull \hbox (badness 4168) in paragraph at lines 9--10
+\T1/stix/m/n/10 stud-ies reach sim-i-lar con-clu-sions while still ex-pos-ing
+ []
+
+
+Underfull \hbox (badness 1028) in paragraph at lines 9--10
+\T1/stix/m/n/10 places the present re-sults in the con-text of com-pa-ra-ble
+ []
+
+
+Underfull \hbox (badness 6741) in paragraph at lines 9--10
+\T1/stix/m/n/10 EEG-based treatment-response pre-dic-tion stud-ies. The
+ []
+
+
+Underfull \hbox (badness 1168) in paragraph at lines 9--10
+\T1/stix/m/n/10 achieved ROC-AUC of 0.816 is com-pet-i-tive with prior
+ []
+
+
+Underfull \hbox (badness 1990) in paragraph at lines 9--10
+\T1/stix/m/n/10 study's sub-stan-tially re-duced chan-nel count and sparse
+ []
+
+
+Underfull \hbox (badness 3803) in paragraph at lines 9--10
+\T1/stix/m/n/10 fea-ture bud-get. How-ever, di-rect nu-mer-i-cal com-par-i-son
+ []
+
+
+Underfull \hbox (badness 5064) in paragraph at lines 9--10
+\T1/stix/m/n/10 is com-pli-cated by dif-fer-ences in clin-i-cal pop-u-la-tions,
+
+ []
+
+[11 <../figures/figure7_effect_size.png>] (../tables/sota_comparison.tex)
+Underfull \hbox (badness 1275) in paragraph at lines 19--20
 []\T1/stix/m/n/10 The present sweep adds a feature-selection view in
  []
 
 
-Underfull \hbox (badness 1354) in paragraph at lines 7--8
-\T1/stix/m/n/10 sep-a-ra-tion. That read-ing keeps the mod-est Jac-card and
+Underfull \hbox (badness 1242) in paragraph at lines 19--20
+\T1/stix/m/n/10 fre-quently se-lected fea-tures with con-sis-tent di-rec-tion o
+f
  []
 
 
-Underfull \hbox (badness 1348) in paragraph at lines 7--8
-\T1/stix/m/n/10 Kuncheva scores in view and gives ap-pro-pri-ate weight
+Underfull \hbox (badness 3343) in paragraph at lines 19--20
+\T1/stix/m/n/10 Jac-card (0.190) and Kuncheva (0.187) scores in-di-cate
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 7--8
-\T1/stix/m/n/10 this fram-ing mat-ters be-cause the de-pres-sion EEG
+Underfull \hbox (badness 1024) in paragraph at lines 19--20
+\T1/stix/m/n/10 a lim-i-ta-tion for biomarker re-pro-ducibil-ity claims. Three
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 7--8
-\T1/stix/m/n/10 bias, lim-ited out-of-sample val-i-da-tion, and known
+Underfull \hbox (badness 2134) in paragraph at lines 19--20
+\T1/stix/m/n/10 the ``per-fect'' sign con-sis-tency val-ues for those en-tries
  []
 
 
-Underfull \hbox (badness 7704) in paragraph at lines 7--8
+Underfull \hbox (badness 2837) in paragraph at lines 19--20
+\T1/stix/m/n/10 should be in-ter-preted cau-tiously. The Jac-card in-crease
+ []
+
+
+Underfull \hbox (badness 4699) in paragraph at lines 19--20
+\T1/stix/m/n/10 with larger inner-k is partly me-chan-i-cal (se-lect-ing $\LS1/
+stix/m/it/10 k$
+ []
+
+
+Underfull \hbox (badness 2189) in paragraph at lines 19--20
+\T1/stix/m/n/10 fea-tures from a fixed pool of 247 will pro-duce more
+ []
+
+
+Underfull \hbox (badness 2495) in paragraph at lines 19--20
+\T1/stix/m/n/10 over-lap by con-struc-tion as $\LS1/stix/m/it/10 k$ \T1/stix/m/
+n/10 in-creases), so this trend
+ []
+
+
+Underfull \hbox (badness 2951) in paragraph at lines 19--20
+\T1/stix/m/n/10 sig-nal sta-bil-ity. Method-olog-i-cally, this fram-ing mat-ter
+s
+ []
+
+
+Underfull \hbox (badness 3803) in paragraph at lines 19--20
+\T1/stix/m/n/10 be-cause the de-pres-sion EEG biomarker lit-er-a-ture still
+ []
+
+
+Underfull \hbox (badness 6961) in paragraph at lines 19--20
+\T1/stix/m/n/10 val-i-da-tion, and known vul-ner-a-bil-ity to leak-age from
+ []
+
+
+Underfull \hbox (badness 7704) in paragraph at lines 19--20
 \T1/stix/m/n/10 sum-ma-riz-ing re-cur-rence and di-rec-tion-al-ity in-stead of
  []
 
 
-Underfull \hbox (badness 5563) in paragraph at lines 9--10
-\T1/stix/m/n/10 in low-density tem-po-ral and frontal-temporal pat-terns
- []
-
-[9 <../figures/figure7_effect_size.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 11--12
-[]\T1/stix/m/n/10 The spe-cific biomark-ers in the present sweep
+Underfull \hbox (badness 10000) in paragraph at lines 21--22
+\T1/stix/m/n/10 in TP10-derived and frontal-temporal de-scrip-tors.
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 11--12
-\T1/stix/m/n/10 are plau-si-ble enough to de-serve follow-up.
+Underfull \hbox (badness 2913) in paragraph at lines 21--22
+\T1/stix/m/n/10 That re-gional con-ver-gence sup-ports the view that the
  []
 
 
-Underfull \hbox (badness 1874) in paragraph at lines 11--12
-\T1/zi4/m/n/10 tp10_-spectral_-entropy \T1/stix/m/n/10 was the most fre-quently se-lected
+Underfull \hbox (badness 4084) in paragraph at lines 21--22
+\T1/stix/m/n/10 low-montage record-ings may con-tain response-relevant
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 11--12
-\T1/stix/m/n/10 fea-ture and skewed to-ward non-remission-associated
+Underfull \hbox (badness 1005) in paragraph at lines 21--22
+\T1/stix/m/n/10 cur-rent study pro-vides only within-cohort ev-i-dence; the
  []
 
 
-Underfull \hbox (badness 4765) in paragraph at lines 11--12
-\T1/stix/m/n/10 folds. En-tropy and re-lated non-lin-ear de-scrip-tors have
+Underfull \hbox (badness 4328) in paragraph at lines 23--24
+\T1/stix/m/n/10 en-tropy in non-remission par-tic-i-pants sug-gests greater
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 11--12
-\T1/stix/m/n/10 Pre-treat-ment mul-ti-scale en-tropy and signal-variability
+Underfull \hbox (badness 1558) in paragraph at lines 23--24
+\T1/stix/m/n/10 TP10 site, which over-lies the tem-poropari-etal junc-tion,
  []
 
 
-Underfull \hbox (badness 4441) in paragraph at lines 11--12
-\T1/stix/m/n/10 re-sponse, al-though the re-ported di-rec-tion de-pends on
+Underfull \hbox (badness 2556) in paragraph at lines 23--24
+\T1/stix/m/n/10 a re-gion im-pli-cated in the de-fault mode net-work and
  []
 
 
-Underfull \hbox (badness 2435) in paragraph at lines 11--12
-\T1/stix/m/n/10 com-plex-ity lit-er-a-ture and sup-ports a cred-i-ble tem-po-ral
+Underfull \hbox (badness 1365) in paragraph at lines 23--24
+\T1/stix/m/n/10 to tDCS-induced mod-u-la-tion. The frontal-temporal beta
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 13--14
-[]\T1/stix/m/n/10 The frontal-temporal beta and gamma dif-fer-ence
+Underfull \hbox (badness 1735) in paragraph at lines 23--24
+\T1/stix/m/n/10 com-mu-ni-ca-tion in higher fre-quency bands, which have
  []
 
 
-Underfull \hbox (badness 6559) in paragraph at lines 13--14
-\T1/stix/m/n/10 and paired asym-me-try terms have been re-ported as
+Underfull \hbox (badness 10000) in paragraph at lines 23--24
+\T1/stix/m/n/10 pro-cesses me-di-ated by fronto-temporal net-works.
  []
 
 
-Underfull \hbox (badness 1584) in paragraph at lines 13--14
-\T1/stix/m/n/10 frontal-temporal fea-tures have been linked to treat-ment
+Underfull \hbox (badness 6608) in paragraph at lines 23--24
+\T1/stix/m/n/10 tDCS ap-plied over the dor-so-lat-eral pre-frontal cor-tex
  []
 
 
-Underfull \hbox (badness 2941) in paragraph at lines 15--16
-\T1/stix/m/n/10 prece-dent as a named biomarker. AF7-centered sig-nal
+Underfull \hbox (badness 7362) in paragraph at lines 23--24
+\T1/stix/m/n/10 (ap-prox-i-mated by AF7/AF8) is thought to mod-u-late
  []
 
 
-Underfull \hbox (badness 2653) in paragraph at lines 15--16
-\T1/stix/m/n/10 rel-e-vance has ap-peared in ad-ja-cent low-montage work
+Underfull \hbox (badness 1237) in paragraph at lines 23--24
+\T1/stix/m/n/10 to re-spond to such mod-u-la-tion. The AF7 zero-crossing
  []
 
 
-Underfull \hbox (badness 2318) in paragraph at lines 15--16
-\T1/stix/m/n/10 im-pli-cate asym-me-try and signal-complexity fam-i-lies in
+Underfull \hbox (badness 1377) in paragraph at lines 23--24
+\T1/stix/m/n/10 a more dy-namic or re-spon-sive frontal sig-nal state that
  []
 
 
-Underfull \hbox (badness 3668) in paragraph at lines 15--16
-\T1/stix/m/n/10 co-horts. Taken to-gether, the re-cur-rent set em-pha-sized
+Underfull \hbox (badness 10000) in paragraph at lines 23--24
+\T1/stix/m/n/10 is con-ducive to stimulation-induced plas-tic-ity. These
  []
 
-
-Underfull \hbox (badness 2205) in paragraph at lines 15--16
-\T1/stix/m/n/10 tem-po-ral and frontal-temporal de-scrip-tors, with lim-ited
- []
-
-
-Underfull \hbox (badness 1043) in paragraph at lines 15--16
-\T1/stix/m/n/10 find-ings dis-cussed above. The cur-rent study con-tributes
- []
-
-
-Underfull \hbox (badness 2302) in paragraph at lines 15--16
-\T1/stix/m/n/10 a sparse hand-crafted biomarker sig-na-ture with ex-plicit
- []
-
-
-Underfull \hbox (badness 2608) in paragraph at lines 17--18
+[12]
+Underfull \hbox (badness 2608) in paragraph at lines 25--26
 \T1/stix/m/n/10 same group point in a sim-i-lar low-montage di-rec-tion.
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 17--18
+Underfull \hbox (badness 10000) in paragraph at lines 25--26
 \T1/stix/m/n/10 PSD-based mod-el-ing again high-lighted AF7 and
  []
 
 
-Underfull \hbox (badness 8075) in paragraph at lines 17--18
+Underfull \hbox (badness 8075) in paragraph at lines 25--26
 \T1/stix/m/n/10 TP10 sig-nal con-tent, and PLV anal-y-ses em-pha-sized
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 17--18
+Underfull \hbox (badness 10000) in paragraph at lines 25--26
 \T1/stix/m/n/10 frontal-temporal and tem-poropari-etal syn-chro-niza-tion
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 17--18
-\T1/stix/m/n/10 pat-terns [[], []]. These bipo-lar stud-ies ad-dress a
+Underfull \hbox (badness 1688) in paragraph at lines 25--26
+\T1/stix/m/n/10 pro-to-col. They sup-port reduced-montage fea-si-bil-ity and
  []
 
 
-Underfull \hbox (badness 6876) in paragraph at lines 17--18
-\T1/stix/m/n/10 reduced-montage fea-si-bil-ity and sig-nal plau-si-bil-ity in
+Underfull \hbox (badness 4805) in paragraph at lines 27--28
+\T1/stix/m/n/10 lim-its sta-tis-ti-cal power and gen-er-al-iz-abil-ity; the wid
+e
  []
 
 
-Underfull \hbox (badness 5008) in paragraph at lines 19--20
-[]\T1/stix/m/n/10 A lim-i-ta-tion of the study is the rel-a-tively small
+Underfull \hbox (badness 1137) in paragraph at lines 27--28
+\T1/stix/m/n/10 0.600--0.990) re-flect this un-cer-tainty. Al-though SMOTE
  []
 
 
-Underfull \hbox (badness 3323) in paragraph at lines 19--20
-\T1/stix/m/n/10 the same feature-selection layer feeds both clas-si-fiers.
+Underfull \hbox (badness 2662) in paragraph at lines 27--28
+\T1/stix/m/n/10 the fun-da-men-tal class im-bal-ance re-mains a con-straint.
  []
 
 
-Underfull \hbox (badness 3439) in paragraph at lines 19--20
-\T1/stix/m/n/10 Class-conditional ra-tios also be-come un-sta-ble when a
+Underfull \hbox (badness 4084) in paragraph at lines 27--28
+\T1/stix/m/n/10 sur-vives the struc-tured 2-family Bon-fer-roni cor-rec-tion
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 27--28
+\T1/stix/m/n/10 but does not sur-vive the more con-ser-va-tive max-T
+ []
+
+
+Underfull \hbox (badness 2035) in paragraph at lines 27--28
+\T1/stix/m/n/10 repli-ca-tion in an in-de-pen-dent co-hort is needed. Third,
+ []
+
+
+Underfull \hbox (badness 1859) in paragraph at lines 27--28
+\T1/stix/m/n/10 there is no ex-ter-nal val-i-da-tion co-hort, so the re-ported
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 27--28
+\T1/stix/m/n/10 low-density mon-tages, or dif-fer-ent clin-i-cal set-tings.
+ []
+
+
+Underfull \hbox (badness 1418) in paragraph at lines 27--28
+\T1/stix/m/n/10 Fourth, im-por-tant clin-i-cal vari-ables such as med-i-ca-tion
+
+ []
+
+
+Underfull \hbox (badness 2913) in paragraph at lines 27--28
+\T1/stix/m/n/10 sta-tus, ill-ness du-ra-tion, episode count, and psy-chi-atric
+ []
+
+
+Underfull \hbox (badness 1320) in paragraph at lines 27--28
+\T1/stix/m/n/10 (mean Jac-card 0.190, Kuncheva 0.187) in-di-cate lim-ited
+ []
+
+
+Underfull \hbox (badness 7203) in paragraph at lines 27--28
+\T1/stix/m/n/10 cross-fold con-sis-tency; how-ever, median-based pa-tient
+ []
+
+
+Underfull \hbox (badness 4492) in paragraph at lines 27--28
+\T1/stix/m/n/10 in a 1-dimensional fea-ture space where the stan-dard
+ []
+
+
+Underfull \hbox (badness 1325) in paragraph at lines 27--28
+\T1/stix/m/n/10 set-ting de-spite the the-o-ret-i-cal caveat. Eighth, the study
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 27--28
+\T1/stix/m/n/10 and val-i-da-tion method-ol-ogy be-tween stud-ies; di-rect
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 27--28
+\T1/stix/m/n/10 method-level com-par-isons would re-quire har-mo-nized
  []
 
 )
-Underfull \hbox (badness 3612) in paragraph at lines 21--89
-[]\T1/stix/m/n/10 Future work should test whether the same sparse
+Underfull \hbox (badness 2894) in paragraph at lines 29--89
+[]\T1/stix/m/n/10 The re-cur-ring fea-tures can be treated as plau-si-ble
  []
 
 
-Underfull \hbox (badness 4341) in paragraph at lines 21--89
+Underfull \hbox (badness 3590) in paragraph at lines 29--89
+\T1/stix/m/n/10 can-di-date fea-tures from this co-hort that now war-rant
+ []
+
+
+Underfull \hbox (badness 6316) in paragraph at lines 29--89
+\T1/stix/m/n/10 follow-up val-i-da-tion rather than as val-i-dated clin-i-cal
+ []
+
+
+Underfull \hbox (badness 4341) in paragraph at lines 29--89
 \T1/stix/m/n/10 low-density mon-tages, and ex-plicit ex-ter-nal val-i-da-tion
  []
 
 
-Underfull \hbox (badness 2837) in paragraph at lines 21--89
-\T1/stix/m/n/10 of-fer one clear di-rec-tion for follow-up [[]--[]]. More
- []
-
-
-Underfull \hbox (badness 3536) in paragraph at lines 21--89
+Underfull \hbox (badness 3536) in paragraph at lines 29--89
 \T1/stix/m/n/10 re-cent response-signature stud-ies also pro-vide rel-e-vant
  []
 
 
-Underfull \hbox (badness 1852) in paragraph at lines 21--89
-\T1/stix/m/n/10 frame that val-i-da-tion ef-fort [[], []]. These ex-ten-sions
+Underfull \hbox (badness 2119) in paragraph at lines 29--89
+\T1/stix/m/n/10 patient-level eval-u-a-tion and sparse in-ter-pretable fea-ture
+
  []
 
 (../sections/conclusion.tex
@@ -2398,14 +3055,36 @@ Underfull \hbox (badness 2662) in paragraph at lines 1--2
 \T1/stix/m/n/10 EEG can sup-port patient-level pre-dic-tion of re-mis-sion
  []
 
-)
-Underfull \hbox (badness 10000) in paragraph at lines 3--92
-[]\T1/stix/m/n/10 Rather than re-ly-ing on high-dimensional fea-ture
+
+Underfull \hbox (badness 10000) in paragraph at lines 1--2
+\T1/stix/m/n/10 achieved promis-ing dis-crim-i-na-tion (ROC-AUC 0.816,
  []
 
 
+Underfull \hbox (badness 1490) in paragraph at lines 1--2
+\T1/stix/m/n/10 sweep of 150 con-fig-u-ra-tions and should be con-sid-ered
+ []
+
+)
+Underfull \hbox (badness 1655) in paragraph at lines 3--92
+\T1/stix/m/n/10 val-i-da-tion co-hort, and mod-est fea-ture sta-bil-ity (Jac-ca
+rd
+ []
+
+
+Underfull \hbox (badness 1082) in paragraph at lines 3--92
+\T1/stix/m/n/10 0.190) in-di-cate that these fea-tures should be treated as
+ []
+
+
+Underfull \hbox (badness 4899) in paragraph at lines 3--92
+\T1/stix/m/n/10 hypothesis-generating rather than as val-i-dated clin-i-cal
+ []
+
+[13]
 Underfull \hbox (badness 4024) in paragraph at lines 93--94
-[]\T1/stix/b/n/10 Abin Daniel Zorto: \T1/stix/m/n/10 Writ-ing - re-view & edit-ing,
+[]\T1/stix/b/n/10 Abin Daniel Zorto: \T1/stix/m/n/10 Writ-ing - re-view & edit-
+ing,
  []
 
 
@@ -2420,7 +3099,8 @@ Underfull \hbox (badness 3977) in paragraph at lines 93--94
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 93--94
-\T1/stix/m/n/10 con-cep-tu-al-iza-tion.. \T1/stix/b/n/10 Ji-jomon C. Moncy: \T1/stix/m/n/10 Writ-ing -
+\T1/stix/m/n/10 con-cep-tu-al-iza-tion.. \T1/stix/b/n/10 Ji-jomon C. Moncy: \T1
+/stix/m/n/10 Writ-ing -
  []
 
 
@@ -2430,7 +3110,8 @@ Underfull \hbox (badness 10000) in paragraph at lines 93--94
 
 
 Underfull \hbox (badness 1005) in paragraph at lines 93--94
-\T1/stix/m/n/10 anal-y-sis, data cu-ra-tion, con-cep-tu-al-iza-tion.. \T1/stix/b/n/10 Wenyi Xiao:
+\T1/stix/m/n/10 anal-y-sis, data cu-ra-tion, con-cep-tu-al-iza-tion.. \T1/stix/
+b/n/10 Wenyi Xiao:
  []
 
 
@@ -2440,17 +3121,20 @@ Underfull \hbox (badness 3884) in paragraph at lines 93--94
 
 
 Underfull \hbox (badness 1902) in paragraph at lines 93--94
-\T1/stix/m/n/10 for-mal anal-y-sis, data cu-ra-tion, con-cep-tu-al-iza-tion.. \T1/stix/b/n/10 Mhd
+\T1/stix/m/n/10 for-mal anal-y-sis, data cu-ra-tion, con-cep-tu-al-iza-tion.. \
+T1/stix/b/n/10 Mhd
  []
 
 
 Underfull \hbox (badness 3138) in paragraph at lines 93--94
-\T1/stix/b/n/10 Saeed Sharif: \T1/stix/m/n/10 Writ-ing - re-view & edit-ing, writ-ing -
+\T1/stix/b/n/10 Saeed Sharif: \T1/stix/m/n/10 Writ-ing - re-view & edit-ing, wr
+it-ing -
  []
 
 
 Underfull \hbox (badness 1107) in paragraph at lines 93--94
-\T1/stix/m/n/10 orig-i-nal draft, val-i-da-tion, su-per-vi-sion, re-sources, project
+\T1/stix/m/n/10 orig-i-nal draft, val-i-da-tion, su-per-vi-sion, re-sources, pr
+oject
  []
 
 
@@ -2460,12 +3144,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 93--94
 
 
 Underfull \hbox (badness 1087) in paragraph at lines 93--94
-\T1/stix/m/n/10 ac-qui-si-tion, for-mal anal-y-sis, con-cep-tu-al-iza-tion.. \T1/stix/b/n/10 Cyn-thia
+\T1/stix/m/n/10 ac-qui-si-tion, for-mal anal-y-sis, con-cep-tu-al-iza-tion.. \T
+1/stix/b/n/10 Cyn-thia
  []
 
 
 Underfull \hbox (badness 3375) in paragraph at lines 93--94
-\T1/stix/m/n/10 method-ol-ogy, in-ves-ti-ga-tion, fund-ing ac-qui-si-tion, for-mal
+\T1/stix/m/n/10 method-ol-ogy, in-ves-ti-ga-tion, fund-ing ac-qui-si-tion, for-
+mal
  []
 
 (../sections/acknowledgements.tex)
@@ -2483,422 +3169,432 @@ Underfull \hbox (badness 4779) in paragraph at lines 1--97
 \T1/stix/m/n/10 Mech-a-nisms Eval-u-a-tion (NIHR167361), and Rose-trees
  []
 
-[10] (./elsevier.bbl
-Underfull \hbox (badness 1365) in paragraph at lines 9--11
-\T1/stix/m/n/8 Psy-chi-a-try 33 (3) (2021) 250--265.  [][]$\T1/zi4/m/n/8 doi : 10 . 1080 / 09540261 . 2021 .
+(./elsevier.bbl
+Underfull \hbox (badness 1460) in paragraph at lines 29--40
+[]\T1/stix/m/n/8 Al-Kaysi, A.M., Al-Ani, A., Loo, C.K., Pow-ell, T.Y., Mar-tin,
+ D.M.,
  []
 
 
-Underfull \hbox (badness 1939) in paragraph at lines 17--19
-[]\T1/stix/m/n/8 E. Hampsey, M. Kalfas, L. Carter, M. Bloom-field, H. Rezaei,
+Underfull \hbox (badness 1242) in paragraph at lines 29--40
+\T1/stix/m/n/8 Break-s-pear, M., Boon-stra, T.W., 2017.  Pre-dict-ing tdcs trea
+t-ment
  []
 
 
-Underfull \hbox (badness 2334) in paragraph at lines 17--19
-\T1/stix/m/n/8 stim-u-la-tion rcts in unipo-lar and bipo-lar de-pres-sion, Jour-nal of
+Underfull \hbox (badness 10000) in paragraph at lines 59--70
+[]\T1/stix/m/n/8 Bailey, N., Hoy, K., Sul-li-van, C., All-man, B., Ro-gasch, N.
+,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 24--27
-[]\T1/stix/m/n/8 S. Ol-brich, M. Arns, [][]Eeg biomark-ers in ma-jor de-pres-sive
+Underfull \hbox (badness 7151) in paragraph at lines 59--70
+\T1/stix/m/n/8 Daskalakis, Z., Fitzger-ald, P., 2023.  Con-cur-rent tran-scra-n
+ial
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 24--27
-\T1/stix/m/n/8 dis-or-der: Dis-crim-i-na-tive power and pre-dic-tion of treat-ment
+Underfull \hbox (badness 10000) in paragraph at lines 59--70
+\T1/stix/m/n/8 mag-netic stim-u-la-tion and elec-troen-cephalog-ra-phy mea-sure
+s are
  []
 
 
-Underfull \hbox (badness 6461) in paragraph at lines 24--27
-\T1/stix/m/n/8 re-sponse[][], In-ter-na-tional Re-view of Psy-chi-a-try (2013).  [][]$\T1/zi4/m/n/8 doi :
+Underfull \hbox (badness 4108) in paragraph at lines 59--70
+\T1/stix/m/n/8 as-so-ci-ated with an-tide-pres-sant re-sponse from rtms treat-m
+ent for
  []
 
 
-Underfull \hbox (badness 2856) in paragraph at lines 29--32
-\T1/stix/m/n/8 de-pres-sive dis-or-der and at-ten-tion deficit hy-per-ac-tiv-ity dis-or-der[][],
+Underfull \hbox (badness 10000) in paragraph at lines 59--70
+\T1/zi4/m/n/8 8278c0b8d2b48ae5ed473c09d6c3f9ba34f53391$[][]\T1/stix/m/n/8 , doi
+:[][]$\T1/zi4/m/n/8 10 . 1101 / 2023 . 02 . 10 .
  []
 
 
-Underfull \hbox (badness 1231) in paragraph at lines 39--40
-[]\T1/stix/m/n/8 C. H. Fu, S. G. Costafreda, Neuroimaging-based biomark-ers in
+Underfull \hbox (badness 1173) in paragraph at lines 71--80
+\T1/stix/m/n/8 Syn-thetic mi-nor-ity over-sampling tech-nique.  Jour-nal of Ar-
+ti-fi-cial
  []
 
 
-Underfull \hbox (badness 7064) in paragraph at lines 42--43
-[]\T1/stix/m/n/8 C. H. Fu, Y. Fan, C. Da-vatzikos, Ad-dress-ing het-ero-gene-ity
+Underfull \hbox (badness 1442) in paragraph at lines 93--105
+\T1/stix/m/n/8 Sini-atchkin, M., et al., 2023.  Strat-i-fi-ca-tion of re-sponse
+s to tdcs
  []
 
 
-Underfull \hbox (badness 2181) in paragraph at lines 42--43
-\T1/stix/m/n/8 (and ho-mo-gene-ity) in treat-ment mech-a-nisms in de-pres-sion and
+Underfull \hbox (badness 2213) in paragraph at lines 106--115
+\T1/stix/m/n/8 M., 2021.  Pre-dict-ing clin-i-cal re-sponse to tran-scra-nial m
+ag-netic
  []
 
 
-Underfull \hbox (badness 3525) in paragraph at lines 42--43
-\T1/stix/m/n/8 the po-ten-tial to de-velop di-ag-nos-tic and pre-dic-tive biomark-ers,
+Underfull \hbox (badness 3536) in paragraph at lines 106--115
+\T1/stix/m/n/8 stim-u-la-tion in ma-jor de-pres-sion us-ing time-frequency eeg 
+sig-nal
  []
 
 
-Underfull \hbox (badness 6477) in paragraph at lines 45--47
-[]\T1/stix/m/n/8 A. S. Widge, M. T. Bilge, R. Mon-tana, W. Chang, C. I.
+Underfull \hbox (badness 10000) in paragraph at lines 106--115
+\T1/stix/m/n/8 pro-cess-ing.  Biomed-i-cal En-gi-neer-ing Ap-pli-ca-tions Ba-si
+s and
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 45--47
-\T1/stix/m/n/8 Ro-driguez, T. Deck-ers-bach, L. L. Car-pen-ter, N. H. Kalin,
+Underfull \hbox (badness 10000) in paragraph at lines 106--115
+\T1/stix/m/n/8 Com-mu-ni-ca-tions URL: [][]$\T1/zi4/m/n/8 https : / / doi . org
+ / 10 . 4015 / s1016237221500484$[][]\T1/stix/m/n/8 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 45--47
-\T1/stix/m/n/8 C. B. Ne-meroff, Elec-troen-cephalo-graphic biomark-ers for
+Underfull \hbox (badness 1092) in paragraph at lines 116--125
+\T1/stix/m/n/8 di-ag-no-sis sup-port sys-tem based on eeg sig-nal en-tropies.  
+Jour-nal
  []
 
 
-Underfull \hbox (badness 6725) in paragraph at lines 45--47
-\T1/stix/m/n/8 treat-ment re-sponse pre-dic-tion in ma-jor de-pres-sive ill-ness: A
+Underfull \hbox (badness 5756) in paragraph at lines 135--145
+[]\T1/stix/m/n/8 Funk, A.P., George, M.S., 2008.  Pre-frontal eeg asym-me-try a
+s
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 49--52
-[]\T1/stix/m/n/8 L. Sim-ma-tis, E. E. Russo, J. Geraci, I. E. Harm-sen,
+Underfull \hbox (badness 4634) in paragraph at lines 135--145
+\T1/stix/m/n/8 a po-ten-tial biomarker of an-tide-pres-sant treat-ment re-spons
+e with
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 49--52
-\T1/stix/m/n/8 N. Samuel, [][]Tech-ni-cal and clin-i-cal con-sid-er-a-tions for
+Underfull \hbox (badness 1308) in paragraph at lines 146--156
+\T1/stix/m/n/8 In-ter-na-tional Con-fer-ence of the IEEE En-gi-neer-ing in Medi
+cine &
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 49--52
-\T1/stix/m/n/8 electroencephalography-based biomark-ers for ma-jor de-pres-sive
+Underfull \hbox (badness 10000) in paragraph at lines 157--169
+[]\T1/stix/m/n/8 Guo, L., Zhang, Z., Tan, X., Phua, K., Wang, C., Tor, P.,
  []
 
 
-Underfull \hbox (badness 4739) in paragraph at lines 49--52
-\T1/stix/m/n/8 dis-or-der[][], npj Men-tal Health Re-search (2023).  [][]$\T1/zi4/m/n/8 doi : 10 . 1038 /
+Underfull \hbox (badness 6428) in paragraph at lines 157--169
+\T1/stix/m/n/8 Ang, K., 2024.  Resting-state eeg biomark-ers of ac-cel-er-ated
  []
 
 
-Underfull \hbox (badness 1038) in paragraph at lines 57--58
-[]\T1/stix/m/n/8 S. Co-hen, J. Zantvo-ord, B. Wezen-berg, J. Daams, C. Bock-t-ing,
+Underfull \hbox (badness 10000) in paragraph at lines 157--169
+\T1/stix/m/n/8 in-ter-mit-tent theta burst stim-u-la-tion treat-ment for de-pre
+s-sion:
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 57--58
-\T1/stix/m/n/8 an-tide-pres-sant treat-ment suc-cess: a sys-tem-atic re-view and
+Underfull \hbox (badness 3612) in paragraph at lines 157--169
+\T1/stix/m/n/8 a pi-lot study, in: An-nual In-ter-na-tional Con-fer-ence of the
+ IEEE
  []
 
 
-Underfull \hbox (badness 1132) in paragraph at lines 60--61
-\T1/stix/m/n/8 of pa-tients with ma-jor de-pres-sive dis-or-der us-ing au-to-mated eeg
+Underfull \hbox (badness 10000) in paragraph at lines 157--169
+\T1/zi4/m/n/8 semanticscholar . org / paper / 9d00f9320f2f75435719d9cccc4133e98
+9f8737e$[][]\T1/stix/m/n/8 ,
  []
 
 
-Underfull \hbox (badness 1205) in paragraph at lines 63--66
-[]\T1/stix/m/n/8 N. Ja-worska, S. d. l. Salle, M. H. Ibrahim, P. Blier, V. Knott,
+Underfull \hbox (badness 2150) in paragraph at lines 182--189
+[]\T1/stix/m/n/8 Hjorth, B., 1970.  Eeg anal-y-sis based on time do-main prop-e
+r-ties.
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 63--66
-[][]\T1/stix/m/n/8 Lever-ag-ing ma-chine learn-ing ap-proaches for pre-dict-ing
+Underfull \hbox (badness 1038) in paragraph at lines 190--201
+[]\T1/stix/m/n/8 Jaworska, N., Salle, S.d.l., Ibrahim, M.H., Blier, P., Knott, 
+V., 2019.
  []
 
-
-Underfull \hbox (badness 4647) in paragraph at lines 63--66
-\T1/stix/m/n/8 an-tide-pres-sant treat-ment re-sponse us-ing elec-troen-cephalog-ra-phy
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 63--66
-\T1/stix/m/n/8 (eeg) and clin-i-cal data[][], Fron-tiers in Psy-chi-a-try (2019).
- []
-
-
-Underfull \hbox (badness 1297) in paragraph at lines 68--71
-\T1/stix/m/n/8 in ma-jor de-pres-sive dis-or-der[][], IEEE Trans-ac-tions on Biomed-i-cal
- []
-
-
-Underfull \hbox (badness 6063) in paragraph at lines 78--81
-[]\T1/stix/m/n/8 E. Ebrahimzadeh, M. As-garine-jad, S. Sal-i-m-inia, S. Ashoori,
- []
-
-
-Underfull \hbox (badness 2020) in paragraph at lines 78--81
-\T1/stix/m/n/8 M. Ser-aji, [][]Pre-dict-ing clin-i-cal re-sponse to tran-scra-nial mag-netic
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 78--81
-\T1/stix/m/n/8 pro-cess-ing[][], Biomed-i-cal En-gi-neer-ing Ap-pli-ca-tions Ba-sis and
+[14]
+Underfull \hbox (badness 1596) in paragraph at lines 329--338
+\T1/stix/m/n/8 in ma-jor de-pres-sive dis-or-der.  IEEE Trans-ac-tions on Biome
+d-i-cal
  []
 
 
-Underfull \hbox (badness 5862) in paragraph at lines 83--84
-[]\T1/stix/m/n/8 A. Zh-danov, et al., Use of ma-chine learn-ing for pre-dict-ing
+Underfull \hbox (badness 1881) in paragraph at lines 339--348
+[]\T1/stix/m/n/8 Olbrich, S., Arns, M., 2013.  Eeg biomark-ers in ma-jor de-pre
+s-sive
  []
 
 
-Underfull \hbox (badness 1436) in paragraph at lines 95--97
-[]\T1/stix/m/n/8 M. Shim, S.-H. Lee, H.-J. Hwang, In-flated pre-dic-tion ac-cu-racy
+Underfull \hbox (badness 1748) in paragraph at lines 339--348
+\T1/stix/m/n/8 In-ter-na-tional Re-view of Psy-chi-a-try URL: [][]$\T1/zi4/m/n/
+8 https : / / doi . org / 10 . 3109 /
  []
 
 
-Underfull \hbox (badness 2376) in paragraph at lines 95--97
-\T1/stix/m/n/8 se-lec-tion, Sci-en-tific Re-ports 11 (1) (apr 2021).  [][]$\T1/zi4/m/n/8 doi : 10 . 1038 /
+Underfull \hbox (badness 1314) in paragraph at lines 349--360
+\T1/stix/m/n/8 Re-view and per-spec-tives of promis-ing base-line eeg biomark-e
+rs in
  []
 
 
-Underfull \hbox (badness 1024) in paragraph at lines 103--106
-\T1/stix/m/n/8 biomarker of an-tide-pres-sant treat-ment re-sponse with tran-scra-nial
+Underfull \hbox (badness 1867) in paragraph at lines 361--381
+[]\T1/stix/m/n/8 Pettorruso, M., Lorenzo, G.D., Be-natti, B., dAn-drea, G., Cav
+-al-lotto,
  []
 
 
-Underfull \hbox (badness 3942) in paragraph at lines 103--106
-\T1/stix/m/n/8 mag-netic stim-u-la-tion (tms): A case se-ries[][], Clin-i-cal EEG and
+Underfull \hbox (badness 10000) in paragraph at lines 361--381
+\T1/stix/m/n/8 C., Carullo, R., Man-cusi, G., Marco, O.D., Mam-marella, G.,
  []
-
 
-Underfull \hbox (badness 2564) in paragraph at lines 108--111
-\T1/stix/m/n/8 P. Fitzger-ald, [][]Con-cur-rent tran-scra-nial mag-netic stim-u-la-tion and
- []
 
+Underfull \hbox (badness 10000) in paragraph at lines 361--381
+\T1/stix/m/n/8 Dat-tilio, A., Bar-locci, E., Rosa, I., Cocco, A., Padula, L.P.,
 
-Underfull \hbox (badness 2293) in paragraph at lines 108--111
-\T1/stix/m/n/8 re-sponse from rtms treat-ment for de-pres-sion[][], medRxiv (2023).
  []
-
 
-Underfull \hbox (badness 10000) in paragraph at lines 108--111
-\T1/stix/m/n/8 URL [][]$\T1/zi4/m/n/8 https : / / www . semanticscholar . org / paper /
- []
 
-[11]
-Underfull \hbox (badness 1418) in paragraph at lines 113--116
-\T1/stix/m/n/8 A. C. Swann, L. A. Aver-ill, B. OBrien, S. J. Mathew, [][]Neu-ral
+Underfull \hbox (badness 1097) in paragraph at lines 361--381
+\T1/stix/m/n/8 Bub-bico, G., Per-rucci, M.G., Guidotti, R., DAn-drea, A., Marze
+tti,
  []
 
 
-Underfull \hbox (badness 5696) in paragraph at lines 113--116
-\T1/stix/m/n/8 com-plex-ity eeg biomark-ers of rapid and post-rapid ke-tamine
+Underfull \hbox (badness 1708) in paragraph at lines 361--381
+\T1/stix/m/n/8 L., Zo-ratto, F., Del-losso, B., Mar-tinotti, G., 2024.  Over-co
+m-ing
  []
 
 
-Underfull \hbox (badness 3168) in paragraph at lines 113--116
-\T1/stix/m/n/8 ef-fects in late-life treatment-resistant de-pres-sion: a ran-dom-ized
+Underfull \hbox (badness 10000) in paragraph at lines 361--381
+\T1/stix/m/n/8 treatment-resistant de-pres-sion with machine-learning based
  []
-
 
-Underfull \hbox (badness 3189) in paragraph at lines 113--116
-\T1/stix/m/n/8 con-trol trial[][], Neu-ropsy-chophar-ma-col-ogy (2023).  [][]$\T1/zi4/m/n/8 doi : 10 . 1038 /
- []
 
+Underfull \hbox (badness 10000) in paragraph at lines 361--381
+\T1/stix/m/n/8 tools: a study pro-to-col com-bin-ing eeg and clin-i-cal data to
 
-Underfull \hbox (badness 2318) in paragraph at lines 118--121
-\T1/stix/m/n/8 stim-u-la-tion treat-ment for de-pres-sion: a pi-lot study[][], in: An-nual
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 118--121
-\T1/stix/m/n/8 URL [][]$\T1/zi4/m/n/8 https : / / www . semanticscholar . org / paper /
+Underfull \hbox (badness 10000) in paragraph at lines 361--381
+\T1/stix/m/n/8 per-son-al-ize glu-ta-mater-gic and brain stim-u-la-tion in-ter-
+ven-tions
  []
 
 
-Underfull \hbox (badness 1122) in paragraph at lines 131--134
-\T1/stix/m/n/8 D. Blum-berger, J. D. Grif-fiths, J. Dow-nar, [][]N100 as a re-sponse
+Underfull \hbox (badness 4036) in paragraph at lines 361--381
+\T1/stix/m/n/8 (se-lec-tool project).  Fron-tiers in Psy-chi-a-try URL: [][]$\T
+1/zi4/m/n/8 https : / / www .
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 131--134
-\T1/stix/m/n/8 pre-dic-tion biomarker for ac-cel-er-ated 1 hz right dlpfc-rtms
+Underfull \hbox (badness 10000) in paragraph at lines 361--381
+\T1/zi4/m/n/8 semanticscholar . org / paper / 169e53dbe54745e1df0495183343bda9d
+6a8a29e$[][]\T1/stix/m/n/8 ,
  []
 
 
-Underfull \hbox (badness 6876) in paragraph at lines 131--134
-\T1/stix/m/n/8 in ma-jor de-pres-sion.[][], Jour-nal of Af-fec-tive Dis-or-ders (2024).
+Underfull \hbox (badness 10000) in paragraph at lines 391--401
+\T1/stix/m/n/8 de-pres-sion.  Clin-i-cal Neu-ro-phys-i-ol-ogy URL: [][]$\T1/zi4
+/m/n/8 https : / / www .
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 131--134
-\T1/stix/m/n/8 URL [][]$\T1/zi4/m/n/8 https : / / www . semanticscholar . org / paper /
+Underfull \hbox (badness 10000) in paragraph at lines 391--401
+\T1/zi4/m/n/8 semanticscholar . org / paper / c2c05fd78b73d7ebd82bcbd5cb8af3516
+e1f5751$[][]\T1/stix/m/n/8 ,
  []
 
 
-Underfull \hbox (badness 6592) in paragraph at lines 136--139
-\T1/stix/m/n/8 Con-fer-ence on Com-puter and Knowl-edge En-gi-neer-ing, 2025.
+Underfull \hbox (badness 10000) in paragraph at lines 415--432
+[]\T1/stix/m/n/8 Romero Marin, R., Lopez Ro-driguez, S., Lakis Granell, S.,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 136--139
-\T1/stix/m/n/8 URL [][]$\T1/zi4/m/n/8 https : / / www . semanticscholar . org / paper /
+Underfull \hbox (badness 1810) in paragraph at lines 415--432
+\T1/stix/m/n/8 Bu-loz Os-o-rio, E., Ca-bello Toscano, M., Ur-re-taviz-caya Sara
+chaga,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 141--144
-[]\T1/stix/m/n/8 A. Reiss-mann, M. Rup-precht, B. Langguth, J. Rischer,
+Underfull \hbox (badness 10000) in paragraph at lines 415--432
+\T1/stix/m/n/8 M., Alonso Or-tega, M.d.P., Chopra, M., Solana Sanchez, J.,
  []
 
 
-Underfull \hbox (badness 6268) in paragraph at lines 141--144
-\T1/stix/m/n/8 S. Schoiss-wohl, [][]Theta-cordance as a biomarker of treat-ment
+Underfull \hbox (badness 1960) in paragraph at lines 415--432
+\T1/stix/m/n/8 Cam-prodon, J., Pas-cual Leone, A., Bartres Faz, D., Cap-pon, D.
+,
  []
-
 
-Underfull \hbox (badness 1412) in paragraph at lines 141--144
-\T1/stix/m/n/8 re-sponse to in-ter-mit-tent theta burst stim-u-la-tion in pa-tients with
- []
 
+Underfull \hbox (badness 3701) in paragraph at lines 415--432
+\T1/stix/m/n/8 Cat-ta-neo, G., 2026.  Re-motely su-per-vised home-based tdcs in
 
-Underfull \hbox (badness 1748) in paragraph at lines 141--144
-\T1/stix/m/n/8 treatment-resistant de-pres-sion.[][], Clin-i-cal Neu-ro-phys-i-ol-ogy (2026).
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 141--144
-\T1/stix/m/n/8 URL [][]$\T1/zi4/m/n/8 https : / / www . semanticscholar . org / paper /
+Underfull \hbox (badness 10000) in paragraph at lines 415--432
+\T1/stix/m/n/8 treatment-resistant de-pres-sion: Fea-si-bil-ity, ef-fec-tive-ne
+ss and eeg
  []
 
 
-Underfull \hbox (badness 3668) in paragraph at lines 146--149
-[]\T1/stix/m/n/8 S. Ul-rich, E. Schnei-der, G. Deur-ing, S. Erni, M. d. Rid-der,
+Underfull \hbox (badness 5417) in paragraph at lines 415--432
+\T1/stix/m/n/8 biomark-ers of re-sponse.  Re-search Square URL: [][]$\T1/zi4/m/
+n/8 https : / / www .
  []
 
 
-Underfull \hbox (badness 1107) in paragraph at lines 146--149
-\T1/stix/m/n/8 elec-tro-con-vul-sive ther-apy: A sys-tem-atic re-view[][], Neu-ro-science &
+Underfull \hbox (badness 10000) in paragraph at lines 415--432
+\T1/zi4/m/n/8 semanticscholar . org / paper / 7ba628353818d20f18ac5ecdccca2bd39
+bca3d77$[][]\T1/stix/m/n/8 ,
  []
 
 
-Underfull \hbox (badness 3884) in paragraph at lines 146--149
-\T1/stix/m/n/8 Biobe-hav-ioral Re-views (2025).  [][]$\T1/zi4/m/n/8 doi : 10 . 1016 / j . neubiorev . 2025 .
+Underfull \hbox (badness 1024) in paragraph at lines 433--448
+[]\T1/stix/m/n/8 Shalbaf, R., Bren-ner, C.A., Pang, C., Blum-berger, D.M., Dow-
+nar, J.,
  []
 
 
-Underfull \hbox (badness 3838) in paragraph at lines 155--156
-\T1/stix/m/n/8 H. Hob-day, G. Shee-han, A.-R. Ghazi-Noori, P. J. Lager-berg,
+Underfull \hbox (badness 10000) in paragraph at lines 449--463
+\T1/zi4/m/n/8 semanticscholar . org / paper / c0dabdc70010a5fb8ea6f2546d37fe9e8
+3a13071$[][]\T1/stix/m/n/8 ,
  []
 
 
-Underfull \hbox (badness 1038) in paragraph at lines 155--156
-\T1/stix/m/n/8 pre-dic-tors of re-mis-sion, Per-son-al-ized Medicine in Psy-chi-a-try 49
+Underfull \hbox (badness 2351) in paragraph at lines 464--472
+[]\T1/stix/m/n/8 Shen, A., Sun, J., Chen, X., Gao, X., 2025.  A data-centric an
+d
  []
 
 
-Underfull \hbox (badness 1895) in paragraph at lines 161--162
-[]\T1/stix/m/n/8 S. Siuly, Y. Li, Y. Zhang, Elec-troen-cephalo-gram (eeg) and its
+Underfull \hbox (badness 1590) in paragraph at lines 464--472
+\T1/stix/m/n/8 in-ter-pretable eeg frame-work for de-pres-sion sever-ity grad-i
+ng us-ing
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 167--170
-\T1/stix/m/n/8 URL [][]$\T1/zi4/m/n/8 https : / / iris . uniroma1 . it / bitstream / 11573 / 802874 / 1 / Jobert _
+Underfull \hbox (badness 4429) in paragraph at lines 482--491
+\T1/stix/m/n/8 biomark-ers for ma-jor de-pres-sive dis-or-der.  npj Men-tal Hea
+lth
  []
 
 
-Underfull \hbox (badness 1331) in paragraph at lines 184--186
-\T1/stix/m/n/8 Pre-treatment eeg sig-nal vari-abil-ity is as-so-ci-ated with treat-ment
+Underfull \hbox (badness 1226) in paragraph at lines 500--512
+\T1/stix/m/n/8 J., Bruhl, A.B., 2025.  Al-ter-ations in resting-state eeg func-
+tional
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 188--190
-[]\T1/stix/m/n/8 B. Hjorth, Eeg anal-y-sis based on time do-main prop-er-ties,
+Underfull \hbox (badness 2772) in paragraph at lines 500--512
+\T1/stix/m/n/8 con-nec-tiv-ity in pa-tients with ma-jor de-pres-sive dis-or-der
+ re-ceiv-ing
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 188--190
-\T1/stix/m/n/8 Elec-troen-cephalog-ra-phy and Clin-i-cal Neu-ro-phys-i-ol-ogy 29 (3)
+Underfull \hbox (badness 1509) in paragraph at lines 500--512
+\T1/stix/m/n/8 elec-tro-con-vul-sive ther-apy: A sys-tem-atic re-view.  Neu-ro-
+science &
  []
 
 
-Underfull \hbox (badness 1803) in paragraph at lines 200--202
-[]\T1/stix/m/n/8 B. Lord, J. J. B. Allen, Eval-u-at-ing eeg com-plex-ity met-rics as
+Underfull \hbox (badness 3291) in paragraph at lines 500--512
+\T1/stix/m/n/8 Biobe-hav-ioral Re-views URL: [][]$\T1/zi4/m/n/8 https : / / doi
+ . org / 10 . 1016 / j . neubiorev .
  []
 
 
-Underfull \hbox (badness 1983) in paragraph at lines 216--217
-\T1/stix/m/n/8 cur-rent stim-u-la-tion (tdcs) in bipo-lar de-pres-sion: ef-fects on eeg
+Underfull \hbox (badness 1571) in paragraph at lines 513--522
+[]\T1/stix/m/n/8 Waller, D.A., Car-pen-ter, L.L., Jones, S.R., 2026.  Tran-sien
+t frontal
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 219--222
-[]\T1/stix/m/n/8 R. Romero Marin, S. Lopez Ro-driguez, S. Lakis Granell,
+Underfull \hbox (badness 10000) in paragraph at lines 513--522
+\T1/zi4/m/n/8 semanticscholar . org / paper / 6a3e902c05c07569afa93b0bb3e0b484b
+f519824$[][]\T1/stix/m/n/8 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 219--222
-\T1/stix/m/n/8 su-per-vised home-based tdcs in treatment-resistant de-pres-sion:
+Underfull \hbox (badness 1308) in paragraph at lines 543--554
+[]\T1/stix/m/n/8 Widge, A.S., Bilge, M.T., Mon-tana, R., Chang, W., Ro-driguez,
+ C.I.,
  []
-
 
-Underfull \hbox (badness 10000) in paragraph at lines 219--222
-\T1/stix/m/n/8 URL [][]$\T1/zi4/m/n/8 https : / / www . semanticscholar . org / paper /
- []
 
-[12]
-Underfull \hbox (badness 10000) in paragraph at lines 224--227
-[]\T1/stix/m/n/8 I. H. Krat-ter, C. W. Austelle, J. I. Lis-se-more, M. Wada,
+Underfull \hbox (badness 2409) in paragraph at lines 566--580
+[]\T1/stix/m/n/8 Woodham, R.D., Sel-varaj, S., La-jmi, N., Hob-day, H., Shee-ha
+n, G.,
  []
 
 
-Underfull \hbox (badness 2119) in paragraph at lines 224--227
-\T1/stix/m/n/8 Schatzberg, D. Spiegel, C. Rolle, G. L. Sahlem, N. Williams,
+Underfull \hbox (badness 1509) in paragraph at lines 566--580
+\T1/stix/m/n/8 Ghazi-Noori, A.R., Lager-berg, P.J., Rizvi, M., Kwon, S.S., Orhi
+i,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 224--227
-\T1/stix/m/n/8 a ran-dom-ized con-trolled trial con-firm-ing ef-fi-cacy, and an
+Underfull \hbox (badness 2884) in paragraph at lines 566--580
+\T1/stix/m/n/8 treat-ment for ma-jor de-pres-sive dis-or-der: a fully re-mote p
+hase 2
  []
-
 
-Underfull \hbox (badness 8113) in paragraph at lines 224--227
-\T1/stix/m/n/8 <scp>eeg</scp> study pro-vid-ing in-sight into mech-a-nism of
+[15]
+Underfull \hbox (badness 1057) in paragraph at lines 581--595
+\T1/stix/m/n/8 Bra-mon, E., Rit-ter, P., Bauer, M., Young, A.H., Fu, C.H., 2025
+a.
  []
 
 
-Underfull \hbox (badness 1028) in paragraph at lines 224--227
-\T1/stix/m/n/8 ac-tion and a po-ten-tially pre-dic-tive biomarker of ef-fi-cacy[][], World
+Underfull \hbox (badness 2941) in paragraph at lines 609--619
+[]\T1/stix/m/n/8 Zeidabadi, A.A., Rashidi, S., 2025.  Pre-dic-tion of rtms trea
+t-ment
  []
 
 
-Underfull \hbox (badness 2486) in paragraph at lines 229--232
-[]\T1/stix/m/n/8 D. A. Waller, L. L. Car-pen-ter, S. R. Jones, [][]Tran-sient frontal
+Underfull \hbox (badness 5578) in paragraph at lines 609--619
+\T1/stix/m/n/8 re-sponse in de-pres-sion us-ing a frequency-based eeg biomarker
+,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 229--232
-\T1/stix/m/n/8 spec-tral events from eeg pre-dict an-tide-pres-sant re-sponse to
+Underfull \hbox (badness 10000) in paragraph at lines 609--619
+\T1/stix/m/n/8 in: In-ter-na-tional Con-fer-ence on Com-puter and Knowl-edge
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 229--232
-\T1/stix/m/n/8 URL [][]$\T1/zi4/m/n/8 https : / / www . semanticscholar . org / paper /
+Underfull \hbox (badness 10000) in paragraph at lines 609--619
+\T1/stix/m/n/8 En-gi-neer-ing.  URL: [][]$\T1/zi4/m/n/8 https : / / www . seman
+ticscholar . org / paper /
  []
 
 
-Underfull \hbox (badness 6859) in paragraph at lines 234--237
-\T1/stix/m/n/8 Per-rucci, R. Guidotti, A. DAn-drea, L. Marzetti, F. Zo-ratto,
+Underfull \hbox (badness 10000) in paragraph at lines 609--619
+\T1/zi4/m/n/8 fa7b0c55f517ebfbaa6af5be40ba57129e5d87f2$[][]\T1/stix/m/n/8 , doi
+:[][]$\T1/zi4/m/n/8 10 . 1109 / ICCKE68588 .
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 234--237
-\T1/stix/m/n/8 B. Del-losso, G. Mar-tinotti, [][]Over-com-ing treatment-resistant
+Underfull \hbox (badness 5787) in paragraph at lines 644--664
+[]\T1/stix/m/n/8 Zhdanov, A., Atluri, S., Wong, W., Vaghei, Y., Daskalakis, Z.J
+.,
  []
 
-
-Underfull \hbox (badness 1715) in paragraph at lines 234--237
-\T1/stix/m/n/8 de-pres-sion with machine-learning based tools: a study pro-to-col
- []
 
+Underfull \hbox (badness 3000) in paragraph at lines 644--664
+\T1/stix/m/n/8 Blum-berger, D.M., Frey, B.N., Gi-a-cobbe, P., Lam, R.W., Milev,
 
-Underfull \hbox (badness 4181) in paragraph at lines 234--237
-\T1/stix/m/n/8 brain stim-u-la-tion in-ter-ven-tions (se-lec-tool project)[][], Fron-tiers in
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 234--237
-\T1/stix/m/n/8 URL [][]$\T1/zi4/m/n/8 https : / / www . semanticscholar . org / paper /
+Underfull \hbox (badness 10000) in paragraph at lines 644--664
+\T1/stix/m/n/8 es-c-i-talo-pram treat-ment out-come from elec-troen-cephalog-ra
+-phy
  []
 
-) [13
+) [16
 
 ] (./elsevier.aux)
  ***********
@@ -2909,18 +3605,31 @@ Package rerunfilecheck Info: File `elsevier.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 17384 strings out of 474116
- 268174 string characters out of 5743681
+ 17416 strings out of 474116
+ 268819 string characters out of 5743681
  1970187 words of memory out of 5000000
- 39297 multiletter control sequences out of 15000+600000
- 651334 words of font info for 157 fonts, out of 8000000 for 9000
+ 39317 multiletter control sequences out of 15000+600000
+ 659985 words of font info for 163 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 90i,13n,93p,1707b,782s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2024/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/STIXGeneral-Bold.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/STIXGeneral-Italic.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/STIXGeneral-Regular.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfss0800.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfss0900.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx0900.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/stix-mathex.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/stix-mathit.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/stix-mathrm.pfb>
-Output written on elsevier.pdf (13 pages, 2250477 bytes).
+ 90i,13n,93p,3266b,676s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2024/texmf-dist/fonts/type1/public/inconsolata/Inconsolat
+a-zi4r.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/STIXGene
+ral-Bold.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/STIXGe
+neral-Italic.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/ST
+IXGeneral-Regular.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/cm
+-super/sfsi0800.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/cm-s
+uper/sfss0800.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/cm-sup
+er/sfss0900.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/cm-super
+/sfsx0800.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/s
+fsx0900.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/stix-ma
+thcal.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/stix-math
+ex.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/stix-mathit.
+pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/stix/stix-mathrm.pfb
+>
+Output written on elsevier.pdf (16 pages, 2318895 bytes).
 PDF statistics:
- 533 PDF objects out of 1000 (max. 8388607)
- 471 compressed objects within 5 object streams
- 103 named destinations out of 1000 (max. 500000)
+ 602 PDF objects out of 1000 (max. 8388607)
+ 530 compressed objects within 6 object streams
+ 107 named destinations out of 1000 (max. 500000)
  61 words of extra memory for PDF output out of 10000 (max. 10000000)
 

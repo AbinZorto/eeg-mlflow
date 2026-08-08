@@ -1,50 +1,51 @@
 This is BibTeX, Version 0.99d (TeX Live 2024)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: elsevier.aux
-The style file: elsarticle-num.bst
+The style file: elsarticle-harv.bst
 Database file #1: references.bib
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Warning--empty journal in babiloni2012_guidelines
 Warning--empty pages in guo2024_restingstate
 Warning--empty pages in zeidabadi2025_prediction
-Warning--empty journal in babiloni2012_guidelines
-You've used 56 entries,
-            2952 wiz_defined-function locations,
-            1058 strings with 24387 characters,
-and the built_in function-call counts, 19879 in all, are:
-= -- 1693
-> -- 1226
-< -- 3
-+ -- 446
-- -- 390
-* -- 1725
-:= -- 3074
-add.period$ -- 96
-call.type$ -- 56
-change.case$ -- 57
-chr.to.int$ -- 0
-cite$ -- 59
-duplicate$ -- 535
-empty$ -- 1886
-format.name$ -- 444
-if$ -- 4870
-int.to.chr$ -- 0
-int.to.str$ -- 56
-missing$ -- 56
-newline$ -- 238
-num.names$ -- 56
-pop$ -- 331
+You've used 53 entries,
+            2990 wiz_defined-function locations,
+            998 strings with 24056 characters,
+and the built_in function-call counts, 48435 in all, are:
+= -- 3223
+> -- 3306
+< -- 10
++ -- 1268
+- -- 1200
+* -- 6208
+:= -- 7267
+add.period$ -- 173
+call.type$ -- 53
+change.case$ -- 662
+chr.to.int$ -- 52
+cite$ -- 56
+duplicate$ -- 3103
+empty$ -- 2681
+format.name$ -- 1365
+if$ -- 8593
+int.to.chr$ -- 2
+int.to.str$ -- 1
+missing$ -- 726
+newline$ -- 294
+num.names$ -- 212
+pop$ -- 1156
 preamble$ -- 1
-purify$ -- 0
+purify$ -- 609
 quote$ -- 0
-skip$ -- 1111
+skip$ -- 800
 stack$ -- 0
-substring$ -- 560
-swap$ -- 180
+substring$ -- 1154
+swap$ -- 2766
 text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 0
+type$ -- 477
 warning$ -- 3
-while$ -- 100
-width$ -- 58
-write$ -- 566
+while$ -- 202
+width$ -- 0
+write$ -- 809
 (There were 3 warnings)

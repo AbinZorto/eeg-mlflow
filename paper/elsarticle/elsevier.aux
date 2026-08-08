@@ -19,19 +19,14 @@
 \citation{woodham2025home}
 \citation{Rimmer2024}
 \citation{olbrich2013_eeg,olbrich2015_personalized,leuchter2010_biomarkers}
-\citation{Fu2013,Fu2019,Widge2019}
+\citation{Fu2019,Widge2019}
 \citation{simmatis2023_technical,watts2022predicting,cohen2023electroencephalography}
 \citation{AlKaysi2017,jaworska2019_leveraging,oakley2022_eeg}
-\citation{shalbaf2018_nonlinear,ebrahimzadeh2021_predicting,zhdanov_svm_prediction}
-\citation{Puthankattil2012,Ghiasi2021,Zhao2022}
 \citation{Shim2021,Shen2025}
 \citation{Widge2019,Shim2021}
-\citation{Shen2025}
-\citation{funk2008_prefrontal,bailey2023_concurrent,murphy2023_neural}
-\citation{guo2024_restingstate,tsai2023_review,Dagnino2023}
-\citation{sheen2024_response,zeidabadi2025_prediction,reissmann2026_thetacordance}
-\citation{ulrich2025_alterations}
+\citation{guo2024_restingstate,Dagnino2023,ulrich2025_alterations}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Clinical significance of low-density EEG}{1}{subsection.1.1}\protected@file@percent }
 \citation{Moncy2024,Xiao2025PMIP}
 \citation{Moncy2024}
 \citation{Xiao2025PMIP}
@@ -42,142 +37,137 @@
 \citation{Miranda2019}
 \citation{Miranda2019,Siuly2017,Mahato2020}
 \citation{simmatis2023_technical,babiloni2012_guidelines}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Methods}{2}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Dataset and preprocessing}{2}{subsection.2.1}\protected@file@percent }
 \citation{Shen2025,Zhang2023EEGMethods}
 \citation{Welch1967}
 \citation{olbrich2013_eeg,Mahato2020,Mumtaz2017}
 \citation{Jaworska2018}
-\@writefile{toc}{\contentsline {section}{\numberline {2}Methods}{2}{section.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Dataset and preprocessing}{2}{subsection.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Feature extraction}{2}{subsection.2.2}\protected@file@percent }
 \citation{Zhang2023EEGMethods,Hjorth1970}
 \citation{Puthankattil2012,Faust2014,Acharya2015}
 \citation{Zhao2022,Jaworska2018,Lord2023}
-\citation{Ghiasi2021,Mahato2020,Monni2022}
-\citation{Ghiasi2021,Zhao2022,ulrich2025_alterations}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Four-channel low-montage EEG setup corresponding to the recording configuration used in the study, showing the \texttt  {AF7}, \texttt  {AF8}, \texttt  {TP9}, and \texttt  {TP10} recording sites together with the corresponding headset placement.}}{3}{figure.1}\protected@file@percent }
 \newlabel{fig:montage-setup}{{1}{3}{Four-channel low-montage EEG setup corresponding to the recording configuration used in the study, showing the \texttt {AF7}, \texttt {AF8}, \texttt {TP9}, and \texttt {TP10} recording sites together with the corresponding headset placement}{figure.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Feature extraction}{3}{subsection.2.2}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Cohort, acquisition, and sweep configuration summary. Trial descriptors derive from the parent home-based tDCS study \citep  {woodham2025home}; acquisition totals and sweep settings derive from the analyzed EEG exports and current experiment configuration.}}{4}{table.1}\protected@file@percent }
 \newlabel{tab:cohort-summary}{{1}{4}{Cohort, acquisition, and sweep configuration summary. Trial descriptors derive from the parent home-based tDCS study \citep {woodham2025home}; acquisition totals and sweep settings derive from the analyzed EEG exports and current experiment configuration}{table.1}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Summary of extracted EEG feature families per analysis window.}}{4}{table.2}\protected@file@percent }
 \newlabel{tab:feature-summary}{{2}{4}{Summary of extracted EEG feature families per analysis window}{table.2}{}}
+\citation{Ghiasi2021,Mahato2020,Monni2022}
+\citation{Ghiasi2021,Zhao2022,ulrich2025_alterations}
 \citation{Mahato2020,Mumtaz2017}
 \citation{Chawla2002}
 \citation{Shim2021}
-\citation{olbrich2013_eeg,olbrich2015_personalized,simmatis2023_technical}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Sweep design and validation}{5}{subsection.2.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Models}{5}{subsection.2.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Outcome metrics and biomarker summaries}{5}{subsection.2.5}\protected@file@percent }
+\citation{olbrich2013_eeg,olbrich2015_personalized,simmatis2023_technical}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces End-to-end analysis flow used in the study. In each leave-one-participant-out fold, one participant was held out once, and participant-group equalization, SMOTE, and feature selection were all applied only within the remaining training participants before held-out scoring and biomarker summarization.}}{6}{figure.2}\protected@file@percent }
 \newlabel{fig:processing-flowchart}{{2}{6}{End-to-end analysis flow used in the study. In each leave-one-participant-out fold, one participant was held out once, and participant-group equalization, SMOTE, and feature selection were all applied only within the remaining training participants before held-out scoring and biomarker summarization}{figure.2}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Model architecture and training summary for the two evaluated classifier families.}}{6}{table.3}\protected@file@percent }
-\newlabel{tab:model-summary}{{3}{6}{Model architecture and training summary for the two evaluated classifier families}{table.3}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Results}{6}{section.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Sweep-level comparison}{6}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Outcome metrics and feature summaries}{6}{subsection.2.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Model architecture and training summary for the two evaluated classifier families.}}{7}{table.3}\protected@file@percent }
+\newlabel{tab:model-summary}{{3}{7}{Model architecture and training summary for the two evaluated classifier families}{table.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Results}{7}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Sweep-level comparison}{7}{subsection.3.1}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Patient-level ROC-AUC by window size across the sweep. Stars mark the best individual hybrid and SVM runs.}}{7}{figure.3}\protected@file@percent }
 \newlabel{fig:sweep-window-roc}{{3}{7}{Patient-level ROC-AUC by window size across the sweep. Stars mark the best individual hybrid and SVM runs}{figure.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Patient-level ROC-AUC by \texttt  {inner-k} across the sweep. The hybrid model retained the strongest discrimination in the sparsest budget region.}}{7}{figure.4}\protected@file@percent }
-\newlabel{fig:sweep-innerk-roc}{{4}{7}{Patient-level ROC-AUC by \texttt {inner-k} across the sweep. The hybrid model retained the strongest discrimination in the sparsest budget region}{figure.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Best-run patient-level performance}{7}{subsection.3.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Mean pairwise Jaccard overlap by \texttt  {inner-k}. Hard-set overlap increased with larger per-fold feature budgets.}}{7}{figure.5}\protected@file@percent }
-\newlabel{fig:sweep-jaccard}{{5}{7}{Mean pairwise Jaccard overlap by \texttt {inner-k}. Hard-set overlap increased with larger per-fold feature budgets}{figure.5}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Unique selected features by \texttt  {inner-k}. Larger per-fold budgets produced markedly larger discovered feature pools.}}{7}{figure.6}\protected@file@percent }
-\newlabel{fig:sweep-unique-features}{{6}{7}{Unique selected features by \texttt {inner-k}. Larger per-fold budgets produced markedly larger discovered feature pools}{figure.6}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Sparse biomarker set with modest hard-set overlap}{7}{subsection.3.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Best-performing configuration for each model family.}}{8}{table.4}\protected@file@percent }
-\newlabel{tab:best-run-comparison}{{4}{8}{Best-performing configuration for each model family}{table.4}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Patient-level ROC curve for the best hybrid run.}}{8}{figure.7}\protected@file@percent }
-\newlabel{fig:main-roc}{{7}{8}{Patient-level ROC curve for the best hybrid run}{figure.7}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Patient-level metric summary for the best hybrid run.}}{8}{figure.8}\protected@file@percent }
-\newlabel{fig:main-metrics}{{8}{8}{Patient-level metric summary for the best hybrid run}{figure.8}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Selection-frequency ranking for the recurrent biomarkers from the best hybrid run.}}{8}{figure.9}\protected@file@percent }
-\newlabel{fig:biomarker-frequency}{{9}{8}{Selection-frequency ranking for the recurrent biomarkers from the best hybrid run}{figure.9}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Class-conditional selection frequencies for the recurrent biomarkers from the best hybrid run. Remission is shown in red and non-remission in blue.}}{8}{figure.10}\protected@file@percent }
-\newlabel{fig:biomarker-class-conditional}{{10}{8}{Class-conditional selection frequencies for the recurrent biomarkers from the best hybrid run. Remission is shown in red and non-remission in blue}{figure.10}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Effect-direction consistency and class-conditional patterns}{8}{subsection.3.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Patient-level ROC-AUC by \texttt  {inner-k} across the sweep. The hybrid model retained the strongest discrimination in the sparsest budget region.}}{8}{figure.4}\protected@file@percent }
+\newlabel{fig:sweep-innerk-roc}{{4}{8}{Patient-level ROC-AUC by \texttt {inner-k} across the sweep. The hybrid model retained the strongest discrimination in the sparsest budget region}{figure.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Mean pairwise Jaccard overlap by \texttt  {inner-k}. Hard-set overlap increased with larger per-fold feature budgets.}}{8}{figure.5}\protected@file@percent }
+\newlabel{fig:sweep-jaccard}{{5}{8}{Mean pairwise Jaccard overlap by \texttt {inner-k}. Hard-set overlap increased with larger per-fold feature budgets}{figure.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Best-run patient-level performance}{8}{subsection.3.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Unique selected features by \texttt  {inner-k}. Larger per-fold budgets produced markedly larger discovered feature pools.}}{8}{figure.6}\protected@file@percent }
+\newlabel{fig:sweep-unique-features}{{6}{8}{Unique selected features by \texttt {inner-k}. Larger per-fold budgets produced markedly larger discovered feature pools}{figure.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Patient-level ROC curve for the best hybrid run. The shaded region shows the 95\% bootstrap confidence band.}}{8}{figure.7}\protected@file@percent }
+\newlabel{fig:main-roc}{{7}{8}{Patient-level ROC curve for the best hybrid run. The shaded region shows the 95\% bootstrap confidence band}{figure.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Best-performing configuration for each model family. Bootstrap confidence intervals are from 1,000 resamples at the 95\% level.}}{9}{table.4}\protected@file@percent }
+\newlabel{tab:best-run-comparison}{{4}{9}{Best-performing configuration for each model family. Bootstrap confidence intervals are from 1,000 resamples at the 95\% level}{table.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Patient-level metric summary for the best hybrid run. Error bars show 95\% bootstrap confidence intervals.}}{9}{figure.8}\protected@file@percent }
+\newlabel{fig:main-metrics}{{8}{9}{Patient-level metric summary for the best hybrid run. Error bars show 95\% bootstrap confidence intervals}{figure.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Intermediate baselines and ablation at the sparsest budget}{9}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Effect-direction consistency and class-conditional patterns}{9}{subsection.3.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Intermediate baseline classifiers and ablations evaluated at the best hybrid configuration (6~s, \texttt  {inner-k=1}). All models used identical data, feature selection, and validation splits. Neural baselines and ablation trained on NVIDIA RTX 3090.}}{10}{table.5}\protected@file@percent }
+\newlabel{tab:intermediate-baselines}{{5}{10}{Intermediate baseline classifiers and ablations evaluated at the best hybrid configuration (6~s, \texttt {inner-k=1}). All models used identical data, feature selection, and validation splits. Neural baselines and ablation trained on NVIDIA RTX 3090}{table.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Features from the best hybrid run that appeared in at least one fold. $\Delta $ selection is remission minus non-remission selection share. Sign consistency is 1.000 for features appearing in multiple folds; single-fold entries should be interpreted with caution.}}{10}{table.6}\protected@file@percent }
+\newlabel{tab:hybrid-biomarkers}{{6}{10}{Features from the best hybrid run that appeared in at least one fold. $\Delta $ selection is remission minus non-remission selection share. Sign consistency is 1.000 for features appearing in multiple folds; single-fold entries should be interpreted with caution}{table.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Selection-frequency ranking for the features identified from the best hybrid run.}}{10}{figure.9}\protected@file@percent }
+\newlabel{fig:biomarker-frequency}{{9}{10}{Selection-frequency ranking for the features identified from the best hybrid run}{figure.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Class-conditional selection frequencies for the recurrent biomarkers from the best hybrid run. Remission is shown in red and non-remission in blue.}}{10}{figure.10}\protected@file@percent }
+\newlabel{fig:biomarker-class-conditional}{{10}{10}{Class-conditional selection frequencies for the recurrent biomarkers from the best hybrid run. Remission is shown in red and non-remission in blue}{figure.10}{}}
 \citation{olbrich2013_eeg,olbrich2015_personalized,leuchter2010_biomarkers}
 \citation{Fu2019,simmatis2023_technical,Moncy2025BD}
 \citation{AlKaysi2017,jaworska2019_leveraging,oakley2022_eeg}
 \citation{shalbaf2018_nonlinear,ebrahimzadeh2021_predicting,zhdanov_svm_prediction}
 \citation{watts2022predicting,cohen2023electroencephalography}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Effect-size stability for the recurrent biomarkers from the best hybrid run. Positive values indicate remission-skewed effects and negative values indicate non-remission-skewed effects.}}{11}{figure.11}\protected@file@percent }
+\newlabel{fig:biomarker-effect-size}{{11}{11}{Effect-size stability for the recurrent biomarkers from the best hybrid run. Positive values indicate remission-skewed effects and negative values indicate non-remission-skewed effects}{figure.11}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Aggregation robustness}{11}{subsection.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Discussion}{11}{section.4}\protected@file@percent }
 \citation{Widge2019,Shim2021}
 \citation{Shen2025}
 \citation{Moncy2024,Xiao2025PMIP}
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Recurrent biomarkers from the best hybrid run. $\Delta $ selection is remission minus non-remission selection share.}}{9}{table.5}\protected@file@percent }
-\newlabel{tab:hybrid-biomarkers}{{5}{9}{Recurrent biomarkers from the best hybrid run. $\Delta $ selection is remission minus non-remission selection share}{table.5}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Effect-size stability for the recurrent biomarkers from the best hybrid run. Positive values indicate remission-skewed effects and negative values indicate non-remission-skewed effects.}}{9}{figure.11}\protected@file@percent }
-\newlabel{fig:biomarker-effect-size}{{11}{9}{Effect-size stability for the recurrent biomarkers from the best hybrid run. Positive values indicate remission-skewed effects and negative values indicate non-remission-skewed effects}{figure.11}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Discussion}{9}{section.4}\protected@file@percent }
-\citation{Puthankattil2012,Faust2014,Acharya2015}
-\citation{Jaworska2018}
-\citation{Lord2023}
-\citation{Mahato2020,Mumtaz2017}
-\citation{Moncy2025BD,Xiao2025JAD}
-\citation{Lord2023,Monni2022}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Comparison with selected EEG-based treatment-response prediction studies in depression.}}{12}{table.7}\protected@file@percent }
+\newlabel{tab:sota-comparison}{{7}{12}{Comparison with selected EEG-based treatment-response prediction studies in depression}{table.7}{}}
 \citation{Moncy2025BD,Xiao2025JAD}
 \citation{Dagnino2023}
 \citation{funk2008_prefrontal,bailey2023_concurrent,guo2024_restingstate}
 \citation{romeromarn2026_remotely,kratter2026_stanford,waller2026_transient}
 \citation{sheen2024_response,zeidabadi2025_prediction,reissmann2026_thetacordance}
 \citation{ulrich2025_alterations,pettorruso2024_overcoming}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion}{10}{section.5}\protected@file@percent }
-\bibstyle{elsarticle-num}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion}{13}{section.5}\protected@file@percent }
+\bibstyle{elsarticle-harv}
 \bibdata{references}
-\bibcite{Woodham2021}{{1}{}{{}}{{}}}
-\bibcite{woodham2025home}{{2}{}{{}}{{}}}
-\bibcite{Hampsey2026}{{3}{}{{}}{{}}}
-\bibcite{Rimmer2024}{{4}{}{{}}{{}}}
-\bibcite{olbrich2013_eeg}{{5}{}{{}}{{}}}
-\bibcite{olbrich2015_personalized}{{6}{}{{}}{{}}}
-\bibcite{leuchter2010_biomarkers}{{7}{}{{}}{{}}}
-\bibcite{Fu2013}{{8}{}{{}}{{}}}
-\bibcite{Fu2019}{{9}{}{{}}{{}}}
-\bibcite{Widge2019}{{10}{}{{}}{{}}}
-\bibcite{simmatis2023_technical}{{11}{}{{}}{{}}}
-\bibcite{watts2022predicting}{{12}{}{{}}{{}}}
-\bibcite{cohen2023electroencephalography}{{13}{}{{}}{{}}}
-\bibcite{AlKaysi2017}{{14}{}{{}}{{}}}
-\bibcite{jaworska2019_leveraging}{{15}{}{{}}{{}}}
-\bibcite{oakley2022_eeg}{{16}{}{{}}{{}}}
-\bibcite{shalbaf2018_nonlinear}{{17}{}{{}}{{}}}
-\bibcite{ebrahimzadeh2021_predicting}{{18}{}{{}}{{}}}
-\bibcite{zhdanov_svm_prediction}{{19}{}{{}}{{}}}
-\bibcite{Puthankattil2012}{{20}{}{{}}{{}}}
-\bibcite{Ghiasi2021}{{21}{}{{}}{{}}}
-\bibcite{Zhao2022}{{22}{}{{}}{{}}}
-\bibcite{Shim2021}{{23}{}{{}}{{}}}
-\bibcite{Shen2025}{{24}{}{{}}{{}}}
-\bibcite{funk2008_prefrontal}{{25}{}{{}}{{}}}
-\bibcite{bailey2023_concurrent}{{26}{}{{}}{{}}}
-\bibcite{murphy2023_neural}{{27}{}{{}}{{}}}
-\bibcite{guo2024_restingstate}{{28}{}{{}}{{}}}
-\bibcite{tsai2023_review}{{29}{}{{}}{{}}}
-\bibcite{Dagnino2023}{{30}{}{{}}{{}}}
-\bibcite{sheen2024_response}{{31}{}{{}}{{}}}
-\bibcite{zeidabadi2025_prediction}{{32}{}{{}}{{}}}
-\bibcite{reissmann2026_thetacordance}{{33}{}{{}}{{}}}
-\bibcite{ulrich2025_alterations}{{34}{}{{}}{{}}}
-\bibcite{Moncy2024}{{35}{}{{}}{{}}}
-\bibcite{Xiao2025PMIP}{{36}{}{{}}{{}}}
-\bibcite{Miranda2019}{{37}{}{{}}{{}}}
-\bibcite{Siuly2017}{{38}{}{{}}{{}}}
-\bibcite{Mahato2020}{{39}{}{{}}{{}}}
-\bibcite{babiloni2012_guidelines}{{40}{}{{}}{{}}}
-\bibcite{Zhang2023EEGMethods}{{41}{}{{}}{{}}}
-\bibcite{Welch1967}{{42}{}{{}}{{}}}
-\bibcite{Mumtaz2017}{{43}{}{{}}{{}}}
-\bibcite{Jaworska2018}{{44}{}{{}}{{}}}
-\bibcite{Hjorth1970}{{45}{}{{}}{{}}}
-\bibcite{Faust2014}{{46}{}{{}}{{}}}
-\bibcite{Acharya2015}{{47}{}{{}}{{}}}
-\bibcite{Lord2023}{{48}{}{{}}{{}}}
-\bibcite{Monni2022}{{49}{}{{}}{{}}}
-\bibcite{Chawla2002}{{50}{}{{}}{{}}}
-\bibcite{Moncy2025BD}{{51}{}{{}}{{}}}
-\bibcite{Xiao2025JAD}{{52}{}{{}}{{}}}
-\bibcite{romeromarn2026_remotely}{{53}{}{{}}{{}}}
-\bibcite{kratter2026_stanford}{{54}{}{{}}{{}}}
-\bibcite{waller2026_transient}{{55}{}{{}}{{}}}
-\bibcite{pettorruso2024_overcoming}{{56}{}{{}}{{}}}
-\csxdef{lastpage}{13}
-\providecommand\NAT@force@numbers{}\NAT@force@numbers
-\gdef \@abspage@last{13}
+\bibcite{Acharya2015}{{1}{2015}{{Acharya et~al.}}{{Acharya, Sudarshan, Adeli, Santhosh, Koh, Puthankatti and Adeli}}}
+\bibcite{AlKaysi2017}{{2}{2017}{{Al-Kaysi et~al.}}{{Al-Kaysi, Al-Ani, Loo, Powell, Martin, Breakspear and Boonstra}}}
+\bibcite{babiloni2012_guidelines}{{3}{2012}{{BABILONI et~al.}}{{BABILONI, CLAUDIO, PH, M, WH, DH, J, U, K, Collaborators, M, T, VJ, FH, M, A, JF, S, LS, GS, B, A, WK, JM, FJ and RG}}}
+\bibcite{bailey2023_concurrent}{{4}{2023}{{Bailey et~al.}}{{Bailey, Hoy, Sullivan, Allman, Rogasch, Daskalakis and Fitzgerald}}}
+\bibcite{Chawla2002}{{5}{2002}{{Chawla et~al.}}{{Chawla, Bowyer, Hall and Kegelmeyer}}}
+\bibcite{cohen2023electroencephalography}{{6}{2023}{{Cohen et~al.}}{{Cohen, Zantvoord, Wezenberg, Daams, Bockting, Denys and van Wingen}}}
+\bibcite{Dagnino2023}{{7}{2023}{{Dagnino et~al.}}{{Dagnino, Braboszcz, Kroupi, Splittgerber, Brauer, Dempfle, Breitling-Ziegler, Prehn-Kristensen, Krauel, Siniatchkin et~al.}}}
+\bibcite{ebrahimzadeh2021_predicting}{{8}{2021}{{Ebrahimzadeh et~al.}}{{Ebrahimzadeh, Asgarinejad, Saliminia, Ashoori and Seraji}}}
+\bibcite{Faust2014}{{9}{2014}{{Faust et~al.}}{{Faust, Ang, Puthankattil and Joseph}}}
+\bibcite{Fu2019}{{10}{2019}{{Fu et~al.}}{{Fu, Fan and Davatzikos}}}
+\bibcite{funk2008_prefrontal}{{11}{2008}{{Funk and George}}{{}}}
+\bibcite{Ghiasi2021}{{12}{2021}{{Ghiasi et~al.}}{{Ghiasi, Dell'Acqua, Messerotti~Benvenuti, Scilingo, Gentili, Valenza and Greco}}}
+\bibcite{guo2024_restingstate}{{13}{2024}{{Guo et~al.}}{{Guo, Zhang, Tan, Phua, Wang, Tor and Ang}}}
+\bibcite{Hampsey2026}{{14}{2026}{{Hampsey et~al.}}{{Hampsey, Kalfas, Carter, Bloomfield, Rezaei, Young and Fu}}}
+\bibcite{Hjorth1970}{{15}{1970}{{Hjorth}}{{}}}
+\bibcite{jaworska2019_leveraging}{{16}{2019}{{Jaworska et~al.}}{{Jaworska, Salle, Ibrahim, Blier and Knott}}}
+\bibcite{Jaworska2018}{{17}{2018}{{Jaworska et~al.}}{{Jaworska, Wang, Smith, Blier, Knott and Protzner}}}
+\bibcite{kratter2026_stanford}{{18}{2026}{{Kratter et~al.}}{{Kratter, Austelle, Lissemore, Wada, Geoly, Chaiken, Kaloiani, Johnson, Wan, Kozyr, Makarewycz, Wong, Sridhar, Espil, Bassano, Kim, Ehrie, Maron~Katz, Tischler, Nejad, Batail, Phillips, Cole, Ford, Bentzley, Jo, Schatzberg, Spiegel, Rolle, Sahlem and Williams}}}
+\bibcite{leuchter2010_biomarkers}{{19}{2010}{{Leuchter et~al.}}{{Leuchter, Cook, Hamilton, Narr, Toga, Hunter, Faull, Whitelegge, Andrews, Loo, Way, Nelson, Horvath and Lebowitz}}}
+\bibcite{Lord2023}{{20}{2023}{{Lord and Allen}}{{}}}
+\bibcite{Mahato2020}{{21}{2020}{{Mahato et~al.}}{{Mahato, Goyal, Ram and Paul}}}
+\bibcite{Miranda2019}{{22}{2019}{{Miranda et~al.}}{{Miranda, Cox, Alexander, Danev and Lakey}}}
+\bibcite{Moncy2024}{{23}{2024}{{Moncy et~al.}}{{Moncy, Fan and Fu}}}
+\bibcite{Moncy2025BD}{{24}{2025}{{Moncy et~al.}}{{Moncy, Xiao, Woodham, Ghazi-Noori, Rezaei, Bramon, Ritter, Bauer, Young, Fan and Fu}}}
+\bibcite{Monni2022}{{25}{2022}{{Monni et~al.}}{{Monni, Collison, Hill, Oumeziane and Foti}}}
+\bibcite{Mumtaz2017}{{26}{2017}{{Mumtaz et~al.}}{{Mumtaz, Xia, Mohd~Yasin, Azhar~Ali and Malik}}}
+\bibcite{oakley2022_eeg}{{27}{2022}{{Oakley et~al.}}{{Oakley, Coskuner, Cadwallader, Ravan and Hasey}}}
+\bibcite{olbrich2013_eeg}{{28}{2013}{{Olbrich and Arns}}{{}}}
+\bibcite{olbrich2015_personalized}{{29}{2015}{{Olbrich et~al.}}{{Olbrich, Dinteren and Arns}}}
+\bibcite{pettorruso2024_overcoming}{{30}{2024}{{Pettorruso et~al.}}{{Pettorruso, Lorenzo, Benatti, dAndrea, Cavallotto, Carullo, Mancusi, Marco, Mammarella, Dattilio, Barlocci, Rosa, Cocco, Padula, Bubbico, Perrucci, Guidotti, DAndrea, Marzetti, Zoratto, Dellosso and Martinotti}}}
+\bibcite{Puthankattil2012}{{31}{2012}{{Puthankattil and Joseph}}{{}}}
+\bibcite{reissmann2026_thetacordance}{{32}{2026}{{Reissmann et~al.}}{{Reissmann, Rupprecht, Langguth, Rischer and Schoisswohl}}}
+\bibcite{Rimmer2024}{{33}{2024}{{Rimmer et~al.}}{{Rimmer, Woodham, Cahill and Fu}}}
+\bibcite{romeromarn2026_remotely}{{34}{2026}{{Romero~Marin et~al.}}{{Romero~Marin, Lopez~Rodriguez, Lakis~Granell, Buloz~Osorio, Cabello~Toscano, Urretavizcaya~Sarachaga, Alonso~Ortega, Chopra, Solana~Sanchez, Camprodon, Pascual~Leone, Bartres~Faz, Cappon and Cattaneo}}}
+\bibcite{shalbaf2018_nonlinear}{{35}{2018}{{Shalbaf et~al.}}{{Shalbaf, Brenner, Pang, Blumberger, Downar, Daskalakis, Tham, Lam, Farzan and Vila-Rodriguez}}}
+\bibcite{sheen2024_response}{{36}{2024}{{Sheen et~al.}}{{Sheen, Mazza, Momi, Miron, Mansouri, Russell, Zhou, Hyde, Fox, Voetterl, Assi, Daskalakis, Blumberger, Griffiths and Downar}}}
+\bibcite{Shen2025}{{37}{2025}{{Shen et~al.}}{{Shen, Sun, Chen and Gao}}}
+\bibcite{Shim2021}{{38}{2021}{{Shim et~al.}}{{Shim, Lee and Hwang}}}
+\bibcite{simmatis2023_technical}{{39}{2023}{{Simmatis et~al.}}{{Simmatis, Russo, Geraci, Harmsen and Samuel}}}
+\bibcite{Siuly2017}{{40}{2017}{{Siuly et~al.}}{{Siuly, Li and Zhang}}}
+\bibcite{ulrich2025_alterations}{{41}{2025}{{Ulrich et~al.}}{{Ulrich, Schneider, Deuring, Erni, Ridder, Sarlon and Bruhl}}}
+\bibcite{waller2026_transient}{{42}{2026}{{Waller et~al.}}{{Waller, Carpenter and Jones}}}
+\bibcite{watts2022predicting}{{43}{2022}{{Watts et~al.}}{{Watts, Pulice, Reilly, Brunoni, Kapczinski and Passos}}}
+\bibcite{Welch1967}{{44}{1967}{{Welch}}{{}}}
+\bibcite{Widge2019}{{45}{2019}{{Widge et~al.}}{{Widge, Bilge, Montana, Chang, Rodriguez, Deckersbach, Carpenter, Kalin and Nemeroff}}}
+\bibcite{Woodham2021}{{46}{2021}{{Woodham et~al.}}{{Woodham, Rimmer, Mutz and Fu}}}
+\bibcite{woodham2025home}{{47}{2025}{{Woodham et~al.}}{{Woodham, Selvaraj, Lajmi, Hobday, Sheehan, Ghazi-Noori, Lagerberg, Rizvi, Kwon, Orhii et~al.}}}
+\bibcite{Xiao2025JAD}{{48}{2025a}{{Xiao et~al.}}{{Xiao, Moncy, Ghazi-Noori, Woodham, Rezaei, Bramon, Ritter, Bauer, Young and Fu}}}
+\bibcite{Xiao2025PMIP}{{49}{2025b}{{Xiao et~al.}}{{Xiao, Moncy, Woodham, Selvaraj, Lajmi, Hobday, Sheehan, Ghazi-Noori, Lagerberg, Machado-Vieira et~al.}}}
+\bibcite{zeidabadi2025_prediction}{{50}{2025}{{Zeidabadi and Rashidi}}{{}}}
+\bibcite{Zhang2023EEGMethods}{{51}{2023}{{Zhang et~al.}}{{Zhang, Zhou, Chen, Hu, Li, Bai, Han, Wang, Liang, Chen, Cong, Yan and Li}}}
+\bibcite{Zhao2022}{{52}{2022}{{Zhao et~al.}}{{Zhao, Ng, Khoo and Chi}}}
+\bibcite{zhdanov_svm_prediction}{{53}{2020}{{Zhdanov et~al.}}{{Zhdanov, Atluri, Wong, Vaghei, Daskalakis, Blumberger, Frey, Giacobbe, Lam, Milev, Mueller, Turecki, Parikh, Rotzinger, Soares, Brenner, Vila-Rodriguez, McAndrews, Kleffner, Alonso-Prieto, Arnott, Foster, Strother, Uher, Kennedy and Farzan}}}
+\csxdef{lastpage}{16}
+\gdef \@abspage@last{16}

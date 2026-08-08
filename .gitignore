@@ -99,4 +99,16 @@ paper/figures
 amr/year3
 paper/elsarticle.zip
 paper
-paper
+data/sdl-mcp-graph.lbug
+data/sdl-mcp.pid
+paper/data/sdl-mcp.pid
+paper/data/sdl-mcp-graph.lbug.wal
+paper/data/sdl-mcp-graph.lbug
+paper/main.aux
+paper/main.bbl
+paper/main.blg
+paper/main.fdb_latexmk
+paper/main.fls
+paper/main.log
+paper/main.out
+paper/main.synctex.gz

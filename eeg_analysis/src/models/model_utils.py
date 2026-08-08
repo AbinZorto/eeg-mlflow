@@ -56,7 +56,7 @@ logger = logging.getLogger(__name__)
 
 class ModelBuilder:
     @staticmethod
-    def create_classifier(name: str, params: Dict[Any, Any] = None) -> Pipeline:
+    def create_classifier(name: str, params: dict[Any, Any] = None) -> Pipeline:
         """Create a classifier pipeline with StandardScaler and the specified model."""
         if params is None:
             user_params = {}
@@ -477,7 +477,7 @@ class ModelBuilder:
             for model_name, params in config_params.items():
                 if model_name in default_configs:
                     default_configs[model_name].update(params)
-        
+                    
         # Create all classifiers
         classifiers = {}
         for name, params in default_configs.items():
